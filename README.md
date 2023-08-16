@@ -1,2 +1,2 @@
 # manpower_requisition_form
-MRF
+MRF project is created using .NET 7 and AngularIO technologies.
