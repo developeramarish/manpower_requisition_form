@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\manpower_requisition_form.props" />
+</Project>

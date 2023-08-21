@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace MRF.Models.Models;
+
+public partial class Mrfinterviewermap
+{
+    public int Id { get; set; }
+
+    public int MrfId { get; set; }
+
+    public int InterviewerEmployeeId { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public int CreatedByEmployeeId { get; set; }
+
+    public DateTime CreatedOnUtc { get; set; }
+
+    public int UpdatedByEmployeeId { get; set; }
+
+    public DateTime UpdatedOnUtc { get; set; }
+}

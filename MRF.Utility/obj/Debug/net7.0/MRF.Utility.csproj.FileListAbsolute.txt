@@ -1,0 +1,11 @@
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\bin\Debug\net7.0\MRF.Utility.deps.json
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\bin\Debug\net7.0\MRF.Utility.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\bin\Debug\net7.0\MRF.Utility.pdb
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\MRF.Utility.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\MRF.Utility.AssemblyInfoInputs.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\MRF.Utility.AssemblyInfo.cs
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\MRF.Utility.csproj.CoreCompileInputs.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\MRF.Utility.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\refint\MRF.Utility.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\MRF.Utility.pdb
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Utility\obj\Debug\net7.0\ref\MRF.Utility.dll

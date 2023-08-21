@@ -1,0 +1,15 @@
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\bin\Debug\net7.0\MRF.DataAccess.deps.json
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\bin\Debug\net7.0\MRF.DataAccess.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\bin\Debug\net7.0\MRF.DataAccess.pdb
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\bin\Debug\net7.0\MRF.Models.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\bin\Debug\net7.0\MRF.Models.pdb
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.csproj.AssemblyReference.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.AssemblyInfoInputs.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.AssemblyInfo.cs
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.csproj.CopyComplete
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\refint\MRF.DataAccess.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\MRF.DataAccess.pdb
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.DataAccess\obj\Debug\net7.0\ref\MRF.DataAccess.dll
