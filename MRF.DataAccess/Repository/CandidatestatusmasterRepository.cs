@@ -15,10 +15,6 @@ namespace MRF.DataAccess.Repository
         {
             _db = db;
         }
-        public void Save()
-        {
-            _db.SaveChanges();
-        }
         public void Update(Candidatestatusmaster candidatestatusmaster)
         {
             _db.Candidatestatusmaster.Update(candidatestatusmaster);

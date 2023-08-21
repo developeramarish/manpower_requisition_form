@@ -9,7 +9,6 @@ namespace MRF.DataAccess.Repository.IRepository
 {
     public interface ICandidatestatusmasterRepository : IRepository<Candidatestatusmaster>
     {
-        void Update(Candidatestatusmaster candidatestatusmaster);
-        void Save();
+        void Update(Candidatestatusmaster candidatestatusmaster);        
     }
 }
