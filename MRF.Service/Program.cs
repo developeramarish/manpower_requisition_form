@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using MRF.DataAccess.Data;
 using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

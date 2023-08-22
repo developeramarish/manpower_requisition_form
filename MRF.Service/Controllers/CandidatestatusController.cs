@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Matching;
-using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
@@ -14,81 +12,124 @@ namespace MRF.API.Controllers
     public class CandidatestatusController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private ResponseDTO _response;
+        private CandidatestatusmasterResponseModel _responseModel;
         public CandidatestatusController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _response = new ResponseDTO();
+            _responseModel= new CandidatestatusmasterResponseModel();
         }
         // GET: api/<CandidatestatusController>
         [HttpGet]
-        public IEnumerable<Candidatestatusmaster> Get()
+        public ResponseDTO Get()
         {
-            List<Candidatestatusmaster> obj = _unitOfWork.Candidatestatusmaster.GetAll().ToList();
-            return obj;
+            try
+            {
+                List<Candidatestatusmaster> obj = _unitOfWork.Candidatestatusmaster.GetAll().ToList();
+                _response.Result = obj;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
         }
 
         // GET api/<CandidatestatusController>/5
         [HttpGet("{Id}")]
-        public Candidatestatusmaster Get(int Id)
+        public ResponseDTO Get(int Id)
         {
-            Candidatestatusmaster candidatestatusmaster = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
-            return candidatestatusmaster;
+            try
+            {
+                Candidatestatusmaster candidatestatusmaster = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
+                _response.Result = candidatestatusmaster;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+
+            return _response;
         }
 
         // POST api/<CandidatestatusController>
         [HttpPost]
-        public void Post([FromBody] CandidatestatusmasterRequestModel request)
+        public CandidatestatusmasterResponseModel Post([FromBody] CandidatestatusmasterRequestModel request)
         {
-
-            var candidateStatus = new Candidatestatusmaster
+            try
             {
-                Status = request.Status,
-                IsActive = request.IsActive,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
-            };
+                var candidateStatus = new Candidatestatusmaster
+                {
+                    Status = request.Status,
+                    IsActive = request.IsActive,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc
+                };
 
-            _unitOfWork.Candidatestatusmaster.Add(candidateStatus);
-            _unitOfWork.Save();
+                _unitOfWork.Candidatestatusmaster.Add(candidateStatus);
+                _unitOfWork.Save();
 
-            var response = new CandidatestatusmasterResponseModel
+                _responseModel.Id = candidateStatus.Id;
+                _responseModel.Status = candidateStatus.Status;
+                _responseModel.IsActive = candidateStatus.IsActive;              
+            }
+            catch (Exception ex)
             {
-                Id = candidateStatus.Id,
-                Status = candidateStatus.Status,
-                IsActive = candidateStatus.IsActive
-            };
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
 
+            return _responseModel;
         }
 
         // PUT api/<CandidatestatusController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] CandidatestatusmasterRequestModel request)
+        public CandidatestatusmasterResponseModel Put(int id, [FromBody] CandidatestatusmasterRequestModel request)
         {
-            var existingStatus = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == id);
-            existingStatus.Status = request.Status;
-            existingStatus.IsActive = request.IsActive;
-            existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-            existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
-
-            _unitOfWork.Candidatestatusmaster.Update(existingStatus);
-            _unitOfWork.Save();
-
-            var response = new CandidatestatusmasterResponseModel
+            try
             {
-                Id = existingStatus.Id,
-                Status = existingStatus.Status,
-                IsActive = existingStatus.IsActive
-            };
+                var existingStatus = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == id);
+                existingStatus.Status = request.Status;
+                existingStatus.IsActive = request.IsActive;
+                existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
+
+                _unitOfWork.Candidatestatusmaster.Update(existingStatus);
+                _unitOfWork.Save();
+
+                _responseModel.Id = existingStatus.Id;
+                _responseModel.Status = existingStatus.Status;
+                _responseModel.IsActive = existingStatus.IsActive;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _responseModel;
         }
 
         // DELETE api/<CandidatestatusController>/5
         [HttpDelete("{Id}")]
         public void Delete(int Id)
         {
-            Candidatestatusmaster? obj = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);          
-            _unitOfWork.Candidatestatusmaster.Remove(obj);
-            _unitOfWork.Save();
+            try
+            {
+                Candidatestatusmaster? obj = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
+                _unitOfWork.Candidatestatusmaster.Remove(obj);
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
         }
     }
 }
