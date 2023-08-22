@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "x6px1icje8bKLApj5jBu/4HczOK5K/UDvb09pROpwIimzy+creiVF7FpWmdl/r1rKMnfERMemrtKM0obuskqwQ==",
+  "dgSpecHash": "ut4LwIkb065vRP3W2zM+AygPE4u2wq8v/a/Ot0s282RCcCxXEh9g1JlBhc0uZVdZT8l/KghPBwhBwn0zYg/Pyg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Service\\MRF.API.csproj",
   "expectedPackageFiles": [
@@ -21,8 +21,12 @@
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\nlog\\5.2.3\\nlog.5.2.3.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\nlog.extensions.logging\\5.3.3\\nlog.extensions.logging.5.3.3.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\nlog.web.aspnetcore\\5.3.3\\nlog.web.aspnetcore.5.3.3.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.annotations\\6.5.0\\swashbuckle.aspnetcore.annotations.6.5.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"

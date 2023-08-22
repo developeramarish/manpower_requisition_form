@@ -1,3 +1,4 @@
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\nlog.config
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\appsettings.json
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\appsettings.Production.json
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\MRF.API.exe
@@ -11,7 +12,11 @@ C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisit
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Microsoft.OpenApi.dll
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\MySqlConnector.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\NLog.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\NLog.Extensions.Logging.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\NLog.Web.AspNetCore.dll
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Swashbuckle.AspNetCore.Annotations.dll
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll

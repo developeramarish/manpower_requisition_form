@@ -2,7 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using MRF.DataAccess.Data;
 using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
+using NLog;
+using NLog.Web;
 
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
 
 var environment = "Production";
@@ -11,7 +14,8 @@ var config = new ConfigurationBuilder()
        .Build();
 
 // Add services to the container.
-
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
