@@ -136,7 +136,7 @@ namespace MRF.API.Controllers
             try
             {
                 var existingStatus = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
-                existingStatus.Name = request.Name;
+                existingStatus.Name = request.Name;                
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -166,11 +166,11 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public void Delete(int Id)
+        public void Delete(int id)
         {
             try
             {
-                Departmentmaster? obj = _unitOfWork.Departmentmaster.Get(u => u.Id == Id);
+                Departmentmaster? obj = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
                 _unitOfWork.Departmentmaster.Remove(obj);
                 _unitOfWork.Save();
             }
