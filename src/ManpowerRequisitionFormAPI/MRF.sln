@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.Api", "MRF.Api\MRF.Api.csproj", "{2722004F-3DF1-4069-AB06-2CBB38F81CC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.Entities", "MRF.Entities\MRF.Entities.csproj", "{4A669EBE-DD29-4ADD-A7CB-FFDC481DAB8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.DataAccess", "MRF.DataAccess\MRF.DataAccess.csproj", "{73863C5B-822F-4B29-8E15-305C7A7D68B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2722004F-3DF1-4069-AB06-2CBB38F81CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2722004F-3DF1-4069-AB06-2CBB38F81CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2722004F-3DF1-4069-AB06-2CBB38F81CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2722004F-3DF1-4069-AB06-2CBB38F81CC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A669EBE-DD29-4ADD-A7CB-FFDC481DAB8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A669EBE-DD29-4ADD-A7CB-FFDC481DAB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A669EBE-DD29-4ADD-A7CB-FFDC481DAB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A669EBE-DD29-4ADD-A7CB-FFDC481DAB8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73863C5B-822F-4B29-8E15-305C7A7D68B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73863C5B-822F-4B29-8E15-305C7A7D68B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73863C5B-822F-4B29-8E15-305C7A7D68B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73863C5B-822F-4B29-8E15-305C7A7D68B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
