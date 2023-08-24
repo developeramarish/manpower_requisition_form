@@ -1,3 +1,10 @@
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.csproj.AssemblyReference.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.AssemblyInfoInputs.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.AssemblyInfo.cs
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.csproj.CoreCompileInputs.cache
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\nlog.config
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\appsettings.json
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\appsettings.Production.json
@@ -24,13 +31,6 @@ C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisit
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\MRF.Models.dll
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\MRF.DataAccess.pdb
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\MRF.Models.pdb
-C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.csproj.AssemblyReference.cache
-C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.AssemblyInfoInputs.cache
-C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.AssemblyInfo.cs
-C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.csproj.CoreCompileInputs.cache
-C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\MRF.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\staticwebassets\msbuild.MRF.API.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\staticwebassets\msbuild.build.MRF.API.props
 C:\Users\Manish.Partey\OneDrive - CJK Group, Inc\Documents\MRF\manpower_requisition_form\MRF.Service\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.MRF.API.props
