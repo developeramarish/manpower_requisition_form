@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MRF.Models.Models;
 
-public partial class Rolemaster
+public class Rolemaster
 {
     public int Id { get; set; }
 

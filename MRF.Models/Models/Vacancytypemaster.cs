@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MRF.Models.Models;
 
-public partial class Vacancytypemaster
+public class Vacancytypemaster
 {
     public int Id { get; set; }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MRF.Models.Models;
 
-public partial class Subdepartmentmaster
+public class Subdepartmentmaster
 {
     public int Id { get; set; }
 
