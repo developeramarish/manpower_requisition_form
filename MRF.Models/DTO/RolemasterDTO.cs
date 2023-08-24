@@ -2,7 +2,7 @@
 {
 
     public class RolemasterRequestModel
-    {  
+    {
         public string Name { get; set; } = null!;
         public bool IsActive { get; set; }
         public int CreatedByEmployeeId { get; set; }

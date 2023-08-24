@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
@@ -95,7 +94,7 @@ namespace MRF.API.Controllers
             {
                 var qualificationStatus = new Qualificationmaster
                 {
-                    Type= request.Type,
+                    Type = request.Type,
                     IsActive = request.IsActive,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,

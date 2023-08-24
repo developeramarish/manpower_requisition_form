@@ -61,7 +61,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                Gendermaster gendermaster  = _unitOfWork.Gendermaster.Get(u => u.Id == id);
+                Gendermaster gendermaster = _unitOfWork.Gendermaster.Get(u => u.Id == id);
                 if (gendermaster == null)
                 {
                     _response.IsSuccess = false;
@@ -93,7 +93,7 @@ namespace MRF.API.Controllers
             try
             {
                 var genderStatus = new Gendermaster
-                {   
+                {
                     IsActive = request.IsActive,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,
@@ -104,7 +104,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Gendermaster.Add(genderStatus);
                 _unitOfWork.Save();
 
-                _responseModel.Id = genderStatus.Id;                
+                _responseModel.Id = genderStatus.Id;
                 _responseModel.IsActive = genderStatus.IsActive;
             }
             catch (Exception ex)

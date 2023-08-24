@@ -26,11 +26,11 @@ namespace MRF.API.Controllers
         // GET: api/<CandidatestatusController>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Candidatestatusmaster>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Description ="Bad Request")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
-        [SwaggerResponse(StatusCodes.Status404NotFound, Description ="Not Found")]        
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description ="Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
@@ -64,10 +64,10 @@ namespace MRF.API.Controllers
                 Candidatestatusmaster candidatestatusmaster = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
                 if (candidatestatusmaster == null)
                 {
-                    _response.IsSuccess = false;                    
+                    _response.IsSuccess = false;
                     _response.Message = "No result found by this Id: " + Id;
                     _logger.LogError("No result found by this Id:" + Id);
-                }                   
+                }
                 _response.Result = candidatestatusmaster;
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@ namespace MRF.API.Controllers
 
                 _responseModel.Id = candidateStatus.Id;
                 _responseModel.Status = candidateStatus.Status;
-                _responseModel.IsActive = candidateStatus.IsActive;              
+                _responseModel.IsActive = candidateStatus.IsActive;
             }
             catch (Exception ex)
             {
@@ -126,7 +126,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful update)")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
-        [SwaggerResponse(StatusCodes.Status403Forbidden,Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
@@ -159,12 +159,12 @@ namespace MRF.API.Controllers
 
         // DELETE api/<CandidatestatusController>/5
         [HttpDelete("{Id}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(CandidatestatusmasterResponseModel))]        
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(CandidatestatusmasterResponseModel))]
         [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful deletion)")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
-        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]        
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int Id)

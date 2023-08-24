@@ -14,6 +14,6 @@
     {
         public int Id { get; set; }
         public string Status { get; set; } = null!;
-        public bool IsActive { get; set; }      
+        public bool IsActive { get; set; }
     }
 }

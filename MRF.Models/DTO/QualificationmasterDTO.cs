@@ -1,5 +1,5 @@
 ﻿namespace MRF.Models.DTO
-{   
+{
     public class QualificationmasterRequestModel
     {
         public string Type { get; set; } = null!;

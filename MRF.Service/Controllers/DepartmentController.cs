@@ -106,7 +106,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Departmentmaster.Add(dapartment);
                 _unitOfWork.Save();
 
-                _responseModel.Id = dapartment.Id;                
+                _responseModel.Id = dapartment.Id;
                 _responseModel.IsActive = dapartment.IsActive;
             }
             catch (Exception ex)
@@ -136,7 +136,7 @@ namespace MRF.API.Controllers
             try
             {
                 var existingStatus = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
-                existingStatus.Name = request.Name;                
+                existingStatus.Name = request.Name;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -144,7 +144,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Departmentmaster.Update(existingStatus);
                 _unitOfWork.Save();
 
-                _responseModel.Id = existingStatus.Id;                
+                _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
             catch (Exception ex)

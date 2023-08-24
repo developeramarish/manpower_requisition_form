@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace MRF.Models.Models;
 
-namespace MRF.Models.Models;
-
-public partial class Mrfdetail
+public class Mrfdetail
 {
     public int Id { get; set; }
 

@@ -3,7 +3,6 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Xml.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -62,7 +61,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                Grademaster grademaster  = _unitOfWork.Grademaster.Get(u => u.Id == id);
+                Grademaster grademaster = _unitOfWork.Grademaster.Get(u => u.Id == id);
                 if (grademaster == null)
                 {
                     _response.IsSuccess = false;
@@ -136,7 +135,7 @@ namespace MRF.API.Controllers
             try
             {
                 var existingStatus = _unitOfWork.Grademaster.Get(u => u.Id == id);
-                
+
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -181,6 +180,6 @@ namespace MRF.API.Controllers
                 _logger.LogError(ex.Message);
             }
         }
-       
+
     }
 }

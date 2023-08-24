@@ -94,7 +94,7 @@ namespace MRF.API.Controllers
             {
                 var evaluationStatus = new Evaluationmaster
                 {
-                    
+
                     IsActive = request.IsActive,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,
@@ -105,7 +105,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Evaluationmaster.Add(evaluationStatus);
                 _unitOfWork.Save();
 
-                _responseModel.Id = evaluationStatus.Id;                
+                _responseModel.Id = evaluationStatus.Id;
                 _responseModel.IsActive = evaluationStatus.IsActive;
             }
             catch (Exception ex)
@@ -135,7 +135,7 @@ namespace MRF.API.Controllers
             try
             {
                 var existingStatus = _unitOfWork.Evaluationmaster.Get(u => u.Id == id);
-                
+
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;

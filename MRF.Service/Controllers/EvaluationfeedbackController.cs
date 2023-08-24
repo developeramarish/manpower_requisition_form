@@ -93,7 +93,7 @@ namespace MRF.API.Controllers
             try
             {
                 var evaluationfeedbackStatus = new Evaluationfeedbackmaster
-                {   
+                {
                     IsActive = request.IsActive,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,
@@ -103,7 +103,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Evaluationfeedbackmaster.Add(evaluationfeedbackStatus);
                 _unitOfWork.Save();
 
-                _responseModel.Id = evaluationfeedbackStatus.Id;                
+                _responseModel.Id = evaluationfeedbackStatus.Id;
                 _responseModel.IsActive = evaluationfeedbackStatus.IsActive;
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
                 _responseModel.Id = existingStatus.Id;
-                
+
                 _responseModel.IsActive = existingStatus.IsActive;
             }
             catch (Exception ex)

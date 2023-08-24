@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MRF.Models.DTO
-{   
+﻿namespace MRF.Models.DTO
+{
     public class ProjectmasterRequestModel
     {
         public string Name { get; set; } = null!;
@@ -18,7 +12,7 @@ namespace MRF.Models.DTO
     }
     public class ProjectmasterResponseModel
     {
-        public int Id { get; set; }        
+        public int Id { get; set; }
         public bool IsActive { get; set; }
     }
 }

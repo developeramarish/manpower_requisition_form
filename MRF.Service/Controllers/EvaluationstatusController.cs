@@ -62,7 +62,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                Evaluationstatusmaster evaluationstatusmaster  = _unitOfWork.Evaluationstatusmaster.Get(u => u.Id == id);
+                Evaluationstatusmaster evaluationstatusmaster = _unitOfWork.Evaluationstatusmaster.Get(u => u.Id == id);
                 if (evaluationstatusmaster == null)
                 {
                     _response.IsSuccess = false;

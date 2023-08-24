@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
@@ -94,7 +93,7 @@ namespace MRF.API.Controllers
             try
             {
                 var employmenttype = new Employmenttypemaster
-                {                  
+                {
                     IsActive = request.IsActive,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,
@@ -134,7 +133,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                var existingStatus = _unitOfWork.Employmenttypemaster.Get(u => u.Id == id);                
+                var existingStatus = _unitOfWork.Employmenttypemaster.Get(u => u.Id == id);
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;

@@ -61,7 +61,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                Vacancytypemaster  vacancytypemaster = _unitOfWork.Vacancytypemaster.Get(u => u.Id == id);
+                Vacancytypemaster vacancytypemaster = _unitOfWork.Vacancytypemaster.Get(u => u.Id == id);
                 if (vacancytypemaster == null)
                 {
                     _response.IsSuccess = false;

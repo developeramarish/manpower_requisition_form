@@ -61,7 +61,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                Subdepartmentmaster  subdepartmentmaster = _unitOfWork.Subdepartmentmaster.Get(u => u.Id == id);
+                Subdepartmentmaster subdepartmentmaster = _unitOfWork.Subdepartmentmaster.Get(u => u.Id == id);
                 if (subdepartmentmaster == null)
                 {
                     _response.IsSuccess = false;

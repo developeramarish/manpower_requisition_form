@@ -12,7 +12,7 @@ namespace MRF.DataAccess.Repository
         public Repository(MRFDBContext db)
         {
             _db = db;
-            this.dbSet=_db.Set<T>();
+            this.dbSet = _db.Set<T>();
         }
         public void Add(T entity)
         {
@@ -22,7 +22,7 @@ namespace MRF.DataAccess.Repository
         public T Get(Expression<Func<T, bool>> filter)
         {
             IQueryable<T> query = dbSet;
-            query= query.Where(filter);
+            query = query.Where(filter);
             return query.FirstOrDefault();
         }
 

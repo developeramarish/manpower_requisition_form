@@ -1,7 +1,7 @@
 ﻿namespace MRF.Models.DTO
 {
     public class DepartmentmasterRequestModel
-    {       
+    {
         public string Name { get; set; } = null!;
         public bool IsActive { get; set; }
         public int CreatedByEmployeeId { get; set; }

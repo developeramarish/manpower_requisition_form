@@ -61,7 +61,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                Rolemaster  rolemaster = _unitOfWork.Rolemaster.Get(u => u.Id == id);
+                Rolemaster rolemaster = _unitOfWork.Rolemaster.Get(u => u.Id == id);
                 if (rolemaster == null)
                 {
                     _response.IsSuccess = false;

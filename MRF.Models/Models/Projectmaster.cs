@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace MRF.Models.Models;
 
-namespace MRF.Models.Models;
-
-public partial class Projectmaster
+public class Projectmaster
 {
     public int Id { get; set; }
 

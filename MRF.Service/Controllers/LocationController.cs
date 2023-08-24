@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
@@ -63,7 +62,7 @@ namespace MRF.API.Controllers
         {
             try
             {
-                Locationmaster locationmaster  = _unitOfWork.Locationmaster.Get(u => u.Id == id);
+                Locationmaster locationmaster = _unitOfWork.Locationmaster.Get(u => u.Id == id);
                 if (locationmaster == null)
                 {
                     _response.IsSuccess = false;
@@ -95,8 +94,8 @@ namespace MRF.API.Controllers
             try
             {
                 var locationStatus = new Locationmaster
-                {           
-                    Location= request.Location,
+                {
+                    Location = request.Location,
                     ShortCode = request.ShortCode,
                     IsActive = request.IsActive,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
@@ -108,7 +107,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Locationmaster.Add(locationStatus);
                 _unitOfWork.Save();
 
-                _responseModel.Id = locationStatus.Id;                
+                _responseModel.Id = locationStatus.Id;
                 _responseModel.IsActive = locationStatus.IsActive;
             }
             catch (Exception ex)
@@ -138,15 +137,15 @@ namespace MRF.API.Controllers
             try
             {
                 var existingStatus = _unitOfWork.Locationmaster.Get(u => u.Id == id);
-                existingStatus.Location=request.Location;
-                existingStatus.ShortCode=request.ShortCode;
+                existingStatus.Location = request.Location;
+                existingStatus.ShortCode = request.ShortCode;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
                 _unitOfWork.Locationmaster.Update(existingStatus);
                 _unitOfWork.Save();
 
-                _responseModel.Id = existingStatus.Id;                
+                _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
             catch (Exception ex)

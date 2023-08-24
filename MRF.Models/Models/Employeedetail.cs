@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace MRF.Models.Models;
 
-namespace MRF.Models.Models;
-
-public partial class Employeedetail
+public class Employeedetail
 {
     public int Id { get; set; }
 

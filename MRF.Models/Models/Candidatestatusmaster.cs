@@ -1,6 +1,6 @@
 ﻿namespace MRF.Models.Models;
 
-public partial class Candidatestatusmaster
+public class Candidatestatusmaster
 {
     public int Id { get; set; }
 

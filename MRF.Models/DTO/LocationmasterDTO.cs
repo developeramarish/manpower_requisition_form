@@ -12,7 +12,7 @@
     }
     public class LocationmasterResponseModel
     {
-        public int Id { get; set; }        
+        public int Id { get; set; }
         public bool IsActive { get; set; }
     }
 }

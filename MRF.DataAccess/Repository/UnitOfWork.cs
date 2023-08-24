@@ -1,6 +1,4 @@
-﻿using MRF.DataAccess.Data;
-using MRF.DataAccess.Repository.IRepository;
-using MRF.Models.Models;
+﻿using MRF.DataAccess.Repository.IRepository;
 
 namespace MRF.DataAccess.Repository
 {
