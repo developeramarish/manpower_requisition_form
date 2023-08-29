@@ -17,6 +17,12 @@
         IRolemasterRepository Rolemaster { get; }
         ISubdepartmentmasterRepository Subdepartmentmaster { get; }
         IVacancytypemasterRepository Vacancytypemaster { get; }
+        IMrfdetailRepository Mrfdetail { get; }
+        IMrffeedbackRepository Mrffeedback { get; }
+        IMrfinterviewermapRepository Mrfinterviewermap { get; }
+        IMrfresumereviewermapRepository Mrfresumereviewermap { get; }
+        IReplacementmrfdetailRepository Replacementmrfdetail { get; }
+        IResumeforwarddetailRepository Resumeforwarddetail { get; }
         void Save();
     }
 }

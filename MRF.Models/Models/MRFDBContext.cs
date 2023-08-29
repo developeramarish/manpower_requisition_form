@@ -43,7 +43,7 @@ public partial class MRFDBContext : DbContext
 
     public virtual DbSet<Locationmaster> Locationmasters { get; set; }
 
-    public virtual DbSet<Mrfdetail> Mrfdetails { get; set; }
+    public virtual DbSet<Mrfdetails> Mrfdetails { get; set; }
 
     public virtual DbSet<Mrffeedback> Mrffeedbacks { get; set; }
 
@@ -389,7 +389,7 @@ public partial class MRFDBContext : DbContext
                 .HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<Mrfdetail>(entity =>
+        modelBuilder.Entity<Mrfdetails>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 

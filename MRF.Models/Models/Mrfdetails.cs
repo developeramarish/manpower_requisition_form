@@ -1,6 +1,6 @@
 ﻿namespace MRF.Models.Models;
 
-public class Mrfdetail
+public class Mrfdetails
 {
     public int Id { get; set; }
 

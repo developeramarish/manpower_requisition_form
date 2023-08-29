@@ -1,4 +1,5 @@
 ﻿using MRF.DataAccess.Repository.IRepository;
+using MRF.Models.Models;
 
 namespace MRF.DataAccess.Repository
 {
@@ -20,6 +21,12 @@ namespace MRF.DataAccess.Repository
         public IRolemasterRepository Rolemaster { get; private set; }
         public ISubdepartmentmasterRepository Subdepartmentmaster { get; private set; }
         public IVacancytypemasterRepository Vacancytypemaster { get; private set; }
+        public IMrfdetailRepository Mrfdetail { get; private set; }
+        public IMrffeedbackRepository Mrffeedback { get; private set; }
+        public IMrfinterviewermapRepository Mrfinterviewermap { get; private set; }
+        public IMrfresumereviewermapRepository Mrfresumereviewermap { get; private set; }
+        public IReplacementmrfdetailRepository Replacementmrfdetail { get; private set; }
+        public IResumeforwarddetailRepository Resumeforwarddetail { get; private set; }
 
         public UnitOfWork(Data.MRFDBContext db)
         {
@@ -39,6 +46,12 @@ namespace MRF.DataAccess.Repository
             Rolemaster = new RolemasterRepository(_db);
             Subdepartmentmaster = new SubdepartmentmasterRepository(_db);
             Vacancytypemaster = new VacancytypemasterRepository(_db);
+            Mrfdetail = new MrfdetailRepository(_db);
+            Mrffeedback = new MrffeedbackRepository(_db);
+            Mrfinterviewermap = new MrfinterviewermapRepository(_db);
+            Mrfresumereviewermap = new MrfresumereviewermapRepository(_db);
+            Replacementmrfdetail = new ReplacementmrfdetailRepository(_db);
+            Resumeforwarddetail = new ResumeforwarddetailRepository(_db);
         }
         public void Save()
         {
