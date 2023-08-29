@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 
@@ -16,8 +17,8 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private LocationmasterResponseModel _responseModel;
-        private readonly ILogger<LocationController> _logger;
-        public LocationController(IUnitOfWork unitOfWork, ILogger<LocationController> logger)
+        private readonly ILoggerService _logger;
+        public LocationController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -35,17 +36,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
-            try
+            _logger.LogInfo("Fetching All Location");
+            List<Locationmaster> locationtList = _unitOfWork.Locationmaster.GetAll().ToList();
+            if (locationtList == null)
             {
-                List<Locationmaster> obj = _unitOfWork.Locationmaster.GetAll().ToList();
-                _response.Result = obj;
+                _logger.LogError("No record is found");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = locationtList;
+            _logger.LogInfo($"Total location  count: {locationtList.Count}");
             return _response;
         }
 
@@ -60,23 +58,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int id)
         {
-            try
+            _logger.LogInfo($"Fetching All Location by Id: {id}");
+            Locationmaster locationmaster = _unitOfWork.Locationmaster.Get(u => u.Id == id);
+            if (locationmaster == null)
             {
-                Locationmaster locationmaster = _unitOfWork.Locationmaster.Get(u => u.Id == id);
-                if (locationmaster == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "No result found by this Id: " + id;
-                    _logger.LogError("No result found by this Id:" + id);
-                }
-                _response.Result = locationmaster;
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = locationmaster;
             return _response;
         }
 
@@ -91,31 +79,22 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public LocationmasterResponseModel Post([FromBody] LocationmasterRequestModel request)
         {
-            try
+            var location = new Locationmaster
             {
-                var locationStatus = new Locationmaster
-                {
-                    Location = request.Location,
-                    ShortCode = request.ShortCode,
-                    IsActive = request.IsActive,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                Location = request.Location,
+                ShortCode = request.ShortCode,
+                IsActive = request.IsActive,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
 
-                _unitOfWork.Locationmaster.Add(locationStatus);
-                _unitOfWork.Save();
+            _unitOfWork.Locationmaster.Add(location);
+            _unitOfWork.Save();
 
-                _responseModel.Id = locationStatus.Id;
-                _responseModel.IsActive = locationStatus.IsActive;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _responseModel.Id = location.Id;
+            _responseModel.IsActive = location.IsActive;
 
             return _responseModel;
         }
@@ -134,9 +113,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public LocationmasterResponseModel Put(int id, [FromBody] LocationmasterRequestModel request)
         {
-            try
+            var existingStatus = _unitOfWork.Locationmaster.Get(u => u.Id == id);
+
+            if (existingStatus != null)
             {
-                var existingStatus = _unitOfWork.Locationmaster.Get(u => u.Id == id);
                 existingStatus.Location = request.Location;
                 existingStatus.ShortCode = request.ShortCode;
                 existingStatus.IsActive = request.IsActive;
@@ -148,11 +128,11 @@ namespace MRF.API.Controllers
                 _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
-            catch (Exception ex)
+            else
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
             }
             return _responseModel;
         }
@@ -169,18 +149,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            try
+            Locationmaster? obj = _unitOfWork.Locationmaster.Get(u => u.Id == id);
+            if (obj == null)
             {
-                Locationmaster? obj = _unitOfWork.Locationmaster.Get(u => u.Id == id);
-                _unitOfWork.Locationmaster.Remove(obj);
-                _unitOfWork.Save();
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _unitOfWork.Locationmaster.Remove(obj);
+            _unitOfWork.Save();
         }
     }
 }

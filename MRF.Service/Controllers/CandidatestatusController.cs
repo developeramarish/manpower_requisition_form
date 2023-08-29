@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,8 +16,8 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private CandidatestatusmasterResponseModel _responseModel;
-        private readonly ILogger<CandidatestatusController> _logger;
-        public CandidatestatusController(IUnitOfWork unitOfWork, ILogger<CandidatestatusController> logger)
+        private readonly ILoggerService _logger;
+        public CandidatestatusController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -34,17 +35,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
-            try
+            _logger.LogInfo("Fetching All Candidate Status");
+            List<Candidatestatusmaster> candidateStatusList = _unitOfWork.Candidatestatusmaster.GetAll().ToList();
+            if (candidateStatusList == null)
             {
-                List<Candidatestatusmaster> obj = _unitOfWork.Candidatestatusmaster.GetAll().ToList();
-                _response.Result = obj;
+                _logger.LogError("No record is found");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = candidateStatusList;
+            _logger.LogInfo($"Total candidate status count: {candidateStatusList.Count}");
             return _response;
         }
 
@@ -59,23 +57,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int Id)
         {
-            try
+
+            _logger.LogInfo($"Fetching All Candidate Status by Id: {Id}");
+            Candidatestatusmaster candidatestatusmaster = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
+            if (candidatestatusmaster == null)
             {
-                Candidatestatusmaster candidatestatusmaster = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
-                if (candidatestatusmaster == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "No result found by this Id: " + Id;
-                    _logger.LogError("No result found by this Id:" + Id);
-                }
-                _response.Result = candidatestatusmaster;
+                _logger.LogError($"No result found by this Id: {Id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = candidatestatusmaster;            
             return _response;
         }
 
@@ -90,31 +79,22 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatestatusmasterResponseModel Post([FromBody] CandidatestatusmasterRequestModel request)
         {
-            try
+            var candidateStatus = new Candidatestatusmaster
             {
-                var candidateStatus = new Candidatestatusmaster
-                {
-                    Status = request.Status,
-                    IsActive = request.IsActive,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                Status = request.Status,
+                IsActive = request.IsActive,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
+            
+            _unitOfWork.Candidatestatusmaster.Add(candidateStatus);
+            _unitOfWork.Save();
 
-                _unitOfWork.Candidatestatusmaster.Add(candidateStatus);
-                _unitOfWork.Save();
-
-                _responseModel.Id = candidateStatus.Id;
-                _responseModel.Status = candidateStatus.Status;
-                _responseModel.IsActive = candidateStatus.IsActive;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _responseModel.Id = candidateStatus.Id;
+            _responseModel.Status = candidateStatus.Status;
+            _responseModel.IsActive = candidateStatus.IsActive;
 
             return _responseModel;
         }
@@ -133,9 +113,11 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatestatusmasterResponseModel Put(int id, [FromBody] CandidatestatusmasterRequestModel request)
         {
-            try
+
+            var existingStatus = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == id);
+
+            if (existingStatus != null)
             {
-                var existingStatus = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == id);
                 existingStatus.Status = request.Status;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
@@ -148,13 +130,16 @@ namespace MRF.API.Controllers
                 _responseModel.Status = existingStatus.Status;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
+            else
+            {                
+                _logger.LogError($"No result found by this Id: {id}");
+
+                _responseModel.Id = 0;
+                _responseModel.Status = null;
+                _responseModel.IsActive = false;
             }
             return _responseModel;
+
         }
 
         // DELETE api/<CandidatestatusController>/5
@@ -169,18 +154,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int Id)
         {
-            try
+            Candidatestatusmaster? obj = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
+            if (obj == null)
             {
-                Candidatestatusmaster? obj = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
-                _unitOfWork.Candidatestatusmaster.Remove(obj);
-                _unitOfWork.Save();
+                _logger.LogError($"No result found by this Id: {Id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _unitOfWork.Candidatestatusmaster.Remove(obj);
+            _unitOfWork.Save();
         }
     }
 }

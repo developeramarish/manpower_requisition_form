@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MRF.DataAccess.Data;
 using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
+using MRF.Utility;
 using NLog;
 using NLog.Web;
 
@@ -19,6 +20,7 @@ builder.Host.UseNLog();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSingleton<ILoggerService, LoggerService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -36,6 +38,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

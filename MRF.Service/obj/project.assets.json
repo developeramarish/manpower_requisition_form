@@ -2,6 +2,39 @@
   "version": 3,
   "targets": {
     "net7.0": {
+      "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "2.2.0",
+          "System.Text.Encodings.Web": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/2.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.OpenApi/7.0.10": {
         "type": "package",
         "dependencies": {
@@ -436,6 +469,19 @@
           "Microsoft.AspNetCore.App"
         ]
       },
+      "System.Text.Encodings.Web/4.5.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/System.Text.Encodings.Web.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Text.Encodings.Web.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MRF.DataAccess/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -463,10 +509,50 @@
         "runtime": {
           "bin/placeholder/MRF.Models.dll": {}
         }
+      },
+      "MRF.Utility/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "NLog": "5.2.3"
+        },
+        "compile": {
+          "bin/placeholder/MRF.Utility.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MRF.Utility.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+      "sha512": "Nxs7Z1q3f1STfLYKJSVXCs1iBl+Ya6E8o4Oy1bCxJ/rNI44E/0f6tbsrVqAWfB7jlnJfyaAtIalBVxPKUPQb4Q==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.http.abstractions/2.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.xml",
+        "microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.http.abstractions.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Http.Features/2.2.0": {
+      "sha512": "ziFz5zH8f33En4dX81LW84I6XrYXKf9jg6aM39cM+LffN9KJahViKZ61dGMSO2gd3e+qe5yBRwsesvyqlZaSMg==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.http.features/2.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.xml",
+        "microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.http.features.nuspec"
+      ]
+    },
     "Microsoft.AspNetCore.OpenApi/7.0.10": {
       "sha512": "p5LiYt1mFJdS70zyHoydahohko2pLIoXiXwANRZGYYyTXcYNQpNUOt+At+lUgGgRwta28sUKVhy2W/93j0qwhA==",
       "type": "package",
@@ -1310,6 +1396,25 @@
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
     },
+    "System.Text.Encodings.Web/4.5.0": {
+      "sha512": "Xg4G4Indi4dqP1iuAiMSwpiWS54ZghzR644OtsRCm/m/lBMG8dUBhLVN7hLm8NNrNTR+iGbshCPTwrvxZPlm4g==",
+      "type": "package",
+      "path": "system.text.encodings.web/4.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard1.0/System.Text.Encodings.Web.dll",
+        "lib/netstandard1.0/System.Text.Encodings.Web.xml",
+        "lib/netstandard2.0/System.Text.Encodings.Web.dll",
+        "lib/netstandard2.0/System.Text.Encodings.Web.xml",
+        "system.text.encodings.web.4.5.0.nupkg.sha512",
+        "system.text.encodings.web.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "MRF.DataAccess/1.0.0": {
       "type": "project",
       "path": "../MRF.DataAccess/MRF.DataAccess.csproj",
@@ -1319,11 +1424,17 @@
       "type": "project",
       "path": "../MRF.Models/MRF.Models.csproj",
       "msbuildProject": "../MRF.Models/MRF.Models.csproj"
+    },
+    "MRF.Utility/1.0.0": {
+      "type": "project",
+      "path": "../MRF.Utility/MRF.Utility.csproj",
+      "msbuildProject": "../MRF.Utility/MRF.Utility.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
       "MRF.DataAccess >= 1.0.0",
+      "MRF.Utility >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 7.0.10",
       "NLog.Web.AspNetCore >= 5.3.3",
       "Pomelo.EntityFrameworkCore.MySql >= 7.0.0",
@@ -1338,11 +1449,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Service\\MRF.API.csproj",
+      "projectUniqueName": "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.Service\\MRF.API.csproj",
       "projectName": "MRF.API",
-      "projectPath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Service\\MRF.API.csproj",
+      "projectPath": "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.Service\\MRF.API.csproj",
       "packagesPath": "C:\\Users\\Manish.Partey\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Service\\obj\\",
+      "outputPath": "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1364,8 +1475,11 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.DataAccess\\MRF.DataAccess.csproj": {
-              "projectPath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.DataAccess\\MRF.DataAccess.csproj"
+            "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.DataAccess\\MRF.DataAccess.csproj": {
+              "projectPath": "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.DataAccess\\MRF.DataAccess.csproj"
+            },
+            "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj": {
+              "projectPath": "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj"
             }
           }
         }

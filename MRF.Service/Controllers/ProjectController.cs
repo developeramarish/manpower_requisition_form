@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,8 +16,8 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private ProjectmasterResponseModel _responseModel;
-        private readonly ILogger<ProjectController> _logger;
-        public ProjectController(IUnitOfWork unitOfWork, ILogger<ProjectController> logger)
+        private readonly ILoggerService _logger;
+        public ProjectController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -34,17 +35,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
-            try
+            _logger.LogInfo("Fetching All Project");
+            List<Projectmaster> projectList = _unitOfWork.Projectmaster.GetAll().ToList();
+            if (projectList == null)
             {
-                List<Projectmaster> obj = _unitOfWork.Projectmaster.GetAll().ToList();
-                _response.Result = obj;
+                _logger.LogError("No record is found");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = projectList;
+            _logger.LogInfo($"Total project  count: {projectList.Count}");
             return _response;
         }
 
@@ -59,23 +57,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int id)
         {
-            try
+            _logger.LogInfo($"Fetching All Project by Id: {id}");
+            Projectmaster projectmaster = _unitOfWork.Projectmaster.Get(u => u.Id == id);
+            if (projectmaster == null)
             {
-                Projectmaster projectmaster = _unitOfWork.Projectmaster.Get(u => u.Id == id);
-                if (projectmaster == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "No result found by this id: " + id;
-                    _logger.LogError("No result found by this id:" + id);
-                }
-                _response.Result = projectmaster;
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = projectmaster;
             return _response;
         }
 
@@ -90,30 +78,21 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ProjectmasterResponseModel Post([FromBody] ProjectmasterRequestModel request)
         {
-            try
+            var projectStatus = new Projectmaster
             {
-                var projectStatus = new Projectmaster
-                {
-                    Name = request.Name,
-                    IsActive = request.IsActive,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                Name = request.Name,
+                IsActive = request.IsActive,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
 
-                _unitOfWork.Projectmaster.Add(projectStatus);
-                _unitOfWork.Save();
+            _unitOfWork.Projectmaster.Add(projectStatus);
+            _unitOfWork.Save();
 
-                _responseModel.Id = projectStatus.Id;
-                _responseModel.IsActive = projectStatus.IsActive;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _responseModel.Id = projectStatus.Id;
+            _responseModel.IsActive = projectStatus.IsActive;
 
             return _responseModel;
         }
@@ -132,9 +111,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ProjectmasterResponseModel Put(int id, [FromBody] ProjectmasterRequestModel request)
         {
-            try
+            var existingStatus = _unitOfWork.Projectmaster.Get(u => u.Id == id);
+
+            if (existingStatus != null)
             {
-                var existingStatus = _unitOfWork.Projectmaster.Get(u => u.Id == id);
                 existingStatus.Name = request.Name;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
@@ -146,11 +126,11 @@ namespace MRF.API.Controllers
                 _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
-            catch (Exception ex)
+            else
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
             }
             return _responseModel;
         }
@@ -167,18 +147,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            try
+            Projectmaster? obj = _unitOfWork.Projectmaster.Get(u => u.Id == id);
+            if (obj == null)
             {
-                Projectmaster? obj = _unitOfWork.Projectmaster.Get(u => u.Id == id);
-                _unitOfWork.Projectmaster.Remove(obj);
-                _unitOfWork.Save();
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _unitOfWork.Projectmaster.Remove(obj);
+            _unitOfWork.Save();
         }
     }
 }

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MRF.DataAccess\MRF.DataAccess.csproj" />
+    <ProjectReference Include="..\MRF.Utility\MRF.Utility.csproj" />
   </ItemGroup>
 
 </Project>

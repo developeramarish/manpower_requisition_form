@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,9 +16,9 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private DepartmentmasterResponseModel _responseModel;
-        private readonly ILogger<DepartmentController> _logger;
+        private readonly ILoggerService _logger;
 
-        public DepartmentController(IUnitOfWork unitOfWork, ILogger<DepartmentController> logger)
+        public DepartmentController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -35,17 +36,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
-            try
+            _logger.LogInfo("Fetching All Department");
+            List<Departmentmaster> departmentList = _unitOfWork.Departmentmaster.GetAll().ToList();
+            if (departmentList == null)
             {
-                List<Departmentmaster> obj = _unitOfWork.Departmentmaster.GetAll().ToList();
-                _response.Result = obj;
+                _logger.LogError("No record is found");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = departmentList;
+            _logger.LogInfo($"Total department  count: {departmentList.Count}");
             return _response;
         }
 
@@ -60,23 +58,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int id)
         {
-            try
+            _logger.LogInfo($"Fetching All Department by Id: {id}");
+            Departmentmaster departmentmaster = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
+            if (departmentmaster == null)
             {
-                Departmentmaster departmentmaster = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
-                if (departmentmaster == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "No result found by this Id: " + id;
-                    _logger.LogError("No result found by this Id:" + id);
-                }
-                _response.Result = departmentmaster;
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = departmentmaster;
             return _response;
         }
 
@@ -91,30 +79,21 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public DepartmentmasterResponseModel Post([FromBody] DepartmentmasterRequestModel request)
         {
-            try
+            var dapartment = new Departmentmaster
             {
-                var dapartment = new Departmentmaster
-                {
-                    Name = request.Name,
-                    IsActive = request.IsActive,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                Name = request.Name,
+                IsActive = request.IsActive,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
 
-                _unitOfWork.Departmentmaster.Add(dapartment);
-                _unitOfWork.Save();
+            _unitOfWork.Departmentmaster.Add(dapartment);
+            _unitOfWork.Save();
 
-                _responseModel.Id = dapartment.Id;
-                _responseModel.IsActive = dapartment.IsActive;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _responseModel.Id = dapartment.Id;            
+            _responseModel.IsActive = dapartment.IsActive;
 
             return _responseModel;
         }
@@ -133,10 +112,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public DepartmentmasterResponseModel Put(int id, [FromBody] DepartmentmasterRequestModel request)
         {
-            try
-            {
-                var existingStatus = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
-                existingStatus.Name = request.Name;
+            var existingStatus = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
+
+            if (existingStatus != null)
+            {   
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -147,11 +126,11 @@ namespace MRF.API.Controllers
                 _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
-            catch (Exception ex)
+            else
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
             }
             return _responseModel;
         }
@@ -168,18 +147,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            try
+            Departmentmaster? obj = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
+            if (obj == null)
             {
-                Departmentmaster? obj = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
-                _unitOfWork.Departmentmaster.Remove(obj);
-                _unitOfWork.Save();
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _unitOfWork.Departmentmaster.Remove(obj);
+            _unitOfWork.Save();            
         }
     }
 }

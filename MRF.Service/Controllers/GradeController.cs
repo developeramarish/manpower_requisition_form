@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,8 +16,8 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private GrademasterResponseModel _responseModel;
-        private readonly ILogger<GradeController> _logger;
-        public GradeController(IUnitOfWork unitOfWork, ILogger<GradeController> logger)
+        private readonly ILoggerService _logger;
+        public GradeController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -34,17 +35,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
-            try
+            _logger.LogInfo("Fetching All Grades");
+            List<Grademaster> gradeList = _unitOfWork.Grademaster.GetAll().ToList();
+            if (gradeList == null)
             {
-                List<Grademaster> obj = _unitOfWork.Grademaster.GetAll().ToList();
-                _response.Result = obj;
+                _logger.LogError("No record is found");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = gradeList;
+            _logger.LogInfo($"Total grade  count: {gradeList.Count}");
             return _response;
         }
 
@@ -59,23 +57,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int id)
         {
-            try
+            _logger.LogInfo($"Fetching All Grade by Id: {id}");
+            Grademaster grademaster = _unitOfWork.Grademaster.Get(u => u.Id == id);
+            if (grademaster == null)
             {
-                Grademaster grademaster = _unitOfWork.Grademaster.Get(u => u.Id == id);
-                if (grademaster == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "No result found by this Id: " + id;
-                    _logger.LogError("No result found by this Id:" + id);
-                }
-                _response.Result = grademaster;
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = grademaster;
             return _response;
         }
 
@@ -89,31 +77,22 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public GrademasterResponseModel Post([FromBody] GrademasterRequestModel request)
-        {
-            try
+        {  
+            var grade = new Grademaster
             {
-                var gradeStatus = new Grademaster
-                {
-                    Name = request.Name,
-                    IsActive = request.IsActive,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                Name = request.Name,
+                IsActive = request.IsActive,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
 
-                _unitOfWork.Grademaster.Add(gradeStatus);
-                _unitOfWork.Save();
+            _unitOfWork.Grademaster.Add(grade);
+            _unitOfWork.Save();
 
-                _responseModel.Id = gradeStatus.Id;
-                _responseModel.IsActive = gradeStatus.IsActive;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _responseModel.Id = grade.Id;
+            _responseModel.IsActive = grade.IsActive;
 
             return _responseModel;
         }
@@ -132,25 +111,26 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public GrademasterResponseModel Put(int id, [FromBody] GrademasterRequestModel request)
         {
-            try
-            {
-                var existingStatus = _unitOfWork.Grademaster.Get(u => u.Id == id);
+            var existingStatus = _unitOfWork.Grademaster.Get(u => u.Id == id);
 
+            if (existingStatus != null)
+            {
+                existingStatus.Name = request.Name;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
-                existingStatus.Name = request.Name;
+
                 _unitOfWork.Grademaster.Update(existingStatus);
                 _unitOfWork.Save();
 
                 _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
-            catch (Exception ex)
+            else
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
             }
             return _responseModel;
         }
@@ -166,19 +146,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
-        {
-            try
+        {  
+            Grademaster? obj = _unitOfWork.Grademaster.Get(u => u.Id == id);
+            if (obj == null)
             {
-                Grademaster? obj = _unitOfWork.Grademaster.Get(u => u.Id == id);
-                _unitOfWork.Grademaster.Remove(obj);
-                _unitOfWork.Save();
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _unitOfWork.Grademaster.Remove(obj);
+            _unitOfWork.Save();
         }
 
     }

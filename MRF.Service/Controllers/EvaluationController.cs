@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,8 +16,8 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private EvaluationmasterResponseModel _responseModel;
-        private readonly ILogger<EvaluationController> _logger;
-        public EvaluationController(IUnitOfWork unitOfWork, ILogger<EvaluationController> logger)
+        private readonly ILoggerService _logger;
+        public EvaluationController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -34,17 +35,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
-            try
+            _logger.LogInfo("Fetching All Evaluation");
+            List<Evaluationmaster> evaluationList = _unitOfWork.Evaluationmaster.GetAll().ToList();
+            if (evaluationList == null)
             {
-                List<Evaluationmaster> obj = _unitOfWork.Evaluationmaster.GetAll().ToList();
-                _response.Result = obj;
+                _logger.LogError("No record is found");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = evaluationList;
+            _logger.LogInfo($"Total evaluation  count: {evaluationList.Count}");
             return _response;
         }
 
@@ -59,23 +57,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int id)
         {
-            try
+            _logger.LogInfo($"Fetching All Evaluation by Id: {id}");
+            Evaluationmaster evaluationmaster = _unitOfWork.Evaluationmaster.Get(u => u.Id == id);
+            if (evaluationmaster == null)
             {
-                Evaluationmaster evaluationmaster = _unitOfWork.Evaluationmaster.Get(u => u.Id == id);
-                if (evaluationmaster == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "No result found by this Id: " + id;
-                    _logger.LogError("No result found by this Id:" + id);
-                }
-                _response.Result = evaluationmaster;
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = evaluationmaster;
             return _response;
         }
 
@@ -90,30 +78,20 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public EvaluationmasterResponseModel Post([FromBody] EvaluationmasterRequestModel request)
         {
-            try
+            var evaluation = new Evaluationmaster
             {
-                var evaluationStatus = new Evaluationmaster
-                {
+                Type = request.Type,                
+                IsActive = request.IsActive,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
+            _unitOfWork.Evaluationmaster.Add(evaluation);
+            _unitOfWork.Save();
 
-                    IsActive = request.IsActive,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
-
-                _unitOfWork.Evaluationmaster.Add(evaluationStatus);
-                _unitOfWork.Save();
-
-                _responseModel.Id = evaluationStatus.Id;
-                _responseModel.IsActive = evaluationStatus.IsActive;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _responseModel.Id = evaluation.Id;
+            _responseModel.IsActive = evaluation.IsActive;
 
             return _responseModel;
         }
@@ -132,10 +110,11 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public EvaluationmasterResponseModel Put(int id, [FromBody] EvaluationmasterRequestModel request)
         {
-            try
-            {
-                var existingStatus = _unitOfWork.Evaluationmaster.Get(u => u.Id == id);
+            var existingStatus = _unitOfWork.Evaluationmaster.Get(u => u.Id == id);
 
+            if (existingStatus != null)
+            {
+                existingStatus.Type = request.Type;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -146,11 +125,11 @@ namespace MRF.API.Controllers
                 _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
-            catch (Exception ex)
+            else
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
             }
             return _responseModel;
         }
@@ -167,18 +146,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            try
+            Evaluationmaster? obj = _unitOfWork.Evaluationmaster.Get(u => u.Id == id);
+            if (obj == null)
             {
-                Evaluationmaster? obj = _unitOfWork.Evaluationmaster.Get(u => u.Id == id);
-                _unitOfWork.Evaluationmaster.Remove(obj);
-                _unitOfWork.Save();
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _unitOfWork.Evaluationmaster.Remove(obj);
+            _unitOfWork.Save();
         }
     }
 }

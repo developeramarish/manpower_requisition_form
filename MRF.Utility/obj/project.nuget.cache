@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "VYxDbil5qHJcZSq51uwjrc9PuyIfp1g800E0+TZCDxaKL7+BB/BRxEyjFWgn16s3tYzBNlLVRdVdvs35vqpROw==",
+  "dgSpecHash": "AmpOJ3lx/qseERy9qI30W/4NLDtzFkJT7iDZ7oZXbtW6OKAF6NjvgjYo8VaXwaxPGGPsnX6iSA+5vmFAlpN8Rg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.extensions.primitives\\2.2.0\\microsoft.extensions.primitives.2.2.0.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\nlog\\5.2.3\\nlog.5.2.3.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\system.memory\\4.5.1\\system.memory.4.5.1.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.1\\system.runtime.compilerservices.unsafe.4.5.1.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512"
+  ],
   "logs": []
 }

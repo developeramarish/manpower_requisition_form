@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ut4LwIkb065vRP3W2zM+AygPE4u2wq8v/a/Ot0s282RCcCxXEh9g1JlBhc0uZVdZT8l/KghPBwhBwn0zYg/Pyg==",
+  "dgSpecHash": "OuG0JtavO5mT+P4cQESF6hClP9vbcom0+4A8VCfl+fZNO+xBOkSN3Spxwr1SXHRJBDLbQSQVhnKNmj7wj/Fg5Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Service\\MRF.API.csproj",
+  "projectFilePath": "C:\\Users\\Manish.Partey\\Source\\Repos\\manpower_requisition_form\\MRF.Service\\MRF.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.10\\microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.10\\microsoft.entityframeworkcore.7.0.10.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.10\\microsoft.entityframeworkcore.abstractions.7.0.10.nupkg.sha512",
@@ -29,7 +31,8 @@
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.annotations\\6.5.0\\swashbuckle.aspnetcore.annotations.6.5.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
-    "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
+    "C:\\Users\\Manish.Partey\\.nuget\\packages\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512"
   ],
   "logs": []
 }

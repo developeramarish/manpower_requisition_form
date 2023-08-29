@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,8 +16,8 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private GendermasterResponseModel _responseModel;
-        private readonly ILogger<GenderController> _logger;
-        public GenderController(IUnitOfWork unitOfWork, ILogger<GenderController> logger)
+        private readonly ILoggerService _logger;
+        public GenderController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -34,17 +35,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get()
         {
-            try
+            _logger.LogInfo("Fetching All Gemder");
+            List<Gendermaster> gendertList = _unitOfWork.Gendermaster.GetAll().ToList();
+            if (gendertList == null)
             {
-                List<Gendermaster> obj = _unitOfWork.Gendermaster.GetAll().ToList();
-                _response.Result = obj;
+                _logger.LogError("No record is found");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = gendertList;
+            _logger.LogInfo($"Total Gemder count: {gendertList.Count}");
             return _response;
         }
 
@@ -59,23 +57,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int id)
         {
-            try
+            _logger.LogInfo($"Fetching All Gender by Id: {id}");
+            Gendermaster gendermaster  = _unitOfWork.Gendermaster.Get(u => u.Id == id);
+            if (gendermaster == null)
             {
-                Gendermaster gendermaster = _unitOfWork.Gendermaster.Get(u => u.Id == id);
-                if (gendermaster == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "No result found by this Id: " + id;
-                    _logger.LogError("No result found by this Id:" + id);
-                }
-                _response.Result = gendermaster;
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _response.Result = gendermaster;
             return _response;
         }
 
@@ -90,29 +78,21 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public GendermasterResponseModel PostPost([FromBody] GendermasterRequestModel request)
         {
-            try
+            var gender = new Gendermaster
             {
-                var genderStatus = new Gendermaster
-                {
-                    IsActive = request.IsActive,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                Type = request.Type,
+                IsActive = request.IsActive,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
 
-                _unitOfWork.Gendermaster.Add(genderStatus);
-                _unitOfWork.Save();
+            _unitOfWork.Gendermaster.Add(gender);
+            _unitOfWork.Save();
 
-                _responseModel.Id = genderStatus.Id;
-                _responseModel.IsActive = genderStatus.IsActive;
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _responseModel.Id = gender.Id;
+            _responseModel.IsActive = gender.IsActive;
 
             return _responseModel;
         }
@@ -131,9 +111,11 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public GendermasterResponseModel Put(int id, [FromBody] GendermasterRequestModel request)
         {
-            try
+            var existingStatus = _unitOfWork.Gendermaster.Get(u => u.Id == id);
+
+            if (existingStatus != null)
             {
-                var existingStatus = _unitOfWork.Gendermaster.Get(u => u.Id == id);
+                existingStatus.Type = existingStatus.Type;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -144,11 +126,11 @@ namespace MRF.API.Controllers
                 _responseModel.Id = existingStatus.Id;
                 _responseModel.IsActive = existingStatus.IsActive;
             }
-            catch (Exception ex)
+            else
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
             }
             return _responseModel;
         }
@@ -165,18 +147,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            try
+            Gendermaster? obj = _unitOfWork.Gendermaster.Get(u => u.Id == id);
+            if (obj == null)
             {
-                Gendermaster? obj = _unitOfWork.Gendermaster.Get(u => u.Id == id);
-                _unitOfWork.Gendermaster.Remove(obj);
-                _unitOfWork.Save();
+                _logger.LogError($"No result found by this Id: {id}");
             }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _logger.LogError(ex.Message);
-            }
+            _unitOfWork.Gendermaster.Remove(obj);
+            _unitOfWork.Save();
         }
     }
 }
