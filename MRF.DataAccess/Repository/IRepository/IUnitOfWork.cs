@@ -23,6 +23,11 @@
         IMrfresumereviewermapRepository Mrfresumereviewermap { get; }
         IReplacementmrfdetailRepository Replacementmrfdetail { get; }
         IResumeforwarddetailRepository Resumeforwarddetail { get; }
+        IEmployeedetailsRepository Employeedetails { get; }
+        ICandidatedetailRepository Candidatedetail { get; }
+        IEmployeelogindetailRepository Employeelogindetail { get; }
+        IEmployeerolemapRepository Employeerolemap { get; }
+        IFreshmrfdetailRepository Freshmrfdetail { get; }
         void Save();
     }
 }

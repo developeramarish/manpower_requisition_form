@@ -27,6 +27,13 @@ namespace MRF.DataAccess.Repository
         public IMrfresumereviewermapRepository Mrfresumereviewermap { get; private set; }
         public IReplacementmrfdetailRepository Replacementmrfdetail { get; private set; }
         public IResumeforwarddetailRepository Resumeforwarddetail { get; private set; }
+        public IEmployeedetailsRepository Employeedetails { get; private set; }
+        public IEmployeelogindetailRepository Employeelogindetail { get; private set; }
+        public IEmployeerolemapRepository Employeerolemap { get; private set; }
+
+        public IFreshmrfdetailRepository Freshmrfdetail { get; private set; }
+
+        public ICandidatedetailRepository Candidatedetail { get; private set; }
 
         public UnitOfWork(Data.MRFDBContext db)
         {
@@ -52,6 +59,12 @@ namespace MRF.DataAccess.Repository
             Mrfresumereviewermap = new MrfresumereviewermapRepository(_db);
             Replacementmrfdetail = new ReplacementmrfdetailRepository(_db);
             Resumeforwarddetail = new ResumeforwarddetailRepository(_db);
+            Employeedetails = new EmployeedetailsRepository(_db);
+            Employeelogindetail = new EmployeelogindetailRepository(_db);
+            Employeerolemap = new EmployeerolemapRepository(_db);
+            Freshmrfdetail = new FreshmrfdetailRepository(_db);
+            Candidatedetail = new CandidatedetailRepository(_db);
+
         }
         public void Save()
         {
