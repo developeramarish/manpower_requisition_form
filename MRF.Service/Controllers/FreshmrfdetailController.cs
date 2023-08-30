@@ -26,7 +26,7 @@ namespace MRF.API.Controllers
         }
         // GET: api/<FreshmrfdetailController>
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Freshmrfdetail>))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Freshmrfdetails>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -36,7 +36,7 @@ namespace MRF.API.Controllers
         public ResponseDTO Get()
         {
             _logger.LogInfo("Fetching All Fresh mr");
-            List<Freshmrfdetail> FreshmrtList = _unitOfWork.Freshmrfdetail.GetAll().ToList();
+            List<Freshmrfdetails> FreshmrtList = _unitOfWork.Freshmrfdetail.GetAll().ToList();
             if (FreshmrtList == null)
             {
                 _logger.LogError("No record is found");
@@ -48,7 +48,7 @@ namespace MRF.API.Controllers
 
         // GET api/<FreshmrfdetailController>/5
         [HttpGet("{id}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Freshmrfdetail))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Freshmrfdetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -58,7 +58,7 @@ namespace MRF.API.Controllers
         public ResponseDTO Get(int id)
         {
             _logger.LogInfo($"Fetching All Fresh mr by Id: {id}");
-            Freshmrfdetail Freshmrfdetail = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
+            Freshmrfdetails Freshmrfdetail = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
             if (Freshmrfdetail == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");
@@ -78,7 +78,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public FreshmrfdetailResponseModel PostPost([FromBody] FreshmrfdetailRequestModel request)
         {
-            var Freshmr = new Freshmrfdetail
+            var Freshmr = new Freshmrfdetails
             {
                 MrfId = request.MrfId,
                 Justification = request.Justification,
@@ -155,7 +155,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            Freshmrfdetail? obj = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
+            Freshmrfdetails? obj = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
             if (obj == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");

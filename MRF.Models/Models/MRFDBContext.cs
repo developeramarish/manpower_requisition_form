@@ -33,7 +33,7 @@ public partial class MRFDBContext : DbContext
 
     public virtual DbSet<Evaluationstatusmaster> Evaluationstatusmasters { get; set; }
 
-    public virtual DbSet<Freshmrfdetail> Freshmrfdetails { get; set; }
+    public virtual DbSet<Freshmrfdetails> Freshmrfdetails { get; set; }
 
     public virtual DbSet<Gendermaster> Gendermasters { get; set; }
 
@@ -274,7 +274,7 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.UpdatedOnUtc).HasColumnType("int(11)");
         });
 
-        modelBuilder.Entity<Freshmrfdetail>(entity =>
+        modelBuilder.Entity<Freshmrfdetails>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 

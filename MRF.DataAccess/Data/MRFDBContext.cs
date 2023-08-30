@@ -28,7 +28,7 @@ namespace MRF.DataAccess.Data
         public DbSet<Employeedetails> Employeedetails { get; set; }
         public DbSet<Employeelogindetails> Employeelogindetails { get; set; }
         public DbSet<Employeerolemap> Employeerolemap { get; set; }
-        public DbSet<Freshmrfdetail> Freshmrfdetail { get; set; }
+        public DbSet<Freshmrfdetails> Freshmrfdetails { get; set; }
         public DbSet<Interviewevaluation> Interviewevaluation { get; set; }
         public DbSet<Mrfdetails> Mrfdetails { get; set; }
         public DbSet<Mrffeedback> Mrffeedback { get; set; }
