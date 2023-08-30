@@ -21,7 +21,7 @@ public partial class MRFDBContext : DbContext
 
     public virtual DbSet<Employeedetails> Employeedetails { get; set; }
 
-    public virtual DbSet<Employeelogindetail> Employeelogindetails { get; set; }
+    public virtual DbSet<Employeelogindetails> Employeelogindetails { get; set; }
 
     public virtual DbSet<Employeerolemap> Employeerolemaps { get; set; }
 
@@ -166,7 +166,7 @@ public partial class MRFDBContext : DbContext
                 .HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<Employeelogindetail>(entity =>
+        modelBuilder.Entity<Employeelogindetails>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 

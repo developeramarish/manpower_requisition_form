@@ -26,7 +26,7 @@ namespace MRF.API.Controllers
         }
         // GET: api/<EmployeelogindetailController>
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeelogindetail>))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeelogindetails>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -36,7 +36,7 @@ namespace MRF.API.Controllers
         public ResponseDTO Get()
         {
             _logger.LogInfo("Fetching All Gemder");
-            List<Employeelogindetail> EmployeelogindetailList = _unitOfWork.Employeelogindetail.GetAll().ToList();
+            List<Employeelogindetails> EmployeelogindetailList = _unitOfWork.Employeelogindetail.GetAll().ToList();
             if (EmployeelogindetailList == null)
             {
                 _logger.LogError("No record is found");
@@ -48,7 +48,7 @@ namespace MRF.API.Controllers
 
         // GET api/<EmployeelogindetailController>/5
         [HttpGet("{id}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeelogindetail))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeelogindetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -58,7 +58,7 @@ namespace MRF.API.Controllers
         public ResponseDTO Get(int id)
         {
             _logger.LogInfo($"Fetching All Employee login detail by Id: {id}");
-            Employeelogindetail Employeelogindetail = _unitOfWork.Employeelogindetail.Get(u => u.Id == id);
+            Employeelogindetails Employeelogindetail = _unitOfWork.Employeelogindetail.Get(u => u.Id == id);
             if (Employeelogindetail == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");
@@ -78,7 +78,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public EmployeelogindetailResponseModel PostPost([FromBody] EmployeelogindetailRequestModel request)
         {
-            var Employeelogindetail = new Employeelogindetail
+            var Employeelogindetail = new Employeelogindetails
             {
                 Id = request.Id,
                 EmployeeId = request.EmployeeId,
@@ -123,7 +123,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            Employeelogindetail? obj = _unitOfWork.Employeelogindetail.Get(u => u.Id == id);
+            Employeelogindetails? obj = _unitOfWork.Employeelogindetail.Get(u => u.Id == id);
             if (obj == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");

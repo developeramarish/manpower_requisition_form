@@ -3,9 +3,9 @@
 
 namespace MRF.DataAccess.Repository.IRepository
 {
-    public interface IEmployeelogindetailRepository : IRepository<Employeelogindetail>
+    public interface IEmployeelogindetailRepository : IRepository<Employeelogindetails>
     {
-        public void Update(Employeelogindetail employeelogindetail)
+        public void Update(Employeelogindetails employeelogindetail)
             ;
     }
 }
