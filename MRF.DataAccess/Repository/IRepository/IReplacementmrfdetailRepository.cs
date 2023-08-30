@@ -2,8 +2,8 @@
 
 namespace MRF.DataAccess.Repository.IRepository
 {
-    public interface IReplacementmrfdetailRepository : IRepository<Replacementmrfdetail>
+    public interface IReplacementmrfdetailRepository : IRepository<Replacementmrfdetails>
     {
-        void Update(Replacementmrfdetail replacementmrfdetail);
+        void Update(Replacementmrfdetails replacementmrfdetail);
     }
 }

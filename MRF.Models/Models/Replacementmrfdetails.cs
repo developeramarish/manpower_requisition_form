@@ -1,6 +1,6 @@
 ﻿namespace MRF.Models.Models;
 
-public class Replacementmrfdetail
+public class Replacementmrfdetails
 {
     public int Id { get; set; }
 

@@ -57,7 +57,7 @@ public partial class MRFDBContext : DbContext
 
     public virtual DbSet<Qualificationmaster> Qualificationmasters { get; set; }
 
-    public virtual DbSet<Replacementmrfdetail> Replacementmrfdetails { get; set; }
+    public virtual DbSet<Replacementmrfdetails> Replacementmrfdetails { get; set; }
 
     public virtual DbSet<Resumeforwarddetail> Resumeforwarddetails { get; set; }
 
@@ -565,7 +565,7 @@ public partial class MRFDBContext : DbContext
                 .HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<Replacementmrfdetail>(entity =>
+        modelBuilder.Entity<Replacementmrfdetails>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
