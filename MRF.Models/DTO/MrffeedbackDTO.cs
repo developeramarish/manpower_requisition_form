@@ -12,6 +12,5 @@
     public class MrffeedbackResponseModel
     {
         public int Id { get; set; }
-      
     }
 }
