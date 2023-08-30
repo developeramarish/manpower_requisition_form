@@ -2,8 +2,8 @@
 
 namespace MRF.DataAccess.Repository.IRepository
 {
-    public interface IResumeforwarddetailRepository : IRepository<Resumeforwarddetail>
+    public interface IResumeforwarddetailRepository : IRepository<Resumeforwarddetails>
     {
-        void Update(Resumeforwarddetail resumeforwarddetail);
+        void Update(Resumeforwarddetails resumeforwarddetail);
     }
 }

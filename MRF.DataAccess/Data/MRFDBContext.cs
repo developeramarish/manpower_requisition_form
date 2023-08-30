@@ -35,6 +35,6 @@ namespace MRF.DataAccess.Data
         public DbSet<Mrfinterviewermap> Mrfinterviewermap { get; set; }
         public DbSet<Mrfresumereviewermap> Mrfresumereviewermap { get; set; }
         public DbSet<Replacementmrfdetails> Replacementmrfdetails { get; set; }
-        public DbSet<Resumeforwarddetail> Resumeforwarddetail { get; set; }
+        public DbSet<Resumeforwarddetails> Resumeforwarddetails { get; set; }
     }
 }

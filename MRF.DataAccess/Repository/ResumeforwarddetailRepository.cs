@@ -3,16 +3,16 @@ using MRF.Models.Models;
 
 namespace MRF.DataAccess.Repository
 {
-    public class ResumeforwarddetailRepository : Repository<Resumeforwarddetail>, IResumeforwarddetailRepository
+    public class ResumeforwarddetailRepository : Repository<Resumeforwarddetails>, IResumeforwarddetailRepository
     {
         private readonly Data.MRFDBContext _db;
         public ResumeforwarddetailRepository(Data.MRFDBContext db) : base(db)
         {
             _db = db;
         }
-        public void Update(Resumeforwarddetail resumeforwarddetail)
+        public void Update(Resumeforwarddetails resumeforwarddetail)
         {
-            _db.Resumeforwarddetail.Update(resumeforwarddetail);
+            _db.Resumeforwarddetails.Update(resumeforwarddetail);
         }
     }
 }

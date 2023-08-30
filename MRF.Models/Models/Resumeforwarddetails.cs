@@ -1,6 +1,6 @@
 ﻿namespace MRF.Models.Models;
 
-public class Resumeforwarddetail
+public class Resumeforwarddetails
 {
     public int Id { get; set; }
 
