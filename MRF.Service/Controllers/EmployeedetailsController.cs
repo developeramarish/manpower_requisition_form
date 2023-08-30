@@ -28,7 +28,7 @@ namespace MRF.API.Controllers
 
         // GET: api/<EmployeedetailsController>
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetail>))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetails>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -38,7 +38,7 @@ namespace MRF.API.Controllers
         public ResponseDTO Get()
         {
             _logger.LogInfo("Fetching All Employee details");
-            List<Employeedetail> obj = _unitOfWork.Employeedetails.GetAll().ToList();
+            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetAll().ToList();
                 _response.Result = obj;
 
 
@@ -56,7 +56,7 @@ namespace MRF.API.Controllers
 
         // GET api/<EmployeedetailsController>/5
         [HttpGet("{id}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeedetail))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeedetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -65,8 +65,8 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO Get(int id)
         {
-            _logger.LogInfo($"Fetching Employeedetail by Id: {id}");
-            Employeedetail Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+            _logger.LogInfo($"Fetching Employeedetails by Id: {id}");
+            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
                 if (Employeedetail == null)
                 {
                     
@@ -80,7 +80,7 @@ namespace MRF.API.Controllers
 
         // POST api/<EmployeedetailsController>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status201Created, Description = "Item created successfully", Type = typeof(Employeedetail))]
+        [SwaggerResponse(StatusCodes.Status201Created, Description = "Item created successfully", Type = typeof(Employeedetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -89,7 +89,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public EmployeedetailsResponseModel Post([FromBody] EmployeedetailsRequestModel request)
         {
-              var employeedetails = new Employeedetail
+              var employeedetails = new Employeedetails
                 {
                     Name   = request.Name,
                     Email = request.Email,
@@ -112,7 +112,7 @@ namespace MRF.API.Controllers
 
         // PUT api/<EmployeedetailsController>/5
         [HttpPut("{id}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(Employeedetail))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(Employeedetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
         [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful update)")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
@@ -154,7 +154,7 @@ namespace MRF.API.Controllers
 
         // DELETE api/<EmployeedetailsController>/5
         [HttpDelete("{id}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(Employeedetail))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(Employeedetails))]
         [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful deletion)")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -165,7 +165,7 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             
-                Employeedetail? obj = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+                Employeedetails? obj = _unitOfWork.Employeedetails.Get(u => u.Id == id);
             if (obj == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");

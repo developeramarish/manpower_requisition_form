@@ -19,7 +19,7 @@ public partial class MRFDBContext : DbContext
 
     public virtual DbSet<Departmentmaster> Departmentmasters { get; set; }
 
-    public virtual DbSet<Employeedetail> Employeedetails { get; set; }
+    public virtual DbSet<Employeedetails> Employeedetails { get; set; }
 
     public virtual DbSet<Employeelogindetail> Employeelogindetails { get; set; }
 
@@ -143,7 +143,7 @@ public partial class MRFDBContext : DbContext
                 .HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<Employeedetail>(entity =>
+        modelBuilder.Entity<Employeedetails>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 

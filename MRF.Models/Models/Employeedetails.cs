@@ -1,6 +1,6 @@
 ﻿namespace MRF.Models.Models;
 
-public class Employeedetail
+public class Employeedetails
 {
     public int Id { get; set; }
 
