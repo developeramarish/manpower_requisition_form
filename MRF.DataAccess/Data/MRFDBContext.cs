@@ -24,7 +24,7 @@ namespace MRF.DataAccess.Data
         public DbSet<Rolemaster> Rolemaster { get; set; }
         public DbSet<Subdepartmentmaster> Subdepartmentmaster { get; set; }
         public DbSet<Vacancytypemaster> Vacancytypemaster { get; set; }
-        public DbSet<Candidatedetail> Candidatedetail { get; set; }
+        public DbSet<Candidatedetails> Candidatedetails { get; set; }
         public DbSet<Employeedetail> Employeedetail { get; set; }
         public DbSet<Employeelogindetail> Employeelogindetail { get; set; }
         public DbSet<Employeerolemap> Employeerolemap { get; set; }

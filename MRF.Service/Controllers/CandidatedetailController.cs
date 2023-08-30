@@ -26,7 +26,7 @@ namespace MRF.API.Controllers
 
         // GET: api/<CandidatedetailController>
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Candidatedetail>))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Candidatedetails>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -36,7 +36,7 @@ namespace MRF.API.Controllers
         public ResponseDTO Get()
         {
             _logger.LogInfo("Fetching All Candidate detail");
-            List<Candidatedetail> obj = _unitOfWork.Candidatedetail.GetAll().ToList();
+            List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetAll().ToList();
                
             if (obj == null)
             {
@@ -49,7 +49,7 @@ namespace MRF.API.Controllers
 
         // GET api/<CandidatedetailController>/5
         [HttpGet("{Id}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Candidatedetail))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Candidatedetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
@@ -59,7 +59,7 @@ namespace MRF.API.Controllers
         public ResponseDTO Get(int Id)
         {
             _logger.LogInfo($"Fetching  Candidate detail by Id: {Id}");
-            Candidatedetail Candidatedetail = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
+            Candidatedetails Candidatedetail = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
                 if (Candidatedetail == null)
                 {
                     
@@ -82,7 +82,7 @@ namespace MRF.API.Controllers
         public CandidatedetailResponseModel Post([FromBody] CandidatedetailRequestModel request)
         {
             
-                var Candidatedetail = new Candidatedetail
+                var Candidatedetail = new Candidatedetails
                 {
                     Name = request.Name,
                     MrfId=request.MrfId,
@@ -136,8 +136,7 @@ namespace MRF.API.Controllers
 
                     _unitOfWork.Candidatedetail.Update(existingDetails);
                     _unitOfWork.Save();
-                    _responseModel.Id = existingDetails.Id;
-                    _responseModel.IsActive = existingDetails.IsActive;
+                    _responseModel.Id = existingDetails.Id;                    
                 }
                 else
                 {
@@ -162,7 +161,7 @@ namespace MRF.API.Controllers
         public void Delete(int Id)
         {
            
-                Candidatedetail? obj = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
+                Candidatedetails? obj = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
                 _unitOfWork.Candidatedetail.Remove(obj);
                 _unitOfWork.Save();
             

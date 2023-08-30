@@ -3,8 +3,8 @@
 
 namespace MRF.DataAccess.Repository.IRepository
 {
-    public interface ICandidatedetailRepository: IRepository<Candidatedetail>
+    public interface ICandidatedetailRepository: IRepository<Candidatedetails>
     {
-        public void Update(Candidatedetail candidatedetail);
+        public void Update(Candidatedetails candidatedetail);
     }
 }

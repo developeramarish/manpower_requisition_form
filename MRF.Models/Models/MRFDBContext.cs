@@ -13,7 +13,7 @@ public partial class MRFDBContext : DbContext
     {
     }
 
-    public virtual DbSet<Candidatedetail> Candidatedetails { get; set; }
+    public virtual DbSet<Candidatedetails> Candidatedetails { get; set; }
 
     public virtual DbSet<Candidatestatusmaster> Candidatestatusmasters { get; set; }
 
@@ -77,7 +77,7 @@ public partial class MRFDBContext : DbContext
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
 
-        modelBuilder.Entity<Candidatedetail>(entity =>
+        modelBuilder.Entity<Candidatedetails>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 

@@ -2,16 +2,16 @@
 using MRF.Models.Models;
 namespace MRF.DataAccess.Repository
 {
-    public class CandidatedetailRepository : Repository<Candidatedetail>, ICandidatedetailRepository
+    public class CandidatedetailRepository : Repository<Candidatedetails>, ICandidatedetailRepository
     {
         private readonly Data.MRFDBContext _db;
         public CandidatedetailRepository(Data.MRFDBContext db) : base(db)
         {
             _db = db;
         }
-        public void Update(Candidatedetail candidatedetail)
+        public void Update(Candidatedetails candidatedetail)
         {
-            _db.Candidatedetail.Update(candidatedetail);
+            _db.Candidatedetails.Update(candidatedetail);
         }
     }
 }
