@@ -16,12 +16,14 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private CandidatedetailResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        public CandidatedetailController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        public CandidatedetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new CandidatedetailResponseModel();
-            _logger = logger;
+            _logger = logger;            
+            _emailService = emailService;
         }
 
         // GET: api/<CandidatedetailController>
@@ -44,6 +46,7 @@ namespace MRF.API.Controllers
             }
             _response.Result = obj;
             _logger.LogInfo($"Total Candidate detail count: {obj.Count}");
+            _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test Email", $"Total Candidate detail count: {obj.Count}");
             return _response;
         }
 

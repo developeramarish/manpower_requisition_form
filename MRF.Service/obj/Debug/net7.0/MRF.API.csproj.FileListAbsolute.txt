@@ -59,10 +59,13 @@ C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\De
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Microsoft.OpenApi.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\MySqlConnector.dll
+C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Newtonsoft.Json.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\NLog.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\NLog.Extensions.Logging.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\NLog.Web.AspNetCore.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\SendGrid.dll
+C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\StarkbankEcdsa.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Swashbuckle.AspNetCore.Annotations.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Manish.Partey\source\repos\manpower_requisition_form\MRF.Service\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
