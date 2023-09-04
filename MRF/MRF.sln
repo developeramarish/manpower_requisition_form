@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRF.Models", "..\MRF.Models
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRF.Utility", "..\MRF.Utility\MRF.Utility.csproj", "{19503098-50FA-4EEB-A704-C32892FDA8A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.Gateway", "MRF.Gateway\MRF.Gateway.csproj", "{AA043AA3-2069-4CD6-9D3D-F272B5709C32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.Gateway", "MRF.Gateway\MRF.Gateway.csproj", "{67B773C5-DC5E-4E30-A33F-AEEF6B9F5CBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{19503098-50FA-4EEB-A704-C32892FDA8A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19503098-50FA-4EEB-A704-C32892FDA8A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19503098-50FA-4EEB-A704-C32892FDA8A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA043AA3-2069-4CD6-9D3D-F272B5709C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA043AA3-2069-4CD6-9D3D-F272B5709C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA043AA3-2069-4CD6-9D3D-F272B5709C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA043AA3-2069-4CD6-9D3D-F272B5709C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67B773C5-DC5E-4E30-A33F-AEEF6B9F5CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67B773C5-DC5E-4E30-A33F-AEEF6B9F5CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67B773C5-DC5E-4E30-A33F-AEEF6B9F5CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67B773C5-DC5E-4E30-A33F-AEEF6B9F5CBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
