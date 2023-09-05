@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Manish.Partey\\source\\repos\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj": {}
+    "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Manish.Partey\\source\\repos\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj": {
+    "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Manish.Partey\\source\\repos\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj",
+        "projectUniqueName": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj",
         "projectName": "MRF.Utility",
-        "projectPath": "C:\\Users\\Manish.Partey\\source\\repos\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj",
+        "projectPath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Utility\\MRF.Utility.csproj",
         "packagesPath": "C:\\Users\\Manish.Partey\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Manish.Partey\\source\\repos\\manpower_requisition_form\\MRF.Utility\\obj\\",
+        "outputPath": "C:\\Users\\Manish.Partey\\OneDrive - CJK Group, Inc\\Documents\\MRF\\manpower_requisition_form\\MRF.Utility\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
