@@ -42,5 +42,5 @@ steps:
   displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'AzureTestProject'
+    ArtifactName: 'MRF-ReleasePipeline-Main-Build-Artifact'
     publishLocation: 'Container'
