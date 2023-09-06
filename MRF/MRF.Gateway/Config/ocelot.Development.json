@@ -1,0 +1,24 @@
+{
+  "Routes": [
+
+    {
+      "DownstreamPathTemplate": "/api/HealthCheck",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/HealthCheck",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5000"
+  }
+}
