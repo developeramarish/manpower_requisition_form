@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'  
   solution: '**/MRF/MRF.sln'
-  project: '**/MRF/MRF.Api/MRF.Api.csproj'
+  project: '**/MRF/MRF.API/MRF.API.csproj'
 
 steps:
 - task: NuGetToolInstaller@1
