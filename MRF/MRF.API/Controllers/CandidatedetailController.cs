@@ -39,13 +39,14 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Candidate detail");
             List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetAll().ToList();
-               
-            if (obj == null)
+
+            if (obj.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = obj;
-            _logger.LogInfo($"Total Candidate detail count: {obj.Count}");
+            _response.Count = obj.Count;
+            _logger.LogInfo($"Total Candidate detail count: {_response.Count}");
             _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test Email", $"Total Candidate detail count: {obj.Count}");
             return _response;
         }
@@ -104,8 +105,8 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
                 _responseModel.Id = Candidatedetail.Id;
-               
-            
+                _responseModel.IsActive = true;
+
 
             return _responseModel;
         }
@@ -139,8 +140,9 @@ namespace MRF.API.Controllers
 
                     _unitOfWork.Candidatedetail.Update(existingDetails);
                     _unitOfWork.Save();
-                    _responseModel.Id = existingDetails.Id;                    
-                }
+                    _responseModel.Id = existingDetails.Id;
+                    _responseModel.IsActive = true;
+                 }
                 else
                 {
                     _logger.LogError($"No result found by this Id: {id}");
@@ -165,8 +167,11 @@ namespace MRF.API.Controllers
         {
            
                 Candidatedetails? obj = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
+            if (obj != null)
+            {
                 _unitOfWork.Candidatedetail.Remove(obj);
                 _unitOfWork.Save();
+            }
             
         }
     }
