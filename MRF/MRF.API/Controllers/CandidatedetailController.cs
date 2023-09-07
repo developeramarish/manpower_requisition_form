@@ -172,6 +172,9 @@ namespace MRF.API.Controllers
                 _unitOfWork.Candidatedetail.Remove(obj);
                 _unitOfWork.Save();
             }
+            else {
+                _logger.LogError($"No result found by this Id: {Id}");
+            }
             
         }
     }
