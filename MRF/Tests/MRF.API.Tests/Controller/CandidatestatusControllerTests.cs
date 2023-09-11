@@ -13,7 +13,7 @@ public class CandidatestatusControllerTests
     private readonly TestFixture fixture;
     private CandidatestatusController Controller;
     public CandidatestatusControllerTests()
-    {
+    { 
         fixture = new TestFixture();
         Controller = new CandidatestatusController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
 

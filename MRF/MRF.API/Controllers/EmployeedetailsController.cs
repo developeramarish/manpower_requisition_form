@@ -3,6 +3,7 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
+using SendGrid;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Xml.Linq;
 
@@ -39,19 +40,19 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Employee details");
             List<Employeedetails> obj = _unitOfWork.Employeedetails.GetAll().ToList();
-                _response.Result = obj;
+            _response.Result = obj;
 
 
-            if (obj == null)
+            if (obj.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = obj;
-            
+            _response.Count = obj.Count;
             _logger.LogInfo($"Total Employee count: {obj.Count}");
             return _response;
 
-            
+
         }
 
         // GET api/<EmployeedetailsController>/5
@@ -67,14 +68,14 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo($"Fetching Employeedetails by Id: {id}");
             Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
-                if (Employeedetail == null)
-                {
-                    
-                    _logger.LogError("No result found by this Id:" + id);
-                }
-                _response.Result = Employeedetail;
-           
-            
+            if (Employeedetail == null)
+            {
+
+                _logger.LogError("No result found by this Id:" + id);
+            }
+            _response.Result = Employeedetail;
+
+
             return _response;
         }
 
@@ -89,24 +90,24 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public EmployeedetailsResponseModel Post([FromBody] EmployeedetailsRequestModel request)
         {
-              var employeedetails = new Employeedetails
-                {
-                    Name   = request.Name,
-                    Email = request.Email,
-                    ContactNo = request.ContactNo,
-                    IsAllowed = request.IsAllowed,
-                    AllowedByEmployeeId = request.AllowedByEmployeeId,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+            var employeedetails = new Employeedetails
+            {
+                Name = request.Name,
+                Email = request.Email,
+                ContactNo = request.ContactNo,
+                IsAllowed = request.IsAllowed,
+                AllowedByEmployeeId = request.AllowedByEmployeeId,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
 
-                _unitOfWork.Employeedetails.Add(employeedetails);
-                _unitOfWork.Save();
+            _unitOfWork.Employeedetails.Add(employeedetails);
+            _unitOfWork.Save();
 
-                _responseModel.Id = employeedetails.Id;
-   
+            _responseModel.Id = employeedetails.Id;
+
             return _responseModel;
         }
 
@@ -124,8 +125,8 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public EmployeedetailsResponseModel Put(int id, [FromBody] EmployeedetailsRequestModel request)
         {
-           
-                var existingStatus = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+
+            var existingStatus = _unitOfWork.Employeedetails.Get(u => u.Id == id);
             if (existingStatus != null)
             {
                 existingStatus.Name = request.Name;
@@ -141,6 +142,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
                 _responseModel.Id = existingStatus.Id;
+
             }
             else
             {
@@ -148,7 +150,7 @@ namespace MRF.API.Controllers
                 _responseModel.Id = 0;
                 _responseModel.IsActive = false;
             }
-            
+
             return _responseModel;
         }
 
@@ -164,18 +166,23 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            
-                Employeedetails? obj = _unitOfWork.Employeedetails.Get(u => u.Id == id);
-            if (obj == null)
+
+            Employeedetails? obj = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+            if (obj != null)
+            {
+                _unitOfWork.Employeedetails.Remove(obj);
+                _unitOfWork.Save();
+            }
+            else
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Employeedetails.Remove(obj);
-                _unitOfWork.Save();
-            
-            
+
+
+
+
         }
 
     }
-    
+
 }

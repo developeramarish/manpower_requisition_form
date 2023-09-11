@@ -3,6 +3,7 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
+using SendGrid;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ namespace MRF.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class EmployeelogindetailController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -37,11 +39,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Gemder");
             List<Employeelogindetails> EmployeelogindetailList = _unitOfWork.Employeelogindetail.GetAll().ToList();
-            if (EmployeelogindetailList == null)
+            if (EmployeelogindetailList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = EmployeelogindetailList;
+            _response.Count = EmployeelogindetailList.Count;
             _logger.LogInfo($"Total Gemder count: {EmployeelogindetailList.Count}");
             return _response;
         }
@@ -61,7 +64,7 @@ namespace MRF.API.Controllers
             Employeelogindetails Employeelogindetail = _unitOfWork.Employeelogindetail.Get(u => u.Id == id);
             if (Employeelogindetail == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:" + id);
             }
             _response.Result = Employeelogindetail;
             return _response;
@@ -82,14 +85,14 @@ namespace MRF.API.Controllers
             {
                 Id = request.Id,
                 EmployeeId = request.EmployeeId,
-              
+
             };
 
             _unitOfWork.Employeelogindetail.Add(Employeelogindetail);
             _unitOfWork.Save();
 
             _responseModel.Id = Employeelogindetail.Id;
-            
+
 
             return _responseModel;
         }
@@ -124,12 +127,17 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Employeelogindetails? obj = _unitOfWork.Employeelogindetail.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
+            {
+                _unitOfWork.Employeelogindetail.Remove(obj);
+                _unitOfWork.Save();
+            }
+            else
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Employeelogindetail.Remove(obj);
-            _unitOfWork.Save();
+
+
         }
     }
 }

@@ -3,11 +3,13 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
+using SendGrid;
 using Swashbuckle.AspNetCore.Annotations;
 namespace MRF.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class EmployeerolemapController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -34,11 +36,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Gemder");
             List<Employeerolemap> EmployeerolemapList = _unitOfWork.Employeerolemap.GetAll().ToList();
-            if (EmployeerolemapList == null)
+            if (EmployeerolemapList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = EmployeerolemapList;
+            _response.Count = EmployeerolemapList.Count;
             _logger.LogInfo($"Total Gemder count: {EmployeerolemapList.Count}");
             return _response;
         }
@@ -77,8 +80,8 @@ namespace MRF.API.Controllers
         {
             var Employeerolemap = new Employeerolemap
             {
-                EmployeeId =request.EmployeeId,
-                RoleId =request.RoleId,
+                EmployeeId = request.EmployeeId,
+                RoleId = request.RoleId,
                 IsActive = request.IsActive,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
@@ -90,7 +93,7 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
 
             _responseModel.Id = Employeerolemap.Id;
-           
+
 
             return _responseModel;
         }
@@ -147,12 +150,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Employeerolemap? obj = _unitOfWork.Employeerolemap.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Employeerolemap.Remove(obj);
+                _unitOfWork.Save();
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Employeerolemap.Remove(obj);
-            _unitOfWork.Save();
+            
+            
         }
     }
 }
