@@ -64,7 +64,7 @@ namespace MRF.API.Controllers
             Employeelogindetails Employeelogindetail = _unitOfWork.Employeelogindetail.Get(u => u.Id == id);
             if (Employeelogindetail == null)
             {
-                _logger.LogError($"No result found by this Id:" + id);
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = Employeelogindetail;
             return _response;

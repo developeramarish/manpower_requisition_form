@@ -38,11 +38,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Evaluation status");
             List<Evaluationstatusmaster> evaluationList = _unitOfWork.Evaluationstatusmaster.GetAll().ToList();
-            if (evaluationList == null)
+            if (evaluationList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = evaluationList;
+            _response.Count= evaluationList.Count;
             _logger.LogInfo($"Total Evaluation status  count: {evaluationList.Count}");
             return _response;
         }
@@ -62,7 +63,7 @@ namespace MRF.API.Controllers
             Evaluationstatusmaster evaluationList = _unitOfWork.Evaluationstatusmaster.Get(u => u.Id == id);
             if (evaluationList == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = evaluationList;
             return _response;
@@ -149,12 +150,15 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Evaluationstatusmaster? obj = _unitOfWork.Evaluationstatusmaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Evaluationstatusmaster.Remove(obj);
+                _unitOfWork.Save();
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Evaluationstatusmaster.Remove(obj);
-            _unitOfWork.Save();
+           
         }
     }
 }

@@ -20,7 +20,7 @@ namespace MRF.API.Test.Controllers
         }
 
         [Fact]
-        public void DepartmentControllerTest_Constructor_ShouldInitializeDependencies()
+        public void EmployeerolemapControllerTest_Constructor_ShouldInitializeDependencies()
         {
             // Assert
             Assert.NotNull(fixture.Controller);
@@ -28,12 +28,12 @@ namespace MRF.API.Test.Controllers
         }
 
         [Fact]
-        public void DepartmentController_ShouldReturnCount_WhenDataFound()
+        public void EmployeerolemapController_ShouldReturnCount_WhenDataFound()
         {
 
 
             // Create a list of sample Employeerolemap for testing
-            var sampleDepartmentDetails = new List<Employeerolemap>
+            var sampleEmployeerolemapDetails = new List<Employeerolemap>
             {
             new Employeerolemap { Id=1, EmployeeId=2345, RoleId=2,IsActive=true,},
             new Employeerolemap { Id=2, EmployeeId=2345, RoleId=2,IsActive=true,},
@@ -41,14 +41,14 @@ namespace MRF.API.Test.Controllers
             };
 
             // Set up the behavior of the mockUnitOfWork to return the sample data
-            fixture.MockUnitOfWork.Setup(uow => uow.Employeerolemap.GetAll()).Returns(sampleDepartmentDetails);
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeerolemap.GetAll()).Returns(sampleEmployeerolemapDetails);
 
 
             // Act
             var result = Controller.Get();
 
             // Assert
-            Assert.Equal(sampleDepartmentDetails.Count, result.Count);
+            Assert.Equal(sampleEmployeerolemapDetails.Count, result.Count);
             Assert.NotNull(result);
             result.Should().NotBeNull();
             fixture.MockUnitOfWork.Verify(x => x.Employeerolemap, Times.Once());
@@ -56,7 +56,7 @@ namespace MRF.API.Test.Controllers
 
 
         [Fact]
-        public void DepartmentController_ShouldReturnNotFound_WhenDataNotFound()
+        public void EmployeerolemapController_ShouldReturnNotFound_WhenDataNotFound()
         {
 
             fixture.MockUnitOfWork.Setup(x => x.Employeerolemap.GetAll()).Returns(new List<Employeerolemap>());
@@ -72,61 +72,61 @@ namespace MRF.API.Test.Controllers
         }
 
 
-        //[Fact]
-        //public void GetDepartmentDetailslById_ShouldReturnNoResult_WhenInputIsEqualsZero()
-        //{
-        //    // Arrange
-
-        //    int id = 0;
-
-        //    // Create a list of sample Employeerolemap for testing
-        //    var sampleDepartmentDetails = new List<Employeerolemap>
-        //    {
-        //    new Employeerolemap { EmployeeId=2345, RoleId=2,IsActive=true,},
-        //    new Employeerolemap { EmployeeId=2345, RoleId=2,IsActive=true,},
-        //        // Add more sample data as needed
-        //    };
-
-        //    // Set up the behavior of the mockUnitOfWork to return the sample data
-        //    fixture.MockUnitOfWork.Setup(uow => uow.Employeerolemap.GetAll()).Returns(sampleDepartmentDetails);
-
-        //    // Act
-        //    var result = Controller.Get(id);
-
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:0"));
-
-
-        //}
-        //[Fact]
-        //public void GetDepartmentDetailslById_ShouldReturnNoResult_WhenInputIsLessThanZero()
-        //{
-        //    // Arrange
-
-
-        //    int id = 0;
-
-        //    // Create a list of sample Employeerolemap for testing
-        //    var sampleDepartmentDetails = new List<Employeerolemap>
-        //    {
-        //    new Employeerolemap {EmployeeId=2345, RoleId=2,IsActive=true,},
-        //    new Employeerolemap {EmployeeId=2345, RoleId=2,IsActive=true,},
-        //        // Add more sample data as needed
-        //    };
-
-        //    // Set up the behavior of the mockUnitOfWork to return the sample data
-        //    fixture.MockUnitOfWork.Setup(uow => uow.Employeerolemap.GetAll()).Returns(sampleDepartmentDetails);
-
-        //    // Act  
-        //    var result = Controller.Get(id);
-
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:0"));
-        //}
         [Fact]
-        public void CreateDepartmentDetails_ShouldReturnOkResponse_WhenValidRequest()
+        public void GetEmployeerolemapDetailslById_ShouldReturnNoResult_WhenInputIsEqualsZero()
+        {
+            // Arrange
+
+            int id = 0;
+
+            // Create a list of sample Employeerolemap for testing
+            var sampleEmployeerolemapDetails = new List<Employeerolemap>
+            {
+            new Employeerolemap { EmployeeId=2345, RoleId=2,IsActive=true,},
+            new Employeerolemap { EmployeeId=2345, RoleId=2,IsActive=true,},
+                // Add more sample data as needed
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeerolemap.GetAll()).Returns(sampleEmployeerolemapDetails);
+
+            // Act
+            var result = Controller.Get(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:0"));
+
+
+        }
+        [Fact]
+        public void GetEmployeerolemapDetailslById_ShouldReturnNoResult_WhenInputIsLessThanZero()
+        {
+            // Arrange
+
+
+            int id = -3;
+
+            // Create a list of sample Employeerolemap for testing
+            var sampleEmployeerolemapDetails = new List<Employeerolemap>
+            {
+            new Employeerolemap {EmployeeId=2345, RoleId=2,IsActive=true,},
+            new Employeerolemap {EmployeeId=2345, RoleId=2,IsActive=true,},
+                // Add more sample data as needed
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeerolemap.GetAll()).Returns(sampleEmployeerolemapDetails);
+
+            // Act  
+            var result = Controller.Get(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:-3"));
+        }
+        [Fact]
+        public void CreateEmployeerolemapDetails_ShouldReturnOkResponse_WhenValidRequest()
         {
 
 
@@ -169,7 +169,7 @@ namespace MRF.API.Test.Controllers
 
         }
         [Fact]
-        public void CreateDepartmentDetailsl_ShouldReturnBadRequest_WhenInvalidRequest()
+        public void CreateEmployeerolemapDetailsl_ShouldReturnBadRequest_WhenInvalidRequest()
         {
             // Mock the behavior of IUnitOfWork
             fixture.MockUnitOfWork.Setup(uow => uow.Employeerolemap.Add(It.IsAny<Employeerolemap>()));
@@ -202,7 +202,7 @@ namespace MRF.API.Test.Controllers
 
         }
         [Fact]
-        public void DeleteDepartmentDetails_ShouldReturnNoContents_WhenDeletedARecord()
+        public void DeleteEmployeerolemapDetails_ShouldReturnNoContents_WhenDeletedARecord()
         {
             // Arrange
 
@@ -231,7 +231,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Verify(uow => uow.Save(), Times.Once);
         }
         [Fact]
-        public void DeleteDepartmentDetails_ShouldReturnNotFound_WhenRecordNotFound()
+        public void DeleteEmployeerolemapDetails_ShouldReturnNotFound_WhenRecordNotFound()
         {
 
             // Arrange
@@ -252,7 +252,7 @@ namespace MRF.API.Test.Controllers
 
         }
         [Fact]
-        public void DeleteDepartmentDetails_ShouldReturnBadResponse_WhenInputIsZero()
+        public void DeleteEmployeerolemapDetails_ShouldReturnBadResponse_WhenInputIsZero()
         {
             // Arrange
 
@@ -270,7 +270,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Verify(uow => uow.Save(), Times.Never);
         }
         [Fact]
-        public void UpdateDepartmentDetails_ShouldReturnIsActiveTrue_WhenRecordIsUpdated()
+        public void UpdateEmployeerolemapDetails_ShouldReturnIsActiveTrue_WhenRecordIsUpdated()
         {
             // Arrange
 
@@ -306,7 +306,7 @@ namespace MRF.API.Test.Controllers
             Assert.Equal(entityId, result.Id);
         }
         [Fact]
-        public void UpdateDepartmentDetails_ShouldReturnIsActiveFalse_WhenInvalidRequest()
+        public void UpdateEmployeerolemapDetails_ShouldReturnIsActiveFalse_WhenInvalidRequest()
         {
             // Arrange
             int entityId = 999; // Id for which the entity is not found

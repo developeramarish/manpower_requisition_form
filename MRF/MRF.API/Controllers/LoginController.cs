@@ -40,7 +40,7 @@ namespace MRF.API.Controllers
             Employeedetails Employeelogindetail = _unitOfWork.Employeedetails.Get(u => u.Name == Username);
             if (Employeelogindetail == null)
             {
-                _logger.LogError($"Login Failed: {Username}");
+                _logger.LogError($"Login Failed:{Username}");
             }
             _response.Result = Employeelogindetail;
             return _response;

@@ -71,7 +71,7 @@ namespace MRF.API.Controllers
             if (Employeedetail == null)
             {
 
-                _logger.LogError("No result found by this Id:" + id);
+                _logger.LogError("No result found by this Id:{id}");
             }
             _response.Result = Employeedetail;
 

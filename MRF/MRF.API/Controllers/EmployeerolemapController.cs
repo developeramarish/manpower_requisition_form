@@ -61,7 +61,7 @@ namespace MRF.API.Controllers
             Employeerolemap Employeerolemap = _unitOfWork.Employeerolemap.Get(u => u.Id == id);
             if (Employeerolemap == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = Employeerolemap;
             return _response;

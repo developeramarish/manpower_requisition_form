@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Gemder");
             List<Gendermaster> gendertList = _unitOfWork.Gendermaster.GetAll().ToList();
-            if (gendertList == null)
+            if (gendertList.Count==0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = gendertList;
+            _response.Count = gendertList.Count;
             _logger.LogInfo($"Total Gemder count: {gendertList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Gendermaster gendermaster  = _unitOfWork.Gendermaster.Get(u => u.Id == id);
             if (gendermaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = gendermaster;
             return _response;
@@ -148,12 +149,15 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Gendermaster? obj = _unitOfWork.Gendermaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Gendermaster.Remove(obj);
+                _unitOfWork.Save();
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Gendermaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

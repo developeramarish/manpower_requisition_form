@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Employement Type");
             List<Employmenttypemaster> employmenttypeList = _unitOfWork.Employmenttypemaster.GetAll().ToList();
-            if (employmenttypeList == null)
+            if (employmenttypeList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = employmenttypeList;
+            _response.Count = employmenttypeList.Count;
             _logger.LogInfo($"Total employement type  count: {employmenttypeList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Employmenttypemaster  employmenttypemaster = _unitOfWork.Employmenttypemaster.Get(u => u.Id == id);
             if (employmenttypemaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = employmenttypemaster;
             return _response;
@@ -146,12 +147,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Employmenttypemaster? obj = _unitOfWork.Employmenttypemaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Employmenttypemaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Employmenttypemaster.Remove(obj);
-            _unitOfWork.Save();
+           
         }
     }
 }

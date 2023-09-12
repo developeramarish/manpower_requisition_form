@@ -39,11 +39,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All MRF Details");
             List<Mrfdetails> mrfdetailsList = _unitOfWork.Mrfdetail.GetAll().ToList();
-            if (mrfdetailsList == null)
+            if (mrfdetailsList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfdetailsList;
+            _response.Count=mrfdetailsList.Count;
             _logger.LogInfo($"Total mrf details count: {mrfdetailsList.Count}");
             return _response;
         }
@@ -63,7 +64,7 @@ namespace MRF.API.Controllers
             Mrfdetails mrfdetail = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
             if (mrfdetail == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfdetail;
             return _response;
@@ -179,12 +180,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Mrfdetails? obj = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Mrfdetail.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Mrfdetail.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

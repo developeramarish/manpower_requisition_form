@@ -64,7 +64,7 @@ namespace MRF.API.Controllers
             Departmentmaster departmentmaster = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
             if (departmentmaster == null)
             {
-                _logger.LogError($"No result found by this Id:" + id);
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = departmentmaster;
             return _response;

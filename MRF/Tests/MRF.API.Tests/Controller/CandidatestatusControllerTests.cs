@@ -72,59 +72,59 @@ public class CandidatestatusControllerTests
     }
 
 
-    //[Fact]
-    //public void GetCandidatestatusmasterById_ShouldReturnNoResult_WhenInputIsEqualsZero()
-    //{
-    //    // Arrange
+    [Fact]
+    public void GetCandidatestatusmasterById_ShouldReturnNoResult_WhenInputIsEqualsZero()
+    {
+        // Arrange
 
-    //    int id = 0;
+        int id = 0;
 
-    //    // Create a list of sample Candidatestatusmaster for testing
-    //    var sampleCandidatestatusmaster = new List<Candidatestatusmaster>
-    //    {
-    //    new Candidatestatusmaster { Id = 1, Status = "John Doe" },
-    //    new Candidatestatusmaster { Id = 2, Status = "Jane Smith" },
-    //        // Add more sample data as needed
-    //    };
+        // Create a list of sample Candidatestatusmaster for testing
+        var sampleCandidatestatusmaster = new List<Candidatestatusmaster>
+        {
+        new Candidatestatusmaster { Id = 1, Status = "John Doe" },
+        new Candidatestatusmaster { Id = 2, Status = "Jane Smith" },
+            // Add more sample data as needed
+        };
 
-    //    // Set up the behavior of the mockUnitOfWork to return the sample data
-    //    fixture.MockUnitOfWork.Setup(uow => uow.Candidatestatusmaster.GetAll()).Returns(sampleCandidatestatusmaster);
+        // Set up the behavior of the mockUnitOfWork to return the sample data
+        fixture.MockUnitOfWork.Setup(uow => uow.Candidatestatusmaster.GetAll()).Returns(sampleCandidatestatusmaster);
 
-    //    // Act
-    //    var result = Controller.Get(id);
+        // Act
+        var result = Controller.Get(id);
 
-    //    // Assert
-    //    result.Should().NotBeNull();
-    //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:0"));
-
-
-    //}
-    //[Fact]
-    //public void GetCandidatestatusmasterById_ShouldReturnNoResult_WhenInputIsLessThanZero()
-    //{
-    //    // Arrange
+        // Assert
+        result.Should().NotBeNull();
+        fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:" + id));
 
 
-    //    int id = -3;
+    }
+    [Fact]
+    public void GetCandidatestatusmasterById_ShouldReturnNoResult_WhenInputIsLessThanZero()
+    {
+        // Arrange
 
-    //    // Create a list of sample Candidatestatusmaster for testing
-    //    var sampleCandidatestatusmaster = new List<Candidatestatusmaster>
-    //    {
-    //    new Candidatestatusmaster { Id = 1,  Status = "John Doe" },
-    //    new Candidatestatusmaster { Id = 2, Status = "Jane Smith" },
-    //        // Add more sample data as needed
-    //    };
 
-    //    // Set up the behavior of the mockUnitOfWork to return the sample data
-    //    fixture.MockUnitOfWork.Setup(uow => uow.Candidatestatusmaster.GetAll()).Returns(sampleCandidatestatusmaster);
+        int id = -3;
 
-    //    // Act  
-    //    var result =Controller.Get(id);
+        // Create a list of sample Candidatestatusmaster for testing
+        var sampleCandidatestatusmaster = new List<Candidatestatusmaster>
+        {
+        new Candidatestatusmaster { Id = 1,  Status = "John Doe" },
+        new Candidatestatusmaster { Id = 2, Status = "Jane Smith" },
+            // Add more sample data as needed
+        };
 
-    //    // Assert
-    //    result.Should().NotBeNull();
-    //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:-3"));
-    //}
+        // Set up the behavior of the mockUnitOfWork to return the sample data
+        fixture.MockUnitOfWork.Setup(uow => uow.Candidatestatusmaster.GetAll()).Returns(sampleCandidatestatusmaster);
+
+        // Act  
+        var result = Controller.Get(id);
+
+        // Assert
+        result.Should().NotBeNull();
+        fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:" + id));
+    }
     [Fact]
     public void CreateCandidatestatusmaster_ShouldReturnOkResponse_WhenValidRequest()
     {

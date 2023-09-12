@@ -20,7 +20,7 @@ namespace MRF.API.Test.Controllers
         }
 
         [Fact]
-        public void DepartmentControllerTest_Constructor_ShouldInitializeDependencies()
+        public void EmployeelogindetailControllerTest_Constructor_ShouldInitializeDependencies()
         {
             // Assert
             Assert.NotNull(fixture.Controller);
@@ -28,12 +28,12 @@ namespace MRF.API.Test.Controllers
         }
 
         [Fact]
-        public void DepartmentController_ShouldReturnCount_WhenDataFound()
+        public void EmployeelogindetailController_ShouldReturnCount_WhenDataFound()
         {
 
 
             // Create a list of sample Employeelogindetails for testing
-            var sampleDepartmentDetails = new List<Employeelogindetails>
+            var sampleEmployeeloginDetails = new List<Employeelogindetails>
             {
             new Employeelogindetails { Id=1, EmployeeId=47245,},
             new Employeelogindetails { Id=2, EmployeeId=47245,},
@@ -41,14 +41,14 @@ namespace MRF.API.Test.Controllers
             };
 
             // Set up the behavior of the mockUnitOfWork to return the sample data
-            fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.GetAll()).Returns(sampleDepartmentDetails);
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.GetAll()).Returns(sampleEmployeeloginDetails);
 
 
             // Act
             var result = Controller.Get();
 
             // Assert
-            Assert.Equal(sampleDepartmentDetails.Count, result.Count);
+            Assert.Equal(sampleEmployeeloginDetails.Count, result.Count);
             Assert.NotNull(result);
             result.Should().NotBeNull();
             fixture.MockUnitOfWork.Verify(x => x.Employeelogindetail, Times.Once());
@@ -56,7 +56,7 @@ namespace MRF.API.Test.Controllers
 
 
         [Fact]
-        public void DepartmentController_ShouldReturnNotFound_WhenDataNotFound()
+        public void EmployeelogindetailController_ShouldReturnNotFound_WhenDataNotFound()
         {
 
             fixture.MockUnitOfWork.Setup(x => x.Employeelogindetail.GetAll()).Returns(new List<Employeelogindetails>());
@@ -72,61 +72,61 @@ namespace MRF.API.Test.Controllers
         }
 
 
-        //[Fact]
-        //public void GetDepartmentDetailslById_ShouldReturnNoResult_WhenInputIsEqualsZero()
-        //{
-        //    // Arrange
-
-        //    int id = 0;
-
-        //    // Create a list of sample Employeelogindetails for testing
-        //    var sampleDepartmentDetails = new List<Employeelogindetails>
-        //    {
-        //    new Employeelogindetails {Id=1,EmployeeId=45678,},
-        //    new Employeelogindetails {Id=2,EmployeeId=45678,},
-        //        // Add more sample data as needed
-        //    };
-
-        //    // Set up the behavior of the mockUnitOfWork to return the sample data
-        //    fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.GetAll()).Returns(sampleDepartmentDetails);
-
-        //    // Act
-        //    var result = Controller.Get(id);
-
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:"+id));
-
-
-        //}
-        //[Fact]
-        //public void GetDepartmentDetailslById_ShouldReturnNoResult_WhenInputIsLessThanZero()
-        //{
-        //    // Arrange
-
-
-        //    int id = 0;
-
-        //    // Create a list of sample Employeelogindetails for testing
-        //    var sampleDepartmentDetails = new List<Employeelogindetails>
-        //    {
-        //    new Employeelogindetails {Id=1,EmployeeId=45678,},
-        //    new Employeelogindetails {Id=1,EmployeeId=45678,},
-        //        // Add more sample data as needed
-        //    };
-
-        //    // Set up the behavior of the mockUnitOfWork to return the sample data
-        //    fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.GetAll()).Returns(sampleDepartmentDetails);
-
-        //    // Act  
-        //    var result = Controller.Get(id);
-
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id :"+id));
-        //}
         [Fact]
-        public void CreateDepartmentDetails_ShouldReturnOkResponse_WhenValidRequest()
+        public void GetEmployeeloginDetailslById_ShouldReturnNoResult_WhenInputIsEqualsZero()
+        {
+            // Arrange
+
+            int id = 0;
+
+            // Create a list of sample Employeelogindetails for testing
+            var sampleEmployeeloginDetails = new List<Employeelogindetails>
+            {
+            new Employeelogindetails {Id=1,EmployeeId=45678,},
+            new Employeelogindetails {Id=2,EmployeeId=45678,},
+                // Add more sample data as needed
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.GetAll()).Returns(sampleEmployeeloginDetails);
+
+            // Act
+            var result = Controller.Get(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:" + id));
+
+
+        }
+        [Fact]
+        public void GetEmployeeloginDetailslById_ShouldReturnNoResult_WhenInputIsLessThanZero()
+        {
+            // Arrange
+
+
+            int id = 0;
+
+            // Create a list of sample Employeelogindetails for testing
+            var sampleEmployeeloginDetails = new List<Employeelogindetails>
+            {
+            new Employeelogindetails {Id=1,EmployeeId=45678,},
+            new Employeelogindetails {Id=1,EmployeeId=45678,},
+                // Add more sample data as needed
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.GetAll()).Returns(sampleEmployeeloginDetails);
+
+            // Act  
+            var result = Controller.Get(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:" + id));
+        }
+        [Fact]
+        public void CreateEmployeeloginDetails_ShouldReturnOkResponse_WhenValidRequest()
         {
 
 
@@ -164,7 +164,7 @@ namespace MRF.API.Test.Controllers
 
         }
         [Fact]
-        public void CreateDepartmentDetailsl_ShouldReturnBadRequest_WhenInvalidRequest()
+        public void CreateEmployeeloginDetailsl_ShouldReturnBadRequest_WhenInvalidRequest()
         {
             // Mock the behavior of IUnitOfWork
             fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.Add(It.IsAny<Employeelogindetails>()));
@@ -197,7 +197,7 @@ namespace MRF.API.Test.Controllers
 
         }
         [Fact]
-        public void DeleteDepartmentDetails_ShouldReturnNoContents_WhenDeletedARecord()
+        public void DeleteEmployeeloginDetails_ShouldReturnNoContents_WhenDeletedARecord()
         {
             // Arrange
 
@@ -226,7 +226,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Verify(uow => uow.Save(), Times.Once);
         }
         [Fact]
-        public void DeleteDepartmentDetails_ShouldReturnNotFound_WhenRecordNotFound()
+        public void DeleteEmployeeloginDetails_ShouldReturnNotFound_WhenRecordNotFound()
         {
 
             // Arrange
@@ -247,7 +247,7 @@ namespace MRF.API.Test.Controllers
 
         }
         [Fact]
-        public void DeleteDepartmentDetails_ShouldReturnBadResponse_WhenInputIsZero()
+        public void DeleteEmployeeloginDetails_ShouldReturnBadResponse_WhenInputIsZero()
         {
             // Arrange
 
@@ -273,14 +273,14 @@ namespace MRF.API.Test.Controllers
 
         //    var requestModel = new EmployeelogindetailRequestModel
         //    {
-        //         EmployeeId=23456,
+        //        EmployeeId = 23456,
         //    };
 
         //    // Mock the behavior of IUnitOfWork's Get method to return an existing entity
         //    var existingEntity = new Employeelogindetails
         //    {
         //        Id = entityId,
-
+                
         //    };
 
         //    fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.Get(It.IsAny<Expression<Func<Employeelogindetails, bool>>>()))
@@ -294,11 +294,11 @@ namespace MRF.API.Test.Controllers
         //    fixture.MockUnitOfWork.Verify(uow => uow.Employeelogindetail.Update(It.IsAny<Employeelogindetails>()), Times.Once);
         //    fixture.MockUnitOfWork.Verify(uow => uow.Save(), Times.Once);
 
-            
-        //    Assert.NotEqual(entityId, result.Id);
+
+        //    Assert.Equal(entityId, result.Id);
         //}
         [Fact]
-        public void UpdateDepartmentDetails_ShouldReturnIsActiveFalse_WhenInvalidRequest()
+        public void UpdateEmployeeloginDetails_ShouldReturnIsActiveFalse_WhenInvalidRequest()
         {
             // Arrange
             int entityId = 999; // Id for which the entity is not found

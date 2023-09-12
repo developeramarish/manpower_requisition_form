@@ -63,7 +63,7 @@ namespace MRF.API.Controllers
             Candidatestatusmaster candidatestatusmaster = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
             if (candidatestatusmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {Id}");
+                _logger.LogError($"No result found by this Id:{Id}");
                 
             }
             
