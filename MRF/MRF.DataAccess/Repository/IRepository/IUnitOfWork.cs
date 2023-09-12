@@ -28,6 +28,7 @@
         IEmployeelogindetailRepository Employeelogindetail { get; }
         IEmployeerolemapRepository Employeerolemap { get; }
         IFreshmrfdetailRepository Freshmrfdetail { get; }
+        IDashboardRepository Dashboard { get; }
         void Save();
     }
 }

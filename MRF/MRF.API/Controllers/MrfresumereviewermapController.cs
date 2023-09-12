@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MrfresumereviewermapController : ControllerBase
     {
@@ -67,7 +67,7 @@ namespace MRF.API.Controllers
             _response.Result = mrfresumereviewermap;
             return _response;
         }
-
+     
         // POST api/<MrfresumereviewermapController>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status201Created, Description = "Item created successfully", Type = typeof(MrfresumereviewermapResponseModel))]
@@ -154,5 +154,9 @@ namespace MRF.API.Controllers
             _unitOfWork.Mrfresumereviewermap.Remove(obj);
             _unitOfWork.Save();
         }
+
+
+
+        
     }
 }

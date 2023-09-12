@@ -158,5 +158,7 @@ namespace MRF.API.Controllers
             _unitOfWork.Mrfstatusmaster.Remove(obj);
             _unitOfWork.Save();
         }
+
+        
     }
 }
