@@ -38,11 +38,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
             List<Mrfresumereviewermap> mrfresumereviewermapList = _unitOfWork.Mrfresumereviewermap.GetAll().ToList();
-            if (mrfresumereviewermapList == null)
+            if (mrfresumereviewermapList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfresumereviewermapList;
+            _response.Count = mrfresumereviewermapList.Count;
             _logger.LogInfo($"Total Mrf resume reviewer map count: {mrfresumereviewermapList.Count}");
             return _response;
         }
@@ -62,7 +63,7 @@ namespace MRF.API.Controllers
             Mrfresumereviewermap mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.Get(u => u.Id == id);
             if (mrfresumereviewermap == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfresumereviewermap;
             return _response;
@@ -147,12 +148,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Mrfresumereviewermap? obj = _unitOfWork.Mrfresumereviewermap.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Mrfresumereviewermap.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Mrfresumereviewermap.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

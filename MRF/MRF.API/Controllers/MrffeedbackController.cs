@@ -38,11 +38,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All MRF Feedback");
             List<Mrffeedback> mrfFeedBackList = _unitOfWork.Mrffeedback.GetAll().ToList();
-            if (mrfFeedBackList == null)
+            if (mrfFeedBackList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfFeedBackList;
+            _response.Count=mrfFeedBackList.Count;
             _logger.LogInfo($"Total mrf feedback  count: {mrfFeedBackList.Count}");
             return _response;
         }
@@ -62,7 +63,7 @@ namespace MRF.API.Controllers
             Mrffeedback mrfFeedBack = _unitOfWork.Mrffeedback.Get(u => u.Id == id);
             if (mrfFeedBack == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfFeedBack;
             return _response;
@@ -146,12 +147,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Mrffeedback? obj = _unitOfWork.Mrffeedback.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Mrffeedback.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Mrffeedback.Remove(obj);
-            _unitOfWork.Save();
+           
         }
     }
 }

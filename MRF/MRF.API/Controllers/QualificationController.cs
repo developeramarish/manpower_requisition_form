@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Qualifications");
             List<Qualificationmaster> qualificationList = _unitOfWork.Qualificationmaster.GetAll().ToList();
-            if (qualificationList == null)
+            if (qualificationList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = qualificationList;
+            _response.Count= qualificationList.Count;
             _logger.LogInfo($"Total qualification  count: {qualificationList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Qualificationmaster qualificationmaster = _unitOfWork.Qualificationmaster.Get(u => u.Id == id);
             if (qualificationmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = qualificationmaster;
             return _response;
@@ -148,12 +149,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Qualificationmaster? obj = _unitOfWork.Qualificationmaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Qualificationmaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Qualificationmaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

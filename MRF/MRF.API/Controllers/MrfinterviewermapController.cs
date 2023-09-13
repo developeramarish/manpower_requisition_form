@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Mrf Interviewer Map");
             List<Mrfinterviewermap> mrfinterviewermapList = _unitOfWork.Mrfinterviewermap.GetAll().ToList();
-            if (mrfinterviewermapList == null)
+            if (mrfinterviewermapList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfinterviewermapList;
+            _response.Count=mrfinterviewermapList.Count;
             _logger.LogInfo($"Total Mrf Interviewer Map count: {mrfinterviewermapList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Mrfinterviewermap  mrfinterviewermap = _unitOfWork.Mrfinterviewermap.Get(u => u.Id == id);
             if (mrfinterviewermap == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfinterviewermap;
             return _response;
@@ -146,12 +147,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Mrfinterviewermap? obj = _unitOfWork.Mrfinterviewermap.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Mrfinterviewermap.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Mrfinterviewermap.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

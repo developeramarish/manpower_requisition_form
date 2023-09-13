@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Project");
             List<Projectmaster> projectList = _unitOfWork.Projectmaster.GetAll().ToList();
-            if (projectList == null)
+            if (projectList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = projectList;
+            _response.Count = projectList.Count;
             _logger.LogInfo($"Total project  count: {projectList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Projectmaster projectmaster = _unitOfWork.Projectmaster.Get(u => u.Id == id);
             if (projectmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = projectmaster;
             return _response;
@@ -148,12 +149,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Projectmaster? obj = _unitOfWork.Projectmaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Projectmaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Projectmaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

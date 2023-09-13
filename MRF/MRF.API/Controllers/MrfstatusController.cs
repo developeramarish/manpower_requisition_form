@@ -40,11 +40,12 @@ namespace MRF.API.Controllers
 
             _logger.LogInfo("Fetching All MRF Status");
             List<Mrfstatusmaster> mrfStatusList = _unitOfWork.Mrfstatusmaster.GetAll().ToList();
-            if (mrfStatusList == null)
+            if (mrfStatusList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfStatusList;
+            _response.Count=mrfStatusList.Count;
             _logger.LogInfo($"Total MRF Status  count: {mrfStatusList.Count}");
             return _response;
         }
@@ -64,7 +65,7 @@ namespace MRF.API.Controllers
             Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == id);
             if (mrfstatusmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfstatusmaster;
             return _response;
@@ -151,12 +152,16 @@ namespace MRF.API.Controllers
         public void Delete(int Id)
         {
             Mrfstatusmaster? obj = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == Id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Mrfstatusmaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {Id}");
             }
-            _unitOfWork.Mrfstatusmaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

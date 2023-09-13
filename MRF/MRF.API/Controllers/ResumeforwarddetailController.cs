@@ -38,11 +38,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Resume forward detail");
             List<Resumeforwarddetails> resumeforwarddetailList = _unitOfWork.Resumeforwarddetail.GetAll().ToList();
-            if (resumeforwarddetailList == null)
+            if (resumeforwarddetailList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = resumeforwarddetailList;
+            _response.Count = resumeforwarddetailList.Count;
             _logger.LogInfo($"Total  Resume forward detail count: {resumeforwarddetailList.Count}");
             return _response;
         }
@@ -62,7 +63,7 @@ namespace MRF.API.Controllers
             Resumeforwarddetails  resumeforwarddetail = _unitOfWork.Resumeforwarddetail.Get(u => u.Id == id);
             if (resumeforwarddetail == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = resumeforwarddetail;
             return _response;
@@ -144,12 +145,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Resumeforwarddetails? obj = _unitOfWork.Resumeforwarddetail.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Resumeforwarddetail.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Resumeforwarddetail.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }
