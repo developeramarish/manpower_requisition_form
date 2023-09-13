@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -155,8 +156,30 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
         }
 
+        // GET api/<MrfresumereviewermapController>/5
+        [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(ResumeDetailsViewModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetResumeStatusDetails(int id)
+        {
+            _logger.LogInfo($"Fetching All Mrf resume reviewer map by Id: {id}");
+            List<ResumeDetailsViewModel> ResumeDetails = _unitOfWork.ResumeDetail.GetResumeStatusDetails(id);
+            if (ResumeDetails == null)
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+            }
+            _response.Result = ResumeDetails;
+            return _response;
+        }
 
 
-        
+
+
+
     }
 }

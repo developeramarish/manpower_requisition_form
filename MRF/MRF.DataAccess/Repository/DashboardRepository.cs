@@ -50,6 +50,7 @@ namespace MRF.DataAccess.Repository
             var query = from mrfDetails in _db.Mrfdetails
                         join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId 
                         join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
+                        where status.Status.Contains("resume")
                         group new { mrfDetails, Candidate, status } by new
                         {
                             mrfDetails.Id,
@@ -82,8 +83,10 @@ namespace MRF.DataAccess.Repository
                         join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
                         join evaluation in _db.Evaluationmaster on Candidate.CandidateStatusId equals evaluation.Id
                         join interview in _db.Interviewevaluation on evaluation.Id equals interview.EvaluationId
+                        where !status.Status.Contains("resume")
                         group new { mrfDetails, Candidate, status, interview, evaluation } by new
                         {
+                            mrfDetails.Id,
                             mrfDetails.ReferenceNo,
                             Candidate.CandidateStatusId,
                             status.Status,
@@ -95,7 +98,7 @@ namespace MRF.DataAccess.Repository
                     into grouped
                         select new MrfInterviewSummaryViewModel
                         {
-                            //MrfId = grouped.Key.Id,
+                            MrfId = grouped.Key.Id,
                             ReferenceNo = grouped.Key.ReferenceNo,
                             EvaluationId = grouped.Key.EvaluationId,
                             Type = grouped.Key.Type,
