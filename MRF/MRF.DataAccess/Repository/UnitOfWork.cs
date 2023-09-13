@@ -34,7 +34,9 @@ namespace MRF.DataAccess.Repository
         public IFreshmrfdetailRepository Freshmrfdetail { get; private set; }
 
         public ICandidatedetailRepository Candidatedetail { get; private set; }
-
+        public IDashboardRepository Dashboard { get; private set; }
+        public IMrfStatusDetailsRepository MrfStatusDetail { get; private set; }
+        public IResumeDetailsRepository ResumeDetail { get; private set; }
         public UnitOfWork(Data.MRFDBContext db)
         {
             _db = db;
@@ -64,7 +66,9 @@ namespace MRF.DataAccess.Repository
             Employeerolemap = new EmployeerolemapRepository(_db);
             Freshmrfdetail = new FreshmrfdetailRepository(_db);
             Candidatedetail = new CandidatedetailRepository(_db);
-
+            Dashboard = new DashboardRepository(_db);
+            MrfStatusDetail = new MrfStatusDetailsRepository(_db);
+            ResumeDetail=new ResumeDetailsRepository(_db);
         }
         public void Save()
         {
