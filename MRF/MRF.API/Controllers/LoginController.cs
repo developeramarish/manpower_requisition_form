@@ -8,23 +8,22 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
-        private EmployeedetailsResponseModel _responseModel;
         private readonly ILoggerService _logger;
         public LoginController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
-            _responseModel = new EmployeedetailsResponseModel();
+            
             _logger = logger;
         }
 
-        // GET api/<EmployeelogindetailController>/5
+        
         [HttpGet("{Username}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeedetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
@@ -37,13 +36,37 @@ namespace MRF.API.Controllers
         public ResponseDTO Get(string Username)
         {
             _logger.LogInfo($"Fetching Employee login detail by name: {Username}");
-            Employeedetails Employeelogindetail = _unitOfWork.Employeedetails.Get(u => u.Name == Username);
-            if (Employeelogindetail == null)
+            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Name == Username);
+            if (Employeedetail == null)
             {
                 _logger.LogError($"Login Failed:{Username}");
             }
-            _response.Result = Employeelogindetail;
+            else
+            {
+                var Employeelogindetail = new Employeelogindetails
+                {
+                    
+                    EmployeeId = Employeedetail.Id,
+                    LoginDateTime = DateTime.Now,
+                };
+
+                _unitOfWork.Employeelogindetail.Add(Employeelogindetail);
+                _unitOfWork.Save();
+
+                if (Employeelogindetail.Id != 0)
+                {
+                    Employeerolemap Employeerolemap = _unitOfWork.Employeerolemap.Get(u => u.EmployeeId == Employeedetail.Id);
+                    if (Employeerolemap == null)
+                    {
+                        _logger.LogError($"No result found by this Id:{Employeedetail.Id}");
+                    }
+                    _response.Result = Employeerolemap;
+                }
+               
+            }
+            
             return _response;
         }
+      
     }
 }

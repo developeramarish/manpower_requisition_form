@@ -6,19 +6,28 @@ namespace MRF.API.Controllers
     [ApiController]
     public class FileUploadController : Controller
     {
-        [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public string _rootPath;
+ 
+        [Obsolete]
+        public FileUploadController(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
+            _rootPath = env.WebRootPath;
+        }
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file,string ResumeOrAssign)
+        { 
             // Check if a file was sent
             if (file == null || file.Length == 0)
                 return BadRequest("No file received.");
+           
+            string directory = Path.Combine(_rootPath, ResumeOrAssign);
 
-            // You can handle the uploaded file here, for example, save it to disk
-            // or process it in some way.
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
             // Make sure to validate the file type and size.
 
             // Example: Save the file to a specific path
-            var filePath = Path.Combine("your_upload_directory", file.FileName);
+            var filePath = Path.Combine(directory, file.FileName);
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);

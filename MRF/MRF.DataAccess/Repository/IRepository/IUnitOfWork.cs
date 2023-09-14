@@ -31,6 +31,7 @@
         IDashboardRepository Dashboard { get; }
         IMrfStatusDetailsRepository MrfStatusDetail { get; }
         IResumeDetailsRepository ResumeDetail { get; }
+        IInterviewDetailsRepository InterviewDetail { get; }
         void Save();
     }
 }

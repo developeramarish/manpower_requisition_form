@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MrfinterviewermapController : ControllerBase
     {
@@ -157,6 +158,28 @@ namespace MRF.API.Controllers
                 _logger.LogError($"No result found by this Id: {id}");
             }
             
+        }
+
+
+        // GET api/<MrfinterviewermapController>/5
+        [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(InterviewDetailsViewModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetInterviewDetails(int id)
+        {
+            _logger.LogInfo($"Fetching All Mrf Interviewer Map by Id: {id}");
+            List<InterviewDetailsViewModel> InterviewDetails = _unitOfWork.InterviewDetail.GetInterviewDetails(id);
+            if (InterviewDetails == null)
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+            }
+            _response.Result = InterviewDetails;
+            return _response;
         }
     }
 }

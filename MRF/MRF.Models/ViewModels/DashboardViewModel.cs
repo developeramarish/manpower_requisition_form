@@ -19,6 +19,8 @@ namespace MRF.Models.ViewModels
         public int MrfId { get; set; }
         public int StatusCount { get; set; }
         public string ReferenceNo { get; set; } = null!;
+        public int EmployeeId { get; set; }
+        public int RoleId { get; set; }
 
     }
 

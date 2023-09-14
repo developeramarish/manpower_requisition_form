@@ -27,6 +27,7 @@ namespace MRF.DataAccess.Repository
                         join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
                         join Emp in _db.Employeedetails on mrfDetails.CreatedByEmployeeId equals Emp.Id
                         join salary in _db.Freshmrfdetails on mrfDetails.Id equals salary.Id
+                        join Vacancy in _db.Vacancytypemaster on mrfDetails.VacancyTypeId equals Vacancy.Id
                         where mrfDetails.Id==mrfId
                         //     group new { mrfDetails, mrfStatus } by new
                         //     {
@@ -47,7 +48,7 @@ namespace MRF.DataAccess.Repository
                             UpdatedOnUtc = mrfDetails.UpdatedOnUtc,
                             Salary = salary.MinTargetSalary + "-" + salary.MaxTargetSalary,
                             VacancyNo=mrfDetails.VacancyNo,
-                            RequisitionType = mrfDetails.PositionTitle,
+                            RequisitionType = Vacancy.Type,
                         };
 
             return query.FirstOrDefault();
