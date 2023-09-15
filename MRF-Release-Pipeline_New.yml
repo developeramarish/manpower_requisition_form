@@ -1,0 +1,60 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+variables:
+  IISWebsiteName: 'MRF'
+
+resources:
+  pipelines:
+  - pipeline: 'buildPipeline'
+    project: 'MRF'
+    source: 'MRF-Build-Pipeline'
+    branch: 'main'
+    
+stages:
+- stage: DeployWebSite      
+  displayName: 'DeployWebSite'      
+  pool: windows-latest
+  jobs:
+  - deployment: DeployWebSite
+    displayName: 'Deploy Web Site'
+    environment: 'KGL-Mumbai.DevServer.XINMUM-INTPOC'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: none
+
+          - download: 'buildPipeline'
+            name: 'DownloadBuildArtifacts'
+            displayName: 'Download Build Artifacts'
+            artifact: 'MRF-ReleasePipeline-Main-Build-Artifact'
+                       
+          - task: IISWebAppManagementOnMachineGroup@0
+            name: 'StopIIS'
+            displayName: 'Stop IIS Website'
+            inputs:
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'StopWebsite'
+              StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
+                    
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            name: 'DeployIIS'
+            displayName: 'Deploy IIS Website'
+            inputs:
+              WebSiteName: '${{ variables.IISWebsiteName }}'
+              Package: '$(Pipeline.Workspace)\buildPipeline\MRF-ReleasePipeline-Main-Build-Artifact'
+              TakeAppOfflineFlag: true
+                       
+          - task: IISWebAppManagementOnMachineGroup@0
+            name: 'StartIIS'
+            displayName: 'Start IIS'
+            inputs:
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'StartWebsite'
+              StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
