@@ -9,12 +9,16 @@ trigger:
 variables:
   IISWebsiteName: 'MRF'
 
+
 resources:
-  pipelines:
-  - pipeline: 'MRF-Build-Pipeline'
-    project: 'MRF'
-    source: 'MRF-Build-Pipeline'
-    branch: 'main'
+ pipelines:
+     - pipeline: 'MRF-Build-Pipeline'
+       project: 'MRF'
+       source: 'MRF-Build-Pipeline'
+       branch: 'main'
+
+       
+
     
 stages:
 - stage: DeployWebSite      
