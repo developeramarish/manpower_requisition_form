@@ -12,11 +12,11 @@ variables:
 
 resources:
  pipelines:
-     - pipeline: 'MRF-Build-Pipeline'
+     - pipeline: 'azure-pipelines'
        project: 'MRF'
-       source: 'MRF-Build-Pipeline'
+       source: 'azure-pipelines'
        branch: 'main'
-       
+
 stages:
 - stage: DeployWebSite      
   displayName: 'DeployWebSite'      
