@@ -17,8 +17,8 @@ resources:
        branch: 'main'
     
 stages:
-    - stage: DeployWebSite
-      DisplayName: 'DeployWebSite'      
+    - stage: DeployWebSite      
+      displayName: 'DeployWebSite'      
       pool: windows-latest
       jobs:
       - deployment: DeployWebSite
