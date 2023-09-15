@@ -16,10 +16,7 @@ resources:
        project: 'MRF'
        source: 'MRF-Build-Pipeline'
        branch: 'main'
-
        
-
-    
 stages:
 - stage: DeployWebSite      
   displayName: 'DeployWebSite'      
