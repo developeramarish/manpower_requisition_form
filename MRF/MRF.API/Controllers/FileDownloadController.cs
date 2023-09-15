@@ -13,7 +13,7 @@ namespace MRF.API.Controllers
         {
             _rootPath = env.WebRootPath;
         }
-        [HttpGet("{fileName}{ResumeOrAssign}")]
+        [HttpGet("{fileName}/{ResumeOrAssign}")]
         public IActionResult GetFile(string fileName, string ResumeOrAssign)
         {
             try
