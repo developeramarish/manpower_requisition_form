@@ -11,10 +11,10 @@ variables:
 
 resources:
  pipelines:
-     - pipeline: 'buildPipeline'
-       project: 'MRF'
-       source: 'MRF-Build-Pipeline'
-       branch: 'main'
+    - pipeline: 'buildPipeline'
+      project: 'MRF'
+      source: 'MRF-Build-Pipeline'
+      branch: 'main'
     
 stages:
     - stage: DeployWebSite      
