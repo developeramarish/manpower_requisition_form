@@ -11,7 +11,7 @@ variables:
 
 resources:
   pipelines:
-  - pipeline: 'buildPipeline'
+  - pipeline: 'MRF-Build-Pipeline'
     project: 'MRF'
     source: 'MRF-Build-Pipeline'
     branch: 'main'
