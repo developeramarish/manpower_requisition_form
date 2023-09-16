@@ -47,7 +47,7 @@ namespace MRF.API.Controllers
             _response.Result = obj;
             _response.Count = obj.Count;
             _logger.LogInfo($"Total Candidate detail count: {_response.Count}");
-            _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test Email", $"Total Candidate detail count: {obj.Count}");
+           // _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test Email", $"Total Candidate detail count: {obj.Count}");
             return _response;
         }
 
