@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
@@ -164,6 +165,51 @@ namespace MRF.API.Controllers
             {
                 _logger.LogError($"No result found by this Id: {id}");
                 _responseModel.Id = 0;             
+            }
+            return _responseModel;
+        }
+
+        // PUT api/<MrfdetailController>/5
+        [HttpPut("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(MrfdetaiResponseModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful update)")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public MrfdetaiResponseModel PartialUpdateMRFStatus(int id, [FromBody] MrfdetailRequestModel request)
+        {
+            var existingStatus = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
+
+            if (existingStatus != null)
+            {
+                    var entityType = existingStatus.GetType();
+                    foreach (var propertyInfo in typeof(MrfdetailRequestModel).GetProperties())
+                    {  
+                    var entityProperty = entityType.GetProperty(propertyInfo.Name);
+                    if (entityProperty != null)
+                        {
+                            
+                            var valueToUpdate = propertyInfo.GetValue(request);
+                            if (valueToUpdate != null && !valueToUpdate.Equals(0))
+                            {
+                                entityProperty.SetValue(existingStatus, valueToUpdate);
+                            }
+                        }
+                    }
+
+                _unitOfWork.Mrfdetail.Update(existingStatus);
+                _unitOfWork.Save();
+                _responseModel.Id = existingStatus.Id;
+            }
+            else
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
             }
             return _responseModel;
         }
