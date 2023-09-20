@@ -23,7 +23,7 @@ namespace MRF.DataAccess.Repository
 
         public List<MrfSummaryViewModel> GroupByMrfStatus()
         {
-             var query = from mrfDetails in _db.Mrfdetails
+            IQueryable<MrfSummaryViewModel> query = from mrfDetails in _db.Mrfdetails
                         join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
                         group new { mrfDetails, mrfStatus } by new
                         {
@@ -47,7 +47,7 @@ namespace MRF.DataAccess.Repository
         public List<MrfResumeSummaryViewModel> GetCountByMrfIdAndResumeStatus()
         {
 
-            var query = from mrfDetails in _db.Mrfdetails
+            IQueryable<MrfResumeSummaryViewModel> query = from mrfDetails in _db.Mrfdetails
                         join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId 
                         join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
                         where status.Status.Contains("resume")
@@ -78,7 +78,7 @@ namespace MRF.DataAccess.Repository
         public List<MrfInterviewSummaryViewModel> GroupByMrfInterviewStatus()
         {
 
-            var query = from mrfDetails in _db.Mrfdetails
+            IQueryable<MrfInterviewSummaryViewModel> query = from mrfDetails in _db.Mrfdetails
                         join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                         join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
                         join evaluation in _db.Evaluationmaster on Candidate.CandidateStatusId equals evaluation.Id
@@ -92,8 +92,6 @@ namespace MRF.DataAccess.Repository
                             status.Status,
                             interview.EvaluationId,
                             evaluation.Type,
-                            
-
                         }
                     into grouped
                         select new MrfInterviewSummaryViewModel

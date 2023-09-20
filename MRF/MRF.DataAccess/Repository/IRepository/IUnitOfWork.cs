@@ -32,6 +32,7 @@
         IMrfStatusDetailsRepository MrfStatusDetail { get; }
         IResumeDetailsRepository ResumeDetail { get; }
         IInterviewDetailsRepository InterviewDetail { get; }
+        IAttachmentEvaluationRepository AttachmentEvaluation { get; }
         void Save();
     }
 }

@@ -23,7 +23,7 @@ namespace MRF.Models.ViewModels
       
         public DateTime CandidateStatusChangedOnUtc { get; set; }
         public string ResumePath { get; set; } = null!;
-        public int IEvaluationId { get; set; }
+        public int EvaluationId { get; set; }
         public int EvaluationFeedbackId { get; set; }
 
         
