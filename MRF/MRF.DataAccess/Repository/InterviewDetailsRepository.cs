@@ -20,12 +20,12 @@ namespace MRF.DataAccess.Repository
 
         public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId)
         {
-            var query = from mrfDetails in _db.Mrfdetails
+            IQueryable<InterviewDetailsViewModel> query = from mrfDetails in _db.Mrfdetails
                         join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                         join Emp in _db.Employeedetails on Candidate.CreatedByEmployeeId equals Emp.Id
                         join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id 
                         join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
-                        //join Mrfinterviewermap in _db.Mrfinterviewermap on mrfDetails.Id equals Mrfinterviewermap.MrfId
+                        join Attachment in _db.AttachmentEvaluation on Ivaluation.EvaluationId equals Attachment.InterviewEvaluationId
                         join Emp2 in _db.Employeedetails on Ivaluation.InterviewerId equals Emp2.Id
                         join EvFeedback in _db.Evaluationfeedbackmaster on Ivaluation.EvaluationFeedbackId equals EvFeedback.Id
                         where mrfDetails.Id == mrfId && !status.Status.Contains("resume")
@@ -42,16 +42,16 @@ namespace MRF.DataAccess.Repository
                             Candidatestatus = status.Status,
                             InterviewerEmployeeId = Ivaluation.InterviewerId,
                             InterviewerName = Emp2.Name,
-                            IEvaluationId= Ivaluation.Id,
+                            EvaluationId= Ivaluation.Id,
                             EvaluationFeedbackId = Ivaluation.EvaluationFeedbackId,
                             EvalutionStatus = EvFeedback.Description,
                             CandidateStatusChangedOnUtc= Ivaluation.CreatedOnUtc,
-                            Attachment = "",
+                            Attachment = Attachment.FilePath,
                         };
 
             var latestRecords = query
             .GroupBy(r => r.CandidateId)
-            .Select(g => g.OrderByDescending(r => r.IEvaluationId).First());
+            .Select(g => g.OrderByDescending(r => r.EvaluationId).First());
 
 
 

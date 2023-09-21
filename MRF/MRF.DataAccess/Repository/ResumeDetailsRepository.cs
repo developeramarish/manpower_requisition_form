@@ -23,7 +23,7 @@ namespace MRF.DataAccess.Repository
 
         public List<ResumeDetailsViewModel> GetResumeStatusDetails(int mrfId)
         {
-            var query = from mrfDetails in _db.Mrfdetails
+            IQueryable<ResumeDetailsViewModel> query = from mrfDetails in _db.Mrfdetails
                         join resume in _db.Mrfresumereviewermap on mrfDetails.Id equals resume.MrfId
                         join Emp in _db.Employeedetails on resume.CreatedByEmployeeId equals Emp.Id
                         join Emp2 in _db.Employeedetails on resume.ResumeReviewerEmployeeId equals Emp2.Id
