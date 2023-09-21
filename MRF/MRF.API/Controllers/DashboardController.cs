@@ -41,11 +41,12 @@ namespace MRF.API.Controllers
 
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
             List<MrfSummaryViewModel> MrfStatusSummary = _unitOfWork.Dashboard.GroupByMrfStatus().ToList();
-            if (MrfStatusSummary == null)
+            if (MrfStatusSummary==null)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = MrfStatusSummary;
+            
             _logger.LogInfo($"Total Mrf resume reviewer map count: {MrfStatusSummary.Count}");
             return _response;
         }

@@ -25,6 +25,8 @@ namespace MRF.API.Controllers
             _responseModel = new MrfinterviewermapResponseModel();
             _logger = logger;
         }
+        
+        
         // GET: api/<MrfinterviewermapController>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Mrfinterviewermap>))]

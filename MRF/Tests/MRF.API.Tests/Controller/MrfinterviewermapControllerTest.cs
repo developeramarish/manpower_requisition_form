@@ -5,6 +5,7 @@ using FluentAssertions;
 using System.Linq.Expressions;
 using MRF.API.Controllers;
 using Azure.Core;
+using MRF.Models.ViewModels;
 
 namespace MRF.API.Test.Controllers
 {
@@ -12,11 +13,13 @@ namespace MRF.API.Test.Controllers
     {
         private readonly TestFixture fixture;
         private MrfinterviewermapController Controller;
+        
 
         public MrfinterviewermapControllerTest()
         {
             fixture = new TestFixture();
             Controller = new MrfinterviewermapController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
+             
 
         }
 
@@ -42,7 +45,8 @@ namespace MRF.API.Test.Controllers
             };
 
             // Set up the behavior of the mockUnitOfWork to return the sample data
-            fixture.MockUnitOfWork.Setup(uow => uow.Mrfinterviewermap.GetAll()).Returns(SampleMrfinterviewermapDetails);
+            fixture.MockUnitOfWork.Setup(uow => uow.Mrfinterviewermap.GetAll()).Returns
+                (SampleMrfinterviewermapDetails);
 
 
             // Act
@@ -335,6 +339,88 @@ namespace MRF.API.Test.Controllers
             // Verify that the Update and Save methods were not called since the entity does not exist.
             fixture.MockUnitOfWork.Verify(uow => uow.Mrfinterviewermap.Update(It.IsAny<Mrfinterviewermap>()), Times.Never);
             fixture.MockUnitOfWork.Verify(uow => uow.Save(), Times.Never);
+        }
+        [Fact]
+        public void GetinterviewDetailsById_ShouldReturnNoResult_WhenInputIsEqualsZero()
+        {
+            // Arrange
+
+            int id = 0;
+
+            // Create a list of sample Mrfinterviewermap for testing
+            var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
+            {
+            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
+
+            // Act
+            var result = Controller.GetInterviewDetails(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id: 0"));
+
+
+        }
+        [Fact]
+        public void GetinterviewDetailsById_ShouldReturnNoResult_WhenInputIsLessThanZero()
+        {
+            // Arrange
+
+            int id = -3;
+
+            // Create a list of sample Mrfinterviewermap for testing
+            var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
+            {
+            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
+
+            // Act
+            var result = Controller.GetInterviewDetails(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id: -3"));
+
+
+        }
+        [Fact]
+        public void GetinterviewDetailsById_ShouldReturnResult_WhenInputIsCorrect()
+        {
+            // Arrange
+
+            int id = 2;
+
+            // Create a list of sample Mrfinterviewermap for testing
+            var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
+            {
+            new InterviewDetailsViewModel  {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
+
+            // Act
+            var result = Controller.GetInterviewDetails(id);
+
+            // Assert
+            Assert.NotNull(result);
+            result.Should().NotBeNull();
+           
+
+
         }
 
     }

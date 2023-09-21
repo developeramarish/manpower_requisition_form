@@ -280,7 +280,7 @@ namespace MRF.API.Test.Controllers
         //    var existingEntity = new Employeelogindetails
         //    {
         //        Id = entityId,
-                
+
         //    };
 
         //    fixture.MockUnitOfWork.Setup(uow => uow.Employeelogindetail.Get(It.IsAny<Expression<Func<Employeelogindetails, bool>>>()))

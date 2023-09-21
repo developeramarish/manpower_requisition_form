@@ -5,6 +5,7 @@ using FluentAssertions;
 using System.Linq.Expressions;
 using MRF.API.Controllers;
 using Azure.Core;
+using MRF.Models.ViewModels;
 
 namespace MRF.API.Test.Controllers
 {
@@ -335,6 +336,60 @@ namespace MRF.API.Test.Controllers
             // Verify that the Update and Save methods were not called since the entity does not exist.
             fixture.MockUnitOfWork.Verify(uow => uow.Mrfresumereviewermap.Update(It.IsAny<Mrfresumereviewermap>()), Times.Never);
             fixture.MockUnitOfWork.Verify(uow => uow.Save(), Times.Never);
+        }
+        [Fact]
+        public void GetResumeStatusDetailsById_ShouldReturnNoResult_WhenInputIsEqualToZero()
+        {
+            // Arrange
+
+            int id = 0;
+
+            // Create a list of sample Mrfinterviewermap for testing
+            var SampleResumeDetails = new List<ResumeDetailsViewModel>
+            {
+            new ResumeDetailsViewModel  {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",ResumeReviewerEmployeeId= 47345,ResumeReviewerName="kritika gupta",},
+            new ResumeDetailsViewModel {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",ResumeReviewerEmployeeId=47236,ResumeReviewerName="kritika gupta",},
+
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.ResumeDetail.GetAll()).Returns(SampleResumeDetails);
+
+            // Act
+            var result = Controller.GetResumeStatusDetails(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id: 0"));
+
+
+        }
+        [Fact]
+        public void GetResumeStatusDetailsById_ShouldReturnNoResult_WhenInputIsLessThanZero()
+        {
+            // Arrange
+
+            int id = -3;
+
+            // Create a list of sample Mrfinterviewermap for testing
+            var SampleMrfDetails = new List<ResumeDetailsViewModel>
+            {
+            new ResumeDetailsViewModel  {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",ResumeReviewerEmployeeId= 47345,ResumeReviewerName="kritika gupta",},
+            new ResumeDetailsViewModel {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",ResumeReviewerEmployeeId=47346,ResumeReviewerName="kritika gupta",},
+
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.ResumeDetail.GetAll()).Returns(SampleMrfDetails);
+
+            // Act
+            var result = Controller.GetResumeStatusDetails(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id: -3"));
+
+
         }
 
     }

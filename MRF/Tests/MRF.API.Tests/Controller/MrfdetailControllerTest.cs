@@ -5,6 +5,7 @@ using FluentAssertions;
 using System.Linq.Expressions;
 using MRF.API.Controllers;
 using Azure.Core;
+using MRF.Models.ViewModels;
 
 namespace MRF.API.Test.Controllers
 {
@@ -379,6 +380,61 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Verify(uow => uow.Mrfdetail.Update(It.IsAny<Mrfdetails>()), Times.Never);
             fixture.MockUnitOfWork.Verify(uow => uow.Save(), Times.Never);
         }
+        [Fact]
+        public void GetMrfDetailsById_ShouldReturnNoResult_WhenInputIsEqualToZero()
+        {
+            // Arrange
+
+            int id = 0;
+
+            // Create a list of sample Mrfinterviewermap for testing
+            var SampleMrfDetails = new List<MrfDetailsViewModel>
+            {
+            new MrfDetailsViewModel  {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",MrfStatus= "completed",Name="kritika gupta",},
+            new MrfDetailsViewModel {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",MrfStatus="completed",Name="kritika gupta",},
+
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.MrfStatusDetail.GetAll()).Returns(SampleMrfDetails);
+
+            // Act
+            var result = Controller.GetMrfDetails(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:0"));
+
+
+        }
+        [Fact]
+        public void GetMrfDetailsById_ShouldReturnNoResult_WhenInputIsLessThanZero()
+        {
+            // Arrange
+
+            int id = -3;
+
+            // Create a list of sample Mrfinterviewermap for testing
+            var SampleMrfDetails = new List<MrfDetailsViewModel>
+            {
+            new MrfDetailsViewModel  {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",MrfStatus= "completed",Name="kritika gupta",},
+            new MrfDetailsViewModel {MrfId=345,ReferenceNo="02/MUM/CFR/AUG/23/007",MrfStatus="completed",Name="kritika gupta",},
+
+            };
+
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.MrfStatusDetail.GetAll()).Returns(SampleMrfDetails);
+
+            // Act
+            var result = Controller.GetMrfDetails(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:-3"));
+
+
+        }
+        
 
     }
 }

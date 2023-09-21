@@ -72,59 +72,59 @@ namespace MRF.API.Test.Controllers
         }
 
 
-        //[Fact]
-        //public void GetEmployeeDetailslById_ShouldReturnNoResult_WhenInputIsEqualsZero()
-        //{
-        //    // Arrange
+        [Fact]
+        public void GetEmployeeDetailslById_ShouldReturnNoResult_WhenInputIsEqualsZero()
+        {
+            // Arrange
 
-        //    int id = 0;
+            int id = 0;
 
-        //    // Create a list of sample Employeedetails for testing
-        //    var sampleEmployeeDetails = new List<Employeedetails>
-        //    {
-        //    new Employeedetails { Name = "John Doe" ,Email ="k@gmail.com",ContactNo = "97554678",},
-        //    new Employeedetails { Name = "Jane Smith" ,Email ="k@gmail.com",ContactNo = "97554678",},
-        //        // Add more sample data as needed
-        //    };
+            // Create a list of sample Employeedetails for testing
+            var sampleEmployeeDetails = new List<Employeedetails>
+            {
+            new Employeedetails { Name = "John Doe" ,Email ="k@gmail.com",ContactNo = "97554678",},
+            new Employeedetails { Name = "Jane Smith" ,Email ="k@gmail.com",ContactNo = "97554678",},
+                // Add more sample data as needed
+            };
 
-        //    // Set up the behavior of the mockUnitOfWork to return the sample data
-        //    fixture.MockUnitOfWork.Setup(uow => uow.Employeedetails.GetAll()).Returns(sampleEmployeeDetails);
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeedetails.GetAll()).Returns(sampleEmployeeDetails);
 
-        //    // Act
-        //    var result = Controller.Get(id);
+            // Act
+            var result = Controller.Get(id);
 
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:0"));
-
-
-        //}
-        //[Fact]
-        //public void GetEmployeeDetailslById_ShouldReturnNoResult_WhenInputIsLessThanZero()
-        //{
-        //    // Arrange
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:"+id));
 
 
-        //    int id = 0;
+        }
+        [Fact]
+        public void GetEmployeeDetailslById_ShouldReturnNoResult_WhenInputIsLessThanZero()
+        {
+            // Arrange
 
-        //    // Create a list of sample Employeedetails for testing
-        //    var sampleEmployeeDetails = new List<Employeedetails>
-        //    {
-        //    new Employeedetails { Name = "John Doe" ,Email ="k@gmail.com",ContactNo = "97554678",},
-        //    new Employeedetails { Name = "Jane Smith",Email ="k@gmail.com",ContactNo = "97554678",},
-        //        // Add more sample data as needed
-        //    };
 
-        //    // Set up the behavior of the mockUnitOfWork to return the sample data
-        //    fixture.MockUnitOfWork.Setup(uow => uow.Employeedetails.GetAll()).Returns(sampleEmployeeDetails);
+            int id = 0;
 
-        //    // Act  
-        //    var result = Controller.Get(id);
+            // Create a list of sample Employeedetails for testing
+            var sampleEmployeeDetails = new List<Employeedetails>
+            {
+            new Employeedetails { Name = "John Doe" ,Email ="k@gmail.com",ContactNo = "97554678",},
+            new Employeedetails { Name = "Jane Smith",Email ="k@gmail.com",ContactNo = "97554678",},
+                // Add more sample data as needed
+            };
 
-        //    // Assert
-        //    result.Should().NotBeNull();
-        //    fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:0"));
-        //}
+            // Set up the behavior of the mockUnitOfWork to return the sample data
+            fixture.MockUnitOfWork.Setup(uow => uow.Employeedetails.GetAll()).Returns(sampleEmployeeDetails);
+
+            // Act  
+            var result = Controller.Get(id);
+
+            // Assert
+            result.Should().NotBeNull();
+            fixture.MockLogger.Verify(logger => logger.LogError("No result found by this Id:"+id));
+        }
         [Fact]
         public void CreateEmployeeDetails_ShouldReturnOkResponse_WhenValidRequest()
         {
