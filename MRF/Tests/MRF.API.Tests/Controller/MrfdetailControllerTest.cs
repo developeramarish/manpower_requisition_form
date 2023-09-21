@@ -6,6 +6,8 @@ using System.Linq.Expressions;
 using MRF.API.Controllers;
 using Azure.Core;
 using MRF.Models.ViewModels;
+using MRF.Utility;
+
 
 namespace MRF.API.Test.Controllers
 {
@@ -13,11 +15,11 @@ namespace MRF.API.Test.Controllers
     {
         private readonly TestFixture fixture;
         private MrfdetailController Controller;
-
+       
         public MrfdetailControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new MrfdetailController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
+            Controller = new MrfdetailController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object);
 
         }
 

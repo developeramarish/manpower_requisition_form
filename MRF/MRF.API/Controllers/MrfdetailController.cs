@@ -19,13 +19,15 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrfdetaiResponseModel _responseModel;
         private readonly ILoggerService _logger;
+        private readonly IEmailService _emailService;
 
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger)
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfdetaiResponseModel();
             _logger = logger;
+            _emailService = emailService;
         }
 
         // GET: api/<MrfdetailController>
@@ -113,6 +115,10 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
 
             _responseModel.Id = mrfDetail.Id;
+            
+            
+            //_emailService.SendEmailAsync("Submit MRF");
+
             return _responseModel;
         }
 
@@ -204,6 +210,9 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
+                
+                //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
+                //_emailService.SendEmailAsync(emailRequest.emailTo,emailRequest.Subject,emailRequest.Content);
                 _responseModel.Id = existingStatus.Id;
             }
             else

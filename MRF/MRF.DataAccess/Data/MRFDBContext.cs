@@ -37,5 +37,7 @@ namespace MRF.DataAccess.Data
         public DbSet<Replacementmrfdetails> Replacementmrfdetails { get; set; }
         public DbSet<Resumeforwarddetails> Resumeforwarddetails { get; set; }
         public DbSet<AttachmentEvaluation> AttachmentEvaluation { get; set; }
+
+        public DbSet<emailmaster> emailmaster { get; set; }
     }
 }

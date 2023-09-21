@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace MRF.Models.Models;
 
@@ -695,6 +696,17 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.UpdatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
+        });
+
+
+        modelBuilder.Entity<emailmaster>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.ToTable("emailmaster");
+
+            entity.Property(e => e.status).HasMaxLength(50);
+            entity.Property(e => e.Subject).HasMaxLength(50);
+            entity.Property(e => e.Content).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

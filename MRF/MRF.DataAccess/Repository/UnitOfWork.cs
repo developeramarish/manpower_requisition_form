@@ -39,6 +39,7 @@ namespace MRF.DataAccess.Repository
         public IResumeDetailsRepository ResumeDetail { get; private set; }
         public IInterviewDetailsRepository InterviewDetail { get; private set; }
         public IAttachmentEvaluationRepository AttachmentEvaluation { get; private set; }
+        public IEmailRepository emailmaster { get; private set; }
         public UnitOfWork(Data.MRFDBContext db)
         {
             _db = db;
@@ -73,6 +74,7 @@ namespace MRF.DataAccess.Repository
             ResumeDetail=new ResumeDetailsRepository(_db);
             InterviewDetail=new InterviewDetailsRepository(_db);
             AttachmentEvaluation = new AttachmentEvaluationRepository(_db);
+            emailmaster = new EmailRepository(_db);
         }
         public void Save()
         {

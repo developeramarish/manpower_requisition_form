@@ -33,6 +33,7 @@
         IResumeDetailsRepository ResumeDetail { get; }
         IInterviewDetailsRepository InterviewDetail { get; }
         IAttachmentEvaluationRepository AttachmentEvaluation { get; }
+        IEmailRepository emailmaster { get; }
         void Save();
     }
 }
