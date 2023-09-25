@@ -25,6 +25,7 @@
         IResumeforwarddetailRepository Resumeforwarddetail { get; }
         IEmployeedetailsRepository Employeedetails { get; }
         ICandidatedetailRepository Candidatedetail { get; }
+        IInterviewevaluationRepository Interviewevaluation { get; }
         IEmployeelogindetailRepository Employeelogindetail { get; }
         IEmployeerolemapRepository Employeerolemap { get; }
         IFreshmrfdetailRepository Freshmrfdetail { get; }
