@@ -17,12 +17,14 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private InterviewevaluationResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        public InterviewevaluationController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        public InterviewevaluationController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new InterviewevaluationResponseModel();
             _logger = logger;
+            _emailService = emailService;
         }
         // GET: api/<InterviewevaluationController>
         [HttpGet]
@@ -138,7 +140,8 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Interviewevaluation.Update(existingRecord);
                 _unitOfWork.Save();
-
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interview Status");
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                 _responseModel.Id = existingRecord.Id;
 
             }

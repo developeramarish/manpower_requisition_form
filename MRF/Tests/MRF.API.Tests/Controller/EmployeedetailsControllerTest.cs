@@ -15,7 +15,7 @@ namespace MRF.API.Test.Controllers
         public EmployeedetailsControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new EmployeedetailsController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
+            Controller = new EmployeedetailsController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object);
 
         }
 

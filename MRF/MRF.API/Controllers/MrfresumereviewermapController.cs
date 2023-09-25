@@ -18,13 +18,15 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrfresumereviewermapResponseModel _responseModel;
         private readonly ILoggerService _logger;
+        private readonly IEmailService _emailService;
 
-        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger)
+        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfresumereviewermapResponseModel();
             _logger = logger;
+            _emailService = emailService;
         }
         // GET: api/<MrfresumereviewermapController>
         [HttpGet]
@@ -94,7 +96,8 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Mrfresumereviewermap.Add(mrfresumereviewermap);
             _unitOfWork.Save();
-
+            emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
+            _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
             _responseModel.Id = mrfresumereviewermap.Id;
             return _responseModel;
         }
@@ -152,6 +155,8 @@ namespace MRF.API.Controllers
             if (obj != null)
             {
                 _unitOfWork.Mrfresumereviewermap.Remove(obj);
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                 _unitOfWork.Save();
 
             }

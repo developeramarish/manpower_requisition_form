@@ -17,12 +17,14 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private ResumeforwarddetailResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        public ResumeforwarddetailController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        public ResumeforwarddetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new ResumeforwarddetailResponseModel();
             _logger = logger;
+            _emailService = emailService;
         }
 
         // GET: api/<ResumeforwarddetailController>
@@ -90,7 +92,8 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Resumeforwarddetail.Add(resumeforwarddetail);
             _unitOfWork.Save();
-
+            emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
+            _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
             _responseModel.Id = resumeforwarddetail.Id;
             return _responseModel;
         }
