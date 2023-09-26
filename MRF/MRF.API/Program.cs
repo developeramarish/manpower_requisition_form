@@ -35,14 +35,15 @@ builder.Services.AddMicrosoftIdentityWebAppAuthentication(config);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", builder =>
-    {
-        builder
-            .AllowAnyOrigin() // Allow requests from any origin (for development, consider tightening this)
-            .AllowAnyMethod() // Allow any HTTP methods
-            .AllowAnyHeader(); // Allow any headers
-    });
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+        });
 });
+
 
 
 var app = builder.Build();
@@ -53,7 +54,7 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
-
+app.UseCors();
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
@@ -61,5 +62,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors("AllowReactApp");
+
 app.Run();
