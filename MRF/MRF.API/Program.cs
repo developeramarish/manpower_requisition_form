@@ -33,6 +33,18 @@ builder.Services.AddDbContext<MRFDBContext>(options =>
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(config);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", builder =>
+    {
+        builder
+            .AllowAnyOrigin() // Allow requests from any origin (for development, consider tightening this)
+            .AllowAnyMethod() // Allow any HTTP methods
+            .AllowAnyHeader(); // Allow any headers
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,5 +61,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors("AllowReactApp");
 app.Run();
