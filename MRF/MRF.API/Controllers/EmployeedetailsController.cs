@@ -18,14 +18,12 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private EmployeedetailsResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        private readonly IEmailService _emailService;
-        public EmployeedetailsController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
+        public EmployeedetailsController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new EmployeedetailsResponseModel();
             _logger = logger;
-            _emailService = emailService;
         }
 
 
@@ -76,6 +74,8 @@ namespace MRF.API.Controllers
                 _logger.LogError("No result found by this Id:"+id);
             }
             _response.Result = Employeedetail;
+
+
             return _response;
         }
 
@@ -105,8 +105,7 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Employeedetails.Add(employeedetails);
             _unitOfWork.Save();
-            emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
-            _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+
             _responseModel.Id = employeedetails.Id;
 
             return _responseModel;
@@ -141,10 +140,8 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Employeedetails.Update(existingStatus);
                 _unitOfWork.Save();
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Update user");
-                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+
                 _responseModel.Id = existingStatus.Id;
-               
 
             }
             else
@@ -175,8 +172,6 @@ namespace MRF.API.Controllers
             {
                 _unitOfWork.Employeedetails.Remove(obj);
                 _unitOfWork.Save();
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Delete User");
-                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
             }
             else
             {

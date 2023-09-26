@@ -18,14 +18,12 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrffeedbackResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        private readonly IEmailService _emailService;
-        public MrffeedbackController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
+        public MrffeedbackController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrffeedbackResponseModel();
             _logger = logger;
-            _emailService = emailService;
         }
         // GET: api/<MrffeedbackController>
         [HttpGet]
@@ -94,9 +92,8 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Mrffeedback.Add(mrffeedback);
             _unitOfWork.Save();
-            emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Feedback Submission");
-            _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-           _responseModel.Id = mrffeedback.Id;
+
+            _responseModel.Id = mrffeedback.Id;
             return _responseModel;
         }
 

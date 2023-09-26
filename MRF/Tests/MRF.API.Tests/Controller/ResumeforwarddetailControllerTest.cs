@@ -16,7 +16,7 @@ namespace MRF.API.Test.Controllers
         public ResumeforwarddetailControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new ResumeforwarddetailController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object);
+            Controller = new ResumeforwarddetailController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
 
         }
 

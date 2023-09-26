@@ -117,7 +117,7 @@ namespace MRF.API.Controllers
             _responseModel.Id = mrfDetail.Id;
             
             
-           // _emailService.SendEmailAsync("Submit MRF");
+            //_emailService.SendEmailAsync("Submit MRF");
 
             return _responseModel;
         }
@@ -211,8 +211,8 @@ namespace MRF.API.Controllers
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
                 
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
-                _emailService.SendEmailAsync(emailRequest.emailTo,emailRequest.Subject,emailRequest.Content);
+                //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
+                //_emailService.SendEmailAsync(emailRequest.emailTo,emailRequest.Subject,emailRequest.Content);
                 _responseModel.Id = existingStatus.Id;
             }
             else

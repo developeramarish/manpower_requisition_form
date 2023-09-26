@@ -18,14 +18,12 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrfinterviewermapResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        private readonly IEmailService _emailService;
-        public MrfinterviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
+        public MrfinterviewermapController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfinterviewermapResponseModel();
             _logger = logger;
-            _emailService = emailService;
         }
         
         
@@ -97,8 +95,7 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Mrfinterviewermap.Add(mrfinterviewermap);
             _unitOfWork.Save();
-            emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");
-            _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+
             _responseModel.Id = mrfinterviewermap.Id;
             return _responseModel;
         }
@@ -157,8 +154,6 @@ namespace MRF.API.Controllers
             {
                 _unitOfWork.Mrfinterviewermap.Remove(obj);
                 _unitOfWork.Save();
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
-                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
 
             }
             else {
