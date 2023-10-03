@@ -18,13 +18,16 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrfresumereviewermapResponseModel _responseModel;
         private readonly ILoggerService _logger;
-
-        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        private readonly IHostEnvironment _hostEnvironment;
+        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfresumereviewermapResponseModel();
             _logger = logger;
+            _emailService = emailService;
+            _hostEnvironment = hostEnvironment;
         }
         // GET: api/<MrfresumereviewermapController>
         [HttpGet]
@@ -94,8 +97,12 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Mrfresumereviewermap.Add(mrfresumereviewermap);
             _unitOfWork.Save();
-
             _responseModel.Id = mrfresumereviewermap.Id;
+            if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+            {
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+            }
             return _responseModel;
         }
 
@@ -153,9 +160,14 @@ namespace MRF.API.Controllers
             {
                 _unitOfWork.Mrfresumereviewermap.Remove(obj);
                 _unitOfWork.Save();
-
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
             }
-            else {
+            else
+            {
                 _logger.LogError($"No result found by this Id: {id}");
             }
             

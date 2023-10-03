@@ -16,8 +16,7 @@ namespace MRF.API.Test.Controllers
         public MrffeedbackControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new MrffeedbackController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
-
+            Controller = new MrffeedbackController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object,fixture.MockHostEnvironment.Object);
         }
 
         [Fact]

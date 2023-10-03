@@ -17,8 +17,7 @@ namespace MRF.API.Test.Controllers
         public MrfresumereviewermapControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new MrfresumereviewermapController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
-
+            Controller = new MrfresumereviewermapController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object,fixture.MockHostEnvironment.Object);
         }
 
         [Fact]

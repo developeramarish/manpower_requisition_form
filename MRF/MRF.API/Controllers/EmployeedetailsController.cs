@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
@@ -18,15 +19,23 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private EmployeedetailsResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        public EmployeedetailsController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        private readonly IHostEnvironment _hostEnvironment;
+ 
+        public EmployeedetailsController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
+ 
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new EmployeedetailsResponseModel();
             _logger = logger;
+ 
+            _emailService = emailService;
+            _hostEnvironment = hostEnvironment;
+
+ 
         }
-
-
+ 
         // GET: api/<EmployeedetailsController>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetails>))]
@@ -91,24 +100,34 @@ namespace MRF.API.Controllers
         public EmployeedetailsResponseModel Post([FromBody] EmployeedetailsRequestModel request)
         {
             var employeedetails = new Employeedetails
+             {
+                    Name = request.Name,
+                    Email = request.Email,
+                    ContactNo = request.ContactNo,
+                    IsAllowed = request.IsAllowed,
+                    AllowedByEmployeeId = request.AllowedByEmployeeId,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc
+                };
+                _unitOfWork.Employeedetails.Add(employeedetails);
+                _unitOfWork.Save();
+                _responseModel.Id = employeedetails.Id;
+
+
+            if (_hostEnvironment.IsEnvironment("Development")||_hostEnvironment.IsEnvironment("Production"))
             {
-                Name = request.Name,
-                Email = request.Email,
-                ContactNo = request.ContactNo,
-                IsAllowed = request.IsAllowed,
-                AllowedByEmployeeId = request.AllowedByEmployeeId,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
-            };
 
-            _unitOfWork.Employeedetails.Add(employeedetails);
-            _unitOfWork.Save();
-
-            _responseModel.Id = employeedetails.Id;
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+            }
+            
+ 
 
             return _responseModel;
+ 
+
         }
 
         // PUT api/<EmployeedetailsController>/5
@@ -140,8 +159,20 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Employeedetails.Update(existingStatus);
                 _unitOfWork.Save();
+ 
 
                 _responseModel.Id = existingStatus.Id;
+ 
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Update user");
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
+
+                    _responseModel.Id = existingStatus.Id;
+               
+ 
 
             }
             else
@@ -172,6 +203,15 @@ namespace MRF.API.Controllers
             {
                 _unitOfWork.Employeedetails.Remove(obj);
                 _unitOfWork.Save();
+ 
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Delete User");
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
+               
+ 
             }
             else
             {

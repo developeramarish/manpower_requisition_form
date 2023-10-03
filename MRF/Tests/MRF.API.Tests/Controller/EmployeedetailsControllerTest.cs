@@ -4,6 +4,7 @@ using Moq;
 using FluentAssertions;
 using System.Linq.Expressions;
 using MRF.API.Controllers;
+using Microsoft.Extensions.Hosting;
 
 namespace MRF.API.Test.Controllers
 {
@@ -11,13 +12,13 @@ namespace MRF.API.Test.Controllers
     {
         private readonly TestFixture fixture;
         private EmployeedetailsController Controller;
-
+     
         public EmployeedetailsControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new EmployeedetailsController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object);
-
+            Controller = new EmployeedetailsController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object, fixture.MockHostEnvironment.Object);
         }
+      
 
         [Fact]
         public void EmployeedetailsControllerTest_Constructor_ShouldInitializeDependencies()
@@ -119,6 +120,8 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.Employeedetails.GetAll()).Returns(sampleEmployeeDetails);
 
             // Act  
+        
+
             var result = Controller.Get(id);
 
             // Assert
@@ -138,7 +141,8 @@ namespace MRF.API.Test.Controllers
                 CreatedByEmployeeId = 1,
                 CreatedOnUtc = DateTime.Now,
                 UpdatedByEmployeeId = 1,
-                UpdatedOnUtc = DateTime.Now
+                UpdatedOnUtc = DateTime.Now,
+                 
             };
 
             // Mock the behavior of IUnitOfWork
@@ -146,13 +150,19 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.Save()).Verifiable();
 
             // Create an instance of ResponseDTO to return
-            var responseModel = new EmployeedetailsResponseModel
+            
+
+
+       var responseModel = new EmployeedetailsResponseModel
             {
                 Id = 0, // Set the expected Id
                         // Set other properties as needed
             };
 
             // Act
+
+
+            
             var result = Controller.Post(requestModel);
 
             // Assert
@@ -178,8 +188,9 @@ namespace MRF.API.Test.Controllers
             // Create an instance of ResponseDTO to return
             var responseModel = new EmployeedetailsResponseModel
             {
-                Id = 0, // Set the expected Id
-                        // Set other properties as needed
+                Id = 0,
+                 // Set the expected Id
+                                       // Set other properties as needed
             };
 
             // Act
