@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {Table} from 'react-bootstrap';
 import { variables } from './Variables.js';    
-import {Button,ButtonToolbar} from 'react-bootstrap';
+import {Button}  from 'primereact/button';
 
 
 export class Home extends Component{

@@ -1,0 +1,29 @@
+/* YourComponent.css */
+.full-page-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .left-panel {
+    width: 250px;
+    background-color: rgb(43, 42, 42);
+    color: white;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+
+  .MyDashboard
+  {
+    background-color: rgb(245, 238, 238);
+    width: 100%;
+    padding:3%;
+  }
+  
