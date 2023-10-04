@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Grades");
             List<Grademaster> gradeList = _unitOfWork.Grademaster.GetAll().ToList();
-            if (gradeList == null)
+            if (gradeList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = gradeList;
+            _response.Count=gradeList.Count;
             _logger.LogInfo($"Total grade  count: {gradeList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Grademaster grademaster = _unitOfWork.Grademaster.Get(u => u.Id == id);
             if (grademaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = grademaster;
             return _response;
@@ -148,12 +149,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {  
             Grademaster? obj = _unitOfWork.Grademaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Grademaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Grademaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
 
     }

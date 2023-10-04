@@ -3,6 +3,7 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
+using SendGrid;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -38,11 +39,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Department");
             List<Departmentmaster> departmentList = _unitOfWork.Departmentmaster.GetAll().ToList();
-            if (departmentList == null)
+            if (departmentList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = departmentList;
+            _response.Count = departmentList.Count;
             _logger.LogInfo($"Total department  count: {departmentList.Count}");
             return _response;
         }
@@ -62,7 +64,7 @@ namespace MRF.API.Controllers
             Departmentmaster departmentmaster = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
             if (departmentmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = departmentmaster;
             return _response;
@@ -92,7 +94,7 @@ namespace MRF.API.Controllers
             _unitOfWork.Departmentmaster.Add(dapartment);
             _unitOfWork.Save();
 
-            _responseModel.Id = dapartment.Id;            
+            _responseModel.Id = dapartment.Id;
             _responseModel.IsActive = dapartment.IsActive;
 
             return _responseModel;
@@ -115,7 +117,7 @@ namespace MRF.API.Controllers
             var existingStatus = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
 
             if (existingStatus != null)
-            {   
+            {
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -148,12 +150,17 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Departmentmaster? obj = _unitOfWork.Departmentmaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
+            {
+                _unitOfWork.Departmentmaster.Remove(obj);
+                _unitOfWork.Save();
+            }
+            else
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Departmentmaster.Remove(obj);
-            _unitOfWork.Save();            
+
+
         }
     }
 }

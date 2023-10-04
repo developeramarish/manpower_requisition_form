@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Vaccancies");
             List<Vacancytypemaster> vaccancyList = _unitOfWork.Vacancytypemaster.GetAll().ToList();
-            if (vaccancyList == null)
+            if (vaccancyList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = vaccancyList;
+            _response.Count=vaccancyList.Count;
             _logger.LogInfo($"Total vaccancies  count: {vaccancyList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Vacancytypemaster vacancytypemaster = _unitOfWork.Vacancytypemaster.Get(u => u.Id == id);
             if (vacancytypemaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = vacancytypemaster;
             return _response;
@@ -148,12 +149,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Vacancytypemaster? obj = _unitOfWork.Vacancytypemaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Vacancytypemaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Vacancytypemaster.Remove(obj);
-            _unitOfWork.Save();          
+                    
         }
     }
 }

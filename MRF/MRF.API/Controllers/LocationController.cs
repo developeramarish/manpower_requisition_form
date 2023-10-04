@@ -38,11 +38,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Location");
             List<Locationmaster> locationtList = _unitOfWork.Locationmaster.GetAll().ToList();
-            if (locationtList == null)
+            if (locationtList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = locationtList;
+            _response.Count = locationtList.Count;
             _logger.LogInfo($"Total location  count: {locationtList.Count}");
             return _response;
         }
@@ -62,7 +63,7 @@ namespace MRF.API.Controllers
             Locationmaster locationmaster = _unitOfWork.Locationmaster.Get(u => u.Id == id);
             if (locationmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = locationmaster;
             return _response;
@@ -150,12 +151,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Locationmaster? obj = _unitOfWork.Locationmaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Locationmaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Locationmaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

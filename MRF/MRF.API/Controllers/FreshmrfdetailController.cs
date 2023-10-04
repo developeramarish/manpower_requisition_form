@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Fresh mr");
             List<Freshmrfdetails> FreshmrtList = _unitOfWork.Freshmrfdetail.GetAll().ToList();
-            if (FreshmrtList == null)
+            if (FreshmrtList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = FreshmrtList;
+            _response.Count = FreshmrtList.Count;
             _logger.LogInfo($"Total Gemder count: {FreshmrtList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Freshmrfdetails Freshmrfdetail = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
             if (Freshmrfdetail == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = Freshmrfdetail;
             return _response;
@@ -156,12 +157,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Freshmrfdetails? obj = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Freshmrfdetail.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Freshmrfdetail.Remove(obj);
-            _unitOfWork.Save();
+           
         }
     }
 }

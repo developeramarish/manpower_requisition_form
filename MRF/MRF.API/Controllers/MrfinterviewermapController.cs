@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MrfinterviewermapController : ControllerBase
     {
@@ -17,13 +18,19 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrfinterviewermapResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        public MrfinterviewermapController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        private readonly IHostEnvironment _hostEnvironment;
+        public MrfinterviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfinterviewermapResponseModel();
             _logger = logger;
+            _emailService = emailService;
+            _hostEnvironment = hostEnvironment;
         }
+        
+        
         // GET: api/<MrfinterviewermapController>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Mrfinterviewermap>))]
@@ -37,11 +44,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Mrf Interviewer Map");
             List<Mrfinterviewermap> mrfinterviewermapList = _unitOfWork.Mrfinterviewermap.GetAll().ToList();
-            if (mrfinterviewermapList == null)
+            if (mrfinterviewermapList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfinterviewermapList;
+            _response.Count=mrfinterviewermapList.Count;
             _logger.LogInfo($"Total Mrf Interviewer Map count: {mrfinterviewermapList.Count}");
             return _response;
         }
@@ -61,7 +69,7 @@ namespace MRF.API.Controllers
             Mrfinterviewermap  mrfinterviewermap = _unitOfWork.Mrfinterviewermap.Get(u => u.Id == id);
             if (mrfinterviewermap == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfinterviewermap;
             return _response;
@@ -91,8 +99,13 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Mrfinterviewermap.Add(mrfinterviewermap);
             _unitOfWork.Save();
-
             _responseModel.Id = mrfinterviewermap.Id;
+            if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+            {
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+            }
+           
             return _responseModel;
         }
 
@@ -146,12 +159,43 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Mrfinterviewermap? obj = _unitOfWork.Mrfinterviewermap.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
+            {
+                _unitOfWork.Mrfinterviewermap.Remove(obj);
+                _unitOfWork.Save();
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
+
+            }
+            else {
+                _logger.LogError($"No result found by this Id: {id}");
+            }
+            
+        }
+
+
+        // GET api/<MrfinterviewermapController>/5
+        [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(InterviewDetailsViewModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetInterviewDetails(int id)
+        {
+            _logger.LogInfo($"Fetching All Mrf Interviewer Map by Id: {id}");
+            List<InterviewDetailsViewModel> InterviewDetails = _unitOfWork.InterviewDetail.GetInterviewDetails(id);
+            if (InterviewDetails == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Mrfinterviewermap.Remove(obj);
-            _unitOfWork.Save();
+            _response.Result = InterviewDetails;
+            return _response;
         }
     }
 }

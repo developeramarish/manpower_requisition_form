@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Candidate Status");
             List<Candidatestatusmaster> candidateStatusList = _unitOfWork.Candidatestatusmaster.GetAll().ToList();
-            if (candidateStatusList == null)
+            if (candidateStatusList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = candidateStatusList;
+            _response.Count = candidateStatusList.Count;
             _logger.LogInfo($"Total candidate status count: {candidateStatusList.Count}");
             return _response;
         }
@@ -62,10 +63,14 @@ namespace MRF.API.Controllers
             Candidatestatusmaster candidatestatusmaster = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
             if (candidatestatusmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {Id}");
+                _logger.LogError($"No result found by this Id:{Id}");
+                
             }
-            _response.Result = candidatestatusmaster;            
-            return _response;
+            
+                _response.Result = candidatestatusmaster;
+                return _response;
+            
+           
         }
 
         // POST api/<CandidatestatusController>
@@ -155,12 +160,18 @@ namespace MRF.API.Controllers
         public void Delete(int Id)
         {
             Candidatestatusmaster? obj = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == Id);
-            if (obj == null)
+
+
+            if (obj != null)
             {
+                _unitOfWork.Candidatestatusmaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {Id}");
             }
-            _unitOfWork.Candidatestatusmaster.Remove(obj);
-            _unitOfWork.Save();
+          
         }
     }
 }

@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Roles");
             List<Rolemaster> rolesList = _unitOfWork.Rolemaster.GetAll().ToList();
-            if (rolesList == null)
+            if (rolesList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = rolesList;
+            _response.Count= rolesList.Count;
             _logger.LogInfo($"Total role  count: {rolesList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Rolemaster rolemaster = _unitOfWork.Rolemaster.Get(u => u.Id == id);
             if (rolemaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = rolemaster;
             return _response;
@@ -147,12 +148,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Rolemaster? obj = _unitOfWork.Rolemaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Rolemaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Rolemaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

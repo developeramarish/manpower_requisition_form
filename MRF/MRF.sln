@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.API", "MRF.API\MRF.API.csproj", "{30A0C47D-6316-4308-9744-06E236E50C86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRF.API", "MRF.API\MRF.API.csproj", "{30A0C47D-6316-4308-9744-06E236E50C86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.DataAccess", "MRF.DataAccess\MRF.DataAccess.csproj", "{C1E8A508-6F42-44B3-A8C2-B1E8B29F48E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRF.DataAccess", "MRF.DataAccess\MRF.DataAccess.csproj", "{C1E8A508-6F42-44B3-A8C2-B1E8B29F48E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.Models", "MRF.Models\MRF.Models.csproj", "{182D7C11-AEA8-4613-9239-DEC6788C6A5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRF.Models", "MRF.Models\MRF.Models.csproj", "{182D7C11-AEA8-4613-9239-DEC6788C6A5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.Utility", "MRF.Utility\MRF.Utility.csproj", "{3BF2896B-F7B0-42D4-AA0C-B93E5E26D346}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRF.Utility", "MRF.Utility\MRF.Utility.csproj", "{3BF2896B-F7B0-42D4-AA0C-B93E5E26D346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.Gateway", "MRF.Gateway\MRF.Gateway.csproj", "{A11C0C8B-E2A0-4286-B059-9330B552058B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MRF.Gateway", "MRF.Gateway\MRF.Gateway.csproj", "{A11C0C8B-E2A0-4286-B059-9330B552058B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2C2383B6-3491-4D8B-B7F1-A3BB69CBC80D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRF.API.Test", "Tests\MRF.API.Tests\MRF.API.Test.csproj", "{C10DBAE1-4B03-43ED-BA4F-2EE8E5701E48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +43,16 @@ Global
 		{A11C0C8B-E2A0-4286-B059-9330B552058B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A11C0C8B-E2A0-4286-B059-9330B552058B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A11C0C8B-E2A0-4286-B059-9330B552058B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C10DBAE1-4B03-43ED-BA4F-2EE8E5701E48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10DBAE1-4B03-43ED-BA4F-2EE8E5701E48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10DBAE1-4B03-43ED-BA4F-2EE8E5701E48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10DBAE1-4B03-43ED-BA4F-2EE8E5701E48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C10DBAE1-4B03-43ED-BA4F-2EE8E5701E48} = {2C2383B6-3491-4D8B-B7F1-A3BB69CBC80D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AEC1ACFD-7053-468B-AF43-D353DF9D735E}

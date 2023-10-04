@@ -34,7 +34,10 @@ namespace MRF.DataAccess.Repository
 
         public void Remove(T entity)
         {
-            dbSet.Remove(entity);
+            if (entity != null)
+            {
+                dbSet.Remove(entity);
+            }
         }
 
         public void RemoveRange(IEnumerable<T> entity)

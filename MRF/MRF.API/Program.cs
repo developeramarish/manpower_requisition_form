@@ -5,6 +5,8 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Utility;
 using NLog;
 using NLog.Web;
+using Microsoft.Identity.Web;
+
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
@@ -28,19 +30,35 @@ builder.Services.AddDbContext<MRFDBContext>(options =>
         options.UseMySql(config.GetConnectionString("DbConnectionString"), ServerVersion.AutoDetect(config.GetConnectionString("DbConnectionString")))
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging());
+
+builder.Services.AddMicrosoftIdentityWebAppAuthentication(config);
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+        });
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-
+//}
+app.UseCors();
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

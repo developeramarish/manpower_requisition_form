@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRF.DataAccess.Repository;
+using MRF.DataAccess.Repository.IRepository;
+using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,11 +15,12 @@ namespace MRF.API.Controllers
     {
         private readonly IEmailService _emailService;
         private readonly ILoggerService _logger;
-        public EmailController(IEmailService emailService, ILoggerService logger)
+        private readonly IUnitOfWork _unitOfWork;
+        public EmailController(IEmailService emailService, ILoggerService logger, IUnitOfWork unitOfWork)
         {
             _emailService = emailService;
             _logger = logger;
-
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -28,18 +32,17 @@ namespace MRF.API.Controllers
         [SwaggerOperation(Summary ="Sends an email.")]
         [SwaggerResponse(200, "Email sent successfully.")]
         [SwaggerResponse(500, "Internal server error.")]
-        public async Task<IActionResult> SendEmail([FromBody] EmailRequest emailRequest)
+        public async Task<IActionResult> SendEmail(String Status)
         {
-            await _emailService.SendEmailAsync(emailRequest.ToEmail, emailRequest.Subject, emailRequest.Content);
-            _logger.LogInfo("Email sent successfully.");
-            return Ok("Email sent successfully.");
+            emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == Status);
+            if (emailRequest != null)
+            {   await _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                _logger.LogInfo("Email sent successfully.");
+                return Ok("Email sent successfully.");
+            }
+            else { return Ok("Email not sent."); }
         }
     }
 
-    public class EmailRequest
-    {
-        public string ToEmail { get; set; }
-        public string Subject { get; set; }
-        public string Content { get; set; }
-    }
+   
 }

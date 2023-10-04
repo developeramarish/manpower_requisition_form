@@ -37,11 +37,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Sub Department");
             List<Subdepartmentmaster> subdepartmentList = _unitOfWork.Subdepartmentmaster.GetAll().ToList();
-            if (subdepartmentList == null)
+            if (subdepartmentList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = subdepartmentList;
+            _response.Count = subdepartmentList.Count;
             _logger.LogInfo($"Total sub department  count: {subdepartmentList.Count}");
             return _response;
         }
@@ -61,7 +62,7 @@ namespace MRF.API.Controllers
             Subdepartmentmaster subdepartmentmaster = _unitOfWork.Subdepartmentmaster.Get(u => u.Id == id);
             if (subdepartmentmaster == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = subdepartmentmaster;
             return _response;
@@ -150,12 +151,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Subdepartmentmaster? obj = _unitOfWork.Subdepartmentmaster.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Subdepartmentmaster.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Subdepartmentmaster.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }
