@@ -50,5 +50,5 @@ steps:
   displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'MRF-ReleasePipeline-Main-Build-Artifact'
+    ArtifactName: 'MRF-Main-Build-Artifact'
     publishLocation: 'Container'
