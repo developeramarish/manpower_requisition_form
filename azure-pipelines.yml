@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- main
+- manish_partey_source_code
 
 pool:
   vmImage: ubuntu-latest
@@ -42,5 +42,5 @@ steps:
   displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'MRF-ReleasePipeline-Main-Build-Artifact'
+    ArtifactName: 'MRF-Main-Build-Artifact'
     publishLocation: 'Container'
