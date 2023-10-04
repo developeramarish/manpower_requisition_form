@@ -2,6 +2,7 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MrfresumereviewermapController : ControllerBase
     {
@@ -17,13 +18,16 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrfresumereviewermapResponseModel _responseModel;
         private readonly ILoggerService _logger;
-
-        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        private readonly IHostEnvironment _hostEnvironment;
+        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfresumereviewermapResponseModel();
             _logger = logger;
+            _emailService = emailService;
+            _hostEnvironment = hostEnvironment;
         }
         // GET: api/<MrfresumereviewermapController>
         [HttpGet]
@@ -38,11 +42,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
             List<Mrfresumereviewermap> mrfresumereviewermapList = _unitOfWork.Mrfresumereviewermap.GetAll().ToList();
-            if (mrfresumereviewermapList == null)
+            if (mrfresumereviewermapList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfresumereviewermapList;
+            _response.Count = mrfresumereviewermapList.Count;
             _logger.LogInfo($"Total Mrf resume reviewer map count: {mrfresumereviewermapList.Count}");
             return _response;
         }
@@ -62,12 +67,12 @@ namespace MRF.API.Controllers
             Mrfresumereviewermap mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.Get(u => u.Id == id);
             if (mrfresumereviewermap == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfresumereviewermap;
             return _response;
         }
-
+     
         // POST api/<MrfresumereviewermapController>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status201Created, Description = "Item created successfully", Type = typeof(MrfresumereviewermapResponseModel))]
@@ -92,8 +97,12 @@ namespace MRF.API.Controllers
 
             _unitOfWork.Mrfresumereviewermap.Add(mrfresumereviewermap);
             _unitOfWork.Save();
-
             _responseModel.Id = mrfresumereviewermap.Id;
+            if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+            {
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+            }
             return _responseModel;
         }
 
@@ -147,12 +156,47 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Mrfresumereviewermap? obj = _unitOfWork.Mrfresumereviewermap.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
+            {
+                _unitOfWork.Mrfresumereviewermap.Remove(obj);
+                _unitOfWork.Save();
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
+            }
+            else
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Mrfresumereviewermap.Remove(obj);
-            _unitOfWork.Save();
+            
         }
+
+        // GET api/<MrfresumereviewermapController>/5
+        [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(ResumeDetailsViewModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetResumeStatusDetails(int id)
+        {
+            _logger.LogInfo($"Fetching All Mrf resume reviewer map by Id: {id}");
+            List<ResumeDetailsViewModel> ResumeDetails = _unitOfWork.ResumeDetail.GetResumeStatusDetails(id);
+            if (ResumeDetails == null)
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+            }
+            _response.Result = ResumeDetails;
+            return _response;
+        }
+
+
+
+
+
     }
 }

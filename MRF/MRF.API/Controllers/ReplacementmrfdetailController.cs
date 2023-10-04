@@ -38,11 +38,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Replacement mrf detail");
             List<Replacementmrfdetails> replacementmrfdetailList = _unitOfWork.Replacementmrfdetail.GetAll().ToList();
-            if (replacementmrfdetailList == null)
+            if (replacementmrfdetailList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = replacementmrfdetailList;
+            _response.Count = replacementmrfdetailList.Count;
             _logger.LogInfo($"Total Replacement mrf detail count: {replacementmrfdetailList.Count}");
             return _response;
         }
@@ -62,7 +63,7 @@ namespace MRF.API.Controllers
             Replacementmrfdetails  replacementmrfdetail = _unitOfWork.Replacementmrfdetail.Get(u => u.Id == id);
             if (replacementmrfdetail == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = replacementmrfdetail;
             return _response;
@@ -156,12 +157,16 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Replacementmrfdetails? obj = _unitOfWork.Replacementmrfdetail.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Replacementmrfdetail.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Replacementmrfdetail.Remove(obj);
-            _unitOfWork.Save();
+            
         }
     }
 }

@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MRF.Models.ViewModels
+{
+    public class ResumeDetailsViewModel
+    {
+        public int Id { get; set; }
+        public int MrfId { get; set; }
+        public string ReferenceNo { get; set; } = null!;
+        public int ResumeReviewerEmployeeId { get; set; }
+        public string ResumeReviewerName { get; set; } = null!;
+        public int CreatedByEmployeeId { get; set; }
+        public string CreatedName { get; set; } = null!;
+        public DateTime CreatedOnUtc { get; set; }
+        public string Candidatestatus { get; set; } = null!;
+        public int CandidateStatusId { get; set; }
+        public string ResumePath { get; set; } = null!;
+
+
+    }
+}

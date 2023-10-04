@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace MRF.Models.Models;
 
@@ -66,7 +67,7 @@ public partial class MRFDBContext : DbContext
     public virtual DbSet<Subdepartmentmaster> Subdepartmentmasters { get; set; }
 
     public virtual DbSet<Vacancytypemaster> Vacancytypemasters { get; set; }
-
+    public virtual DbSet<AttachmentEvaluation> AttachmentEvaluation { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseMySql("server=localhost;database=mrf;user=root;password=Info@2023", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.15-mysql"));
@@ -364,6 +365,29 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.FromTimeUtc).HasColumnType("time");
             entity.Property(e => e.InterviewerId).HasColumnType("int(11)");
             entity.Property(e => e.ToTimeUtc).HasColumnType("time");
+            entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
+            entity.Property(e => e.UpdatedOnUtc)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
+        });
+
+
+
+        modelBuilder.Entity<AttachmentEvaluation>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("AttachemntEvaluation");
+            
+            entity.HasIndex(e => e.InterviewEvaluationId, "FK_InterviewEvaluation");
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.InterviewEvaluationId).HasColumnType("int(11)");
+            entity.Property(e => e.FilePath).HasColumnType("text");
+            entity.Property(e => e.CreatedByEmployeeId).HasColumnType("int(11)");
+            entity.Property(e => e.CreatedOnUtc)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
+          
             entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
             entity.Property(e => e.UpdatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -672,6 +696,17 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.UpdatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
+        });
+
+
+        modelBuilder.Entity<emailmaster>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.ToTable("emailmaster");
+
+            entity.Property(e => e.status).HasMaxLength(50);
+            entity.Property(e => e.Subject).HasMaxLength(50);
+            entity.Property(e => e.Content).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

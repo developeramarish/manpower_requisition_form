@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,7 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MrfdetailController : ControllerBase
     {
@@ -17,13 +19,15 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrfdetaiResponseModel _responseModel;
         private readonly ILoggerService _logger;
+        private readonly IEmailService _emailService;
 
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger)
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfdetaiResponseModel();
             _logger = logger;
+            _emailService = emailService;
         }
 
         // GET: api/<MrfdetailController>
@@ -39,11 +43,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All MRF Details");
             List<Mrfdetails> mrfdetailsList = _unitOfWork.Mrfdetail.GetAll().ToList();
-            if (mrfdetailsList == null)
+            if (mrfdetailsList.Count ==  0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfdetailsList;
+            _response.Count=mrfdetailsList.Count;
             _logger.LogInfo($"Total mrf details count: {mrfdetailsList.Count}");
             return _response;
         }
@@ -63,7 +68,7 @@ namespace MRF.API.Controllers
             Mrfdetails mrfdetail = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
             if (mrfdetail == null)
             {
-                _logger.LogError($"No result found by this Id: {id}");
+                _logger.LogError($"No result found by this Id:{id}");
             }
             _response.Result = mrfdetail;
             return _response;
@@ -110,6 +115,10 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
 
             _responseModel.Id = mrfDetail.Id;
+            
+            
+            //_emailService.SendEmailAsync("Submit MRF");
+
             return _responseModel;
         }
 
@@ -166,6 +175,54 @@ namespace MRF.API.Controllers
             return _responseModel;
         }
 
+        // PUT api/<MrfdetailController>/5
+        [HttpPut("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(MrfdetaiResponseModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful update)")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public MrfdetaiResponseModel PartialUpdateMRFStatus(int id, [FromBody] MrfdetailRequestModel request)
+        {
+            var existingStatus = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
+
+            if (existingStatus != null)
+            {
+                    var entityType = existingStatus.GetType();
+                    foreach (var propertyInfo in typeof(MrfdetailRequestModel).GetProperties())
+                    {  
+                    var entityProperty = entityType.GetProperty(propertyInfo.Name);
+                    if (entityProperty != null)
+                        {
+                            
+                            var valueToUpdate = propertyInfo.GetValue(request);
+                            if (valueToUpdate != null && !valueToUpdate.Equals(0))
+                            {
+                                entityProperty.SetValue(existingStatus, valueToUpdate);
+                            }
+                        }
+                    }
+
+                _unitOfWork.Mrfdetail.Update(existingStatus);
+                _unitOfWork.Save();
+                
+                //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
+                //_emailService.SendEmailAsync(emailRequest.emailTo,emailRequest.Subject,emailRequest.Content);
+                _responseModel.Id = existingStatus.Id;
+            }
+            else
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+            }
+            return _responseModel;
+        }
+
         // DELETE api/<MrfdetailController>/5
         [HttpDelete("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(MrfdetaiResponseModel))]
@@ -179,12 +236,38 @@ namespace MRF.API.Controllers
         public void Delete(int id)
         {
             Mrfdetails? obj = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
-            if (obj == null)
+            if (obj != null)
             {
+                _unitOfWork.Mrfdetail.Remove(obj);
+                _unitOfWork.Save();
+
+            }
+            else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _unitOfWork.Mrfdetail.Remove(obj);
-            _unitOfWork.Save();
+            
+        }
+
+
+        // GET api/<MrfdetailController>/5
+        [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(MrfDetailsViewModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetMrfDetails(int id)
+        {
+            _logger.LogInfo($"Fetching All MRF Details by Id: {id}");
+            MrfDetailsViewModel mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(id);
+            if (mrfdetail == null)
+            {
+                _logger.LogError($"No result found by this Id:{id}");
+            }
+            _response.Result = mrfdetail;
+            return _response;
         }
     }
 }

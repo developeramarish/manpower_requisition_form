@@ -25,9 +25,16 @@
         IResumeforwarddetailRepository Resumeforwarddetail { get; }
         IEmployeedetailsRepository Employeedetails { get; }
         ICandidatedetailRepository Candidatedetail { get; }
+        IInterviewevaluationRepository Interviewevaluation { get; }
         IEmployeelogindetailRepository Employeelogindetail { get; }
         IEmployeerolemapRepository Employeerolemap { get; }
         IFreshmrfdetailRepository Freshmrfdetail { get; }
+        IDashboardRepository Dashboard { get; }
+        IMrfStatusDetailsRepository MrfStatusDetail { get; }
+        IResumeDetailsRepository ResumeDetail { get; }
+        IInterviewDetailsRepository InterviewDetail { get; }
+        IAttachmentEvaluationRepository AttachmentEvaluation { get; }
+        IEmailRepository emailmaster { get; }
         void Save();
     }
 }
