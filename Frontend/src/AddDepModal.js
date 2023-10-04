@@ -1,77 +1,66 @@
-import React,{Component} from 'react';
-import {Modal,Button, Row, Col, Form} from 'react-bootstrap';
-import { variables } from './Variables';   
-export class AddDepModal extends Component{
-    constructor(props){
-        super(props);
-        this.handleSubmit=this.handleSubmit.bind(this);
-    }
+import React, { useState } from 'react';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
 
-    handleSubmit(event){
-        event.preventDefault();
-        fetch(variables.REACT_APP_API+'department',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                DepartmentId:null,
-                DepartmentName:event.target.DepartmentName.value
-            })
-        })
-        .then(res=>res.json())
-        .then((result)=>{
-            alert(result);
-        },
-        (error)=>{
-            alert('Failed');
-        })
-    }
-    render(){
-        return (
-            <div className="container">
+const AddDeptModel = () => {
+  const [visible, setVisible] = useState(false);
+  const [formData, setFormData] = useState({ name: '', age: '', gender: '' });
 
-<Modal
-{...this.props}
-size="lg"
-aria-labelledby="contained-modal-title-vcenter"
-centered
->
-    <Modal.Header clooseButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-            Add Department
-        </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
+  const showDialog = () => {
+    setVisible(true);
+  };
 
-        <Row>
-            <Col sm={6}>
-                <Form onSubmit={this.handleSubmit}>
-                    <Form.Group controlId="DepartmentName">
-                        <Form.Label>DepartmentName</Form.Label>
-                        <Form.Control type="text" name="DepartmentName" required 
-                        placeholder="DepartmentName"/>
-                    </Form.Group>
+  const hideDialog = () => {
+    setVisible(false);
+  };
 
-                    <Form.Group>
-                        <Button variant="primary" type="submit">
-                            Add Department
-                        </Button>
-                    </Form.Group>
-                </Form>
-            </Col>
-        </Row>
-    </Modal.Body>
-    
-    <Modal.Footer>
-        <Button variant="danger" onClick={this.props.onHide}>Close</Button>
-    </Modal.Footer>
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
-</Modal>
+  const handleSubmit = () => {
+    // Handle form submission logic
+    hideDialog();
+  };
 
-            </div>
-        )
-    }
+  const genderOptions = [
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
+  ];
 
-}
+  return (
+    <div>
+      <Button label="Open Modal" onClick={showDialog} />
+
+      <Dialog visible={visible} onHide={hideDialog}>
+        <div>
+          <h2>Your Form</h2>
+          <form>
+            <label>Name:</label>
+            <InputText name="name" value={formData.name} onChange={handleInputChange} />
+
+            <label>Age:</label>
+            <InputText name="age" value={formData.age} onChange={handleInputChange} />
+
+            <label>Gender:</label>
+            <Dropdown
+              name="gender"
+              value={formData.gender}
+              options={genderOptions}
+              onChange={handleInputChange}
+              optionLabel="label"
+              placeholder="Select Gender"
+            />
+
+            <Button label="Submit" onClick={handleSubmit} />
+          </form>
+        </div>
+      </Dialog>
+    </div>
+  );
+};
+
+export default AddDeptModel;

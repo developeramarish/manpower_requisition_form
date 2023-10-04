@@ -1,10 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins');
 body {
     margin: 0;
-    font-family: Arial;
+    font-family:'Poppins';
     font-size: 11px;
     color: #ffffff;
     background: #202020;
     background-size: cover;
     background-color: #c9c9c9;
+}
+
+.titleHeader
+{
+  font-size: medium;
+}
+
+.mainpg {
+  padding-top: 20px;    /* Adjust as needed */
+  padding-bottom: 20px; /* Adjust as needed */
+  padding-left: 10px;   /* Adjust as needed for less padding on the left */
+  padding-right: 10px;  /* Adjust as needed for less padding on the right */
 }
 

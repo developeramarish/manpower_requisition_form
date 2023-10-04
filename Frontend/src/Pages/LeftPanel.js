@@ -7,12 +7,19 @@ import './Dashboard.css'
 const LeftPanel = () => {
     const items = [
       {
-        label: 'DASHBOARD',
         icon: 'pi pi-home',
+      }
+      ,
+        {
+        label: 'DASHBOARD',
+       
+      },
+      {
+        icon: 'pi pi-tags',
       },
       {
         label: 'MY REQUISITION',
-        icon: 'pi pi-tags',
+        
         
       },
       {

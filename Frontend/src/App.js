@@ -4,11 +4,12 @@ import { Department } from './Department';
 import { Employeedetails } from './Employeedetails';
 import { Dashboard } from './Dashboard';
 import { Navigation } from './Navigation';
-import 'primereact/resources/themes/saga-blue/theme.css';
+import './styles/layout/theme.css';
 import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import 'primereact/resources/primereact.min.css';
+
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -18,7 +19,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <BrowserRouter>
-      <div className="container">
+      <div className="container mainpg">
         
         <Navigation />
 

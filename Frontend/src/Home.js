@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
-import {Table} from 'react-bootstrap';
+import {DataTable} from 'primereact/datatable';
 import { variables } from './Variables.js';    
 import {Button}  from 'primereact/button';
-
+import { Column } from 'primereact/column';
 
 export class Home extends Component{
 
@@ -124,7 +124,7 @@ export class Home extends Component{
         
         return(
             <div>
-                <Table className="mt-4" striped bordered hover size="sm">
+                <DataTable className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
                             <th>MRF ReferenceNo</th>
@@ -140,9 +140,9 @@ export class Home extends Component{
                             </tr>
                         )}
                     </tbody>
-                     </Table>
+                     </DataTable>
 
-                     <Table className="mt-4" striped bordered hover size="sm">
+                     <DataTable className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
                             <th>MRF Resume Status</th>
@@ -158,8 +158,8 @@ export class Home extends Component{
                             </tr>
                         )}
                     </tbody>
-                     </Table>
-                     <Table className="mt-4" striped bordered hover size="sm">
+                     </DataTable>
+                     <DataTable className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
                             <th>MRF Interview Status</th>
@@ -175,7 +175,7 @@ export class Home extends Component{
                             </tr>
                         )}
                     </tbody>
-                     </Table>
+                     </DataTable>
             </div>
 
             
