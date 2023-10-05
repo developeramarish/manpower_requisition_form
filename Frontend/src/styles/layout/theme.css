@@ -2569,17 +2569,18 @@
     }
     .p-datatable .p-datatable-thead > tr > th {
       text-align: left;
-      padding: 1rem 1rem;
+      padding: .50rem .5rem;
       border: 1px solid #e9ecef;
       border-width: 0 0 1px 0;
       font-weight: 600;
       color: #495057;
-      background: #f8f9fa;
+      background: #fafbfd;
       transition: box-shadow 0.2s;
+      font-size: smaller;
     }
     .p-datatable .p-datatable-tfoot > tr > td {
       text-align: left;
-      padding: 1rem 1rem;
+      padding: .5rem .5rem;
       border: 1px solid #e9ecef;
       border-width: 0 0 1px 0;
       font-weight: 600;
@@ -2633,7 +2634,8 @@
       text-align: left;
       border: 1px solid #e9ecef;
       border-width: 0 0 1px 0;
-      padding: 1rem 1rem;
+      padding: .5rem .5rem;
+      font-size: small;
     }
     .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
     .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
@@ -4898,11 +4900,11 @@
       margin: 0.25rem 0;
     }
     .p-menubar {
-      padding: 0.5rem;
-      background: #f8f9fa;
-      color: #495057;
-      border: 1px solid #dee2e6;
-      border-radius: 3px;
+      
+      background-color: rgb(43, 42, 42);
+      color: white;
+      
+     
     }
     .p-menubar .p-menuitem-link {
       padding: 0.75rem 1rem;
@@ -4912,7 +4914,7 @@
       user-select: none;
     }
     .p-menubar .p-menuitem-link .p-menuitem-text {
-      color: #495057;
+      color: white;
     }
     .p-menubar .p-menuitem-link .p-menuitem-icon {
       color: #6c757d;
@@ -4940,13 +4942,13 @@
     }
     .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
       padding: 0.75rem 1rem;
-      color: #495057;
+      color: white;
       border-radius: 3px;
       transition: box-shadow 0.2s;
       user-select: none;
     }
     .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-text {
-      color: #495057;
+      color: white;
     }
     .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-icon {
       color: #6c757d;
@@ -5074,6 +5076,7 @@
       .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-icon {
         color: #6c757d;
         margin-right: 0.5rem;
+        
       }
       .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-submenu-icon {
         color: #6c757d;
@@ -5156,6 +5159,7 @@
     }
     .p-panelmenu .p-panelmenu-header > a .p-menuitem-icon {
       margin-right: 0.5rem;
+      margin-bottom: 3px;
     }
     .p-panelmenu .p-panelmenu-header > a:focus-visible {
       outline: 0 none;
