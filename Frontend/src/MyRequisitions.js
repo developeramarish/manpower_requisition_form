@@ -7,6 +7,8 @@ import DashboardHeader from './Pages/Header';
 import LeftPanel from './Pages/LeftPanel';
 import SearchText from './Pages/SearchText';
  
+ 
+ 
     const MyRequisitions = () => {
         // Dummy data
         const [data, setData] = useState([
@@ -38,6 +40,7 @@ import SearchText from './Pages/SearchText';
     
     
     return(
+ 
         
         <div >
         <DashboardHeader />
@@ -56,7 +59,10 @@ import SearchText from './Pages/SearchText';
        
           
         
-        <div>
+        
+      
+        <div className = "bar">
+ 
             
             <DataTable value={data} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '69rem'}} >
     <Column field="MRFID" header="MRF ID" style={{ width: '20%',color:'#0e0808'}} ></Column>
