@@ -1,12 +1,15 @@
 // DashboardContent.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import SearchText from './SearchText';
+import {fetchData} from '../Service/GetDashboarddetails';
+import { variables } from '../Variables';
 
-const MRFSummaryTable = () => {
+
+const baseUrl = variables.APP_API;
   // MRF Summary Data
-  const mrfSummaryData = [
+  /*const mrfSummaryData = [
     { Status: 'Drafted',  TotalCount: 5 },
     { Status: 'Submitted by HR',  TotalCount: 5 },
     { Status: 'Submission Required',  TotalCount: 5 },
@@ -14,16 +17,55 @@ const MRFSummaryTable = () => {
     { Status: 'Rejected',  TotalCount: 5 },
     { Status: 1,  TotalCount: 5 },
   ];
+  */
+
+const MRFSummaryTable = () => {
+  const [selectedReference, setSelectedReference] = useState(null);
+  const handleReferenceClick = (referenceNo) => {
+    // Open your popup or perform any action here
+    console.log('Reference clicked:', referenceNo);
+    setSelectedReference(referenceNo);
+  };
+
+  const [mrfSummaryData, setMrfSummaryData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://localhost:7128/api/Dashboard/GetMrfStatusSummary');
+        const responseData = await response.json();
+
+        if (Array.isArray(responseData.result)) {
+          const data = responseData.result;
+          const newMrfSummaryData = data.map(item => {
+            return {
+             
+              id: item.id,
+              referenceNo: item.referenceNo,
+              count: item.statusCount,
+              
+            };
+          });
+          
+          setMrfSummaryData(newMrfSummaryData);
+        } else {
+          console.error('API response result is not an array:', responseData);
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+
+    fetchData();
+  }, []); 
 
   return (
     <div className="headMrfSummary">
       <div className="spSummary">MRF Summary</div>
       <DataTable value={mrfSummaryData}>
-        {/* Define your columns */}
         
-        <Column field="Status" header="Status"></Column>
-        <Column field="TotalCount" header="Total Count"></Column>
-        {/* Add more columns as needed */}
+        <Column field="referenceNo" header="Reference No"></Column>
+        <Column field="count" header="Total Count"></Column>
       </DataTable>
     </div>
   );
@@ -35,7 +77,6 @@ const ResumeSummaryTable = () => {
     const data = [
       { id: '02/MUM/CFR/JAN/15/003', new: 5, shortlisted: 3, rejected: 1, onHold: 2 },
       { id: '03/MUM/CFR/JAN/15/003', new: 2, shortlisted: 7, rejected: 0, onHold: 1 },
-      
       // Add more data as needed
     ];
   
@@ -125,7 +166,7 @@ const DashboardContent = () => {
        <SearchText/>
        </div>
      <div className="left-div">
-      <MRFSummaryTable />
+      <MRFSummaryTable></MRFSummaryTable>
       </div>
       <div className="right-div">
       <ResumeSummaryTable />

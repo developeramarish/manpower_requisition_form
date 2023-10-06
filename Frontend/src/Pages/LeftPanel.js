@@ -6,58 +6,62 @@ import '../styles/layout/Dashboard.css'
 import { Link } from 'react-router-dom';
 
 const LeftPanel = () => {
-    const imagePath = './MyDashboard.png';
+    
     const linkStyles = {
       textDecoration: 'none',
       color: 'white',
       padding: '8px',
-      
       borderRadius: '4px',
       display: 'inline-block',
     };
     const menuDashBoard = {
-      color: 'white',
+         color: 'white',
         fontWeight: 'bold',
         fontSize:'10px',
+        textAlign: 'center',
+        // Add more styles as needed
+      }; 
+       
+      const iconStyle = {
+        color: 'gray', 
+        padding:'5px',
+        paddingLeft:'15px',
         
-        // Add more styles as needed
-      }; 
-      const menuMyRequi = {
-       
-        fontWeight: 'bold',
-        fontSize:'10px',
-        // Add more styles as needed
-      }; 
-      const menuCreateRequi = {
-       
-        fontWeight: 'bold',
-        fontSize:'10px',
-        // Add more styles as needed
-      }; 
+      };
+      const divStyle = {
+        textAlign: 'center',
+      }
     
     const items = [
       {
         label: (
               <Link to="/Dashboard" className="linkStyles">
-              
+              <div className="divStyle">
+              <i className="pi pi-chart-bar" style={iconStyle }></i>
+              </div>
               <span style={menuDashBoard}>DASHBOARD</span>
+              
               </Link>
           ),
       },
       {
         label:(
             <Link to="/MyRequisitions" className="linkStyles">
-              
+               <div className="divStyle">
+              <i className="pi pi-list" style={iconStyle }></i>
+              </div>
         <span style={menuDashBoard}>MY REQUISITIONS</span>
       </Link>),
         
       },
       {
        
-        label:(<div className="menu-item-container">
-              
+        label:(<Link to="/CreateRequisition" className="linkStyles">
+               <div className="divStyle">
+              <i className="pi pi-file-edit" style={iconStyle }></i>
+              </div>
         <span style={menuDashBoard}>CREATE REQUISITIONS</span>
-      </div>),
+        </Link>),
       },
       // Add more menu items as needed
     ];
