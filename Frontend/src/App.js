@@ -21,7 +21,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <BrowserRouter>
-      <div className="container mainpg">
+      <div className="container mainpg p-0">
         
         <Navigation />
 
