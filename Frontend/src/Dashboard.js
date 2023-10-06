@@ -11,7 +11,7 @@ const Dashboard = () => {
       <DashboardHeader />
       <div style={{ display: 'flex' }}>
         <LeftPanel />
-        <div class="MyDashboard">
+        <div className="MyDashboard">
         <DashboardContent />
         </div>
       </div>

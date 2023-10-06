@@ -1,9 +1,9 @@
 import React,{Component} from 'react';
-import {Table} from 'react-bootstrap';
+import {DataTable} from 'primereact/datatable';
 import { variables } from './Variables.js';    
-import {Button,ButtonToolbar} from 'react-bootstrap';
-import {AddDepModal} from './AddDepModal';
-import {EditDepModal} from './EditDepModal';
+import {Button}  from 'primereact/button';
+import AddDepModal from './AddDepModal';
+import EditDepModal from './EditDepModal';
 
 export class Department extends Component{
 
@@ -59,7 +59,7 @@ export class Department extends Component{
         let editModalClose=()=>this.setState({editModalShow:false});
         return(
             <div>
-                <Table className="mt-4" striped bordered hover size="sm">
+                <DataTable className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
                             <th>DepartmentId</th>
@@ -73,7 +73,7 @@ export class Department extends Component{
                                 <td>{dep.id}</td>
                                 <td>{dep.name}</td>
                                 <td>
-<ButtonToolbar>
+
     <Button className="mr-2" variant="info"
     onClick={()=>this.setState({editModalShow:true,
         depid:dep.DepartmentId,depname:dep.DepartmentName})}>
@@ -89,22 +89,22 @@ export class Department extends Component{
         onHide={editModalClose}
         depid={depid}
         depname={depname}/>
-</ButtonToolbar>
+
 
                                 </td>
                             </tr>
                             )}
                     </tbody>
                     
-               </Table>
-               <ButtonToolbar>
+               </DataTable>
+               
                     <Button variant='primary'
                     onClick={()=>this.setState({addModalShow:true})}>
                     Add Department</Button>
 
                     <AddDepModal show={this.state.addModalShow}
                     onHide={addModalClose}/>
-                </ButtonToolbar>
+                
           </div>
           
         )
