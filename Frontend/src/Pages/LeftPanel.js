@@ -3,12 +3,20 @@ import React from 'react';
 import { Menubar } from 'primereact/menubar';
 import { PanelMenu } from 'primereact/panelmenu';
 import '../styles/layout/Dashboard.css'
-import '../styles/layout/header.css'; 
+import { Link } from 'react-router-dom';
+
 const LeftPanel = () => {
     const imagePath = './MyDashboard.png';
-
+    const linkStyles = {
+      textDecoration: 'none',
+      color: 'white',
+      padding: '8px',
+      
+      borderRadius: '4px',
+      display: 'inline-block',
+    };
     const menuDashBoard = {
-        
+      color: 'white',
         fontWeight: 'bold',
         fontSize:'10px',
         
@@ -30,17 +38,18 @@ const LeftPanel = () => {
     const items = [
       {
         label: (
-            <div className="menu-item-container">
+              <Link to="/Dashboard" className="linkStyles">
               
               <span style={menuDashBoard}>DASHBOARD</span>
-            </div>
+              </Link>
           ),
       },
       {
-        label:(<div className="menu-item-container">
+        label:(
+            <Link to="/MyRequisitions" className="linkStyles">
               
         <span style={menuDashBoard}>MY REQUISITIONS</span>
-      </div>),
+      </Link>),
         
       },
       {

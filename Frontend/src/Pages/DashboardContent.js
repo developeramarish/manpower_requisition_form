@@ -3,6 +3,7 @@ import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import SearchText from './SearchText';
+
 const MRFSummaryTable = () => {
   // MRF Summary Data
   const mrfSummaryData = [
@@ -32,7 +33,7 @@ const MRFSummaryTable = () => {
 const ResumeSummaryTable = () => {
     const data = [
       { id: '02/MUM/CFR/JAN/15/003', new: 5, shortlisted: 3, rejected: 1, onHold: 2 },
-      { id: '0MUM/CFR/JAN/15/003', new: 2, shortlisted: 7, rejected: 0, onHold: 1 },
+      { id: '03/MUM/CFR/JAN/15/003', new: 2, shortlisted: 7, rejected: 0, onHold: 1 },
       // Add more data as needed
     ];
   

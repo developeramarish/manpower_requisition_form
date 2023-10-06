@@ -10,6 +10,8 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import 'primereact/resources/primereact.min.css';
 
+import DashboardPage from './Dashboard'; // Import your Dashboard page component
+import MyRequisitions from './MyRequisitions';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -24,9 +26,9 @@ function App() {
         <Navigation />
 
         <Routes>
-          <Route path="/Home" element={<Home />} />
-          <Route path="/Department" element={<Department />} />
-          <Route path="/Employeedetails" element={<Employeedetails />} />
+         
+          
+          <Route path="/MyRequisitions" element={<MyRequisitions />} />
         </Routes>
       </div>
     </BrowserRouter>
