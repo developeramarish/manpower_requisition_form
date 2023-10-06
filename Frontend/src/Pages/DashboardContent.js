@@ -75,20 +75,40 @@ const ResumeSummaryTable = () => {
 
 
 const InterviewSummaryTable = () => {
-  // Interview Summary Data
-  const interviewSummaryData = [
-    // Your data goes here
+  const data = [
+    { id: '02/MUM/CFR/JAN/15/003', new: 5, shortlisted: 3, rejected: 1, onHold: 2 },
+    { id: '03/MUM/CFR/JAN/15/003', new: 2, shortlisted: 7, rejected: 0, onHold: 1 },
+    // Add more data as needed
   ];
 
   return (
     <div className="headinterviewSummary">
       <div className="spSummary">Interview Summary</div>
-      <DataTable value={interviewSummaryData}>
-        {/* Define your columns */}
-        <Column field="id" header="ID"></Column>
-        <Column field="candidate" header="Candidate"></Column>
-        {/* Add more columns as needed */}
-      </DataTable>
+      <table>
+            <thead>
+              <tr className="table-header">
+                <th rowSpan="2" className="column-widthFirst">MRF ID</th>
+                <th colSpan="4" className="column-width">Status</th>
+              </tr>
+              <tr className="StatusHeader">
+                <th>New</th>
+                <th>Shortlisted</th>
+                <th>Rejected</th>
+                <th>On Hold</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((rowData) => (
+                <tr key={rowData.id} className="table-row">
+                  <td>{rowData.id}</td>
+                  <td>{rowData.new}</td>
+                  <td>{rowData.shortlisted}</td>
+                  <td>{rowData.rejected}</td>
+                  <td>{rowData.onHold}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { Column } from 'primereact/column';
 import { DataViewLayoutOptions } from 'primereact/dataview';
 import DashboardHeader from './Pages/Header';
 import LeftPanel from './Pages/LeftPanel';
- 
+import SearchText from './Pages/SearchText';
     const MyRequisitions = () => {
         // Dummy data
         const [data, setData] = useState([
@@ -42,6 +42,12 @@ import LeftPanel from './Pages/LeftPanel';
       <div style={{ display: 'flex' }}>
         <LeftPanel />
         <div className="MyDashboard">
+        <div className="containerH">
+        <div className="box">
+       <label>MY REQUISITIONS</label>
+       </div>
+       <SearchText/>
+       </div>
         <div className = "bar">
             
             <DataTable value={data} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '80rem' }} >
