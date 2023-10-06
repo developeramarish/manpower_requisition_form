@@ -1,0 +1,50 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff; /* Adjust background color as needed */
+    color: #050404; /* Adjust text color as needed */
+  }
+  
+  .left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .iconimg {
+    width: 30px; /* Set the width of the icon */
+    height: 30px; /* Set the height of the icon */
+    background-image: url('../../Assets/img/mrf.png'); /* Set the path to your image */
+    background-size: cover; /* Adjust as needed */
+    margin-right: 10px;
+  }
+  
+
+
+  .icon {
+    font-size: 15px;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .username {
+    margin-right: 10px;
+  }
+  
+  .logout {
+    color:  #c4c2c2; /* Adjust text color as needed */
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Optional: Add hover effect for the logout link */
+  .logout:hover {
+    text-decoration: underline;
+  }
+  
