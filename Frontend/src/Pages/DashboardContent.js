@@ -20,6 +20,7 @@ const MRFSummaryTable = () => {
       <div className="spSummary">MRF Summary</div>
       <DataTable value={mrfSummaryData}>
         {/* Define your columns */}
+        
         <Column field="Status" header="Status"></Column>
         <Column field="TotalCount" header="Total Count"></Column>
         {/* Add more columns as needed */}
@@ -34,6 +35,7 @@ const ResumeSummaryTable = () => {
     const data = [
       { id: '02/MUM/CFR/JAN/15/003', new: 5, shortlisted: 3, rejected: 1, onHold: 2 },
       { id: '03/MUM/CFR/JAN/15/003', new: 2, shortlisted: 7, rejected: 0, onHold: 1 },
+      
       // Add more data as needed
     ];
   
