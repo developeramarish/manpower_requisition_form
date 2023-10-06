@@ -5,6 +5,7 @@ import { Column } from 'primereact/column';
 import { DataViewLayoutOptions } from 'primereact/dataview';
 import DashboardHeader from './Pages/Header';
 import LeftPanel from './Pages/LeftPanel';
+import SearchText from './Pages/SearchText';
  
     const MyRequisitions = () => {
         // Dummy data
@@ -37,29 +38,42 @@ import LeftPanel from './Pages/LeftPanel';
     
     
     return(
-      <div>
-      <DashboardHeader />
-      <div style={{ display: 'flex' }}>
-        <LeftPanel />
-        <div className="MyDashboard">
-        <div className = "bar">
+        
+        <div >
+        <DashboardHeader />
+        <div style={{ display: 'flex' }}>
+          <LeftPanel />
+         
+          <div className = "bar">
+            <div class="containerH">
+                <label class="box" >My Requisitions</label>
+                <div class="SearchText"><SearchText/></div>
+            </div>
+          
+        
+      
+      
+       
+          
+        
+        <div>
             
-            <DataTable value={data} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '80rem' }} >
-    <Column field="MRFID" header="MRF ID" style={{ width: '20%'}} ></Column>
-    <Column field="CreatedBy" header="Created By"sortable style={{ width: '25%' }}></Column>
-    <Column field="CreatedOn" header="Created On"sortable style={{ width: '25%' }}></Column>
-    <Column field="LastUpdated" header="Last Updated"sortable style={{ width: '25%' }}></Column>
-    <Column field="RequisionType" header="Requision Type"sortable style={{ width: '25%' }}></Column>
-    <Column field="NoOfPositions" header="No.of positions"sortable style={{ width: '25%' }}></Column>
-    <Column field="ExpRequired" header="Exp Required"sortable style={{ width: '25%' }}></Column>
-    <Column field="SalaryRange" header="Salary Range"sortable style={{ width: '25%' }}></Column>
-    <Column field="Status" header="Status"sortable style={{ width: '25  %' }}></Column>
+            <DataTable value={data} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '69rem'}} >
+    <Column field="MRFID" header="MRF ID" style={{ width: '20%',color:'#0e0808'}} ></Column>
+    <Column field="CreatedBy" header="Created By"sortable style={{ width: '25%' ,color:'#0e0808'}}></Column>
+    <Column field="CreatedOn" header="Created On"sortable style={{ width: '25%',color:'#0e0808'}}></Column>
+    <Column field="LastUpdated" header="Last Updated"sortable style={{ width: '25%',color:'#0e0808'}}></Column>
+    <Column field="RequisionType" header="Requision Type"sortable style={{ width: '25%',color:'#0e0808'}}></Column>
+    <Column field="NoOfPositions" header="No.of positions"sortable style={{ width: '25%',color:'#0e0808'}}></Column>
+    <Column field="ExpRequired" header="Exp Required"sortable style={{ width: '25%',color:'#0e0808'}}></Column>
+    <Column field="SalaryRange" header="Salary Range"sortable style={{ width: '25%',color:'#0e0808'}}></Column>
+    <Column field="Status" header="Status"sortable style={{ width: '25  %',color:'#0e0808'}}></Column>
     </DataTable>
     </div>
       </div>
+      </div>
     </div>
- 
-        </div>
+     
         
     );
     }
