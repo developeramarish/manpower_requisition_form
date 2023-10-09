@@ -1,9 +1,6 @@
 // LeftPanel.js
 import React from "react";
-// import { Menubar } from "primereact/menubar";
-
-import { Menu } from "primereact/menu";
-
+import { Menubar } from "primereact/menubar";
 import "../styles/layout/LeftPanel.css";
 import { Link } from "react-router-dom";
 
@@ -46,7 +43,7 @@ const LeftPanel = () => {
   // const start = <div></div>;
 
   return (
-    <Menu model={items} className="menu-class" />
+    <Menubar model={items} className="menu-class" />
     // <div className="full-page-container">
     //   <div className="left-panel py-2">
     //     <Menubar model={items} start={start} />
