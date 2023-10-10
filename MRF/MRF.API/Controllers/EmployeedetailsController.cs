@@ -120,7 +120,10 @@ namespace MRF.API.Controllers
             {
 
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
-                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                if (emailRequest != null)
+                {
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
             }
             
  
@@ -167,7 +170,10 @@ namespace MRF.API.Controllers
                 {
 
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Update user");
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
                 }
 
                     _responseModel.Id = existingStatus.Id;
@@ -208,7 +214,10 @@ namespace MRF.API.Controllers
                 {
 
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Delete User");
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
                 }
                
  

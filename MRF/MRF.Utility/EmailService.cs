@@ -20,26 +20,29 @@ namespace MRF.Utility
         }
         public async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
         {
-            
-            string[] emailTo = toEmail.Split(',');
-
-            for (int i = 0;i < emailTo.Length; i++)
+            try
             {
-                var msg = new SendGridMessage
-                {
-                    From = new EmailAddress(FromEmail, SenderName),
-                    Subject = subject,
-                    HtmlContent = htmlContent
-                };
+                string[] emailTo = toEmail.Split(',');
 
-                msg.AddTo(emailTo[i]);
-
-                var response = await _sendGridClient.SendEmailAsync(msg);
-                if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
+                for (int i = 0; i < emailTo.Length; i++)
                 {
-                    throw new Exception($"Failed to send email. Status code: {response.StatusCode}");
+                    var msg = new SendGridMessage
+                    {
+                        From = new EmailAddress(FromEmail, SenderName),
+                        Subject = subject,
+                        HtmlContent = htmlContent
+                    };
+
+                    msg.AddTo(emailTo[i]);
+
+                    var response = await _sendGridClient.SendEmailAsync(msg);
+                    if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
+                    {
+                        throw new Exception($"Failed to send email. Status code: {response.StatusCode}");
+                    }
                 }
             }
+            catch(Exception e) { }
         }
 
         public bool IsValidUpdateValue(object value)

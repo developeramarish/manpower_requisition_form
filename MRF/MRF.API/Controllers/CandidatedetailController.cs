@@ -112,7 +112,7 @@ namespace MRF.API.Controllers
         }
 
         // PUT api/<CandidatedetailController>/5
-        [EnableCors]
+        
         [HttpPut("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(CandidatedetailResponseModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
@@ -153,7 +153,7 @@ namespace MRF.API.Controllers
               
             return _responseModel;
         }
-        [EnableCors]
+        
         // DELETE api/<CandidatedetailController>/5
         [HttpDelete("{Id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(CandidatedetailResponseModel))]
