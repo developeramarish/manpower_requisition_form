@@ -9,5 +9,6 @@ namespace MRF.Utility
     public interface IEmailService
     {
         Task SendEmailAsync(string toEmail, string subject, string htmlContent);
+        public bool IsValidUpdateValue(object value);
     }
 }
