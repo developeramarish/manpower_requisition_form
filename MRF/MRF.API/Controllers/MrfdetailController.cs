@@ -21,15 +21,15 @@ namespace MRF.API.Controllers
         private MrfdetaiResponseModel _responseModel;
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
-        private readonly IHostEnvironment _hostEnvironment;
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
+        //private readonly IHostEnvironment _hostEnvironment;
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfdetaiResponseModel();
             _logger = logger;
             _emailService = emailService;
-            _hostEnvironment = hostEnvironment;
+           // _hostEnvironment = hostEnvironment;
         }
 
         // GET: api/<MrfdetailController>
@@ -213,14 +213,14 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
-                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-                {
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
-                    if (emailRequest != null)
-                    {
-                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                    }
-                }
+                //if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                //{
+                //    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
+                //    if (emailRequest != null)
+                //    {
+                //        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                //    }
+                //}
                     _responseModel.Id = existingStatus.Id;
             }
             else
