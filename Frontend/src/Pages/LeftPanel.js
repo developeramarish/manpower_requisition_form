@@ -56,12 +56,12 @@ const LeftPanel = () => {
       },
       {
        
-        label:(<div className="menu-item-container">
+        label:(<Link to="/CreateRequisition" className="linkStyles">
                <div className="divStyle">
               <i className="pi pi-file-edit" style={iconStyle }></i>
               </div>
         <span style={menuDashBoard}>CREATE REQUISITIONS</span>
-      </div>),
+        </Link>),
       },
       // Add more menu items as needed
     ];

@@ -12,6 +12,8 @@ import 'primereact/resources/primereact.min.css';
 
 import DashboardPage from './Dashboard'; // Import your Dashboard page component
 import MyRequisitions from './MyRequisitions';
+import CreateRequisition from './Pages/CreateRequisition';
+import MyReumes from './Pages/MyReumes';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -29,6 +31,8 @@ function App() {
          
           
           <Route path="/MyRequisitions" element={<MyRequisitions />} />
+          <Route path="/CreateRequisition" element={<CreateRequisition />} />
+          <Route path="/MyReumes" element={<MyReumes />} />
         </Routes>
       </div>
     </BrowserRouter>
