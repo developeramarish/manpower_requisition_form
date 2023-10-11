@@ -33,16 +33,16 @@ builder.Services.AddDbContext<MRFDBContext>(options =>
 
 builder.Services.AddMicrosoftIdentityWebAppAuthentication(config);
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddDefaultPolicy(
-//        policy =>
-//        {
-//            policy.AllowAnyOrigin()
-//                    .AllowAnyMethod()
-//                    .AllowAnyHeader();
-//        });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+        });
+});
 
 
 
@@ -54,8 +54,8 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
-//app.UseCors();
-//app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
