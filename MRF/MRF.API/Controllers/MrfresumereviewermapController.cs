@@ -101,7 +101,10 @@ namespace MRF.API.Controllers
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
-                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                if (emailRequest != null)
+                {
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
             }
             return _responseModel;
         }
@@ -163,7 +166,10 @@ namespace MRF.API.Controllers
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
                 }
             }
             else

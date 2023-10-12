@@ -93,7 +93,8 @@ namespace MRF.API.Controllers
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
+                UpdatedOnUtc = request.UpdatedOnUtc,
+                Justification = request.Justification,
             };
 
             _unitOfWork.Replacementmrfdetail.Add(replacementmrfdetail);
@@ -131,6 +132,7 @@ namespace MRF.API.Controllers
                 existingStatus.GradeId = request.GradeId;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
+                existingStatus.Justification = request.Justification;
 
                 _unitOfWork.Replacementmrfdetail.Update(existingStatus);
                 _unitOfWork.Save();

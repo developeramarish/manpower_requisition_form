@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,7 +24,7 @@ namespace MRF.API.Controllers
         private MrfdetaiResponseModel _responseModel;
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
-
+        //private readonly IHostEnvironment _hostEnvironment;
         public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
@@ -28,6 +32,7 @@ namespace MRF.API.Controllers
             _responseModel = new MrfdetaiResponseModel();
             _logger = logger;
             _emailService = emailService;
+           // _hostEnvironment = hostEnvironment;
         }
 
         // GET: api/<MrfdetailController>
@@ -201,7 +206,8 @@ namespace MRF.API.Controllers
                         {
                             
                             var valueToUpdate = propertyInfo.GetValue(request);
-                            if (valueToUpdate != null && !valueToUpdate.Equals(0))
+                        if (_emailService.IsValidUpdateValue(valueToUpdate))
+                            
                             {
                                 entityProperty.SetValue(existingStatus, valueToUpdate);
                             }
@@ -210,10 +216,15 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
-                
-                //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
-                //_emailService.SendEmailAsync(emailRequest.emailTo,emailRequest.Subject,emailRequest.Content);
-                _responseModel.Id = existingStatus.Id;
+                //if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                //{
+                //    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
+                //    if (emailRequest != null)
+                //    {
+                //        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                //    }
+                //}
+                    _responseModel.Id = existingStatus.Id;
             }
             else
             {
@@ -269,5 +280,59 @@ namespace MRF.API.Controllers
             _response.Result = mrfdetail;
             return _response;
         }
+
+        // GET: api/<ProjectController>
+        [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<SwaggerResponseDTO>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetMRFDropdownlist()
+        {
+            _logger.LogInfo("Fetching create MRF Dropdown list");
+            SwaggerResponseDTO sw = new SwaggerResponseDTO();
+
+            sw.Projects = _unitOfWork.Projectmaster.GetAll().ToList();
+            sw.Departments = _unitOfWork.Departmentmaster.GetAll().ToList();
+            sw.Grades = _unitOfWork.Grademaster.GetAll().ToList();
+            sw.Vaccancies = _unitOfWork.Vacancytypemaster.GetAll().ToList();
+            sw.EmploymentTypes = _unitOfWork.Employmenttypemaster.GetAll().ToList();
+            sw.location= _unitOfWork.Locationmaster.GetAll().ToList();
+            if (sw.Projects.Count == 0 || sw.Departments.Count == 0 || sw.Grades.Count == 0 || sw.Vaccancies.Count == 0 || sw.EmploymentTypes.Count==0 || sw.location.Count==0)
+            {
+                _logger.LogError("No record is found");
+            }
+            var combinedData = new
+            {
+                sw.Projects,
+                sw.Departments,
+                sw.Grades,
+                sw.Vaccancies,
+                sw.EmploymentTypes,
+                sw.location,
+            };
+
+            int Count = sw.Projects.Count + sw.Departments.Count + sw.Grades.Count+ sw.Vaccancies.Count + sw.EmploymentTypes.Count+ sw.location.Count ;
+            _response.Result = combinedData;
+            _response.Count = Count;
+            _logger.LogInfo($"Total MRF Dropdown list  count: {Count}");
+            return _response;
+        }
+
+        public class SwaggerResponseDTO
+        {
+            public  List<Projectmaster> Projects { get; set; }=new List<Projectmaster>();
+            public List<Departmentmaster> Departments { get; set; } = new List<Departmentmaster>();
+            public List<Grademaster> Grades { get; set; } = new List<Grademaster>();
+            public List<Vacancytypemaster> Vaccancies { get; set; } = new List<Vacancytypemaster>();
+            public List<Employmenttypemaster> EmploymentTypes { get; set; } = new List<Employmenttypemaster>();
+            public List<Locationmaster> location  { get; set; } = new List<Locationmaster>();
+                
+        }
+
+
     }
 }
