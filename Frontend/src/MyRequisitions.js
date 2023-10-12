@@ -84,4 +84,3 @@ import SearchText from './Pages/SearchText';
     );
     }
     export default MyRequisitions ;
-

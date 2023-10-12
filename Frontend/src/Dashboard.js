@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <div>
       <DashboardHeader />
-      <div style={{ display: "flex" }}>
+      <div className="flex">
         <LeftPanel />
         <div className="MyDashboard">
           <DashboardContent />
