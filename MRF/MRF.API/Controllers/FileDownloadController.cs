@@ -7,25 +7,29 @@ namespace MRF.API.Controllers
     [ApiController]
     public class FileDownloadController : ControllerBase
     {
-        public string _rootPath;
-        [Obsolete]
-        public FileDownloadController(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        private readonly IWebHostEnvironment _env;
+        private readonly string _rootPath;
+        private readonly string _fallbackPath;
+        public FileDownloadController(IWebHostEnvironment env, IConfiguration configuration)
         {
-            _rootPath = env.WebRootPath;
+            _env = env ?? throw new ArgumentNullException(nameof(env));
+            _rootPath = _env.WebRootPath;
+            _fallbackPath = configuration["FileUploadSettings:FallbackPath"];
         }
-        [HttpGet("{fileName}/{ResumeOrAssign}")]
+    [HttpGet("{fileName}/{ResumeOrAssign}")]
         public IActionResult GetFile(string fileName, string ResumeOrAssign)
         {
             try
             {
-
+                string directory = string.Empty;
                 // Check if a file was sent
                 if (fileName == null)
                     return BadRequest("No file received.");
-
-                string directory = Path.Combine(_rootPath, ResumeOrAssign);
-
-               
+                if (_rootPath == null)
+                    directory = Path.Combine(_fallbackPath, ResumeOrAssign);
+                else
+                    directory = Path.Combine(_rootPath, ResumeOrAssign);
+                
                     var filePath = Path.Combine(directory, fileName);
                     if (System.IO.File.Exists(filePath))
                     {

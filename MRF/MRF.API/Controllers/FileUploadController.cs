@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRF.Utility;
 
 namespace MRF.API.Controllers
 {
@@ -6,21 +7,28 @@ namespace MRF.API.Controllers
     [ApiController]
     public class FileUploadController : Controller
     {
-        public string _rootPath;
- 
-        [Obsolete]
-        public FileUploadController(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        private readonly IWebHostEnvironment _env;
+        private readonly string _rootPath;
+        private readonly string _fallbackPath;
+        
+        public FileUploadController(IWebHostEnvironment env, IConfiguration configuration)
         {
-            _rootPath = env.WebRootPath;
+            _env = env ?? throw new ArgumentNullException(nameof(env));
+            _rootPath = _env.WebRootPath;
+            _fallbackPath = configuration["FileUploadSettings:FallbackPath"];
         }
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file,string ResumeOrAssign)
-        { 
+        {
+            string directory =string.Empty;
             // Check if a file was sent
             if (file == null || file.Length == 0)
                 return BadRequest("No file received.");
-           
-            string directory = Path.Combine(_rootPath, ResumeOrAssign);
+            
+            if(_rootPath==null)
+                 directory = Path.Combine(_fallbackPath, ResumeOrAssign);
+            else
+                 directory = Path.Combine(_rootPath, ResumeOrAssign);
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
@@ -35,5 +43,8 @@ namespace MRF.API.Controllers
 
             return Ok("File uploaded successfully.");
         }
+
+
+        
     }
 }

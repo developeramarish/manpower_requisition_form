@@ -17,7 +17,7 @@ namespace MRF.Models.ViewModels
         public class MrfDashboardViewModel
     {
         public int MrfId { get; set; }
-        public int StatusCount { get; set; }
+        public int TotalCount { get; set; }
         public string ReferenceNo { get; set; } = null!;
         public int EmployeeId { get; set; }
         public int RoleId { get; set; }
