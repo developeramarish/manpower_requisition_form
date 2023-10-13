@@ -27,17 +27,15 @@ namespace MRF.DataAccess.Repository
                         join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
                         group new { mrfDetails, mrfStatus } by new
                         {
-                            mrfDetails.Id,
                             mrfDetails.MrfStatusId,
-                            mrfDetails.ReferenceNo,
+                            mrfStatus.Status,
                         }
                     into grouped
                         select new MrfSummaryViewModel
                         {
-                            MrfId = grouped.Key.Id,
                             MrfStatusId = grouped.Key.MrfStatusId,
-                            ReferenceNo = grouped.Key.ReferenceNo,
-                            StatusCount = grouped.Count(),
+                            Status= grouped.Key.Status,
+                            TotalCount = grouped.Count(),
                         };
 
             return query.ToList();
@@ -66,7 +64,7 @@ namespace MRF.DataAccess.Repository
                             ReferenceNo = grouped.Key.ReferenceNo,
                             CandidateStatusId = grouped.Key.CandidateStatusId,
                             Candidatestatus = grouped.Key.Status,
-                            StatusCount = grouped.Count(),
+                            TotalCount = grouped.Count(),
                         };
             return query.ToList();
 
@@ -101,7 +99,7 @@ namespace MRF.DataAccess.Repository
                             EvaluationId = grouped.Key.EvaluationId,
                             Type = grouped.Key.Type,
                             Candidatestatus= grouped.Key.Status,
-                            StatusCount = grouped.Count(),
+                            TotalCount = grouped.Count(),
                         };
 
 
