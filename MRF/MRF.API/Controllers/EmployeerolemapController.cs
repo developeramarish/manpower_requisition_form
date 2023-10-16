@@ -7,7 +7,7 @@ using SendGrid;
 using Swashbuckle.AspNetCore.Annotations;
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
 
     public class EmployeerolemapController : ControllerBase
@@ -160,6 +160,27 @@ namespace MRF.API.Controllers
             }
             
             
+        }
+
+        // GET api/<EmployeerolemapController>/5
+        [HttpGet("{RoleId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeerolemap))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetEmployeebyRole(int RoleId)
+        {
+            _logger.LogInfo($"Fetching All Employee rolemap List by Id: {RoleId}");
+            List<Employeerolemap> Employeerolemap = _unitOfWork.Employeerolemap.GetEmployeebyRole(RoleId);
+            if (Employeerolemap == null)
+            {
+                _logger.LogError($"No result found by this Id:{RoleId}");
+            }
+            _response.Result = Employeerolemap;
+            return _response;
         }
     }
 }

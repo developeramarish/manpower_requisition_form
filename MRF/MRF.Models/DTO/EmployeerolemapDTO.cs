@@ -1,4 +1,6 @@
-﻿namespace MRF.Models.DTO
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MRF.Models.DTO
 {
     public class EmployeerolemapRequestModel
     {
@@ -17,6 +19,8 @@
         public int UpdatedByEmployeeId { get; set; }
 
         public DateTime UpdatedOnUtc { get; set; }
+        [NotMapped]
+        public string? name { get; set; }
     }
 
     public class EmployeerolemapResponseModel
