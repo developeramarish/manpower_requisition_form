@@ -34,18 +34,18 @@ namespace MRF.DataAccess.Repository
                             MrfDetailsCount = mrfDetailsGroup.Count(),
                         };
 
-            var result = query.AsEnumerable()  
+            var result = query.AsEnumerable()
                 .Select(grouped => new MrfSummaryViewModel
                 {
                     MrfStatusId = grouped.MrfStatusId,
                     Status = grouped.Status,
                     TotalCount = grouped.MrfDetailsCount,
-                    
                 })
+                .Distinct() // Apply distinct to avoid duplications
                 .ToList();
 
             return result;
-
+         
         }
 
 
