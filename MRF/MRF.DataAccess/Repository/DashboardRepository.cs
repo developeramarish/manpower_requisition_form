@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,25 +24,31 @@ namespace MRF.DataAccess.Repository
 
         public List<MrfSummaryViewModel> GroupByMrfStatus()
         {
-            IQueryable<MrfSummaryViewModel> query = from mrfDetails in _db.Mrfdetails
-                        join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
-                        group new { mrfDetails, mrfStatus } by new
+            var query = from mrfStatus in _db.Mrfstatusmaster
+                        join mrfDetails in _db.Mrfdetails
+                        on mrfStatus.Id equals mrfDetails.MrfStatusId into mrfDetailsGroup
+                        select new
                         {
-                            mrfDetails.MrfStatusId,
-                            mrfStatus.Status,
-                        }
-                    into grouped
-                        select new MrfSummaryViewModel
-                        {
-                            MrfStatusId = grouped.Key.MrfStatusId,
-                            Status= grouped.Key.Status,
-                            TotalCount = grouped.Count(),
+                            MrfStatusId = mrfStatus.Id,
+                            Status = mrfStatus.Status,
+                            MrfDetailsCount = mrfDetailsGroup.Count(),
                         };
 
-            return query.ToList();
+            var result = query.AsEnumerable()  
+                .Select(grouped => new MrfSummaryViewModel
+                {
+                    MrfStatusId = grouped.MrfStatusId,
+                    Status = grouped.Status,
+                    TotalCount = grouped.MrfDetailsCount,
+                    
+                })
+                .ToList();
+
+            return result;
+
         }
-    
-   
+
+
         public List<MrfResumeSummaryViewModel> GetCountByMrfIdAndResumeStatus()
         {
 
@@ -63,7 +70,7 @@ namespace MRF.DataAccess.Repository
                             MrfId = grouped.Key.Id,
                             ReferenceNo = grouped.Key.ReferenceNo,
                             CandidateStatusId = grouped.Key.CandidateStatusId,
-                            Candidatestatus = grouped.Key.Status,
+                            Candidatestatus = grouped.Key.Status.Replace("Resume","").Replace("Uploaded","New").Replace("Selected","Shortlisted").Trim(),
                             TotalCount = grouped.Count(),
                         };
             return query.ToList();
