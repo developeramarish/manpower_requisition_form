@@ -6,7 +6,8 @@ using MRF.Utility;
 using NLog;
 using NLog.Web;
 using Microsoft.Identity.Web;
-
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +32,9 @@ builder.Services.AddDbContext<MRFDBContext>(options =>
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging());
 
-builder.Services.AddMicrosoftIdentityWebAppAuthentication(config);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
 
 builder.Services.AddCors(options =>
 {
@@ -43,7 +46,40 @@ builder.Services.AddCors(options =>
                     .AllowAnyHeader();
         });
 });
+builder.Services.AddSwaggerGen(
+    c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "swagger azure ad", Version = "v1" });
+        c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            Description = "Oauth2.0",
+            Name = "Oauth2.0",
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
+            {
+                AuthorizationCode = new OpenApiOAuthFlow
+                {
+                    AuthorizationUrl = new Uri(builder.Configuration["SwaggerAzureAD:AuthorizationUrl"]),
+                    TokenUrl = new Uri(builder.Configuration["SwaggerAzureAD:TokenUrl"]),
+                    Scopes = new Dictionary<string, string>
+               {
+                   { builder.Configuration["SwaggerAzureAD:Scope"],"Access API as User" }
+               }
+                }
+            }
+        });
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+           new OpenApiSecurityScheme
+           {
+               Reference=new OpenApiReference{Type=ReferenceType.SecurityScheme,Id="oauth2"}
 
+           },new[] {builder.Configuration["SwaggerAzureAD:Scope"] }
+            }
+        });
+    }
+    );
 
 
 var app = builder.Build();
@@ -52,7 +88,12 @@ var app = builder.Build();
 //if (app.Environment.IsDevelopment())
 //{
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => {
+    c.OAuthClientId(builder.Configuration["SwaggerAzureAD:ClientId"]);
+    c.OAuthUsePkce();
+    c.OAuthScopeSeparator(" ");
+}
+    ); 
 //}
 app.UseCors();
 app.UseMiddleware<ExceptionMiddleware>();
