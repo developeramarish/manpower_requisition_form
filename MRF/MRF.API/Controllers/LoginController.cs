@@ -25,7 +25,7 @@ namespace MRF.API.Controllers
         }
 
         
-        [HttpGet("{Username}")]
+        [HttpGet("emailaddress")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeedetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -35,13 +35,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         [Authorize]
-        public ResponseDTO Get(string Username)
+        public ResponseDTO Get(string Emailaddress)
         {
-            _logger.LogInfo($"Fetching Employee login detail by name: {Username}");
-            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Name == Username);
+            _logger.LogInfo($"Fetching Employee login detail by name: {Emailaddress}");
+            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Email == Emailaddress);
             if (Employeedetail == null)
             {
-                _logger.LogError($"Login Failed:{Username}");
+                _logger.LogError($"Login Failed:{Emailaddress}");
             }
             else
             {
@@ -50,6 +50,7 @@ namespace MRF.API.Controllers
                     
                     EmployeeId = Employeedetail.Id,
                     LoginDateTime = DateTime.Now,
+                    
                 };
 
                 _unitOfWork.Employeelogindetail.Add(Employeelogindetail);
@@ -61,6 +62,10 @@ namespace MRF.API.Controllers
                     if (Employeerolemap == null)
                     {
                         _logger.LogError($"No result found by this Id:{Employeedetail.Id}");
+                    }
+                    else
+                    {
+                        Employeerolemap.name = Employeedetail.Name;
                     }
                     _response.Result = Employeerolemap;
                 }
