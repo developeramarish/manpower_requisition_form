@@ -6,6 +6,8 @@ using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text;
+
 
 namespace MRF.API.Controllers
 {
@@ -16,12 +18,14 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private readonly ILoggerService _logger;
-        public LoginController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IUserService _userService;
+        public LoginController(IUnitOfWork unitOfWork, ILoggerService logger, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             
             _logger = logger;
+            _userService = userService;
         }
 
         
@@ -38,40 +42,13 @@ namespace MRF.API.Controllers
         public ResponseDTO Get(string Emailaddress)
         {
             _logger.LogInfo($"Fetching Employee login detail by name: {Emailaddress}");
-            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Email == Emailaddress);
-            if (Employeedetail == null)
+            
+            _response = _userService.GetRoledetails(true);
+            if (_response.Result == null)
             {
                 _logger.LogError($"Login Failed:{Emailaddress}");
             }
-            else
-            {
-                var Employeelogindetail = new Employeelogindetails
-                {
-                    
-                    EmployeeId = Employeedetail.Id,
-                    LoginDateTime = DateTime.Now,
-                    
-                };
 
-                _unitOfWork.Employeelogindetail.Add(Employeelogindetail);
-                _unitOfWork.Save();
-
-                if (Employeelogindetail.Id != 0)
-                {
-                    Employeerolemap Employeerolemap = _unitOfWork.Employeerolemap.Get(u => u.EmployeeId == Employeedetail.Id);
-                    if (Employeerolemap == null)
-                    {
-                        _logger.LogError($"No result found by this Id:{Employeedetail.Id}");
-                    }
-                    else
-                    {
-                        Employeerolemap.name = Employeedetail.Name;
-                    }
-                    _response.Result = Employeerolemap;
-                }
-               
-            }
-            
             return _response;
         }
       

@@ -25,4 +25,5 @@ public class Candidatedetails
     public int UpdatedByEmployeeId { get; set; }
 
     public DateTime UpdatedOnUtc { get; set; }
+    public string Reason { get; set; } = "";
 }

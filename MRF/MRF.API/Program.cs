@@ -5,6 +5,7 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Utility;
 using NLog;
 using NLog.Web;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +20,7 @@ var config = new ConfigurationBuilder()
 // Add services to the container.
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -26,6 +28,9 @@ builder.Services.AddSingleton<ILoggerService, LoggerService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<MRFDBContext>(options =>
         options.UseMySql(config.GetConnectionString("DbConnectionString"), ServerVersion.AutoDetect(config.GetConnectionString("DbConnectionString")))
@@ -34,8 +39,13 @@ builder.Services.AddDbContext<MRFDBContext>(options =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);//We set Time here 
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -97,7 +107,7 @@ var app = builder.Build();
 //}
 app.UseCors();
 app.UseMiddleware<ExceptionMiddleware>();
-
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

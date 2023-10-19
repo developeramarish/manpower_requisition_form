@@ -17,16 +17,22 @@ namespace MRF.DataAccess.Repository
     public class DashboardRepository: Repository<MrDashboardViewModel>, IDashboardRepository
     {
         private readonly Data.MRFDBContext _db;
-        public DashboardRepository(Data.MRFDBContext db) : base(db)
+        private readonly IUserService _userService;
+        
+        public DashboardRepository(Data.MRFDBContext db,IUserService userService) : base(db)
         {
             _db = db;
+            _userService= userService;
         }
 
         public List<MrfSummaryViewModel> GroupByMrfStatus()
         {
+            int RoleId= _userService.GetRoleId();
             var query = from mrfStatus in _db.Mrfstatusmaster
+                        join mrfstatusRole in _db.mrfStatusrolemap on mrfStatus.Id equals mrfstatusRole.statusId
                         join mrfDetails in _db.Mrfdetails
                         on mrfStatus.Id equals mrfDetails.MrfStatusId into mrfDetailsGroup
+                        where mrfstatusRole.RoleId== RoleId
                         select new
                         {
                             MrfStatusId = mrfStatus.Id,
