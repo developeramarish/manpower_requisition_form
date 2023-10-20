@@ -5,6 +5,7 @@ using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Drawing;
 using System.Xml.Linq;
 
 namespace MRF.API.Controllers
@@ -96,6 +97,7 @@ namespace MRF.API.Controllers
                     ReviewedByEmployeeId = request.ReviewedByEmployeeId,
                     CandidateStatusId = request.CandidateStatusId,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    Reason= request.Reason,
                     CreatedOnUtc = request.CreatedOnUtc,
                     UpdatedByEmployeeId = request.UpdatedByEmployeeId,
                     UpdatedOnUtc = request.UpdatedOnUtc
@@ -138,7 +140,8 @@ namespace MRF.API.Controllers
                     existingDetails.CandidateStatusId = request.CandidateStatusId;
                     existingDetails.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                     existingDetails.UpdatedOnUtc = request.UpdatedOnUtc;
-
+                    existingDetails.Reason = request.Reason;
+                 
                     _unitOfWork.Candidatedetail.Update(existingDetails);
                     _unitOfWork.Save();
                     _responseModel.Id = existingDetails.Id;

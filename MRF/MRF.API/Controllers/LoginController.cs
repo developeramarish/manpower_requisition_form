@@ -6,6 +6,8 @@ using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text;
+
 
 namespace MRF.API.Controllers
 {
@@ -16,16 +18,18 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private readonly ILoggerService _logger;
-        public LoginController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IUserService _userService;
+        public LoginController(IUnitOfWork unitOfWork, ILoggerService logger, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             
             _logger = logger;
+            _userService = userService;
         }
 
         
-        [HttpGet("{Username}")]
+        [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeedetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -35,38 +39,16 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         [Authorize]
-        public ResponseDTO Get(string Username)
+        public ResponseDTO Get()
         {
-            _logger.LogInfo($"Fetching Employee login detail by name: {Username}");
-            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Name == Username);
-            if (Employeedetail == null)
-            {
-                _logger.LogError($"Login Failed:{Username}");
-            }
-            else
-            {
-                var Employeelogindetail = new Employeelogindetails
-                {
-                    
-                    EmployeeId = Employeedetail.Id,
-                    LoginDateTime = DateTime.Now,
-                };
-
-                _unitOfWork.Employeelogindetail.Add(Employeelogindetail);
-                _unitOfWork.Save();
-
-                if (Employeelogindetail.Id != 0)
-                {
-                    Employeerolemap Employeerolemap = _unitOfWork.Employeerolemap.Get(u => u.EmployeeId == Employeedetail.Id);
-                    if (Employeerolemap == null)
-                    {
-                        _logger.LogError($"No result found by this Id:{Employeedetail.Id}");
-                    }
-                    _response.Result = Employeerolemap;
-                }
-               
-            }
+            _logger.LogInfo($"Fetching Employee login detail by name: ");
             
+            _response = _userService.GetRoledetails(true);
+            if (_response.Result == null)
+            {
+                _logger.LogError($"Login Failed");
+            }
+
             return _response;
         }
       

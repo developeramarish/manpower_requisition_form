@@ -35,6 +35,7 @@
         IInterviewDetailsRepository InterviewDetail { get; }
         IAttachmentEvaluationRepository AttachmentEvaluation { get; }
         IEmailRepository emailmaster { get; }
+        IMrfStatusRoleMapRepository MrfStatusRoleMap { get; }
         void Save();
     }
 }
