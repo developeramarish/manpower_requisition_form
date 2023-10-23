@@ -15,7 +15,7 @@ namespace MRF.API.Controllers
     [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    
+
     public class DashboardController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -31,7 +31,7 @@ namespace MRF.API.Controllers
 
         // GET: api/<MrfstatusController>
         [HttpGet]
-       
+
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<MrfSummaryViewModel>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -43,17 +43,17 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
             List<MrfSummaryViewModel> MrfStatusSummary = _unitOfWork.Dashboard.GroupByMrfStatus().ToList();
-            if (MrfStatusSummary==null)
+            if (MrfStatusSummary == null)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = MrfStatusSummary;
-            
+
             _logger.LogInfo($"Total Mrf resume reviewer map count: {MrfStatusSummary.Count}");
             return _response;
         }
 
-        [HttpGet]
+        [HttpGet("Count")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(MrfResumeSummaryViewModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -61,21 +61,23 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetMrfResumeSummary()
+        public ResponseDTO GetMrfResumeSummary(int Count)
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
-            List<MrfResumeSummaryViewModel> mrfresumereviewermapList = _unitOfWork.Dashboard.GetCountByMrfIdAndResumeStatus().ToList();
+            //List<MrfResumeSummaryViewModel> mrfresumereviewermapList = _unitOfWork.Dashboard.GetCountByMrfIdAndResumeStatus().ToList();
+            List<ResultViewModel> mrfresumereviewermapList = _unitOfWork.Dashboard.GetCountByMrfIdAndResumeStatus(Count).ToList();
+
             if (mrfresumereviewermapList == null)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfresumereviewermapList;
-            _logger.LogInfo($"Total Mrf resume reviewer map count: {mrfresumereviewermapList.Count}");
+            _logger.LogInfo($"Total Mrf resume reviewer map count: {mrfresumereviewermapList.Count()}");
             return _response;
         }
 
 
-        [HttpGet]
+        [HttpGet("Count")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(MrfInterviewSummaryViewModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -83,10 +85,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetMrfInterviewSummary()
+        public ResponseDTO GetMrfInterviewSummary(int Count)
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
-            List<MrfInterviewSummaryViewModel> mrfInterviewSummary = _unitOfWork.Dashboard.GroupByMrfInterviewStatus().ToList();
+            List<ResultViewModel> mrfInterviewSummary = _unitOfWork.Dashboard.GroupByMrfInterviewStatus(Count).ToList();
             if (mrfInterviewSummary == null)
             {
                 _logger.LogError("No record is found");

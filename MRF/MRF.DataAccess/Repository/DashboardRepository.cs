@@ -6,10 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection.PortableExecutable;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MRF.DataAccess.Repository
@@ -55,68 +57,201 @@ namespace MRF.DataAccess.Repository
         }
 
 
-        public List<MrfResumeSummaryViewModel> GetCountByMrfIdAndResumeStatus()
+        public List<MrfResumeSummaryViewModel> GetCountByMrfIdAndResumeStatus1()
         {
 
             IQueryable<MrfResumeSummaryViewModel> query = from mrfDetails in _db.Mrfdetails
-                        join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId 
-                        join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
-                        where status.Status.Contains("resume")
-                        group new { mrfDetails, Candidate, status } by new
-                        {
-                            mrfDetails.Id,
-                            Candidate.CandidateStatusId,
-                            status.Status,
-                            mrfDetails.ReferenceNo,
+                                                          join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
+                                                          join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
+                                                          where status.Status.Contains("resume")
+                                                          group new { mrfDetails, Candidate, status } by new
+                                                          {
+                                                              mrfDetails.Id,
+                                                              //Candidate.CandidateStatusId,
+                                                              status.Status,
+                                                              mrfDetails.ReferenceNo,
 
-                        }
+                                                          }
                     into grouped
-                        select new MrfResumeSummaryViewModel
-                        {
-                            MrfId = grouped.Key.Id,
-                            ReferenceNo = grouped.Key.ReferenceNo,
-                            CandidateStatusId = grouped.Key.CandidateStatusId,
-                            Candidatestatus = grouped.Key.Status.Replace("Resume","").Replace("Uploaded","New").Replace("Selected","Shortlisted").Trim(),
-                            TotalCount = grouped.Count(),
-                        };
+                                                          select new MrfResumeSummaryViewModel
+                                                          {
+                                                              MrfId = grouped.Key.Id,
+                                                              ReferenceNo = grouped.Key.ReferenceNo,
+                                                              //CandidateStatusId = grouped.Key.CandidateStatusId,
+                                                              Candidatestatus = grouped.Key.Status.Replace("Resume", "").Replace("Uploaded", "New").Replace("Selected", "Shortlisted").Trim(),
+                                                              TotalCount = grouped.Count(),
+                                                          };
             return query.ToList();
 
 
-            
+        }
+       public List<ResultViewModel> GetCountByMrfIdAndResumeStatus(int count)
+        {
+            List<ResultViewModel> finalresult= new List<ResultViewModel>();
+            finalresult = GetCountfromCandidateStatus(count, true);
+            return finalresult;
         }
 
-
-        public List<MrfInterviewSummaryViewModel> GroupByMrfInterviewStatus()
+        public List<ResultViewModel> GetCountfromCandidateStatus(int count,bool resume)
         {
+            List<Candidatestatusmaster> CStatus = new List<Candidatestatusmaster>();
+            if (resume)
+            {
+                 CStatus = (from s in _db.Candidatestatusmaster
+                               where s.Status.Contains("resume")
+                               select new Candidatestatusmaster
+                               {
+                                   Id = s.Id,
+                                   Status = s.Status.Replace("Resume", "")
+                                           .Replace("Uploaded", "New")
+                                           .Replace("Selected", "Shortlisted")
+                                           .Trim(),
+                               }).ToList();
+            }
+            else
+            {
+                CStatus = (from s in _db.Candidatestatusmaster
+                           where !s.Status.Contains("resume")
+                           select s).ToList();
+            }
+            var mrfDetails = from mrfD in _db.Mrfdetails
+                             join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                             group new { mrfD, Candidate } by new
+                             {
+                                 mrfD.Id,
+                                 Candidate.CandidateStatusId,
+                                 mrfD.ReferenceNo,
 
-            IQueryable<MrfInterviewSummaryViewModel> query = from mrfDetails in _db.Mrfdetails
-                        join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
-                        join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
-                        join evaluation in _db.Evaluationmaster on Candidate.CandidateStatusId equals evaluation.Id
-                        join interview in _db.Interviewevaluation on evaluation.Id equals interview.EvaluationId
-                        where !status.Status.Contains("resume")
-                        group new { mrfDetails, Candidate, status, interview, evaluation } by new
+                             }
+                     into grouped
+                             select new MrfResumeSummaryViewModel
+                             {
+                                 MrfId = grouped.Key.Id,
+                                 ReferenceNo = grouped.Key.ReferenceNo,
+                                 statusID = grouped.Key.CandidateStatusId,
+                                 TotalCount = grouped.Count(),
+                             };
+
+            var result = new List<ResultViewModel>();
+            int i = 1;
+            bool valid = false;
+            foreach (var mrf in mrfDetails)
+            {
+                valid = false;
+                var resultViewModel = result.FirstOrDefault(r => r.mrfId == mrf.MrfId);
+                if (resultViewModel == null)
+                {
+                    resultViewModel = new ResultViewModel
+                    {
+                        mrfId = mrf.MrfId,
+                        referenceno = mrf.ReferenceNo,
+                        resultGroups = new List<ResultGroup>()
+                    };
+                    valid = true;
+                }
+
+                foreach (var st in CStatus)
+                {
+                    var existingResultGroup = resultViewModel.resultGroups.FirstOrDefault(rg => rg.Candidatestatus == st.Status);
+                    if (existingResultGroup != null)
+                    {
+                        if (st.Id == mrf.statusID)
                         {
-                            mrfDetails.Id,
-                            mrfDetails.ReferenceNo,
-                            Candidate.CandidateStatusId,
-                            status.Status,
-                            interview.EvaluationId,
-                            evaluation.Type,
+                            existingResultGroup.TotalstatusCount = mrf.TotalCount;
                         }
-                    into grouped
-                        select new MrfInterviewSummaryViewModel
+                    }
+                    else
+                    {
+                        var totalStatusCount = st.Id == mrf.statusID ? mrf.TotalCount : 0;
+                        resultViewModel.resultGroups.Add(new ResultGroup
                         {
-                            MrfId = grouped.Key.Id,
-                            ReferenceNo = grouped.Key.ReferenceNo,
-                            EvaluationId = grouped.Key.EvaluationId,
-                            Type = grouped.Key.Type,
-                            Candidatestatus= grouped.Key.Status,
-                            TotalCount = grouped.Count(),
-                        };
+                            Candidatestatus = st.Status,
+                            TotalstatusCount = totalStatusCount
+                        });
+                    }
+                }
+
+                if (valid)
+                {
+                    result.Add(resultViewModel);
+                    i++;
+                }
+                if (count > 0 && i == count)
+                {
+                    break;
+                }
+            }
+
+            return result;
+
+        }
+
+        public List<ResultViewModel> GroupByMrfInterviewStatus(int count)
+        {
+            List<ResultViewModel> result = new List<ResultViewModel>();
+            result = GetCountfromCandidateStatus(count, false);
+
+           var CStatus = (from s in _db.Evaluationstatusmaster
+                          select s).ToList();
+        
+           var mrfDetails = from mrfD in _db.Mrfdetails
+                         join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                         join interview in _db.Interviewevaluation on Candidate.Id equals interview.CandidateId
+                         group new { mrfD, Candidate,  interview } by new
+                         {
+                             mrfD.Id,
+                             interview.EvaluationId,
+                             mrfD.ReferenceNo,
+                         }
+                 into grouped
+                         select new MrfInterviewSummaryViewModel
+                         {
+                             MrfId = grouped.Key.Id,
+                             ReferenceNo = grouped.Key.ReferenceNo,
+                             EvaluationId = grouped.Key.EvaluationId,
+                             TotalCount = grouped.Count(),
+                         };
 
 
-            return query.ToList();
+            foreach (var mrf in mrfDetails)
+            {
+               
+                var resultViewModel = result.FirstOrDefault(r => r.mrfId == mrf.MrfId);
+                if (resultViewModel != null)
+                {
+                    resultViewModel = new ResultViewModel
+                    {
+                        mrfId = mrf.MrfId,
+                        referenceno = mrf.ReferenceNo,
+                        resultGroups = new List<ResultGroup>()
+                    };
+ 
+                    foreach (var st in CStatus)
+                    {
+                        var existingResultGroup = resultViewModel.resultGroups.FirstOrDefault(rg => rg.Candidatestatus == st.Status);
+                        if (existingResultGroup != null)
+                        {
+
+                            if (existingResultGroup.Candidatestatus == st.Status)
+                            {
+                                existingResultGroup.TotalstatusCount = mrf.TotalCount;
+                            }
+                        }
+                        else
+                        {
+                            var totalStatusCount = st.Status == mrf.Candidatestatus ? mrf.TotalCount : 0;
+                            resultViewModel.resultGroups.Add(new ResultGroup
+                            {
+                                Candidatestatus = st.Status,
+                                TotalstatusCount = totalStatusCount
+                            });
+                        }
+                    }
+                    
+                }
+            }
+
+            return result;
 
         }
     }
