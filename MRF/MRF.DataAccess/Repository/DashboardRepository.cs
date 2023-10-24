@@ -133,7 +133,7 @@ namespace MRF.DataAccess.Repository
                              };
 
             var result = new List<ResultViewModel>();
-            int i = 1;
+            
             bool valid = false;
             foreach (var mrf in mrfDetails)
             {
@@ -174,9 +174,9 @@ namespace MRF.DataAccess.Repository
                 if (valid)
                 {
                     result.Add(resultViewModel);
-                    i++;
+                    
                 }
-                if (count > 0 && i == count)
+                if (count > 0 && result.Count == count)
                 {
                     break;
                 }
