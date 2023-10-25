@@ -9,6 +9,7 @@ using MRF.Utility;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics;
+using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -90,41 +91,53 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfdetaiResponseModel Post([FromBody] MrfdetailRequestModel request)
         {
-            var mrfDetail = new Mrfdetails
+            var k = request.ReferenceNo.Replace(" ", "");
+            var existingReferenceNo = _unitOfWork.Mrfdetail.Get(u => u.ReferenceNo == k);
+
+            if (existingReferenceNo != null)
             {
-                ReferenceNo = request.ReferenceNo,
-                PositionTitle = request.PositionTitle,
-                DepartmentId = request.DepartmentId,
-                SubDepartmentId = request.SubDepartmentId,
-                ProjectId = request.ProjectId,
-                VacancyNo = request.VacancyNo,
-                GenderId = request.GenderId,
-                RequisitionDateUtc = request.RequisitionDateUtc,
-                ReportsToEmployeeId = request.ReportsToEmployeeId,
-                GradeId = request.GradeId,
-                EmploymentTypeId = request.EmploymentTypeId,
-                MinExperience = request.MinExperience,
-                MaxExperience = request.MaxExperience,
-                VacancyTypeId = request.VacancyTypeId,
-                IsReplacement = request.IsReplacement,
-                MrfStatusId = request.MrfStatusId,
-                JdDocPath = request.JdDocPath,
-                LocationId = request.LocationId,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
-            };
+                _responseModel.StatusCode = HttpStatusCode.Conflict;
+                _responseModel.message = "Duplicate Reference Number is not allowed";
+                return _responseModel;
+            }
+            else
+            {
+                var mrfDetail = new Mrfdetails
+                {
+                    ReferenceNo = request.ReferenceNo,
+                    PositionTitle = request.PositionTitle,
+                    DepartmentId = request.DepartmentId,
+                    SubDepartmentId = request.SubDepartmentId,
+                    ProjectId = request.ProjectId,
+                    VacancyNo = request.VacancyNo,
+                    GenderId = request.GenderId,
+                    RequisitionDateUtc = request.RequisitionDateUtc,
+                    ReportsToEmployeeId = request.ReportsToEmployeeId,
+                    GradeId = request.GradeId,
+                    EmploymentTypeId = request.EmploymentTypeId,
+                    MinExperience = request.MinExperience,
+                    MaxExperience = request.MaxExperience,
+                    VacancyTypeId = request.VacancyTypeId,
+                    IsReplacement = request.IsReplacement,
+                    MrfStatusId = request.MrfStatusId,
+                    JdDocPath = request.JdDocPath,
+                    LocationId = request.LocationId,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc
+                };
 
-            _unitOfWork.Mrfdetail.Add(mrfDetail);
-            _unitOfWork.Save();
+                _unitOfWork.Mrfdetail.Add(mrfDetail);
+                _unitOfWork.Save();
 
-            _responseModel.Id = mrfDetail.Id;
-            
-            
-            //_emailService.SendEmailAsync("Submit MRF");
+                _responseModel.Id = mrfDetail.Id;
 
-            return _responseModel;
+
+                //_emailService.SendEmailAsync("Submit MRF");
+
+                return _responseModel;
+            }
         }
 
         // PUT api/<MrfdetailController>/5
