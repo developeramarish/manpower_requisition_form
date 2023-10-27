@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class SubdepartmentController : ControllerBase
     {
@@ -161,6 +161,27 @@ namespace MRF.API.Controllers
                 _logger.LogError($"No result found by this Id: {id}");
             }
             
+        }
+
+        // GET api/<SubdepartmentController>/5
+        [HttpGet("{DepartmentId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Candidatestatusmaster))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetInfo(int DepartmentId)
+        {
+            _logger.LogInfo($"Fetching All Sub Department by Department Id: {DepartmentId}");
+            List<Subdepartmentmaster> subdepartmentmaster = _unitOfWork.Subdepartmentmaster.GetA(u => u.DepartmentId == DepartmentId).ToList();
+            if (subdepartmentmaster == null)
+            {
+                _logger.LogError($"No result found by this Department Id:{DepartmentId}");
+            }
+            _response.Result = subdepartmentmaster;
+            return _response;
         }
     }
 }

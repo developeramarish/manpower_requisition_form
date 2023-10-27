@@ -6116,4 +6116,16 @@
       box-shadow: inset 0 -2px 0 0 #2196F3;
     }
   }
+
+  .label-with-padding-right {
+    padding-right: 10px;
+  }
+
+  .label-with-padding-left {
+    padding-left: 10px;
+  }
+  .label-with-padding{
+    padding: 10px;
+  }
+  
   

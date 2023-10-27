@@ -14,14 +14,14 @@ namespace MRF.DataAccess.Repository
             _db = db;
         }
   
-        public MrfDetailsViewModel GetMrfStatusDetails(int statusId)
+        public List<MrfDetailsViewModel> GetMrfStatusDetails(int statusId)
         {
             IQueryable<MrfDetailsViewModel> query  = from mrfDetails in _db.Mrfdetails
                         join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
                         join Emp in _db.Employeedetails on mrfDetails.CreatedByEmployeeId equals Emp.Id
                         join salary in _db.Freshmrfdetails on mrfDetails.Id equals salary.Id
                         join Vacancy in _db.Vacancytypemaster on mrfDetails.VacancyTypeId equals Vacancy.Id
-                        where mrfStatus.Id == statusId
+                        where (statusId == 0 || (statusId !=0 && mrfStatus.Id == statusId))
                         select new MrfDetailsViewModel
                         {
                             MrfId = mrfDetails.Id,
@@ -38,7 +38,7 @@ namespace MRF.DataAccess.Repository
                             RequisitionType = Vacancy.Type,
                         };
 
-            return query.FirstOrDefault();
+            return query.ToList();
         }
     }
 

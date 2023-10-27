@@ -11,6 +11,6 @@ namespace MRF.DataAccess.Repository.IRepository
 {
     public interface IMrfStatusDetailsRepository: IRepository<MrfDetailsViewModel>
     {
-        public MrfDetailsViewModel GetMrfStatusDetails(int mrfId);
+        public List<MrfDetailsViewModel> GetMrfStatusDetails(int mrfId);
     }
 }
