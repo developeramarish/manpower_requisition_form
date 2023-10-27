@@ -203,11 +203,13 @@ namespace MRF.API.Test.Controllers
             var responseModel = new MrfdetaiResponseModel
             {
                 Id = 0, // Set the expected Id
-                        // Set other properties as needed
+                StatusCode = 0,
+                message = null  ,     // Set other properties as needed
             };
 
             // Act
-            var result = Controller.Post(new MrfdetailRequestModel());
+            var result = Controller.Post(new MrfdetailRequestModel { ReferenceNo= "02/MUM/CFR/AUG/23/007" });
+             
 
             // Assert
             // Verify that the result is an OkObjectResult

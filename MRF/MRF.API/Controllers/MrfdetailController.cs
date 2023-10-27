@@ -9,6 +9,7 @@ using MRF.Utility;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics;
+using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -90,41 +91,53 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfdetaiResponseModel Post([FromBody] MrfdetailRequestModel request)
         {
-            var mrfDetail = new Mrfdetails
+            var k = request.ReferenceNo.Replace(" ", "");
+            var existingReferenceNo = _unitOfWork.Mrfdetail.Get(u => u.ReferenceNo == k);
+
+            if (existingReferenceNo != null)
             {
-                ReferenceNo = request.ReferenceNo,
-                PositionTitle = request.PositionTitle,
-                DepartmentId = request.DepartmentId,
-                SubDepartmentId = request.SubDepartmentId,
-                ProjectId = request.ProjectId,
-                VacancyNo = request.VacancyNo,
-                GenderId = request.GenderId,
-                RequisitionDateUtc = request.RequisitionDateUtc,
-                ReportsToEmployeeId = request.ReportsToEmployeeId,
-                GradeId = request.GradeId,
-                EmploymentTypeId = request.EmploymentTypeId,
-                MinExperience = request.MinExperience,
-                MaxExperience = request.MaxExperience,
-                VacancyTypeId = request.VacancyTypeId,
-                IsReplacement = request.IsReplacement,
-                MrfStatusId = request.MrfStatusId,
-                JdDocPath = request.JdDocPath,
-                LocationId = request.LocationId,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
-            };
+                _responseModel.StatusCode = HttpStatusCode.Conflict;
+                _responseModel.message = "Duplicate Reference Number is not allowed";
+                return _responseModel;
+            }
+            else
+            {
+                var mrfDetail = new Mrfdetails
+                {
+                    ReferenceNo = request.ReferenceNo,
+                    PositionTitle = request.PositionTitle,
+                    DepartmentId = request.DepartmentId,
+                    SubDepartmentId = request.SubDepartmentId,
+                    ProjectId = request.ProjectId,
+                    VacancyNo = request.VacancyNo,
+                    GenderId = request.GenderId,
+                    RequisitionDateUtc = request.RequisitionDateUtc,
+                    ReportsToEmployeeId = request.ReportsToEmployeeId,
+                    GradeId = request.GradeId,
+                    EmploymentTypeId = request.EmploymentTypeId,
+                    MinExperience = request.MinExperience,
+                    MaxExperience = request.MaxExperience,
+                    VacancyTypeId = request.VacancyTypeId,
+                    IsReplacement = request.IsReplacement,
+                    MrfStatusId = request.MrfStatusId,
+                    JdDocPath = request.JdDocPath,
+                    LocationId = request.LocationId,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc
+                };
 
-            _unitOfWork.Mrfdetail.Add(mrfDetail);
-            _unitOfWork.Save();
+                _unitOfWork.Mrfdetail.Add(mrfDetail);
+                _unitOfWork.Save();
 
-            _responseModel.Id = mrfDetail.Id;
-            
-            
-            //_emailService.SendEmailAsync("Submit MRF");
+                _responseModel.Id = mrfDetail.Id;
 
-            return _responseModel;
+
+                //_emailService.SendEmailAsync("Submit MRF");
+
+                return _responseModel;
+            }
         }
 
         // PUT api/<MrfdetailController>/5
@@ -272,7 +285,7 @@ namespace MRF.API.Controllers
         public ResponseDTO GetMrfDetails(int id)
         {
             _logger.LogInfo($"Fetching All MRF Details by Id: {id}");
-            MrfDetailsViewModel mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(id);
+            List<MrfDetailsViewModel> mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(id);
             if (mrfdetail == null)
             {
                 _logger.LogError($"No result found by this Id:{id}");
@@ -300,8 +313,10 @@ namespace MRF.API.Controllers
             sw.Grades = _unitOfWork.Grademaster.GetAll().ToList();
             sw.Vaccancies = _unitOfWork.Vacancytypemaster.GetAll().ToList();
             sw.EmploymentTypes = _unitOfWork.Employmenttypemaster.GetAll().ToList();
-            sw.location= _unitOfWork.Locationmaster.GetAll().ToList();
-            if (sw.Projects.Count == 0 || sw.Departments.Count == 0 || sw.Grades.Count == 0 || sw.Vaccancies.Count == 0 || sw.EmploymentTypes.Count==0 || sw.location.Count==0)
+            sw.location = _unitOfWork.Locationmaster.GetAll().ToList();
+            sw.Qualification = _unitOfWork.Qualificationmaster.GetAll().ToList();
+            sw.ReportingTo = _unitOfWork.Employeedetails.GetAll().ToList();
+            if (sw.Projects.Count == 0 || sw.Departments.Count == 0 || sw.Grades.Count == 0 || sw.Vaccancies.Count == 0 || sw.EmploymentTypes.Count == 0 || sw.location.Count == 0 || sw.Qualification.Count == 0 || sw.ReportingTo.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
@@ -313,9 +328,11 @@ namespace MRF.API.Controllers
                 sw.Vaccancies,
                 sw.EmploymentTypes,
                 sw.location,
+                sw.Qualification,
+                sw.ReportingTo
             };
 
-            int Count = sw.Projects.Count + sw.Departments.Count + sw.Grades.Count+ sw.Vaccancies.Count + sw.EmploymentTypes.Count+ sw.location.Count ;
+            int Count = sw.Projects.Count + sw.Departments.Count + sw.Grades.Count + sw.Vaccancies.Count + sw.EmploymentTypes.Count + sw.location.Count + sw.Qualification.Count + sw.ReportingTo.Count;
             _response.Result = combinedData;
             _response.Count = Count;
             _logger.LogInfo($"Total MRF Dropdown list  count: {Count}");
@@ -324,14 +341,17 @@ namespace MRF.API.Controllers
 
         public class SwaggerResponseDTO
         {
-            public  List<Projectmaster> Projects { get; set; }=new List<Projectmaster>();
+            public List<Projectmaster> Projects { get; set; } = new List<Projectmaster>();
             public List<Departmentmaster> Departments { get; set; } = new List<Departmentmaster>();
             public List<Grademaster> Grades { get; set; } = new List<Grademaster>();
             public List<Vacancytypemaster> Vaccancies { get; set; } = new List<Vacancytypemaster>();
             public List<Employmenttypemaster> EmploymentTypes { get; set; } = new List<Employmenttypemaster>();
-            public List<Locationmaster> location  { get; set; } = new List<Locationmaster>();
-                
+            public List<Locationmaster> location { get; set; } = new List<Locationmaster>();
+            public List<Qualificationmaster> Qualification { get; set; } = new List<Qualificationmaster>();
+            public List<Employeedetails> ReportingTo { get; set; } = new List<Employeedetails>();
+
         }
+
 
 
     }

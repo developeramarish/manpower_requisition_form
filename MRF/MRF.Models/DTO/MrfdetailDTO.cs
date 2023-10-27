@@ -1,4 +1,6 @@
-﻿namespace MRF.Models.DTO
+﻿using System.Net;
+
+namespace MRF.Models.DTO
 {
     public class MrfdetailRequestModel
     {
@@ -28,6 +30,8 @@
     public class MrfdetaiResponseModel
     {
         public int Id { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public String message { get; set; }
     }
 
 }
