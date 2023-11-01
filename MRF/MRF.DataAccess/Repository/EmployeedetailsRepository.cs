@@ -14,6 +14,24 @@ namespace MRF.DataAccess.Repository
         {
             _db.Employeedetails.Update(employeedetails);
         }
+        public List<Employeedetails> GetEmployee()
+        {
+            IQueryable<Employeedetails> query = from empdetails in _db.Employeedetails 
+                                                join emprole in _db.Employeerolemap on empdetails.Id  equals emprole.EmployeeId
+                                                join role in _db.Rolemaster on emprole.RoleId equals role.Id
+                                                select new Employeedetails
+                                                {
+                                     
+                                                    Name = empdetails.Name,
+                                                    Email=empdetails.Email,
+                                                    ContactNo= empdetails.ContactNo,
+                                                    RoleName=role.Name
+
+                                                };
+
+            return query.ToList();
+
+        }
     }
 }
 

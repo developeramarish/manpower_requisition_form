@@ -11,7 +11,7 @@ using System.Xml.Linq;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class EmployeedetailsController
     {
@@ -229,6 +229,30 @@ namespace MRF.API.Controllers
 
 
 
+
+        }
+       
+        [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetails>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetEmployee()
+        {
+            _logger.LogInfo("Fetching All Employee details");
+            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee();
+             
+
+
+            if (obj.Count == 0)
+            {
+                _logger.LogError("No record is found");
+            }
+            _response.Result = obj;
+            return _response;
 
         }
 

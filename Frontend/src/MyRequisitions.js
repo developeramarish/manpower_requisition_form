@@ -7,14 +7,15 @@ import DataTableComponents from './Components/DataTableComponent';
 import DashboardHeader from './Pages/Header';
 import LeftPanel from './Pages/LeftPanel';
 import SearchText from './Pages/SearchText';
-
+import { Link } from 'react-router-dom'
+import EmployeDetails from './Pages/EmployeDetails';
 
 
  
     const MyRequisitions = () => {
       
       const [data, setData] = useState([{}]);
-       
+     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means  
       React.useEffect(() => {
         const url = "https://localhost:7128/api/Mrfdetail/GetMrfDetails/0";
         fetch(url)
@@ -31,12 +32,12 @@ import SearchText from './Pages/SearchText';
          const columns = [
         {columnName : 'MRF ID', field : 'referenceNo'},
         {columnName : 'Created By', field : 'name'},
-        {columnName : 'CreatedOn', field : 'createdOnUtc'},
-        {columnName : 'LastUpdated', field : 'updatedOnUtc'},
-        {columnName : 'RequisionType', field : 'requisitionType'},
-        {columnName : 'NoOfPositions', field : 'vacancyNo'},
-        {columnName : 'ExpRequired', field : 'experience'},
-        {columnName : 'SalaryRange', field : 'salary'},
+        {columnName : 'Created On', field : 'createdOnUtc'},
+        {columnName : 'Last Updated', field : 'updatedOnUtc'},
+        {columnName : 'Requision Type', field : 'requisitionType'},
+        {columnName : 'No Of Positions', field : 'vacancyNo'},
+        {columnName : 'Exp Required', field : 'experience'},
+        {columnName : 'Salary Range', field : 'salary'},
         {columnName : 'Status', field : 'mrfStatus'}
         
       ]
@@ -53,8 +54,10 @@ import SearchText from './Pages/SearchText';
               <div class="SearchText"><SearchText/></div>
           </div>
           
-           
-    <div className = "bar"><DataTableComponents data= {data} columns={columns} rows={5}/></div>
+              
+    <div className = "bar"><DataTableComponents data= {data}  columns={columns} rows={5}/>
+    
+    </div>
     </div> 
     </div>
   </div>
