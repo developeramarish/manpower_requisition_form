@@ -28,20 +28,7 @@ const CreateRequisitionBody = () => {
   const [selectedHardwareSkills, setSelectedHardwareSkills] = useState(null);
   const [isSubmissionSuccessful, setIsSubmissionSuccessful] = useState(false);
   const toastRef = useRef(null);
-  /*const handleSoftwareSkillsChange = (e) => {
-    setSelectedSoftwareSkills(e);
-  };
-
-  const handleHardwareSkillsChange = (e) => {
-    setSelectedHardwareSkills(e);
-  };*/
-  const onMinExperienceChange = (e) => {
-    setSelectedMinExperience(e.value);
-  };
-
-  const onMaxExperienceChange = (e) => {
-    setSelectedMaxExperience(e.value);
-  };
+ 
   const handleCheckboxChange = (isChecked) => {
     setIsCheckboxChecked(isChecked);
   };
@@ -77,6 +64,8 @@ const CreateRequisitionBody = () => {
         console.error("Fetch error:", error);
       });
   };
+
+
   const formSchema = {
     referenceNo: "",
     positionTitle: "",
@@ -96,6 +85,18 @@ const CreateRequisitionBody = () => {
     mrfStatusId: 0,
     jdDocPath: "",
     locationId: 0,
+    Justification :"",
+    SoftwaresRequired :"",
+    HardwaresRequired :"",
+    MinTargetSalary :0,
+    MaxTargetSalary:0,
+    EmployeeName :"",
+    EmailId :"",
+    EmployeeCode :0,
+    LastWorkingDate :"",
+    AnnualCtc :0,
+    AnnualGross:0,
+    ReplaceJustification :""
   };
 
   // Initialize the formData state using the form schema
@@ -111,14 +112,14 @@ const CreateRequisitionBody = () => {
       projectId: formData.projectId,
       vacancyNo: formData.vacancyNo,
       genderId: formData.genderId,
-      requisitionDateUtc: "2023-10-31",
+      requisitionDateUtc: new Date().toISOString().slice(0, 10),
       reportsToEmployeeId: formData.reportingTo,
       gradeId: formData.gradeId,
       employmentTypeId: formData.employmentTypeId,
       minExperience: formData.minExperience,
       maxExperience: formData.maxExperience,
       vacancyTypeId: formData.vacancyTypeId,
-      isReplacement: true,
+      isReplacement: isCheckboxChecked,
       mrfStatusId: mrfStatusId,
       jdDocPath: "string",
       locationId: formData.locationId,
@@ -126,6 +127,18 @@ const CreateRequisitionBody = () => {
       createdOnUtc: new Date().toISOString(),
       updatedByEmployeeId: 1,
       updatedOnUtc: new Date().toISOString(),
+      Justification :"",
+      SoftwaresRequired :"",
+      HardwaresRequired :"",
+      MinTargetSalary :0,
+      MaxTargetSalary:0,
+      EmployeeName :"",
+      EmailId :"",
+      EmployeeCode :0,
+      LastWorkingDate :new Date().toISOString().slice(0, 10),
+      AnnualCtc :0,
+      AnnualGross:0,
+      ReplaceJustification :""
     };
     try {
       const response = await fetch(
@@ -168,7 +181,7 @@ const CreateRequisitionBody = () => {
       <h3 className="text-xl my-2">Fill the Details</h3>
       <section
         className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
-        style={{ height: "90%" }}
+        style={{ height: "95%" }}
       >
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
@@ -370,17 +383,33 @@ const CreateRequisitionBody = () => {
           </div>
         </div>
         <div className="flex justify-content-between gap-5">
+          <div className="flex flex-row align-items-center h-3rem w-5 gap-2 px-4 border-round-sm border-1 border-300 bg-gray-100">
+            <CheckboxComponent
+              inputId="replacement"
+              checked={isCheckboxChecked}
+              onCheckboxChange={handleCheckboxChange}
+            />
+            <label htmlFor="replacement" className="font-bold text-sm">
+              Replacement for the employee
+            </label>
+          </div>
+        </div>
+        {isCheckboxChecked && (
+        <div className={`transition-div ${isCheckboxChecked ? 'show-div' : ''}`} id="DivreplacedEmp">
+        <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="no-vacancies" className="font-bold text-sm">
-              Employee Email ID disable request date
+              Employee Name 
             </label>
-            <CalendarComponent
-              id="disablerequest"
-              inputClassName="bg-gray-100"
-              showIcon
-              onChange={(e) => setFormData({ ...formData, di: e.value })}
+            <InputTextCp
+              id="employeeName"
+              onChange={(e) =>
+                setFormData({ ...formData, k: e.target.value })
+              }
+              value={formData.positionTitle}
             />
           </div>
+          
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="lastworkingDate" className="font-bold text-sm">
               Last Working Date
@@ -391,16 +420,71 @@ const CreateRequisitionBody = () => {
               showIcon
             />
           </div>
-          <div className="flex flex-row align-items-center w-6 gap-2 px-4 border-round-sm border-1 border-300 bg-gray-100">
-            <CheckboxComponent
-              inputId="replacement"
-              onCheckboxChange={handleCheckboxChange}
-            />
-            <label htmlFor="replacement" className="font-bold text-sm">
-              Replacement for the employee
-            </label>
           </div>
-        </div>
+          <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="no-vacancies" className="font-bold text-sm">
+              Employee Email 
+            </label>
+            <InputTextCp
+              id="EmployeeEmail"
+              onChange={(e) =>
+                setFormData({ ...formData, k: e.target.value })
+              }
+              value={formData.positionTitle}
+            />
+          </div>
+          
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="lastworkingDate" className="font-bold text-sm">
+            Employee Code
+            </label>
+            <InputTextCp
+              id="position-title"
+              onChange={(e) =>
+                setFormData({ ...formData, k: e.target.value })
+              }
+              value={formData.positionTitle}
+            />
+          </div>
+          </div>
+          <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="no-vacancies" className="font-bold text-sm">
+              Annual CTC
+            </label>
+            <InputTextCp
+              id="position-title"
+              onChange={(e) =>
+                setFormData({ ...formData, k: e.target.value })
+              }
+              value={formData.positionTitle}
+            />
+            <label htmlFor="no-vacancies" className="font-bold text-sm">
+              Annual Gross
+            </label>
+            <InputTextCp
+              id="position-title"
+              onChange={(e) =>
+                setFormData({ ...formData, k: e.target.value })
+              }
+              value={formData.positionTitle}
+            />
+            
+          </div>
+          
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="lastworkingDate" className="font-bold text-sm">
+              Replacement Justification
+            </label>
+            <InputTextareaComponent
+              autoResize
+              id="Justification"
+              className="bg-gray-100"
+            />
+          </div>
+          </div>
+        </div>)}
         <div className="flex justify-content-between gap-5 ">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="Justification" className="font-bold text-sm">
@@ -510,7 +594,8 @@ const CreateRequisitionBody = () => {
           label="SUBMIT"
           className="w-2"
           disabled
-          onClick={() => handleSubmit(1)}
+          onClick={() => handleSubmit(1)
+          }
         />
         <ToastMessages ref={toastRef} />
       </div>

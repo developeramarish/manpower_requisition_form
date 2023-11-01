@@ -77,7 +77,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public FreshmrfdetailResponseModel PostPost([FromBody] FreshmrfdetailRequestModel request)
+        public FreshmrfdetailResponseModel Post([FromBody] FreshmrfdetailRequestModel request)
         {
             var Freshmr = new Freshmrfdetails
             {
@@ -168,6 +168,8 @@ namespace MRF.API.Controllers
             }
            
         }
+
+        
     }
 }
 
