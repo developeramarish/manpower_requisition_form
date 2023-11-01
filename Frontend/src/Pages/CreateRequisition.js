@@ -2,8 +2,9 @@ import RequisitionBody from "../Components/RequisitionBody";
 import SearchHeader from "../Components/SearchHeader";
 import DashboardHeader from "./Header";
 import LeftPanel from "./LeftPanel";
-import CreateRequisitionBody from "./CreateRequisitionBody";    
-import DemoFile from "./demofile"; 
+import CreateRequisitionBody from "./CreateRequisitionBody";
+
+
 export default function CreateRequisition() {
   return (
     <>

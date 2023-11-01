@@ -33,7 +33,7 @@ const MRFSummaryTable = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://localhost:7128/api/Dashboard/GetMrfStatusSummary"
+          "https://localhost:7128/api/Dashboard/GetMrfStatusSummary",
         );
         const responseData = await response.json();
 
@@ -189,7 +189,7 @@ const DashboardContent = () => {
         </div>
         <SearchText />
       </div> */}
-      <SearchHeader title="My Dashboard"/>
+      <SearchHeader title="My Dashboard" />
       <div className="left-div">
         <MRFSummaryTable></MRFSummaryTable>
       </div>

@@ -1,20 +1,15 @@
-import React, {useEffect,useState } from 'react';
-import axios from "axios"; 
-import './MyRequisitions.css';
-import DataTableComponents from './Components/DataTableComponent';
- 
-
-import DashboardHeader from './Pages/Header';
-import LeftPanel from './Pages/LeftPanel';
-import SearchText from './Pages/SearchText';
-import { Link } from 'react-router-dom'
-import EmployeDetails from './Pages/EmployeDetails';
-
+import React, { useEffect, useState } from "react";
+//import axios from "axios";
+import "./MyRequisitions.css";
+import DataTableComponents from "./Components/DataTableComponent";
 
  
-    const MyRequisitions = () => {
-      
-      const [data, setData] = useState([{}]);
+import DashboardHeader from "./Pages/Header";
+import LeftPanel from "./Pages/LeftPanel";
+import SearchText from "./Pages/SearchText";
+
+const MyRequisitions = () => {
+  const [data, setData] = useState([{}]);
      //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means  
       React.useEffect(() => {
         const url = "https://localhost:7128/api/Mrfdetail/GetMrfDetails/0";
@@ -42,27 +37,34 @@ import EmployeDetails from './Pages/EmployeDetails';
         
       ]
    
-    return (
-      <div >
+  
+
+  return (
+    <div>
+ 
       <DashboardHeader />
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: "flex" }}>
         <LeftPanel />
-       
-        <div className = "bar">
+
+        <div className="bar">
           <div class="containerH">
-              <label class="box" >My Requisitions</label>
-              <div class="SearchText"><SearchText/></div>
+            <label class="box">My Requisitions</label>
+            <div class="SearchText">
+              <SearchText />
+            </div>
           </div>
-          
+ 
               
     <div className = "bar"><DataTableComponents data= {data}  columns={columns} rows={5}/>
     
     </div>
     </div> 
+ 
+
+          
+      </div>
+ 
     </div>
-  </div>
-    );
-    
-     
-    }
-    export default MyRequisitions ;
+  );
+};
+export default MyRequisitions;

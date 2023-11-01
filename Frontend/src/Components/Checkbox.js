@@ -1,6 +1,6 @@
 // CheckboxComponent.js
-import React, { useState } from 'react';
-import { Checkbox } from 'primereact/checkbox';
+import React, { useState } from "react";
+import { Checkbox } from "primereact/checkbox";
 
 const CheckboxComponent = ({ label, onCheckboxChange }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -13,7 +13,11 @@ const CheckboxComponent = ({ label, onCheckboxChange }) => {
 
   return (
     <div className="p-field-checkbox">
-      <Checkbox inputId="checkbox" onChange={handleCheckboxChange} checked={isChecked} />
+      <Checkbox
+        inputId="checkbox"
+        onChange={handleCheckboxChange}
+        checked={isChecked}
+      />
       <label htmlFor="checkbox">{label}</label>
     </div>
   );

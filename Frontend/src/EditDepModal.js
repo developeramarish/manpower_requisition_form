@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
+import React, { useState } from "react";
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 
 const EditDeptModel = () => {
   const [visible, setVisible] = useState(false);
-  const [formData, setFormData] = useState({ name: '', age: '', gender: '' });
+  const [formData, setFormData] = useState({ name: "", age: "", gender: "" });
 
   const showDialog = () => {
     setVisible(true);
@@ -27,8 +27,8 @@ const EditDeptModel = () => {
   };
 
   const genderOptions = [
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
   ];
 
   return (
@@ -40,10 +40,18 @@ const EditDeptModel = () => {
           <h2>Your Form</h2>
           <form>
             <label>Name:</label>
-            <InputText name="name" value={formData.name} onChange={handleInputChange} />
+            <InputText
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
 
             <label>Age:</label>
-            <InputText name="age" value={formData.age} onChange={handleInputChange} />
+            <InputText
+              name="age"
+              value={formData.age}
+              onChange={handleInputChange}
+            />
 
             <label>Gender:</label>
             <Dropdown
