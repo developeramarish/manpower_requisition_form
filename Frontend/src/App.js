@@ -16,6 +16,7 @@ import CreateRequisition from "./Pages/CreateRequisition";
 import MyReumes from "./Pages/MyReumes";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import EmployeDetails from "./Pages/EmployeDetails";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/MyRequisitions" element={<MyRequisitions />} />
           <Route path="/CreateRequisition" element={<CreateRequisition />} />
           <Route path="/MyReumes" element={<MyReumes />} />
+          <Route path="/EmployeDetails" element={<EmployeDetails />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -4,6 +4,7 @@ import { DataTable } from "primereact/datatable";
 
 const DataTableComponents = (props) => {
   console.log(props.data);
+  
   return (
     <DataTable
       value={props.data}
@@ -25,4 +26,4 @@ const DataTableComponents = (props) => {
   );
 };
 export default DataTableComponents;
->>>>>>> 5589c0f2c285fa4b05ca558379bf0aa2005e2ec3
+
