@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import DropdownComponent from '../Components/Dropdown';
-import InputText  from "../Components/Textbox";
-import Button  from "../Components/Button";
-import CalendarComponent  from "../Components/Calendar";
-import CheckboxComponent  from "../Components/Checkbox";
+import React, { useState, useEffect } from "react";
+import DropdownComponent from "../Components/Dropdown";
+import InputText from "../Components/Textbox";
+import Button from "../Components/Button";
+import CalendarComponent from "../Components/Calendar";
+import CheckboxComponent from "../Components/Checkbox";
 import InputTextareaComponent from "../Components/InputTextarea";
 
-const DemoFile = () => { // Changed the component name to start with an uppercase letter
+const DemoFile = () => {
+  // Changed the component name to start with an uppercase letter
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [projects, setProjects] = useState([]);
@@ -25,7 +26,7 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
   const [selectedQualification, setSelectedQualification] = useState(null);
   const [ReportingTo, setReportingTo] = useState([]);
   const [selectedReportingTo, setSelectedReportingTo] = useState(null);
- 
+
   // Define the handleDepartmentChange function outside the useEffect
   const handleDepartmentChange = (e) => {
     setSelectedDepartment(e.value);
@@ -33,7 +34,7 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
   const handleProjectChange = (e) => {
     setSelectedProject(e.value);
   };
- 
+
   const handlegradesChange = (e) => {
     setSelectedGrades(e.value);
   };
@@ -52,17 +53,16 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
   const handleReportingToChange = (e) => {
     setSelectedReportingTo(e.value);
   };
- 
+
   const handleSubDepartmentChange = (e) => {
     setSelectedSubDepartment(e.value);
   };
 
   useEffect(() => {
     // Fetch the data for all the dropdowns
-    fetch('https://localhost:7128/api/Mrfdetail/GetMRFDropdownlist')
+    fetch("https://localhost:7128/api/Mrfdetail/GetMRFDropdownlist")
       .then((response) => response.json())
       .then((data) => {
-        
         const projectData = data.result.projects;
         const departments = data.result.departments;
         const grades = data.result.grades;
@@ -71,7 +71,7 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
         const location = data.result.location;
         const Qualification = data.result.Qualification;
         const ReportingTo = data.result.ReportingTo;
-        
+
         setProjects(projectData);
         setDepartments(departments);
         setGrades(grades);
@@ -80,19 +80,18 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
         setLocation(location);
         setQualification(Qualification);
         setReportingTo(ReportingTo);
-        
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       });
   }, []);
- 
+
   return (
-  <div
+    <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
       style={{ height: "81vh" }}
     >
-    <h3 className="text-xl my-2">Fill the Details</h3>
+      <h3 className="text-xl my-2">Fill the Details</h3>
       <section
         className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
         style={{ height: "90%" }}
@@ -102,13 +101,13 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
             <label htmlFor="refno" className="font-bold text-sm">
               Reference Number
             </label>
-            <InputText id="refno"  />
+            <InputText id="refno" />
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-title" className="font-bold text-sm">
               Position Title
             </label>
-            <InputText id="position-title"  />
+            <InputText id="position-title" />
           </div>
         </div>
         <div className="flex justify-content-between gap-5">
@@ -116,56 +115,56 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
             <label htmlFor="department" className="font-bold text-sm">
               Department
             </label>
-    <DropdownComponent
-      optionLabel="name" 
-      optionValue="id"   
-      type="Department"
-      options={departments}
-      selectedOption={selectedDepartment}
-      onChange={handleDepartmentChange} 
-    />
-
-    </div>
-    <div className="flex flex-column w-6 gap-2">
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="id"
+              type="Department"
+              options={departments}
+              selectedOption={selectedDepartment}
+              onChange={handleDepartmentChange}
+            />
+          </div>
+          <div className="flex flex-column w-6 gap-2">
             <label htmlFor="sub-department" className="font-bold text-sm">
               Sub-Department
             </label>
             <DropdownComponent
-        type="SubDepartment"
-        options={subDepartments}
-        selectedOption={selectedSubDepartment}
-        onChange={handleSubDepartmentChange}
-        optionLabel="name" 
-      optionValue="id"   
-      />
+              type="SubDepartment"
+              options={subDepartments}
+              selectedOption={selectedSubDepartment}
+              onChange={handleSubDepartmentChange}
+              optionLabel="name"
+              optionValue="id"
+            />
           </div>
-    </div>
-    <div className="flex justify-content-between gap-5">
-          <div className="flex flex-column w-6 gap-2">
-          <label htmlFor="project" className="font-bold text-sm">
-            Project
-          </label>
-          <DropdownComponent
-      optionLabel="name" 
-      optionValue="id"   
-      type="project"
-      options={projects}
-      selectedOption={selectedProject}
-      onChange={handleProjectChange} 
-    /></div><div className="flex flex-column w-6 gap-2">
-    <label htmlFor="location" className="font-bold text-sm">
-      Location
-    </label>
-    <DropdownComponent
-      optionLabel="name" 
-      optionValue="id"   
-      type="location"
-      options={location}
-      selectedOption={selectedLocation}
-      onChange={handlelocationChange} 
-    />
-  
         </div>
+        <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="project" className="font-bold text-sm">
+              Project
+            </label>
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="id"
+              type="project"
+              options={projects}
+              selectedOption={selectedProject}
+              onChange={handleProjectChange}
+            />
+          </div>
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="location" className="font-bold text-sm">
+              Location
+            </label>
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="id"
+              type="location"
+              options={location}
+              selectedOption={selectedLocation}
+              onChange={handlelocationChange}
+            />
+          </div>
         </div>
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
@@ -193,26 +192,26 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
               Position Reporting to
             </label>
             <DropdownComponent
-      optionLabel="name" 
-      optionValue="id"   
-      type="reporting To"
-      options={ReportingTo}
-      selectedOption={selectedReportingTo}
-      onChange={handleReportingToChange} 
-    />
+              optionLabel="name"
+              optionValue="id"
+              type="reporting To"
+              options={ReportingTo}
+              selectedOption={selectedReportingTo}
+              onChange={handleReportingToChange}
+            />
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="grade" className="font-bold text-sm">
               Grade of the proposed employee
             </label>
             <DropdownComponent
-      optionLabel="name" 
-      optionValue="id"   
-      type="grade"
-      options={grades}
-      selectedOption={selectedGrades}
-      onChange={handlegradesChange} 
-    />
+              optionLabel="name"
+              optionValue="id"
+              type="grade"
+              options={grades}
+              selectedOption={selectedGrades}
+              onChange={handlegradesChange}
+            />
           </div>
         </div>
         <div className="flex justify-content-between gap-5">
@@ -221,26 +220,26 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
               Type of employment required
             </label>
             <DropdownComponent
-      optionLabel="type" 
-      optionValue="id"   
-      type="Employee Type"
-      options={employmentTypes}
-      selectedOption={selectedEmploymentTypes}
-      onChange={handleemploymentTypesChange} 
-    />
+              optionLabel="type"
+              optionValue="id"
+              type="Employee Type"
+              options={employmentTypes}
+              selectedOption={selectedEmploymentTypes}
+              onChange={handleemploymentTypesChange}
+            />
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="vacancy-type" className="font-bold text-sm">
               Type of vacancy
             </label>
             <DropdownComponent
-      optionLabel="type" 
-      optionValue="id"   
-      type="vaccancy"
-      options={vaccancies}
-      selectedOption={selectedVaccancies}
-      onChange={handlevaccanciesChange} 
-    />
+              optionLabel="type"
+              optionValue="id"
+              type="vaccancy"
+              options={vaccancies}
+              selectedOption={selectedVaccancies}
+              onChange={handlevaccanciesChange}
+            />
           </div>
         </div>
         <div className="flex justify-content-between gap-5">
@@ -248,13 +247,21 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
             <label htmlFor="no-vacancies" className="font-bold text-sm">
               Employee Email ID disable request date
             </label>
-            <CalendarComponent id="no-vacancies" inputClassName="bg-gray-100" showIcon />
+            <CalendarComponent
+              id="no-vacancies"
+              inputClassName="bg-gray-100"
+              showIcon
+            />
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="gender" className="font-bold text-sm">
               Last Working Date
             </label>
-            <CalendarComponent id="gender" inputClassName="bg-gray-100" showIcon />
+            <CalendarComponent
+              id="gender"
+              inputClassName="bg-gray-100"
+              showIcon
+            />
           </div>
           <div className="flex flex-row align-items-center w-6 gap-2 px-4 border-round-sm border-1 border-300 bg-gray-100">
             <CheckboxComponent inputId="replacement" />
@@ -268,25 +275,28 @@ const DemoFile = () => { // Changed the component name to start with an uppercas
             <label htmlFor="experience" className="font-bold text-sm">
               Experience
             </label>
-            <InputTextareaComponent autoResize id="experience" className="bg-gray-100" />
+            <InputTextareaComponent
+              autoResize
+              id="experience"
+              className="bg-gray-100"
+            />
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="qualification" className="font-bold text-sm">
               Qualification
             </label>
             <DropdownComponent
-      optionLabel="type" 
-      optionValue="id"   
-      type="Qualification"
-      options={Qualification}
-      selectedOption={selectedQualification}
-      onChange={handleQualificationChange} 
-    />
+              optionLabel="type"
+              optionValue="id"
+              type="Qualification"
+              options={Qualification}
+              selectedOption={selectedQualification}
+              onChange={handleQualificationChange}
+            />
           </div>
         </div>
-    
-    </section>
-   
+      </section>
+
       <div className="flex flex-wrap justify-content-end gap-5 mt-3">
         <Button label="CANCEL" outlined className="mr-auto w-2" />
         <Button label="SAVE AS A DRAFT" className="w-2" />
