@@ -6127,5 +6127,50 @@
   .label-with-padding{
     padding: 10px;
   }
+
+  .custom-multi-select {
+    position: relative;
+    width: 200px;
+    font: 200;
+    color: black;
+  }
   
+  .selected-options {
+    padding: 8px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
   
+  .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .option {
+    display: block;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .option input {
+    margin-right: 5px;
+  }
+
+  /* Define a class to transition the opacity and height */
+.transition-div {
+  opacity: 0;
+  height: 0;
+  transition: opacity 0.3s, height 0.3s;
+}
+
+/* Define a class to make the div visible */
+.show-div {
+  opacity: 1;
+  height: auto;
+  -webkit-transition: all 0.5s ease; -o-transition: all 0.5s ease; transition: all 0.5s ease;
+}

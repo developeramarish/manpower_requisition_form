@@ -9,7 +9,7 @@ import { variables } from "../Variables";
 
 const baseUrl = variables.APP_API;
 // MRF Summary Data
-/*const mrfSummaryData = [
+const mrfSummaryData = [
     { Status: 'Drafted',  TotalCount: 5 },
     { Status: 'Submitted by HR',  TotalCount: 5 },
     { Status: 'Submission Required',  TotalCount: 5 },
@@ -17,7 +17,7 @@ const baseUrl = variables.APP_API;
     { Status: 'Rejected',  TotalCount: 5 },
     { Status: 1,  TotalCount: 5 },
   ];
-  */
+  
 
 const MRFSummaryTable = () => {
   const [selectedReference, setSelectedReference] = useState(null);
@@ -29,11 +29,11 @@ const MRFSummaryTable = () => {
 
   const [mrfSummaryData, setMrfSummaryData] = useState([]);
 
-  useEffect(() => {
+ /* useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://localhost:7128/api/Dashboard/GetMrfStatusSummary"
+          "https://localhost:7128/api/Dashboard/GetMrfStatusSummary",
         );
         const responseData = await response.json();
 
@@ -58,7 +58,7 @@ const MRFSummaryTable = () => {
 
     fetchData();
   }, []);
-
+*/
   return (
     <div className="headMrfSummary">
       <div className="spSummary">MRF Summary</div>
@@ -189,7 +189,7 @@ const DashboardContent = () => {
         </div>
         <SearchText />
       </div> */}
-      <SearchHeader title="My Dashboard"/>
+      <SearchHeader title="My Dashboard" />
       <div className="left-div">
         <MRFSummaryTable></MRFSummaryTable>
       </div>

@@ -174,7 +174,7 @@ namespace MRF.API.Test.Controllers
             };
 
             // Act
-            var result = Controller.PostPost(requestModel);
+            var result = Controller.Post(requestModel);
 
             // Assert
             // Verify that the result is an OkObjectResult
@@ -204,7 +204,7 @@ namespace MRF.API.Test.Controllers
             };
 
             // Act
-            var result = Controller.PostPost(new FreshmrfdetailRequestModel());
+            var result = Controller.Post(new FreshmrfdetailRequestModel());
 
             // Assert
             // Verify that the result is an OkObjectResult

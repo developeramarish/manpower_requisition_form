@@ -29,6 +29,16 @@ const LeftPanel = () => {
     },
     {
       label: (
+        <Link to="/EmployeDetails" className="menu-link-class">
+          <i className="pi pi-file-edit text-2xl"></i>
+          <h4 className="my-2 line-height-2 text-center text-xs">
+             Create EmployeDetails
+          </h4>
+        </Link>
+      ),
+    },
+    {
+      label: (
         <Link to="/CreateRequisition" className="menu-link-class">
           <i className="pi pi-file-edit text-2xl"></i>
           <h4 className="my-2 line-height-2 text-center text-xs">
@@ -37,6 +47,7 @@ const LeftPanel = () => {
         </Link>
       ),
     },
+    
     // Add more menu items as needed
   ];
 

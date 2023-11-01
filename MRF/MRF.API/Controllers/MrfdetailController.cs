@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics;
 using System.Net;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,6 +24,7 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private MrfdetaiResponseModel _responseModel;
+        private FreshmrfdetailResponseModel _responseModelf;
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
         //private readonly IHostEnvironment _hostEnvironment;
@@ -31,9 +33,10 @@ namespace MRF.API.Controllers
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrfdetaiResponseModel();
+            _responseModelf = new FreshmrfdetailResponseModel();
             _logger = logger;
             _emailService = emailService;
-           // _hostEnvironment = hostEnvironment;
+            // _hostEnvironment = hostEnvironment;
         }
 
         // GET: api/<MrfdetailController>
@@ -49,12 +52,12 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All MRF Details");
             List<Mrfdetails> mrfdetailsList = _unitOfWork.Mrfdetail.GetAll().ToList();
-            if (mrfdetailsList.Count ==  0)
+            if (mrfdetailsList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = mrfdetailsList;
-            _response.Count=mrfdetailsList.Count;
+            _response.Count = mrfdetailsList.Count;
             _logger.LogInfo($"Total mrf details count: {mrfdetailsList.Count}");
             return _response;
         }
@@ -91,6 +94,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfdetaiResponseModel Post([FromBody] MrfdetailRequestModel request)
         {
+            _logger.LogInfo($"Post All MRF Details");
             var k = request.ReferenceNo.Replace(" ", "");
             var existingReferenceNo = _unitOfWork.Mrfdetail.Get(u => u.ReferenceNo == k);
 
@@ -132,13 +136,86 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
                 _responseModel.Id = mrfDetail.Id;
+                if(mrfDetail.Id != 0 )
+                {
+                    CallFreshmrfdetailController(request, mrfDetail.Id);
+                }
+                else
+                {
+                    _logger.LogError($"Unable to add mrf details");
 
+                }
 
                 //_emailService.SendEmailAsync("Submit MRF");
 
                 return _responseModel;
             }
         }
+
+
+        private void CallFreshmrfdetailController(MrfdetailRequestModel request,int mrfId)
+        {
+
+            var freshmrRequest = new FreshmrfdetailRequestModel
+            {
+                MrfId = mrfId,
+                Justification = request.Justification,
+                SoftwaresRequired = request.SoftwaresRequired,
+                HardwaresRequired = request.HardwaresRequired,
+                MinTargetSalary = request.MinTargetSalary,
+                MaxTargetSalary = request.MaxTargetSalary,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
+            FreshmrfdetailController freshmrController = new FreshmrfdetailController(_unitOfWork, _logger);
+            var freshmrResponse = freshmrController.Post(freshmrRequest);
+
+
+            if (freshmrResponse.Id != 0 && request.IsReplacement)
+            {
+                CallReplacementController(request,mrfId);
+            }
+            else
+            {
+
+            }
+        }
+
+        private void CallReplacementController(MrfdetailRequestModel request, int mrfId)
+        {
+
+            var ReplacementmrfdetailRequest = new ReplacementmrfdetailRequestModel
+            {
+                MrfId = mrfId,
+                EmployeeName = request.EmployeeName,
+                EmailId = request.EmailId,
+                EmployeeCode = request.EmployeeCode,
+                LastWorkingDate = request.LastWorkingDate,
+                AnnualCtc = request.AnnualCtc,
+                AnnualGross = request.AnnualGross,
+                GradeId = request.GradeId,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc,
+                Justification = request.ReplaceJustification,
+            };
+            ReplacementmrfdetailController freshmrController = new ReplacementmrfdetailController(_unitOfWork, _logger);
+            var ReplacementmrfdetailResponse = freshmrController.Post(ReplacementmrfdetailRequest);
+
+
+            if (ReplacementmrfdetailResponse.Id != 0)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
 
         // PUT api/<MrfdetailController>/5
         [HttpPut("{id}")]
