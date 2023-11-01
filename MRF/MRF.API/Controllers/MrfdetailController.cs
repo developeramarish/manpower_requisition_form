@@ -173,7 +173,7 @@ namespace MRF.API.Controllers
             var freshmrResponse = freshmrController.Post(freshmrRequest);
 
 
-            if (freshmrResponse.Id != 0)
+            if (freshmrResponse.Id != 0 && request.IsReplacement)
             {
                 CallReplacementController(request,mrfId);
             }
