@@ -22,6 +22,7 @@ const DataTableComponents = (props) => {
           ></Column>
         );
       })}
+       <Column body={props.body} exportable={false} style={{ minWidth: '12rem' }} ></Column> 
     </DataTable>
   );
 };
