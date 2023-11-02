@@ -11,9 +11,11 @@ import EmployeDetailsBody from './EmployeDetailsBody';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
+import { useNavigate } from 'react-router-dom';
 export default function  EmployeDetails() {
     const [data, setData] = useState([{}]);
     const [value, setValue] = useState([{}]);
+    const navigate= useNavigate();
     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means  
      React.useEffect(() => {
        const url = "https://localhost:7128/api/Employeedetails/GetEmployee";
@@ -27,27 +29,7 @@ export default function  EmployeDetails() {
          
          .catch((error) => console.log(error));
      }, []);
-     useEffect(() => {
-        deleteData();
-        }, []);
-    const deleteData = () => {
-        const apiUrl = `https://localhost:7128/api/Role`;
-        fetch(apiUrl)
-                .then(response => response.json())
-                .then(responseData => {
-                  if (Array.isArray(responseData.result)) {
-                    const data = responseData.result;
-                    
-                    setValue(data);
-                  } else {
-                    console.error('API response result is not an array:', responseData);
-                  }
-                })
-                .catch(error => {
-                  console.error('Fetch error:', error);
-                });
-       
-      };
+  
     const columns = [
         {columnName : 'Name', field : 'name'},
         {columnName : 'Email', field : 'email'},
@@ -55,30 +37,37 @@ export default function  EmployeDetails() {
         {columnName : 'Role', field : 'roleName'},
           
       ]
-      const openNew = () => {
-        EmployeDetailsBody();
-    };
+       
       const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <ButtonC label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
+                <ButtonC label="New" icon="pi pi-plus" severity="success" onClick={()=> navigate("/EmployeDetailsBody")} />
             </div>
         );
     };
+    const Removefunction = (id) => {
+      if (window.confirm('Do you want to remove?')) {
+          fetch("https://localhost:7128/api/Employeedetails/" + id, {
+              method: "DELETE"
+          }).then((res) => {
+              alert('Removed successfully.')
+              window.location.reload();
+          }).catch((err) => {
+              console.log(err.message)
+          })
+      }
+  }
+    const actionBodyTemplate = (rowData) => {
+      return (
+          <React.Fragment>
+              <ButtonC icon="pi pi-pencil" rounded outlined className="mr-2" onClick={()=> navigate("/EmployeDetailsBody")} />
+              <ButtonC icon="pi pi-trash" rounded outlined severity="danger" onClick={()=>{Removefunction(rowData.id) }} />
+             
+          </React.Fragment>
+      );
+  };
     
   return (
-    // <>
-    //   <DashboardHeader />
-    //   <div className="flex bg-gray-200">
-    //     <LeftPanel />
-    //     <div className="flex flex-column gap-2 w-full p-3 py-2 h-full ">
-    //     <div className="flex flex-row align-items-center h-3rem w-full px-2">
-    //   <h3 className="text-black-alpha-90 mr-auto text-xl ">Employee Details</h3>
-    //        </div>
-    //         <MyRequisitions/>
-    //     </div>
-    //   </div>
-    // </>
     <div >
       <DashboardHeader />
       <div style={{ display: 'flex' }}>
@@ -92,7 +81,7 @@ export default function  EmployeDetails() {
           
           
           <Toolbar className="mb-4" left={leftToolbarTemplate} ></Toolbar>         
-    <div className = "bar"><DataTableComponents data= {data}  columns={columns} rows={5} />
+    <div className = "bar"><DataTableComponents data= {data}  columns={columns} body={actionBodyTemplate} rows={5} />
     
     </div>
     </div> 
