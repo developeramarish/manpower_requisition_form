@@ -6,13 +6,28 @@ const ToastMessages = (props, ref) => {
 
   // Expose the showSuccessMessage function to the parent component
   useImperativeHandle(ref, () => ({
-    showSuccessMessage: () => {
+    showSuccessMessage: (message) => {
       toast.current.show({
         severity: "success",
         summary: "Success Message",
-        detail: "Form submitted successfully!",
+        detail:message,
       });
     },
+    showConflictMessage: (message) => {
+      toast.current.show({
+        severity: "error",
+        summary: "Conflict Message",
+        detail: message, 
+      });
+    },
+    showBadRequestMessage: (message) => {
+      toast.current.show({
+        severity: "error",
+        summary: "Bad Request Message",
+        detail: message,
+      });
+    },
+  
   }));
 
   return (
