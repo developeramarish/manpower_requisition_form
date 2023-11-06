@@ -14,22 +14,27 @@ namespace MRF.DataAccess.Repository
         {
             _db.Employeedetails.Update(employeedetails);
         }
-        public List<Employeedetails> GetEmployee()
+        public List<Employeedetails> GetEmployee(int id)
         {
-            IQueryable<Employeedetails> query = from empdetails in _db.Employeedetails 
-                                                join emprole in _db.Employeerolemap on empdetails.Id  equals emprole.EmployeeId
+            IQueryable<Employeedetails> query = from empdetails in _db.Employeedetails
+                                                join emprole in _db.Employeerolemap on empdetails.Id equals emprole.EmployeeId
                                                 join role in _db.Rolemaster on emprole.RoleId equals role.Id
+                                                where (id == 0 || (id != 0 && empdetails.Id == id))
                                                 select new Employeedetails
-                                                {
-                                     
-                                                    Name = empdetails.Name,
-                                                    Email=empdetails.Email,
-                                                    ContactNo= empdetails.ContactNo,
-                                                    RoleName=role.Name
+            {
+                Id = empdetails.Id,
+                Name = empdetails.Name,
+                Email = empdetails.Email,
+                ContactNo = empdetails.ContactNo,
+                RoleName = role.Name,
+                RoleId = role.Id
 
-                                                };
+            };
+            var latestRecords = query
+              .GroupBy(r => r.Name)
+              .Select(g => g.OrderByDescending(r => r.Name).First());
 
-            return query.ToList();
+            return latestRecords.ToList();
 
         }
     }
