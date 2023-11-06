@@ -29,7 +29,8 @@ namespace MRF.DataAccess.Repository
 
         public List<MrfSummaryViewModel> GroupByMrfStatus()
         {
-            int RoleId= _userService.GetRoleId();
+            //int RoleId= _userService.GetRoleId();
+            int RoleId = 3;
             var query = from mrfStatus in _db.Mrfstatusmaster
                         join mrfstatusRole in _db.mrfStatusrolemap on mrfStatus.Id equals mrfstatusRole.statusId
                         join mrfDetails in _db.Mrfdetails

@@ -19,7 +19,7 @@ namespace MRF.DataAccess.Repository
             IQueryable<MrfDetailsViewModel> query  = from mrfDetails in _db.Mrfdetails
                         join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
                         join Emp in _db.Employeedetails on mrfDetails.CreatedByEmployeeId equals Emp.Id
-                        join salary in _db.Freshmrfdetails on mrfDetails.Id equals salary.Id
+                        join salary in _db.Freshmrfdetails on mrfDetails.Id equals salary.MrfId
                         join Vacancy in _db.Vacancytypemaster on mrfDetails.VacancyTypeId equals Vacancy.Id
                         where (statusId == 0 || (statusId !=0 && mrfStatus.Id == statusId))
                         select new MrfDetailsViewModel

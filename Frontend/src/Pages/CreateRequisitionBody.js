@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+
 import DropdownComponent from "../Components/Dropdown";
 import InputTextCp from "../Components/Textbox";
 import ButtonC from "../Components/Button";
@@ -27,6 +28,7 @@ const CreateRequisitionBody = () => {
   const [selectedSoftwareSkills, setSelectedSoftwareSkills] = useState(null);
   const [selectedHardwareSkills, setSelectedHardwareSkills] = useState(null);
   const [isSubmissionSuccessful, setIsSubmissionSuccessful] = useState(false);
+
   const toastRef = useRef(null);
  
   const handleCheckboxChange = (isChecked) => {
@@ -104,6 +106,7 @@ const CreateRequisitionBody = () => {
 
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
+   
     const data = {
       referenceNo: formData.referenceNumber,
       positionTitle: formData.positionTitle,
@@ -159,6 +162,7 @@ const CreateRequisitionBody = () => {
         {toastRef.current.showConflictMessage(responseData.message);}
         else{
         toastRef.current.showSuccessMessage("Form submitted successfully!");
+       // window.location.href = '/MyRequisitions';
         }
       } else {
         console.error("Request failed with status:", response.status);
