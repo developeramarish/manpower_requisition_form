@@ -10,6 +10,8 @@
 
         public string ContactNo { get; set; } = null!;
 
+        public int  RoleId { get; set; } 
+
         public bool IsAllowed { get; set; }
 
         public int AllowedByEmployeeId { get; set; }
