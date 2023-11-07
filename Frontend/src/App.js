@@ -10,7 +10,9 @@ import CreateRequisition from "./Pages/CreateRequisition";
 import MyReumes from "./Pages/MyReumes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import EmployeDetails from "./Pages/EmployeDetails";
-import EmployeDetailsBody from "./Pages/EmployeDetailsBody";
+
+import EmployeDetailsCreate from "./Pages/EmployeDetailsCreate";
+import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 
 function App() {
   return (
@@ -24,7 +26,8 @@ function App() {
           <Route path="/CreateRequisition" element={<CreateRequisition />} />
           <Route path="/MyReumes" element={<MyReumes />} />
           <Route path="/EmployeDetails" element={<EmployeDetails />}></Route>
-            <Route path="/EmployeDetailsBody" element={<EmployeDetailsBody />} />
+            <Route path="/EmployeDetailsCreate" element={<EmployeDetailsCreate />} />
+            <Route path="/EmployeeDtailsEdit/:id" element={<EmployeeDtailsEdit />} />
           <Route index element={<Dashboard />} />
         </Routes>
       </div>

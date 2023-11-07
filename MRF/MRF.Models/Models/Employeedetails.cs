@@ -14,6 +14,9 @@ public class Employeedetails
     
     [NotMapped]
     public string  RoleName { get; set; } = null!;
+   
+    [NotMapped]
+    public int RoleId { get; set; } 
 
     public bool IsAllowed { get; set; }
 
