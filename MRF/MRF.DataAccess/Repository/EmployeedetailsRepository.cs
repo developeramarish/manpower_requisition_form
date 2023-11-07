@@ -30,11 +30,9 @@ namespace MRF.DataAccess.Repository
                 RoleId = role.Id
 
             };
-            var latestRecords = query
-              .GroupBy(r => r.Name)
-              .Select(g => g.OrderByDescending(r => r.Name).First());
+             
 
-            return latestRecords.ToList();
+            return query.ToList();
 
         }
     }
