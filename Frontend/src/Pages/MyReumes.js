@@ -44,6 +44,7 @@ const MyReumes = () => {
               ForwardTo: "",
               Reason: (
                 <InputTextarea
+                className="border-round-md"
                   value={x.reason}
                   placeholder="Enter Reason"
                   rows={2}

@@ -5,6 +5,7 @@
     /* background-color: rgba(237, 237, 237, 0.904); */
     color: rgb(0, 0, 0);
 }
+
 p-datatable	{
     background-color: #1bc3f2;
 
@@ -32,11 +33,7 @@ i {
     padding-left: 5px;
 }
 
-.p-inputtext {
 
-    border-radius: 35px;
-
-}
 
 
 .table-header {
@@ -46,7 +43,3 @@ i {
     align-items: center;
 }
 
-.p-inputtextarea {
-    border-radius: 1px;
-
-}

@@ -44,7 +44,7 @@ const DataTableCustom = ({
   const textEditor = (value, placeholder) => {
     return (
       <InputTextarea
-        className="textarea"
+        
         rows={2}
         cols={25}
         value={value || ""}
