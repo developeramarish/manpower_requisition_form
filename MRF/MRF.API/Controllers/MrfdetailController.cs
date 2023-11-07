@@ -388,7 +388,6 @@ namespace MRF.API.Controllers
                 _logger.LogError($"No result found by this Id:{MrfId}");
 
                 MrfdetailRequestModel blankData=new MrfdetailRequestModel();
-                blankData.Result = "";
                 return blankData;
             }
             else
