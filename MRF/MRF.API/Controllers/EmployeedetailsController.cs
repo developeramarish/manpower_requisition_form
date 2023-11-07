@@ -125,14 +125,40 @@ namespace MRF.API.Controllers
                     _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                 }
             }
-            
- 
+
+            if (employeedetails.Id != 0)
+            {
+                CallEmployeeRoleMapController(request, employeedetails.Id);
+            }
+            else
+            {
+                _logger.LogError($"Unable to add mrf details");
+
+            }
 
             return _responseModel;
  
 
         }
+        private void CallEmployeeRoleMapController(EmployeedetailsRequestModel request, int id)
+        {
 
+            var freshmrRequest = new EmployeerolemapRequestModel
+            {
+                 EmployeeId= id,
+                 RoleId= request.RoleId,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+
+            };
+             EmployeerolemapController freshmrController = new EmployeerolemapController(_unitOfWork, _logger);
+            var freshmrResponse = freshmrController.PostPost(freshmrRequest);
+
+
+ 
+        }
         // PUT api/<EmployeedetailsController>/5
         [HttpPut("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(Employeedetails))]
@@ -232,7 +258,7 @@ namespace MRF.API.Controllers
 
         }
        
-        [HttpGet]
+        [HttpGet("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetails>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -240,10 +266,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetEmployee()
+        public ResponseDTO GetEmployee(int id)
         {
             _logger.LogInfo("Fetching All Employee details");
-            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee();
+            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee( id);
              
 
 

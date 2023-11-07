@@ -370,6 +370,35 @@ namespace MRF.API.Controllers
             _response.Result = mrfdetail;
             return _response;
         }
+        // GET api/<MrfdetailController>/
+        [HttpGet("{MrfId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(MrfDetailsViewModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public MrfdetailRequestModel GetRequisition(int MrfId)
+        {
+            _logger.LogInfo($"Fetching All MRF Details by Id: {MrfId}");
+            MrfdetailRequestModel mrfdetail = _unitOfWork.Mrfdetail.GetRequisition(MrfId);
+            if (mrfdetail == null)
+            {
+                _logger.LogError($"No result found by this Id:{MrfId}");
+
+                MrfdetailRequestModel blankData=new MrfdetailRequestModel();
+                blankData.Result = "";
+                return blankData;
+            }
+            else
+            {
+                return mrfdetail;
+            }
+            
+            
+        }
+         
 
         // GET: api/<ProjectController>
         [HttpGet]

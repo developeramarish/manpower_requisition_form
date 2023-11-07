@@ -7,18 +7,21 @@ import DataTableComponents from '../Components/DataTableComponent';
 import SearchText from './SearchText';
 import ButtonC  from "../Components/Button";
 import { Toolbar } from 'primereact/toolbar';
-import EmployeDetailsBody from './EmployeDetailsBody';
+import EmployeDetailsCreate from './EmployeDetailsCreate';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
 import { useNavigate } from 'react-router-dom';
+import EmployeeDtailsEdit from './EmployeeDtailsEdit';
 export default function  EmployeDetails() {
     const [data, setData] = useState([{}]);
     const [value, setValue] = useState([{}]);
+    const [editMode, setEditMode] = useState(false);
+    const [editData, setEditData] = useState()
     const navigate= useNavigate();
     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means  
      React.useEffect(() => {
-       const url = "https://localhost:7128/api/Employeedetails/GetEmployee";
+       const url = "https://localhost:7128/api/Employeedetails/GetEmployee/0";
        fetch(url)
          .then((response) => {
            return response.json()
@@ -41,7 +44,7 @@ export default function  EmployeDetails() {
       const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <ButtonC label="New" icon="pi pi-plus" severity="success" onClick={()=> navigate("/EmployeDetailsBody")} />
+                <ButtonC label="New" icon="pi pi-plus" severity="success" onClick={()=> navigate("/EmployeDetailsCreate")} />
             </div>
         );
     };
@@ -57,12 +60,22 @@ export default function  EmployeDetails() {
           })
       }
   }
+  const updateData = (p_BVal) =>{
+    setEditMode(p_BVal);
+  }
+  const LoadEdit = (id) => {
+    setEditData(id);
+    setEditMode(true);
+    // navigate('/EmployeeDtailsEdit/' + id);
+  
+    //navigate("/employee/edit/" + id);
+}
     const actionBodyTemplate = (rowData) => {
       return (
           <React.Fragment>
-              <ButtonC icon="pi pi-pencil" rounded outlined className="mr-2" onClick={()=> navigate("/EmployeDetailsBody")} />
+              <ButtonC icon="pi pi-pencil" rounded outlined className="mr-2" onClick={()=>{LoadEdit(rowData.id)}} />
               <ButtonC icon="pi pi-trash" rounded outlined severity="danger" onClick={()=>{Removefunction(rowData.id) }} />
-             
+            
           </React.Fragment>
       );
   };
@@ -72,7 +85,7 @@ export default function  EmployeDetails() {
       <DashboardHeader />
       <div style={{ display: 'flex' }}>
         <LeftPanel />
-       
+       {!editMode && 
         <div className = "bar">
           <div class="containerH">
               <label class="box" >Employee Details</label>
@@ -81,10 +94,14 @@ export default function  EmployeDetails() {
           
           
           <Toolbar className="mb-4" left={leftToolbarTemplate} ></Toolbar>         
-    <div className = "bar"><DataTableComponents data= {data}  columns={columns} body={actionBodyTemplate} rows={5} />
+          <div className = "bar"><DataTableComponents data= {data}  columns={columns} body={actionBodyTemplate} rows={5} />
     
-    </div>
-    </div> 
+         </div>
+      </div>  
+      }
+      {editMode && <EmployeeDtailsEdit id={editData} updateData = {updateData}/>
+
+      }
     </div>
   </div>
   );
