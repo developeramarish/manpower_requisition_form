@@ -192,64 +192,56 @@ namespace MRF.DataAccess.Repository
             List<ResultViewModel> result = new List<ResultViewModel>();
             result = GetCountfromCandidateStatus(count, false);
 
-           var CStatus = (from s in _db.Evaluationstatusmaster
+            var CStatus = (from s in _db.Evaluationstatusmaster
                           select s).ToList();
-        
-           var mrfDetails = from mrfD in _db.Mrfdetails
+
+
+            // by default all result added from evalution with count 0
+            result.ForEach(r => {
+                r.resultGroups.AddRange(CStatus.Select(st => new ResultGroup
+                {
+                    Candidatestatus = st.Status,
+                    TotalstatusCount = 0
+                }));
+            });
+
+            /* group by mrfid and evaluation id will get count */
+            var Interviewevaluation = (from mrfD in _db.Mrfdetails
                          join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                          join interview in _db.Interviewevaluation on Candidate.Id equals interview.CandidateId
-                         group new { mrfD, Candidate,  interview } by new
+                         join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id
+                         group new { mrfD, Candidate,  interview, status } by new
                          {
                              mrfD.Id,
                              interview.EvaluationId,
                              mrfD.ReferenceNo,
+                             status.Status
                          }
                  into grouped
                          select new MrfInterviewSummaryViewModel
                          {
                              MrfId = grouped.Key.Id,
-                             ReferenceNo = grouped.Key.ReferenceNo,
-                             EvaluationId = grouped.Key.EvaluationId,
+                             Candidatestatus= grouped.Key.Status,
                              TotalCount = grouped.Count(),
-                         };
+                         })
+                         .OrderBy(result => result.MrfId)
+                         .ToList(); 
 
-
-            foreach (var mrf in mrfDetails)
+            
+            foreach (var mrf in Interviewevaluation)
             {
-               
+                /*take record of same mrfdetails match with Interviewevaluation*/
                 var resultViewModel = result.FirstOrDefault(r => r.mrfId == mrf.MrfId);
-                if (resultViewModel != null)
-                {
-                    resultViewModel = new ResultViewModel
-                    {
-                        mrfId = mrf.MrfId,
-                        referenceno = mrf.ReferenceNo,
-                        resultGroups = new List<ResultGroup>()
-                    };
- 
-                    foreach (var st in CStatus)
-                    {
-                        var existingResultGroup = resultViewModel.resultGroups.FirstOrDefault(rg => rg.Candidatestatus == st.Status);
-                        if (existingResultGroup != null)
-                        {
 
-                            if (existingResultGroup.Candidatestatus == st.Status)
-                            {
-                                existingResultGroup.TotalstatusCount = mrf.TotalCount;
-                            }
-                        }
-                        else
-                        {
-                            var totalStatusCount = st.Status == mrf.Candidatestatus ? mrf.TotalCount : 0;
-                            resultViewModel.resultGroups.Add(new ResultGroup
-                            {
-                                Candidatestatus = st.Status,
-                                TotalstatusCount = totalStatusCount
-                            });
-                        }
+                if (resultViewModel != null)
+                {    var existingResultGroup = resultViewModel.resultGroups
+                    .First(rg => rg.Candidatestatus == mrf.Candidatestatus);
+                    if (existingResultGroup != null)
+                    {
+                        existingResultGroup.TotalstatusCount = mrf.TotalCount;
                     }
-                    
                 }
+
             }
 
             return result;
