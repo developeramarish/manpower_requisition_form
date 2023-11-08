@@ -45,21 +45,22 @@ namespace MRF.DataAccess.Repository
                                                           JdDocPath = mrfDetails.JdDocPath,
                                                           LocationId = mrfDetails.LocationId,
                                                           Justification = fr.Justification ?? "",
-                                                            SoftwaresRequired = fr.SoftwaresRequired ?? "",
-                                                            HardwaresRequired = fr.HardwaresRequired ?? "",
-                                                            MinTargetSalary = fr.MinTargetSalary != 0 ? fr.MinTargetSalary : 0,
-                                                            MaxTargetSalary = fr.MaxTargetSalary != 0 ? fr.MaxTargetSalary : 0,
-                                                            EmployeeName = replacement.EmployeeName ?? "",
-                                                            EmployeeCode = replacement != null  ? replacement.EmployeeCode : 0,
-                                                            EmailId = replacement != null ? replacement.EmailId : "",
-                                                            LastWorkingDate = replacement != null ? replacement.LastWorkingDate:DateOnly.MinValue ,
-                                                            ReplaceJustification = replacement.Justification ?? "",
-                                                            AnnualCtc = replacement != null ? replacement.AnnualCtc : 0,
-                                                            AnnualGross = replacement != null ?  replacement.AnnualGross : 0,
-                                                        };
+                                                          SoftwaresRequired = fr.SoftwaresRequired ?? "",
+                                                          HardwaresRequired = fr.HardwaresRequired ?? "",
+                                                          MinTargetSalary = fr.MinTargetSalary != 0 ? fr.MinTargetSalary : 0,
+                                                          MaxTargetSalary = fr.MaxTargetSalary != 0 ? fr.MaxTargetSalary : 0,
+                                                          EmployeeName = replacement.EmployeeName ?? "",
+                                                          EmployeeCode = replacement != null ? replacement.EmployeeCode : 0,
+                                                          EmailId = replacement != null ? replacement.EmailId : "",
+                                                          LastWorkingDate = replacement != null ? replacement.LastWorkingDate : DateOnly.MinValue,
+                                                          ReplaceJustification = replacement.Justification ?? "",
+                                                          AnnualCtc = replacement != null ? replacement.AnnualCtc : 0,
+                                                          AnnualGross = replacement != null ? replacement.AnnualGross : 0,
+                                                      };
 
             return query.FirstOrDefault();
         }
     }
+       
 }
 

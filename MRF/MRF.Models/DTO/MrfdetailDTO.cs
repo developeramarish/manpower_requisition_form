@@ -4,7 +4,7 @@ namespace MRF.Models.DTO
 {
     public class MrfdetailRequestModel
     {
-        public string ReferenceNo { get; set; } = null!;
+        public string? ReferenceNo { get; set; } 
         public string PositionTitle { get; set; } = null!;
         public int DepartmentId { get; set; }
         public int SubDepartmentId { get; set; }
@@ -45,7 +45,10 @@ namespace MRF.Models.DTO
         public string ReplaceJustification { get; set; } = null!;
         public int AnnualCtc { get; set; }
         public int AnnualGross { get; set; }
-       
+
+        public int ResumeReviewerEmployeeId { get; set; }
+        public int InterviewerEmployeeId { get; set; }
+
     }
     public class MrfdetaiResponseModel
     {
