@@ -14,9 +14,9 @@ export const multiHardwareSkill = [
 ];
 
 export const Gender = [
-  { label: "Male", id: "1" },
-  { label: "Female", id: "2" },
-  { label: "Other", id: "3" },
+  { label: "Male", id: 1 },
+  { label: "Female", id: 2 },
+  { label: "Other", id: 3 },
 ];
 
 export const minExperienceOptions = Array.from({ length: 31 }, (_, i) => ({

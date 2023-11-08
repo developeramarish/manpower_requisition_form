@@ -39,14 +39,14 @@ const DropdownComponent = ({
   );
 };
 
-DropdownComponent.propTypes = {
-  optionLabel: PropTypes.string.isRequired,
-  optionValue: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
-  // selectedOption: PropTypes.any,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.any,
-};
+// DropdownComponent.propTypes = {
+//   optionLabel: PropTypes.string.isRequired,
+//   optionValue: PropTypes.string.isRequired,
+//   type: PropTypes.string.isRequired,
+//   options: PropTypes.array.isRequired,
+//   selectedOption: PropTypes.any,
+//   onChange: PropTypes.func.isRequired,
+//   value: PropTypes.any,
+// };
 
 export default DropdownComponent;
