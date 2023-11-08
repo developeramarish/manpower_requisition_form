@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
 using SendGrid;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Xml.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -109,8 +112,10 @@ namespace MRF.API.Controllers
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,
                     UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                    UpdatedOnUtc = request.UpdatedOnUtc,
+                    IsDeleted = request.IsDeleted,
+                  //  EmployeCode=request.EmployeCode,
+        };
                 _unitOfWork.Employeedetails.Add(employeedetails);
                 _unitOfWork.Save();
                 _responseModel.Id = employeedetails.Id;
@@ -185,7 +190,8 @@ namespace MRF.API.Controllers
                 existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
-
+                existingStatus.IsDeleted = request.IsDeleted;
+               // existingStatus.EmployeCode = request.EmployeCode;
                 _unitOfWork.Employeedetails.Update(existingStatus);
                 _unitOfWork.Save();
  
@@ -234,6 +240,8 @@ namespace MRF.API.Controllers
             if (obj != null)
             {
                 _unitOfWork.Employeedetails.Remove(obj);
+                obj.IsDeleted = true;
+
                 _unitOfWork.Save();
  
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
@@ -252,10 +260,6 @@ namespace MRF.API.Controllers
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-
-
-
-
         }
        
         [HttpGet("{id}")]
@@ -267,17 +271,13 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO GetEmployee(int id)
-        {
+        { 
             _logger.LogInfo("Fetching All Employee details");
             List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee( id);
-             
-
-
-            if (obj.Count == 0)
-            {
-                _logger.LogError("No record is found");
-            }
-            _response.Result = obj;
+            var r = from l in obj
+                    where l.IsDeleted == false  
+                    select l;
+            _response.Result = r;
             return _response;
 
         }

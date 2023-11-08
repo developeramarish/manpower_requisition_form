@@ -14,6 +14,8 @@
 
         public bool IsAllowed { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public int AllowedByEmployeeId { get; set; }
 
         public int CreatedByEmployeeId { get; set; }
