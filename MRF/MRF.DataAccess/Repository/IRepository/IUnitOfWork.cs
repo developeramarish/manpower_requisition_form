@@ -36,6 +36,7 @@
         IAttachmentEvaluationRepository AttachmentEvaluation { get; }
         IEmailRepository emailmaster { get; }
         IMrfStatusRoleMapRepository MrfStatusRoleMap { get; }
+        IMrfLastNumberRepository MrfLastNo { get; }
         void Save();
     }
 }

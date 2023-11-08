@@ -95,8 +95,8 @@ namespace MRF.API.Controllers
         public MrfdetaiResponseModel Post([FromBody] MrfdetailRequestModel request)
         {
             _logger.LogInfo($"Post All MRF Details");
-            var k = request.ReferenceNo.Replace(" ", "");
-            var existingReferenceNo = _unitOfWork.Mrfdetail.Get(u => u.ReferenceNo == k);
+            var Ref = request.ReferenceNo.Replace(" ", "");
+            var existingReferenceNo = _unitOfWork.Mrfdetail.Get(u => u.ReferenceNo == Ref);
 
             if (existingReferenceNo != null)
             {
@@ -106,9 +106,13 @@ namespace MRF.API.Controllers
             }
             else
             {
+                var result = GenerateMrfReferenceNumber(request);
+                string ReferenceNo = result.Reference;
+                MrfLastNumber Number =  result.Number;
+                
                 var mrfDetail = new Mrfdetails
                 {
-                    ReferenceNo = request.ReferenceNo,
+                    ReferenceNo = ReferenceNo,
                     PositionTitle = request.PositionTitle,
                     DepartmentId = request.DepartmentId,
                     SubDepartmentId = request.SubDepartmentId,
@@ -139,6 +143,11 @@ namespace MRF.API.Controllers
                 if(mrfDetail.Id != 0 )
                 {
                     CallFreshmrfdetailController(request, mrfDetail.Id);
+                    if (Number.LastNumber > 0)
+                    {
+                        _unitOfWork.MrfLastNo.Update(Number);
+                        _unitOfWork.Save();
+                    }
                 }
                 else
                 {
@@ -147,7 +156,7 @@ namespace MRF.API.Controllers
                 }
 
                 //_emailService.SendEmailAsync("Submit MRF");
-
+                
                 return _responseModel;
             }
         }
@@ -396,6 +405,30 @@ namespace MRF.API.Controllers
             }
             
             
+        }
+        /*
+         Reference Number: [Format: No. of positions (in 2 digits) / Location Name (in 3 alphabets)/ 
+                            Type (RP/ CRP/ FR/ CFR) / MMM/ YY/ MRF No. (in 3 digits)]
+                            Example: 02/ MUM/ CFR/ JAN/ 15/ 003  */
+        private (string Reference, MrfLastNumber Number) GenerateMrfReferenceNumber(MrfdetailRequestModel request)
+        {
+            string Reference=string.Empty;
+            _logger.LogInfo("Fetching All MRF Details");
+            MrfLastNumber Number = _unitOfWork.MrfLastNo.Get(u => u.Id ==1);
+            
+            if (Number==null)
+            {
+                _logger.LogError("No record is found");
+            }
+
+            Locationmaster locationmaster = _unitOfWork.Locationmaster.Get(u => u.Id == request.LocationId);
+            string month= request.CreatedOnUtc.ToString("MMM").ToUpper(); 
+            string Year= request.CreatedOnUtc.ToString("YY");
+            
+            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ RP/ " + month + "/ " + Year + "/ " 
+                + (Number.LastNumber++).ToString("D3");
+            
+            return (Reference, Number);
         }
          
 

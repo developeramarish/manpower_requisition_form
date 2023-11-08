@@ -43,6 +43,7 @@ namespace MRF.DataAccess.Repository
         public IAttachmentEvaluationRepository AttachmentEvaluation { get; private set; }
         public IEmailRepository emailmaster { get; private set; }
         public IMrfStatusRoleMapRepository MrfStatusRoleMap { get; private set; }
+        public IMrfLastNumberRepository MrfLastNo { get; private set; }
         public UnitOfWork(Data.MRFDBContext db, IUserService userService)
         {
             _db = db;
@@ -81,7 +82,8 @@ namespace MRF.DataAccess.Repository
             AttachmentEvaluation = new AttachmentEvaluationRepository(_db);
             emailmaster = new EmailRepository(_db);
             MrfStatusRoleMap = new MrfStatusRoleMapRepository(_db);
-            
+            MrfLastNo = new MrfLastNumberRepository(_db);
+
         }
         public void Save()
         {
