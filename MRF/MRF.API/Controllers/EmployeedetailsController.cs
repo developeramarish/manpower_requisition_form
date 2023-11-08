@@ -24,21 +24,21 @@ namespace MRF.API.Controllers
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
- 
+
         public EmployeedetailsController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
- 
+
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new EmployeedetailsResponseModel();
             _logger = logger;
- 
+
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
 
- 
+
         }
- 
+
         // GET: api/<EmployeedetailsController>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetails>))]
@@ -83,7 +83,7 @@ namespace MRF.API.Controllers
             if (Employeedetail == null)
             {
 
-                _logger.LogError("No result found by this Id:"+id);
+                _logger.LogError("No result found by this Id:" + id);
             }
             _response.Result = Employeedetail;
 
@@ -103,25 +103,26 @@ namespace MRF.API.Controllers
         public EmployeedetailsResponseModel Post([FromBody] EmployeedetailsRequestModel request)
         {
             var employeedetails = new Employeedetails
-             {
-                    Name = request.Name,
-                    Email = request.Email,
-                    ContactNo = request.ContactNo,
-                    IsAllowed = request.IsAllowed,
-                    AllowedByEmployeeId = request.AllowedByEmployeeId,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc,
-                    IsDeleted = request.IsDeleted,
-                  //  EmployeCode=request.EmployeCode,
-        };
-                _unitOfWork.Employeedetails.Add(employeedetails);
-                _unitOfWork.Save();
-                _responseModel.Id = employeedetails.Id;
+            {
+                Name = request.Name,
+                Email = request.Email,
+                ContactNo = request.ContactNo,
+                IsAllowed = request.IsAllowed,
+                AllowedByEmployeeId = request.AllowedByEmployeeId,
+                RoleId = request.RoleId,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc,
+                IsDeleted = request.IsDeleted,
+                EmployeCode = request.EmployeCode,
+            };
+            _unitOfWork.Employeedetails.Add(employeedetails);
+            _unitOfWork.Save();
+            _responseModel.Id = employeedetails.Id;
 
 
-            if (_hostEnvironment.IsEnvironment("Development")||_hostEnvironment.IsEnvironment("Production"))
+            if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
 
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
@@ -142,7 +143,7 @@ namespace MRF.API.Controllers
             }
 
             return _responseModel;
- 
+
 
         }
         private void CallEmployeeRoleMapController(EmployeedetailsRequestModel request, int id)
@@ -150,19 +151,19 @@ namespace MRF.API.Controllers
 
             var freshmrRequest = new EmployeerolemapRequestModel
             {
-                 EmployeeId= id,
-                 RoleId= request.RoleId,
+                EmployeeId = id,
+                RoleId = request.RoleId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
                 UpdatedOnUtc = request.UpdatedOnUtc
 
             };
-             EmployeerolemapController freshmrController = new EmployeerolemapController(_unitOfWork, _logger);
+            EmployeerolemapController freshmrController = new EmployeerolemapController(_unitOfWork, _logger);
             var freshmrResponse = freshmrController.PostPost(freshmrRequest);
 
 
- 
+
         }
         // PUT api/<EmployeedetailsController>/5
         [HttpPut("{id}")]
@@ -179,46 +180,55 @@ namespace MRF.API.Controllers
         public EmployeedetailsResponseModel Put(int id, [FromBody] EmployeedetailsRequestModel request)
         {
 
-            var existingStatus = _unitOfWork.Employeedetails.Get(u => u.Id == id);
-            if (existingStatus != null)
-            {
-                existingStatus.Name = request.Name;
-                existingStatus.Email = request.Email;
-                existingStatus.ContactNo = request.ContactNo;
-                existingStatus.IsAllowed = request.IsAllowed;
-                existingStatus.AllowedByEmployeeId = request.AllowedByEmployeeId;
-                existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
-                existingStatus.IsDeleted = request.IsDeleted;
-               // existingStatus.EmployeCode = request.EmployeCode;
-                _unitOfWork.Employeedetails.Update(existingStatus);
-                _unitOfWork.Save();
- 
-
-                _responseModel.Id = existingStatus.Id;
- 
-                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+            List<Employeedetails> existingStatus = _unitOfWork.Employeedetails.GetEmployee(id);
+            foreach (Employeedetails existingStatusItem in existingStatus) {
+                if (existingStatusItem != null)
                 {
+                    existingStatusItem.Name = request.Name;
+                    existingStatusItem.Email = request.Email;
+                    existingStatusItem.ContactNo = request.ContactNo;
+                    existingStatusItem.IsAllowed = request.IsAllowed;
+                    existingStatusItem.AllowedByEmployeeId = request.AllowedByEmployeeId;
+                    existingStatusItem.CreatedByEmployeeId = request.CreatedByEmployeeId;
+                    existingStatusItem.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                    existingStatusItem.UpdatedOnUtc = request.UpdatedOnUtc;
+                    existingStatusItem.IsDeleted = request.IsDeleted;
+                    existingStatusItem.EmployeCode = request.EmployeCode;
+                    _unitOfWork.Employeedetails.Update(existingStatusItem);
+                    _unitOfWork.Save();
 
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Update user");
-                    if (emailRequest != null)
+
+                    _responseModel.Id = existingStatusItem.Id;
+
+                    if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                     {
-                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+
+                        emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Update user");
+                        if (emailRequest != null)
+                        {
+                            _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                        }
                     }
+
+
+                    if (_responseModel.Id != 0)
+                    {
+                        CallEmployeeRoleMapController(request, _responseModel.Id);
+                    }
+                   
+
                 }
-
-                    _responseModel.Id = existingStatus.Id;
-               
- 
-
+                else
+                {
+                    _logger.LogError($"No result found by this Id: {id}");
+                    _responseModel.Id = 0;
+                    _responseModel.IsActive = false;
+                }
             }
-            else
-            {
-                _logger.LogError($"No result found by this Id: {id}");
-                _responseModel.Id = 0;
-                _responseModel.IsActive = false;
-            }
+
+
+
+         
 
             return _responseModel;
         }
@@ -243,7 +253,7 @@ namespace MRF.API.Controllers
                 obj.IsDeleted = true;
 
                 _unitOfWork.Save();
- 
+
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
 
@@ -253,15 +263,15 @@ namespace MRF.API.Controllers
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }
-               
- 
+
+
             }
             else
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
         }
-       
+
         [HttpGet("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetails>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
@@ -271,11 +281,11 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO GetEmployee(int id)
-        { 
+        {
             _logger.LogInfo("Fetching All Employee details");
-            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee( id);
+            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee(id);
             var r = from l in obj
-                    where l.IsDeleted == false  
+                    where l.IsDeleted == false
                     select l;
             _response.Result = r;
             return _response;
@@ -283,5 +293,4 @@ namespace MRF.API.Controllers
         }
 
     }
-
 }

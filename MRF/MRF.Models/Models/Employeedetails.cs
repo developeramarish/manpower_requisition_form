@@ -20,7 +20,7 @@ public class Employeedetails
     
     public bool IsDeleted { get; set; }
 
-    public string EmployeCode { get; set; } 
+    public  int EmployeCode { get; set; } 
 
     public bool IsAllowed { get; set; }
 
