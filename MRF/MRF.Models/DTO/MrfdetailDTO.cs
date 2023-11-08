@@ -45,7 +45,10 @@ namespace MRF.Models.DTO
         public string ReplaceJustification { get; set; } = null!;
         public int AnnualCtc { get; set; }
         public int AnnualGross { get; set; }
-       
+
+        public int ResumeReviewerEmployeeId { get; set; }
+        public int InterviewerEmployeeId { get; set; }
+
     }
     public class MrfdetaiResponseModel
     {

@@ -342,7 +342,7 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = 0;
-
+            bool dashboard=false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleResumeDetails = new List<ResumeDetailsViewModel>
             {
@@ -355,7 +355,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.ResumeDetail.GetAll()).Returns(SampleResumeDetails);
 
             // Act
-            var result = Controller.GetResumeStatusDetails(id);
+            var result = Controller.GetResumeStatusDetails(id, dashboard);
 
             // Assert
             result.Should().NotBeNull();
@@ -369,7 +369,7 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = -3;
-
+            bool dashboard=false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfDetails = new List<ResumeDetailsViewModel>
             {
@@ -382,7 +382,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.ResumeDetail.GetAll()).Returns(SampleMrfDetails);
 
             // Act
-            var result = Controller.GetResumeStatusDetails(id);
+            var result = Controller.GetResumeStatusDetails(id, dashboard);
 
             // Assert
             result.Should().NotBeNull();
