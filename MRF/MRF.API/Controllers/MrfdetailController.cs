@@ -464,7 +464,7 @@ namespace MRF.API.Controllers
             string month= request.CreatedOnUtc.ToString("MMM").ToUpper(); 
             string Year= request.CreatedOnUtc.ToString("YY");
             
-            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ RP/ " + month + "/ " + Year + "/ " 
+            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ FR/ " + month + "/ " + Year + "/ " 
                 + (Number.LastNumber++).ToString("D3");
             
             return (Reference, Number);
