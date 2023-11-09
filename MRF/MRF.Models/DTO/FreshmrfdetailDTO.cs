@@ -8,9 +8,9 @@
 
         public string Justification { get; set; } = null!;
 
-        public string SoftwaresRequired { get; set; } = null!;
+        public string JobDescription { get; set; } = null!;
 
-        public string HardwaresRequired { get; set; } = null!;
+        public string Skills { get; set; } = null!;
 
         public int MinTargetSalary { get; set; }
 

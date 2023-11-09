@@ -16,7 +16,11 @@ public class Employeedetails
     public string  RoleName { get; set; } = null!;
    
     [NotMapped]
-    public int RoleId { get; set; } 
+    public int RoleId { get; set; }
+    
+    public bool IsDeleted { get; set; }
+
+    public  int EmployeCode { get; set; } 
 
     public bool IsAllowed { get; set; }
 

@@ -14,6 +14,8 @@
 
         public bool IsAllowed { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public int AllowedByEmployeeId { get; set; }
 
         public int CreatedByEmployeeId { get; set; }
@@ -23,7 +25,7 @@
         public int UpdatedByEmployeeId { get; set; }
 
         public DateTime UpdatedOnUtc { get; set; }
-
+        public int EmployeCode { get; set; }
     }
 
     public class EmployeedetailsResponseModel
