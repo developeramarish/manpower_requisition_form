@@ -1,14 +1,21 @@
 import React, {useEffect,useState } from 'react';
+import RequisitionBody from "../Components/RequisitionBody";
+import SearchHeader from "../Components/SearchHeader";
 import DashboardHeader from "./Header";
 import LeftPanel from "./LeftPanel";
 import DataTableComponents from '../Components/DataTableComponent';
 import SearchText from './SearchText';
 import ButtonC  from "../Components/Button";
 import { Toolbar } from 'primereact/toolbar';
+import EmployeDetailsCreate from './EmployeDetailsCreate';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { Dialog } from 'primereact/dialog';
 import { useNavigate } from 'react-router-dom';
 import EmployeeDtailsEdit from './EmployeeDtailsEdit';
 export default function  EmployeDetails() {
     const [data, setData] = useState([{}]);
+    const [value, setValue] = useState([{}]);
     const [editMode, setEditMode] = useState(false);
     const [editData, setEditData] = useState()
     const navigate= useNavigate();
@@ -25,16 +32,7 @@ export default function  EmployeDetails() {
          
          .catch((error) => console.log(error));
      }, []);
-     const [name, namechange] = useState("");
-     const [email, emailchange] = useState("");
-     const [roleId, setRole] = useState(null);
-     const [contactNo,phonechange] = useState("");
-     const [allowedByEmployeeId] = useState("1");
-     const [createdByEmployeeId] = useState("1");
-     const [createdOnUtc] = useState(new Date().toISOString());
-     const [updatedByEmployeeId] = useState("1");
-     const [isAllowed] = useState(true);
-     const [updatedOnUtc] = useState(new Date().toISOString());
+  
     const columns = [
         {columnName : 'Name', field : 'name'},
         {columnName : 'Email', field : 'email'},
@@ -50,31 +48,16 @@ export default function  EmployeDetails() {
             </div>
         );
     };
-    const [isDeleted] = useState(true); 
     const Removefunction = (id) => {
-     const url = "https://localhost:7128/api/Employeedetails/GetEmployee/"+id;
-      fetch(url)
-        .then((response) => {
-          return response.json()
-        }).then((result) => {
-           namechange(result.result[0].name);
-          emailchange(result.result[0].email);
-            phonechange(result.result[0].contactNo);
-        })
       if (window.confirm('Do you want to remove?')) {
-      const empdata = {name,email,contactNo,allowedByEmployeeId,createdByEmployeeId,createdOnUtc,updatedByEmployeeId,
-        isAllowed,updatedOnUtc,isDeleted};
-      fetch("https://localhost:7128/api/Employeedetails/Put/"+id, {
-          method: "Put",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(empdata)
-           
-        }).then((res) => {
-          alert('Deleted successfully.')
-    
-        }).catch((err) => {
-          console.log(err.message)
-        })
+          fetch("https://localhost:7128/api/Employeedetails/" + id, {
+              method: "DELETE"
+          }).then((res) => {
+              alert('Removed successfully.')
+              window.location.reload();
+          }).catch((err) => {
+              console.log(err.message)
+          })
       }
   }
   const updateData = (p_BVal) =>{
@@ -83,8 +66,10 @@ export default function  EmployeDetails() {
   const LoadEdit = (id) => {
     setEditData(id);
     setEditMode(true);
+    // navigate('/EmployeeDtailsEdit/' + id);
+  
+    //navigate("/employee/edit/" + id);
 }
- 
     const actionBodyTemplate = (rowData) => {
       return (
           <React.Fragment>
