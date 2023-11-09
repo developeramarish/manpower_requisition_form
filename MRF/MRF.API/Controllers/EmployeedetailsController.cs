@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
 using SendGrid;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Xml.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -109,13 +106,10 @@ namespace MRF.API.Controllers
                 ContactNo = request.ContactNo,
                 IsAllowed = request.IsAllowed,
                 AllowedByEmployeeId = request.AllowedByEmployeeId,
-                RoleId = request.RoleId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc,
-                IsDeleted = request.IsDeleted,
-                EmployeCode = request.EmployeCode,
+                UpdatedOnUtc = request.UpdatedOnUtc
             };
             _unitOfWork.Employeedetails.Add(employeedetails);
             _unitOfWork.Save();
@@ -180,55 +174,45 @@ namespace MRF.API.Controllers
         public EmployeedetailsResponseModel Put(int id, [FromBody] EmployeedetailsRequestModel request)
         {
 
-            List<Employeedetails> existingStatus = _unitOfWork.Employeedetails.GetEmployee(id);
-            foreach (Employeedetails existingStatusItem in existingStatus) {
-                if (existingStatusItem != null)
+            var existingStatus = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+            if (existingStatus != null)
+            {
+                existingStatus.Name = request.Name;
+                existingStatus.Email = request.Email;
+                existingStatus.ContactNo = request.ContactNo;
+                existingStatus.IsAllowed = request.IsAllowed;
+                existingStatus.AllowedByEmployeeId = request.AllowedByEmployeeId;
+                existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
+                existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
+
+                _unitOfWork.Employeedetails.Update(existingStatus);
+                _unitOfWork.Save();
+
+
+                _responseModel.Id = existingStatus.Id;
+
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
-                    existingStatusItem.Name = request.Name;
-                    existingStatusItem.Email = request.Email;
-                    existingStatusItem.ContactNo = request.ContactNo;
-                    existingStatusItem.IsAllowed = request.IsAllowed;
-                    existingStatusItem.AllowedByEmployeeId = request.AllowedByEmployeeId;
-                    existingStatusItem.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                    existingStatusItem.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                    existingStatusItem.UpdatedOnUtc = request.UpdatedOnUtc;
-                    existingStatusItem.IsDeleted = request.IsDeleted;
-                    existingStatusItem.EmployeCode = request.EmployeCode;
-                    _unitOfWork.Employeedetails.Update(existingStatusItem);
-                    _unitOfWork.Save();
 
-
-                    _responseModel.Id = existingStatusItem.Id;
-
-                    if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Update user");
+                    if (emailRequest != null)
                     {
-
-                        emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Update user");
-                        if (emailRequest != null)
-                        {
-                            _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                        }
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
-
-
-                    if (_responseModel.Id != 0)
-                    {
-                        CallEmployeeRoleMapController(request, _responseModel.Id);
-                    }
-                   
-
                 }
-                else
-                {
-                    _logger.LogError($"No result found by this Id: {id}");
-                    _responseModel.Id = 0;
-                    _responseModel.IsActive = false;
-                }
+
+                _responseModel.Id = existingStatus.Id;
+
+
+
             }
-
-
-
-         
+            else
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
+            }
 
             return _responseModel;
         }
@@ -250,8 +234,6 @@ namespace MRF.API.Controllers
             if (obj != null)
             {
                 _unitOfWork.Employeedetails.Remove(obj);
-                obj.IsDeleted = true;
-
                 _unitOfWork.Save();
 
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
@@ -270,6 +252,10 @@ namespace MRF.API.Controllers
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
+
+
+
+
         }
 
         [HttpGet("{id}")]
@@ -284,13 +270,18 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Employee details");
             List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee(id);
-            var r = from l in obj
-                    where l.IsDeleted == false
-                    select l;
-            _response.Result = r;
+
+
+
+            if (obj.Count == 0)
+            {
+                _logger.LogError("No record is found");
+            }
+            _response.Result = obj;
             return _response;
 
         }
 
     }
+
 }

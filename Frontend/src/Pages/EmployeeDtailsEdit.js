@@ -7,17 +7,47 @@ import LeftPanel from './LeftPanel';
 import DashboardHeader from './Header';
 
 const EmployeeDtailsEdit = ({id, updateData}) => {
+    // const { id } = useParams();
+  
+  
+ 
+  
+  const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
+  console.log("buri"+id);
+//   useEffect(() => {
+//     const apiUrl = `https://localhost:7128/api/Employeedetails/GetEmployee/${id}`;
+//     console.log("bahan");
+//     fetch(apiUrl)
+//     //fetch("https://localhost:7128/api/Employeedetails/GetEmployee/${id}")
+//     .then((response) => response.json()
+//     ).then((resp) => {
+//         //idchange(resp.id);
+//         namechange(resp.name);
+//         emailchange(resp.email);
+//         phonechange(resp.contactNo);
+         
+//         //activechange(resp.isactive);
+//     }).catch((err) => {
+//         console.log(err.message);
+//     })
+// }, []);
 useEffect(() => {
+  console.log("id   ",id)
   fetch("https://localhost:7128/api/Employeedetails/GetEmployee/" + id).then((res) => {
+    console.log("resut for res  ", res)
       return res.json();
   }).then((result) => {
+    
+    console.log("result   =   ",result)
+    //  idchange(resp.id);
      namechange(result.result[0].name);
     emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
       setRole(result.result[0].roleName);
+     // activechange(resp.isactive);
   }).catch((err) => {
       console.log(err.message);
   })
@@ -31,7 +61,6 @@ const [createdByEmployeeId] = useState("1");
 const [createdOnUtc] = useState(new Date().toISOString());
 const [updatedByEmployeeId] = useState("1");
 const [isAllowed] = useState(true);
-const [isDeleted] = useState(false);
 const [updatedOnUtc] = useState(new Date().toISOString());
 const [roleOptions, roleOptionchange] = useState([]);
   const fetchData = () => {
@@ -57,8 +86,10 @@ const [roleOptions, roleOptionchange] = useState([]);
   }
   const handlesubmit = (e) => {
     e.preventDefault();
-    const empdata = { name, email, contactNo,  roleId: roleId.value,isAllowed,isDeleted,allowedByEmployeeId,createdByEmployeeId,
+    const empdata = { name, email, contactNo,  roleId: roleId.value,isAllowed,allowedByEmployeeId,createdByEmployeeId,
       createdOnUtc,updatedByEmployeeId,updatedOnUtc};
+
+
     fetch("https://localhost:7128/api/Employeedetails/Put/"+id, {
       method: "Put",
       headers: { "content-type": "application/json" },
@@ -74,7 +105,11 @@ const [roleOptions, roleOptionchange] = useState([]);
   }
   return (
     <div >
+   {/*  <DashboardHeader /> */}
     <div style={{ display: 'flex' }}>
+      {/* <LeftPanel /> */}
+      
+       
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
       style={{ width: "210vh" } }
@@ -131,7 +166,10 @@ const [roleOptions, roleOptionchange] = useState([]);
          </div>
         </div>
       
-        </section>  
+        </section>
+
+
+           
       {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
         {<ButtonC to="/" className="btn btn-danger" label="CENCEL" disabled onClick={() => updateEditmode(false)}></ButtonC>}
         {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}

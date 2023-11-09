@@ -11,16 +11,12 @@ public class Employeedetails
     public string Email { get; set; } = null!;
 
     public string ContactNo { get; set; } = null!;
-    
+
     [NotMapped]
-    public string  RoleName { get; set; } = null!;
-   
+    public string RoleName { get; set; } = null!;
+
     [NotMapped]
     public int RoleId { get; set; }
-    
-    public bool IsDeleted { get; set; }
-
-    public  int EmployeCode { get; set; } 
 
     public bool IsAllowed { get; set; }
 
