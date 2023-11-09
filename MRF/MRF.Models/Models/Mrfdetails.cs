@@ -22,7 +22,8 @@ public class Mrfdetails
 
     public int ReportsToEmployeeId { get; set; }
 
-    public int GradeId { get; set; }
+    public int MinGradeId { get; set; }
+    public int MaxGradeId { get; set; }
 
     public int EmploymentTypeId { get; set; }
 

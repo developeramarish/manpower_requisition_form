@@ -291,12 +291,12 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
-            entity.Property(e => e.HardwaresRequired).HasColumnType("text");
+            entity.Property(e => e.JobDescription).HasColumnType("text");
             entity.Property(e => e.Justification).HasColumnType("text");
             entity.Property(e => e.MaxTargetSalary).HasColumnType("int(11)");
             entity.Property(e => e.MinTargetSalary).HasColumnType("int(11)");
             entity.Property(e => e.MrfId).HasColumnType("int(11)");
-            entity.Property(e => e.SoftwaresRequired).HasColumnType("text");
+            entity.Property(e => e.Skills).HasColumnType("text");
             entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
             entity.Property(e => e.UpdatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -428,7 +428,8 @@ public partial class MRFDBContext : DbContext
 
             entity.HasIndex(e => e.GenderId, "FK_GenderMasterMrfDetails");
 
-            entity.HasIndex(e => e.GradeId, "FK_GradeMasterMrfDetails");
+            entity.HasIndex(e => e.MinGradeId, "FK_GradeMasterMrfDetails");
+            entity.HasIndex(e => e.MaxGradeId, "FK_GradeMasterMrfDetails2");
 
             entity.HasIndex(e => e.LocationId, "FK_LocationMasterMrfDetails");
 
@@ -450,7 +451,8 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.DepartmentId).HasColumnType("int(11)");
             entity.Property(e => e.EmploymentTypeId).HasColumnType("int(11)");
             entity.Property(e => e.GenderId).HasColumnType("int(11)");
-            entity.Property(e => e.GradeId).HasColumnType("int(11)");
+            entity.Property(e => e.MinGradeId).HasColumnType("int(11)");
+            entity.Property(e => e.MaxGradeId).HasColumnType("int(11)");
             entity.Property(e => e.JdDocPath).HasColumnType("text");
             entity.Property(e => e.LocationId).HasColumnType("int(11)");
             entity.Property(e => e.MaxExperience).HasColumnType("int(11)");

@@ -40,10 +40,10 @@ namespace MRF.API.Test.Controllers
             var SampleMrfDetails = new List<Mrfdetails>
             {
             new Mrfdetails { Id=1, ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
-             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,GradeId=5,
+             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
             new Mrfdetails { Id=2, ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
-             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,GradeId=5,
+             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
 
             };
@@ -91,10 +91,10 @@ namespace MRF.API.Test.Controllers
             var sampleMrfdetails = new List<Mrfdetails>
             {
             new Mrfdetails  {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
-             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,GradeId=5,
+             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
             new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
-             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,GradeId=5,
+             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
                 
             };
@@ -123,10 +123,10 @@ namespace MRF.API.Test.Controllers
             var sampleMrfdetails = new List<Mrfdetails>
             {
             new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
-             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,GradeId=5,
+             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
             new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
-             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,GradeId=5,
+             DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
                 // Add more sample data as needed   
             };
@@ -156,7 +156,8 @@ namespace MRF.API.Test.Controllers
                 ProjectId = 1,
                 VacancyNo = 2,
                 ReportsToEmployeeId = 5,
-                GradeId = 5,
+                MinGradeId = 1,
+                MaxGradeId = 5,
                 EmploymentTypeId = 1,
                 MinExperience = 0,
                 MaxExperience = 4,
@@ -312,7 +313,8 @@ namespace MRF.API.Test.Controllers
                 ProjectId = 1,
                 VacancyNo = 2,
                 ReportsToEmployeeId = 5,
-                GradeId = 5,
+                MinGradeId = 1,
+                MaxGradeId = 5,
                 EmploymentTypeId = 1,
                 MinExperience = 0,
                 MaxExperience = 4,
@@ -360,7 +362,7 @@ namespace MRF.API.Test.Controllers
                 ProjectId = 1,
                 VacancyNo = 2,
                 ReportsToEmployeeId = 5,
-                GradeId = 5,
+                MinGradeId = 5,
                 EmploymentTypeId = 1,
                 MinExperience = 0,
                 MaxExperience = 4,

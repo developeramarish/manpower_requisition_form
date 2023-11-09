@@ -122,7 +122,8 @@ namespace MRF.API.Controllers
                     GenderId = request.GenderId,
                     RequisitionDateUtc = request.RequisitionDateUtc,
                     ReportsToEmployeeId = request.ReportsToEmployeeId,
-                    GradeId = request.GradeId,
+                    MinGradeId = request.MinGradeId,
+                    MaxGradeId = request.MaxGradeId,
                     EmploymentTypeId = request.EmploymentTypeId,
                     MinExperience = request.MinExperience,
                     MaxExperience = request.MaxExperience,
@@ -170,8 +171,8 @@ namespace MRF.API.Controllers
             {
                 MrfId = mrfId,
                 Justification = request.Justification,
-                SoftwaresRequired = request.SoftwaresRequired,
-                HardwaresRequired = request.HardwaresRequired,
+                JobDescription = request.JobDescription,
+                Skills = request.Skills,
                 MinTargetSalary = request.MinTargetSalary,
                 MaxTargetSalary = request.MaxTargetSalary,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
@@ -210,7 +211,7 @@ namespace MRF.API.Controllers
                     LastWorkingDate = request.LastWorkingDate,
                     AnnualCtc = request.AnnualCtc,
                     AnnualGross = request.AnnualGross,
-                    GradeId = request.GradeId,
+                    //GradeId = request.GradeId,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,
                     UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -292,7 +293,8 @@ namespace MRF.API.Controllers
                 existingStatus.GenderId = request.GenderId;
                 existingStatus.RequisitionDateUtc = request.RequisitionDateUtc;
                 existingStatus.ReportsToEmployeeId = request.ReportsToEmployeeId;
-                existingStatus.GradeId = request.GradeId;
+                existingStatus.MinGradeId = request.MinGradeId;
+                existingStatus.MaxGradeId = request.MaxGradeId;
                 existingStatus.EmploymentTypeId = request.EmploymentTypeId;
                 existingStatus.MinExperience = request.MinExperience;
                 existingStatus.MaxExperience = request.MaxExperience;
