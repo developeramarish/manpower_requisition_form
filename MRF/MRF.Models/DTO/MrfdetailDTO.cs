@@ -4,7 +4,8 @@ namespace MRF.Models.DTO
 {
     public class MrfdetailRequestModel
     {
-        public string ReferenceNo { get; set; } = null!;
+        public int mrfID { get; set; }
+        public string? ReferenceNo { get; set; } 
         public string PositionTitle { get; set; } = null!;
         public int DepartmentId { get; set; }
         public int SubDepartmentId { get; set; }
@@ -13,7 +14,8 @@ namespace MRF.Models.DTO
         public int GenderId { get; set; }
         public DateOnly RequisitionDateUtc { get; set; }
         public int ReportsToEmployeeId { get; set; }
-        public int GradeId { get; set; }
+        public int MinGradeId { get; set; }
+        public int MaxGradeId { get; set; }
         public int EmploymentTypeId { get; set; }
         public int MinExperience { get; set; }
         public int MaxExperience { get; set; }
@@ -30,9 +32,9 @@ namespace MRF.Models.DTO
 
         public string Justification { get; set; } = null!;
 
-        public string SoftwaresRequired { get; set; } = null!;
+        public string JobDescription { get; set; } = null!;
 
-        public string HardwaresRequired { get; set; } = null!;
+        public string Skills { get; set; } = null!;
 
         public int MinTargetSalary { get; set; }
 
@@ -45,7 +47,10 @@ namespace MRF.Models.DTO
         public string ReplaceJustification { get; set; } = null!;
         public int AnnualCtc { get; set; }
         public int AnnualGross { get; set; }
-       
+
+        public int ResumeReviewerEmployeeId { get; set; }
+        public int InterviewerEmployeeId { get; set; }
+
     }
     public class MrfdetaiResponseModel
     {

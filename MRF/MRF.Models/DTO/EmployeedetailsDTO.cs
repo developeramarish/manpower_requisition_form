@@ -23,7 +23,7 @@
         public int UpdatedByEmployeeId { get; set; }
 
         public DateTime UpdatedOnUtc { get; set; }
-
+        public int EmployeCode { get; set; }
     }
 
     public class EmployeedetailsResponseModel

@@ -69,6 +69,7 @@ public partial class MRFDBContext : DbContext
     public virtual DbSet<Vacancytypemaster> Vacancytypemasters { get; set; }
     public virtual DbSet<AttachmentEvaluation> AttachmentEvaluation { get; set; }
     public virtual DbSet<MrfStatusRoleMap> MrfStatusRoleMap { get; set; }
+    public virtual DbSet<MrfLastNumber> MrfLastNumber { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseMySql("server=localhost;database=mrf;user=root;password=Info@2023", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.15-mysql"));
@@ -290,12 +291,12 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
-            entity.Property(e => e.HardwaresRequired).HasColumnType("text");
+            entity.Property(e => e.JobDescription).HasColumnType("text");
             entity.Property(e => e.Justification).HasColumnType("text");
             entity.Property(e => e.MaxTargetSalary).HasColumnType("int(11)");
             entity.Property(e => e.MinTargetSalary).HasColumnType("int(11)");
             entity.Property(e => e.MrfId).HasColumnType("int(11)");
-            entity.Property(e => e.SoftwaresRequired).HasColumnType("text");
+            entity.Property(e => e.Skills).HasColumnType("text");
             entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
             entity.Property(e => e.UpdatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -427,7 +428,8 @@ public partial class MRFDBContext : DbContext
 
             entity.HasIndex(e => e.GenderId, "FK_GenderMasterMrfDetails");
 
-            entity.HasIndex(e => e.GradeId, "FK_GradeMasterMrfDetails");
+            entity.HasIndex(e => e.MinGradeId, "FK_GradeMasterMrfDetails");
+            entity.HasIndex(e => e.MaxGradeId, "FK_GradeMasterMrfDetails2");
 
             entity.HasIndex(e => e.LocationId, "FK_LocationMasterMrfDetails");
 
@@ -449,7 +451,8 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.DepartmentId).HasColumnType("int(11)");
             entity.Property(e => e.EmploymentTypeId).HasColumnType("int(11)");
             entity.Property(e => e.GenderId).HasColumnType("int(11)");
-            entity.Property(e => e.GradeId).HasColumnType("int(11)");
+            entity.Property(e => e.MinGradeId).HasColumnType("int(11)");
+            entity.Property(e => e.MaxGradeId).HasColumnType("int(11)");
             entity.Property(e => e.JdDocPath).HasColumnType("text");
             entity.Property(e => e.LocationId).HasColumnType("int(11)");
             entity.Property(e => e.MaxExperience).HasColumnType("int(11)");
@@ -710,6 +713,15 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.Subject).HasMaxLength(50);
             entity.Property(e => e.Content).HasMaxLength(50);
         });
+
+        modelBuilder.Entity<MrfLastNumber>(entity =>
+        {
+
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.ToTable("MrfLastNumber");
+            entity.Property(e => e.LastNumber).HasColumnType("int(11)");
+
+        }); 
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -40,5 +40,7 @@ namespace MRF.DataAccess.Data
 
         public DbSet<emailmaster> emailmaster { get; set; }
         public DbSet<MrfStatusRoleMap> mrfStatusrolemap { get; set; }
+
+        public DbSet<MrfLastNumber> MrfLastNumber { get; set; }
     }
 }

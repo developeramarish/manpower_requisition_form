@@ -83,8 +83,8 @@ namespace MRF.API.Controllers
             {
                 MrfId = request.MrfId,
                 Justification = request.Justification,
-                SoftwaresRequired = request.SoftwaresRequired,
-                HardwaresRequired = request.HardwaresRequired,
+                JobDescription = request.JobDescription,
+                Skills = request.Skills,
                 MinTargetSalary = request.MinTargetSalary,
                 MaxTargetSalary = request.MaxTargetSalary,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
@@ -122,8 +122,8 @@ namespace MRF.API.Controllers
             {
                 existingFreshmr.MrfId = request.MrfId;
                 existingFreshmr.Justification = request.Justification;
-                existingFreshmr.SoftwaresRequired=request.SoftwaresRequired;
-                existingFreshmr.HardwaresRequired = request.HardwaresRequired;
+                existingFreshmr.JobDescription=request.JobDescription;
+                existingFreshmr.Skills = request.Skills;
                 existingFreshmr.MinTargetSalary = request.MinTargetSalary;
                 existingFreshmr.MaxTargetSalary=request.MaxTargetSalary;
                 existingFreshmr.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
