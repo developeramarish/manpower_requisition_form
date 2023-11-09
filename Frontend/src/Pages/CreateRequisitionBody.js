@@ -22,14 +22,15 @@ const CreateRequisitionBody = () => {
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const [selectedMinExperience, setSelectedMinExperience] = useState(null);
-  const [selectedMaxExperience, setSelectedMaxExperience] = useState(null);
-  const [selectedSoftwareSkills, setSelectedSoftwareSkills] = useState(null);
-  const [selectedHardwareSkills, setSelectedHardwareSkills] = useState(null);
-  const [isSubmissionSuccessful, setIsSubmissionSuccessful] = useState(false);
+  // const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  // const [selectedMinExperience, setSelectedMinExperience] = useState(null);
+  // const [selectedMaxExperience, setSelectedMaxExperience] = useState(null);
+  // const [selectedSoftwareSkills, setSelectedSoftwareSkills] = useState(null);
+  // const [selectedHardwareSkills, setSelectedHardwareSkills] = useState(null);
+  // const [isSubmissionSuccessful, setIsSubmissionSuccessful] = useState(false);
 
   const toastRef = useRef(null);
+  const getReqId = 1;
 
   const formSchema = {
     referenceNo: "",
@@ -41,7 +42,9 @@ const CreateRequisitionBody = () => {
     genderId: 0,
     requisitionDateUtc: "",
     reportsToEmployeeId: 0,
-    gradeId: 0,
+    // gradeId: 0,
+    minGradeId: 0,
+    maxGradeId: 0,
     employmentTypeId: 0,
     minExperience: 0,
     maxExperience: 0,
@@ -81,9 +84,8 @@ const CreateRequisitionBody = () => {
         console.error("Error fetching data:", error);
       });
 
-    const id = 1; // need to get id
-    if (id) {
-      const apiUrl = `https://localhost:7128/api/Mrfdetail/GetRequisition/${id}`;
+    if (getReqId) {
+      const apiUrl = `https://localhost:7128/api/Mrfdetail/GetRequisition/${getReqId}`;
       fetch(apiUrl)
         .then((response) => response.json())
         .then((response) => {
@@ -117,10 +119,6 @@ const CreateRequisitionBody = () => {
     fetchSubDepartments(formData.departmentId);
   }, [formData.departmentId]);
 
-  const handleCheckboxChange = (isChecked) => {
-    setIsCheckboxChecked(isChecked);
-  };
-
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
 
@@ -139,7 +137,7 @@ const CreateRequisitionBody = () => {
       minExperience: formData.minExperience,
       maxExperience: formData.maxExperience,
       vacancyTypeId: formData.vacancyTypeId,
-      isReplacement: isCheckboxChecked,
+      isReplacement: formData.isReplacement,
       mrfStatusId: mrfStatusId,
       jdDocPath: "string",
       locationId: formData.locationId,
@@ -148,8 +146,10 @@ const CreateRequisitionBody = () => {
       updatedByEmployeeId: 1,
       updatedOnUtc: new Date().toISOString(),
       justification: formData.justification,
-      softwaresRequired: formData.softwaresRequired,
-      hardwaresRequired: formData.hardwaresRequired,
+      // softwaresRequired: formData.softwaresRequired,
+      // hardwaresRequired: formData.hardwaresRequired,
+      jobDescription: formData.jobDescription,
+      skills: formData.skills,
       minTargetSalary: formData.minTargetSalary,
       maxTargetSalary: formData.maxTargetSalary,
       employeeName: formData.employeeName,
@@ -198,6 +198,7 @@ const CreateRequisitionBody = () => {
     }
   };
 
+  //need to change this
   const handleCancel = () => {
     setDropdownData({});
     setSubDepartments([]);
@@ -214,19 +215,27 @@ const CreateRequisitionBody = () => {
         style={{ height: "95%" }}
       >
         <div className="flex justify-content-between gap-5">
-          <div className="flex flex-column w-6 gap-2">
-            <label htmlFor="refno" className="font-bold text-sm">
-              Reference Number
-            </label>
-            <InputTextCp
-              id="refno"
-              onChange={(e) =>
-                setFormData({ ...formData, referenceNo: e.target.value })
-              }
-              value={formData.referenceNo}
-            />
-          </div>
-          <div className="flex flex-column w-6 gap-2">
+          {getReqId ? (
+            <div className="flex flex-column w-6 gap-2">
+              <label htmlFor="refno" className="font-bold text-sm">
+                Reference Number
+              </label>
+              <InputTextCp
+                id="refno"
+                onChange={(e) =>
+                  setFormData({ ...formData, referenceNo: e.target.value })
+                }
+                value={formData.referenceNo}
+                className="bg-white border-none p-disabled text-black-alpha-90 font-bold"
+              />
+            </div>
+          ) : (
+            ""
+          )}
+
+          <div
+            className={`flex flex-column gap-2 ${getReqId ? "w-6" : "w-full"}`}
+          >
             <label htmlFor="position-title" className="font-bold text-sm">
               Position Title
             </label>
@@ -239,6 +248,7 @@ const CreateRequisitionBody = () => {
             />
           </div>
         </div>
+
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
@@ -360,7 +370,8 @@ const CreateRequisitionBody = () => {
             <label htmlFor="grade" className="font-bold text-sm">
               Grade of the proposed employee
             </label>
-            <DropdownComponent
+
+            {/* <DropdownComponent
               optionLabel="name"
               optionValue="id"
               type="grade"
@@ -369,7 +380,34 @@ const CreateRequisitionBody = () => {
               onChange={(e) =>
                 setFormData({ ...formData, gradeId: e.target.value })
               }
-            />
+            /> */}
+            <div className="p-col-7">
+              <label className="font-bold text-sm label-with-padding-right">
+                Min
+              </label>
+              <DropdownComponent
+                value={formData.minExperience}
+                options={dropdownData.minGradeId}
+                optionLabel="name"
+                placeholder="Min"
+                onChange={(e) =>
+                  setFormData({ ...formData, minGradeId: e.target.value })
+                }
+              />
+
+              <label className="font-bold text-sm label-with-padding-left label-with-padding-right">
+                Max
+              </label>
+              <DropdownComponent
+                value={formData.maxExperience}
+                options={dropdownData.maxGradeId}
+                optionLabel="name"
+                placeholder="Max"
+                onChange={(e) =>
+                  setFormData({ ...formData, maxGradeId: e.target.value })
+                }
+              />
+            </div>
           </div>
         </div>
         <div className="flex justify-content-between gap-5">
@@ -595,6 +633,36 @@ const CreateRequisitionBody = () => {
           </>
           // </div>
         )}
+        <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="jobDescription" className="font-bold text-sm">
+              Job Description
+            </label>
+            <InputTextareaComponent
+              autoResize
+              id="jobDescription"
+              className="bg-gray-100"
+              value={formData.jobDescription}
+              onChange={(e) =>
+                setFormData({ ...formData, jobDescription: e.target.value })
+              }
+            />
+          </div>
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="skills" className="font-bold text-sm">
+              Skills
+            </label>
+            <InputTextareaComponent
+              autoResize
+              id="skills"
+              className="bg-gray-100"
+              value={formData.skills}
+              onChange={(e) =>
+                setFormData({ ...formData, skills: e.target.value })
+              }
+            />
+          </div>
+        </div>
         <div className="flex justify-content-between gap-5 ">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="Justification" className="font-bold text-sm">
@@ -610,7 +678,7 @@ const CreateRequisitionBody = () => {
               }
             />
           </div>
-          <div className="flex flex-column w-4 gap-2">
+          {/* <div className="flex flex-column w-4 gap-2">
             <label htmlFor="Software skills" className="font-bold text-sm">
               Software Skills
             </label>
@@ -651,9 +719,9 @@ const CreateRequisitionBody = () => {
               maxSelectedLabels={3}
               className="w-full md:w-20rem"
             />
-          </div>
-          <div className="flex justify-content-between gap-5">
-            <div className="flex flex-column w-10 gap-2">
+          </div> */}
+          <div className="flex flex-column gap-4 w-6">
+            <div className="flex flex-column gap-2">
               <label htmlFor="MinTargetSalary" className="font-bold text-sm">
                 Min Target Salary
               </label>
@@ -664,7 +732,8 @@ const CreateRequisitionBody = () => {
                 }
                 value={formData.minTargetSalary}
               />
-
+            </div>
+            <div className="flex flex-column gap-2">
               <label htmlFor="MaxTargetSalary" className="font-bold text-sm">
                 Max Target Salary
               </label>

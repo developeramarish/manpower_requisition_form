@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 
 const DropdownComponent = ({
@@ -38,15 +37,5 @@ const DropdownComponent = ({
     />
   );
 };
-
-// DropdownComponent.propTypes = {
-//   optionLabel: PropTypes.string.isRequired,
-//   optionValue: PropTypes.string.isRequired,
-//   type: PropTypes.string.isRequired,
-//   options: PropTypes.array.isRequired,
-//   selectedOption: PropTypes.any,
-//   onChange: PropTypes.func.isRequired,
-//   value: PropTypes.any,
-// };
 
 export default DropdownComponent;
