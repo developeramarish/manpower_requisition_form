@@ -22,14 +22,15 @@ const CreateRequisitionBody = () => {
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const [selectedMinExperience, setSelectedMinExperience] = useState(null);
-  const [selectedMaxExperience, setSelectedMaxExperience] = useState(null);
-  const [selectedSoftwareSkills, setSelectedSoftwareSkills] = useState(null);
-  const [selectedHardwareSkills, setSelectedHardwareSkills] = useState(null);
-  const [isSubmissionSuccessful, setIsSubmissionSuccessful] = useState(false);
+  // const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  // const [selectedMinExperience, setSelectedMinExperience] = useState(null);
+  // const [selectedMaxExperience, setSelectedMaxExperience] = useState(null);
+  // const [selectedSoftwareSkills, setSelectedSoftwareSkills] = useState(null);
+  // const [selectedHardwareSkills, setSelectedHardwareSkills] = useState(null);
+  // const [isSubmissionSuccessful, setIsSubmissionSuccessful] = useState(false);
 
   const toastRef = useRef(null);
+  const getReqId = 1;
 
   const formSchema = {
     referenceNo: "",
@@ -41,7 +42,9 @@ const CreateRequisitionBody = () => {
     genderId: 0,
     requisitionDateUtc: "",
     reportsToEmployeeId: 0,
-    gradeId: 0,
+    // gradeId: 0,
+    minGradeId: 0,
+    maxGradeId: 0,
     employmentTypeId: 0,
     minExperience: 0,
     maxExperience: 0,
@@ -51,18 +54,18 @@ const CreateRequisitionBody = () => {
     jdDocPath: "",
     locationId: 0,
     //
-    Justification: "",
-    SoftwaresRequired: "",
-    HardwaresRequired: "",
-    MinTargetSalary: 0,
-    MaxTargetSalary: 0,
-    EmployeeName: "",
-    EmailId: "",
-    EmployeeCode: 0,
-    LastWorkingDate: "",
-    AnnualCtc: 0,
-    AnnualGross: 0,
-    ReplaceJustification: "",
+    justification: "",
+    softwaresRequired: "",
+    hardwaresRequired: "",
+    minTargetSalary: 0,
+    maxTargetSalary: 0,
+    employeeName: "",
+    emailId: "",
+    employeeCode: 0,
+    lastWorkingDate: "",
+    annualCtc: 0,
+    annualGross: 0,
+    replaceJustification: "",
   };
 
   // Initialize the formData state using the form schema
@@ -81,15 +84,12 @@ const CreateRequisitionBody = () => {
         console.error("Error fetching data:", error);
       });
 
-    const id = 1; // need to get id
-    if (id) {
-      const apiUrl = `https://localhost:7128/api/Mrfdetail/Get/${id}`;
+    if (getReqId) {
+      const apiUrl = `https://localhost:7128/api/Mrfdetail/GetRequisition/${getReqId}`;
       fetch(apiUrl)
         .then((response) => response.json())
         .then((response) => {
-          const data = response.result;
-
-          setFormData({ ...formData, ...data });
+          setFormData({ ...formData, ...response });
         })
         .catch((error) => {
           console.error("Fetch error:", error);
@@ -115,9 +115,9 @@ const CreateRequisitionBody = () => {
       });
   };
 
-  const handleCheckboxChange = (isChecked) => {
-    setIsCheckboxChecked(isChecked);
-  };
+  useEffect(() => {
+    fetchSubDepartments(formData.departmentId);
+  }, [formData.departmentId]);
 
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
@@ -137,7 +137,7 @@ const CreateRequisitionBody = () => {
       minExperience: formData.minExperience,
       maxExperience: formData.maxExperience,
       vacancyTypeId: formData.vacancyTypeId,
-      isReplacement: isCheckboxChecked,
+      isReplacement: formData.isReplacement,
       mrfStatusId: mrfStatusId,
       jdDocPath: "string",
       locationId: formData.locationId,
@@ -145,18 +145,20 @@ const CreateRequisitionBody = () => {
       createdOnUtc: new Date().toISOString(),
       updatedByEmployeeId: 1,
       updatedOnUtc: new Date().toISOString(),
-      Justification: formData.Justification,
-      SoftwaresRequired: formData.SoftwaresRequired,
-      HardwaresRequired: formData.HardwaresRequired,
-      MinTargetSalary: formData.MinTargetSalary,
-      MaxTargetSalary: formData.MaxTargetSalary,
-      EmployeeName: formData.EmployeeName,
-      EmailId: formData.EmailId,
-      EmployeeCode: formData.EmployeeCode,
-      LastWorkingDate: new Date().toISOString().slice(0, 10),
-      AnnualCtc: formData.AnnualCtc,
-      AnnualGross: formData.AnnualGross,
-      ReplaceJustification: formData.ReplaceJustification,
+      justification: formData.justification,
+      // softwaresRequired: formData.softwaresRequired,
+      // hardwaresRequired: formData.hardwaresRequired,
+      jobDescription: formData.jobDescription,
+      skills: formData.skills,
+      minTargetSalary: formData.minTargetSalary,
+      maxTargetSalary: formData.maxTargetSalary,
+      employeeName: formData.employeeName,
+      emailId: formData.emailId,
+      employeeCode: formData.employeeCode,
+      lastWorkingDate: new Date().toISOString().slice(0, 10),
+      annualCtc: formData.annualCtc,
+      annualGross: formData.annualGross,
+      replaceJustification: formData.replaceJustification,
     };
     try {
       const response = await fetch(
@@ -196,6 +198,7 @@ const CreateRequisitionBody = () => {
     }
   };
 
+  //need to change this
   const handleCancel = () => {
     setDropdownData({});
     setSubDepartments([]);
@@ -212,19 +215,27 @@ const CreateRequisitionBody = () => {
         style={{ height: "95%" }}
       >
         <div className="flex justify-content-between gap-5">
-          <div className="flex flex-column w-6 gap-2">
-            <label htmlFor="refno" className="font-bold text-sm">
-              Reference Number
-            </label>
-            <InputTextCp
-              id="refno"
-              onChange={(e) =>
-                setFormData({ ...formData, referenceNo: e.target.value })
-              }
-              value={formData.referenceNo}
-            />
-          </div>
-          <div className="flex flex-column w-6 gap-2">
+          {getReqId ? (
+            <div className="flex flex-column w-6 gap-2">
+              <label htmlFor="refno" className="font-bold text-sm">
+                Reference Number
+              </label>
+              <InputTextCp
+                id="refno"
+                onChange={(e) =>
+                  setFormData({ ...formData, referenceNo: e.target.value })
+                }
+                value={formData.referenceNo}
+                className="bg-white border-none p-disabled text-black-alpha-90 font-bold"
+              />
+            </div>
+          ) : (
+            ""
+          )}
+
+          <div
+            className={`flex flex-column gap-2 ${getReqId ? "w-6" : "w-full"}`}
+          >
             <label htmlFor="position-title" className="font-bold text-sm">
               Position Title
             </label>
@@ -237,12 +248,12 @@ const CreateRequisitionBody = () => {
             />
           </div>
         </div>
+
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
               Department
             </label>
-            {/* changed dropdown */}
             <DropdownComponent
               optionLabel="name"
               optionValue="id"
@@ -250,9 +261,9 @@ const CreateRequisitionBody = () => {
               options={dropdownData.departments || []}
               value={formData.departmentId}
               onChange={(e) => {
-                const selectedDepartment = e.value;
+                // const selectedDepartment = e.value;
                 setFormData({ ...formData, departmentId: e.target.value });
-                fetchSubDepartments(selectedDepartment);
+                // fetchSubDepartments(selectedDepartment);
               }}
             />
           </div>
@@ -265,7 +276,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="subDepartmentId"
               options={subDepartments}
-              selectedOption={subDepartments}
+              value={formData.subDepartmentId}
               onChange={(e) =>
                 setFormData({ ...formData, subDepartmentId: e.target.value })
               }
@@ -282,7 +293,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="project"
               options={dropdownData.projects}
-              selectedOption={dropdownData.projects}
+              value={formData.projectId}
               onChange={(e) =>
                 setFormData({ ...formData, projectId: e.target.value })
               }
@@ -297,7 +308,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="location"
               options={dropdownData.location}
-              selectedOption={dropdownData.location}
+              value={formData.locationId}
               onChange={(e) =>
                 setFormData({ ...formData, locationId: e.target.value })
               }
@@ -314,7 +325,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="reportingTo"
               options={dropdownData.reportingTo}
-              selectedOption={dropdownData.ReportingTo}
+              value={formData.reportsToEmployeeId}
               onChange={(e) =>
                 setFormData({ ...formData, reportingTo: e.target.value })
               }
@@ -328,9 +339,12 @@ const CreateRequisitionBody = () => {
             <CalendarComponent
               id="initiation-date"
               inputClassName="bg-gray-100"
-              showIcon
+              value={new Date(formData.requisitionDateUtc)}
               onChange={(e) =>
-                setFormData({ ...formData, requisitionDateUtc: e.target.value })
+                setFormData({
+                  ...formData,
+                  requisitionDateUtc: e.target.value,
+                })
               }
             />
           </div>
@@ -345,7 +359,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="employmenttypes"
               options={dropdownData.employmentTypes}
-              selectedOption={dropdownData.employmenttypes}
+              value={formData.employmentTypeId}
               onChange={(e) =>
                 setFormData({ ...formData, employmentTypeId: e.target.value })
               }
@@ -356,16 +370,44 @@ const CreateRequisitionBody = () => {
             <label htmlFor="grade" className="font-bold text-sm">
               Grade of the proposed employee
             </label>
-            <DropdownComponent
+
+            {/* <DropdownComponent
               optionLabel="name"
               optionValue="id"
               type="grade"
               options={dropdownData.grades}
-              selectedOption={dropdownData.grades}
+              value={formData.gradeId}
               onChange={(e) =>
                 setFormData({ ...formData, gradeId: e.target.value })
               }
-            />
+            /> */}
+            <div className="p-col-7">
+              <label className="font-bold text-sm label-with-padding-right">
+                Min
+              </label>
+              <DropdownComponent
+                value={formData.minExperience}
+                options={dropdownData.minGradeId}
+                optionLabel="name"
+                placeholder="Min"
+                onChange={(e) =>
+                  setFormData({ ...formData, minGradeId: e.target.value })
+                }
+              />
+
+              <label className="font-bold text-sm label-with-padding-left label-with-padding-right">
+                Max
+              </label>
+              <DropdownComponent
+                value={formData.maxExperience}
+                options={dropdownData.maxGradeId}
+                optionLabel="name"
+                placeholder="Max"
+                onChange={(e) =>
+                  setFormData({ ...formData, maxGradeId: e.target.value })
+                }
+              />
+            </div>
           </div>
         </div>
         <div className="flex justify-content-between gap-5">
@@ -376,6 +418,7 @@ const CreateRequisitionBody = () => {
             <InputTextCp
               id="vaccancies"
               className="bg-gray-100"
+              value={formData.vacancyNo}
               onChange={(e) =>
                 setFormData({ ...formData, vacancyNo: e.target.value })
               }
@@ -391,7 +434,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="vaccancy"
               options={dropdownData.vaccancies}
-              selectedOption={dropdownData.vaccancies}
+              value={formData.vacancyTypeId}
               onChange={(e) =>
                 setFormData({ ...formData, vacancyTypeId: e.target.value })
               }
@@ -408,7 +451,7 @@ const CreateRequisitionBody = () => {
                 Min
               </label>
               <DropdownComponent
-                value={selectedMinExperience}
+                value={formData.minExperience}
                 options={minExperienceOptions}
                 optionLabel="label"
                 placeholder="Min"
@@ -421,7 +464,7 @@ const CreateRequisitionBody = () => {
                 Max
               </label>
               <DropdownComponent
-                value={selectedMaxExperience}
+                value={formData.maxExperience}
                 options={maxExperienceOptions}
                 optionLabel="label"
                 placeholder="Max"
@@ -440,7 +483,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="Gender"
               options={Gender}
-              selectedOption={Gender}
+              value={formData.genderId}
               onChange={(e) =>
                 setFormData({ ...formData, genderId: e.target.value })
               }
@@ -455,7 +498,7 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="Qualification"
               options={dropdownData.qualification}
-              selectedOption={dropdownData.qualification}
+              value={formData.qualification}
               onChange={(e) =>
                 setFormData({ ...formData, qualification: e.target.value })
               }
@@ -466,19 +509,24 @@ const CreateRequisitionBody = () => {
           <div className="flex flex-row align-items-center h-3rem w-5 gap-2 px-4 border-round-sm border-1 border-300 bg-gray-100">
             <CheckboxComponent
               inputId="replacement"
-              checked={isCheckboxChecked}
-              onCheckboxChange={handleCheckboxChange}
+              checked={formData.isReplacement}
+              onChange={(e) =>
+                setFormData({ ...formData, isReplacement: e.checked })
+              }
             />
             <label htmlFor="replacement" className="font-bold text-sm">
               Replacement for the employee
             </label>
           </div>
         </div>
-        {isCheckboxChecked && (
-          <div
-            className={`transition-div ${isCheckboxChecked ? "show-div" : ""}`}
-            id="DivreplacedEmp"
-          >
+        {formData.isReplacement && (
+          // <div
+          //   className={`transition-div ${
+          //     formData.isReplacement ? "show-div" : ""
+          //   }`}
+          //   id="DivreplacedEmp"
+          // >
+          <>
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="employeeName" className="font-bold text-sm">
@@ -487,9 +535,9 @@ const CreateRequisitionBody = () => {
                 <InputTextCp
                   id="employeeName"
                   onChange={(e) =>
-                    setFormData({ ...formData, EmployeeName: e.target.value })
+                    setFormData({ ...formData, employeeName: e.target.value })
                   }
-                  value={formData.EmployeeName}
+                  value={formData.employeeName}
                 />
               </div>
 
@@ -500,11 +548,11 @@ const CreateRequisitionBody = () => {
                 <CalendarComponent
                   id="lastworkingDate"
                   inputClassName="bg-gray-100"
-                  showIcon
+                  value={new Date(formData.lastWorkingDate)}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      LastWorkingDate: e.target.value,
+                      lastWorkingDate: e.target.value,
                     })
                   }
                 />
@@ -518,9 +566,9 @@ const CreateRequisitionBody = () => {
                 <InputTextCp
                   id="EmployeeEmail"
                   onChange={(e) =>
-                    setFormData({ ...formData, EmailId: e.target.value })
+                    setFormData({ ...formData, emailId: e.target.value })
                   }
-                  value={formData.EmailId}
+                  value={formData.emailId}
                 />
               </div>
 
@@ -531,9 +579,9 @@ const CreateRequisitionBody = () => {
                 <InputTextCp
                   id="EmployeeCode"
                   onChange={(e) =>
-                    setFormData({ ...formData, EmployeeCode: e.target.value })
+                    setFormData({ ...formData, employeeCode: e.target.value })
                   }
-                  value={formData.EmployeeCode}
+                  value={formData.employeeCode}
                 />
               </div>
             </div>
@@ -545,9 +593,9 @@ const CreateRequisitionBody = () => {
                 <InputTextCp
                   id="AnnualCTC"
                   onChange={(e) =>
-                    setFormData({ ...formData, AnnualCtc: e.target.value })
+                    setFormData({ ...formData, annualCtc: e.target.value })
                   }
-                  value={formData.AnnualCtc}
+                  value={formData.annualCtc}
                 />
                 <label htmlFor="AnnualGross" className="font-bold text-sm">
                   Annual Gross
@@ -555,31 +603,66 @@ const CreateRequisitionBody = () => {
                 <InputTextCp
                   id="AnnualGross"
                   onChange={(e) =>
-                    setFormData({ ...formData, AnnualGross: e.target.value })
+                    setFormData({ ...formData, annualGross: e.target.value })
                   }
-                  value={formData.AnnualGross}
+                  value={formData.annualGross}
                 />
               </div>
 
               <div className="flex flex-column w-6 gap-2">
-                <label htmlFor="lastworkingDate" className="font-bold text-sm">
+                <label
+                  htmlFor="ReplaceJustification"
+                  className="font-bold text-sm"
+                >
                   Replacement Justification
                 </label>
                 <InputTextareaComponent
                   autoResize
-                  id="Justification"
+                  id="ReplaceJustification"
                   className="bg-gray-100"
+                  value={formData.replaceJustification}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      ReplaceJustification: e.target.value,
+                      replaceJustification: e.target.value,
                     })
                   }
                 />
               </div>
             </div>
-          </div>
+          </>
+          // </div>
         )}
+        <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="jobDescription" className="font-bold text-sm">
+              Job Description
+            </label>
+            <InputTextareaComponent
+              autoResize
+              id="jobDescription"
+              className="bg-gray-100"
+              value={formData.jobDescription}
+              onChange={(e) =>
+                setFormData({ ...formData, jobDescription: e.target.value })
+              }
+            />
+          </div>
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="skills" className="font-bold text-sm">
+              Skills
+            </label>
+            <InputTextareaComponent
+              autoResize
+              id="skills"
+              className="bg-gray-100"
+              value={formData.skills}
+              onChange={(e) =>
+                setFormData({ ...formData, skills: e.target.value })
+              }
+            />
+          </div>
+        </div>
         <div className="flex justify-content-between gap-5 ">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="Justification" className="font-bold text-sm">
@@ -589,12 +672,13 @@ const CreateRequisitionBody = () => {
               autoResize
               id="Justification"
               className="bg-gray-100"
+              value={formData.justification}
               onChange={(e) =>
-                setFormData({ ...formData, Justification: e.target.value })
+                setFormData({ ...formData, justification: e.target.value })
               }
             />
           </div>
-          <div className="flex flex-column w-4 gap-2">
+          {/* <div className="flex flex-column w-4 gap-2">
             <label htmlFor="Software skills" className="font-bold text-sm">
               Software Skills
             </label>
@@ -605,7 +689,7 @@ const CreateRequisitionBody = () => {
               onChange={(e) => {
                 setFormData({
                   ...formData,
-                  SoftwaresRequired: selectedSoftwareSkills,
+                  softwaresRequired: selectedSoftwareSkills,
                 });
                 setSelectedSoftwareSkills(e.value);
               }}
@@ -635,29 +719,30 @@ const CreateRequisitionBody = () => {
               maxSelectedLabels={3}
               className="w-full md:w-20rem"
             />
-          </div>
-          <div className="flex justify-content-between gap-5">
-            <div className="flex flex-column w-10 gap-2">
+          </div> */}
+          <div className="flex flex-column gap-4 w-6">
+            <div className="flex flex-column gap-2">
               <label htmlFor="MinTargetSalary" className="font-bold text-sm">
                 Min Target Salary
               </label>
               <InputTextCp
                 id="MinTargetSalary"
                 onChange={(e) =>
-                  setFormData({ ...formData, MinTargetSalary: e.target.value })
+                  setFormData({ ...formData, minTargetSalary: e.target.value })
                 }
-                value={formData.MinTargetSalary}
+                value={formData.minTargetSalary}
               />
-
+            </div>
+            <div className="flex flex-column gap-2">
               <label htmlFor="MaxTargetSalary" className="font-bold text-sm">
                 Max Target Salary
               </label>
               <InputTextCp
                 id="MaxTargetSalary"
                 onChange={(e) =>
-                  setFormData({ ...formData, MaxTargetSalary: e.target.value })
+                  setFormData({ ...formData, maxTargetSalary: e.target.value })
                 }
-                value={formData.MaxTargetSalary}
+                value={formData.maxTargetSalary}
               />
             </div>
           </div>

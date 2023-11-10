@@ -9,6 +9,8 @@ const MultiDropDownOptions = ({multiSelectOptions,optionLabel,placeholder}) => {
     return (
       <div className="card flex justify-content-center">
         <MultiSelect
+              className="w-full"
+
           value={selectedOptions}
           onChange={(e) => setSelectedOptions(e.value)}
           options={options}
@@ -17,7 +19,6 @@ const MultiDropDownOptions = ({multiSelectOptions,optionLabel,placeholder}) => {
           filter
       placeholder={`Select ${placeholder}`}
           maxSelectedLabels={3}
-          className="w-full md:w-20rem"
         />
       </div>
     );
@@ -33,6 +34,8 @@ const MultiDropDownOptions = ({multiSelectOptions,optionLabel,placeholder}) => {
         onChange={(e) => setStatusDropdownValue(e.value)}
         optionLabel={optionLabel}
         placeholder={`Select ${placeholder}`}
+        className="w-full"
+
       />
     );
   };
