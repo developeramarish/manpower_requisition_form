@@ -314,7 +314,10 @@ const CreateRequisitionBody = () => {
               options={dropdownData.reportingTo}
               value={formData.reportsToEmployeeId}
               onChange={(e) =>
-                setFormData({ ...formData, reportingTo: e.target.value })
+                setFormData({
+                  ...formData,
+                  reportsToEmployeeId: e.target.value,
+                })
               }
             />
           </div>
@@ -366,7 +369,7 @@ const CreateRequisitionBody = () => {
                 value={formData.minGradeId}
                 options={dropdownData.grades}
                 optionLabel="name"
-                optionValue='id'
+                optionValue="id"
                 placeholder="Min"
                 onChange={(e) =>
                   setFormData({ ...formData, minGradeId: e.target.value })
@@ -380,7 +383,7 @@ const CreateRequisitionBody = () => {
                 value={formData.maxGradeId}
                 options={dropdownData.grades}
                 optionLabel="name"
-                optionValue='id'
+                optionValue="id"
                 placeholder="Max"
                 onChange={(e) =>
                   setFormData({ ...formData, maxGradeId: e.target.value })
