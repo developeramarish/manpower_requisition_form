@@ -7,27 +7,20 @@ import CalendarComponent from "../Components/Calendar";
 import CheckboxComponent from "../Components/Checkbox";
 import InputTextareaComponent from "../Components/InputTextarea";
 import ToastMessages from "../Components/ToastMessages";
-import ExperienceDropdown from "../Components/ExperienceDropdown";
+
 import MultiSelectDropdown from "../Components/multiselectDropdown";
-import DateTimeFormatter from "../Components/DateTimeFormatter";
+
 import {
-  multiSoftwareSkill,
-  multiHardwareSkill,
   minExperienceOptions,
   maxExperienceOptions,
   Gender,
 } from "../Components/constant";
+
 const CreateRequisitionBody = () => {
   // State to hold all the dropdown data
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  // const [selectedMinExperience, setSelectedMinExperience] = useState(null);
-  // const [selectedMaxExperience, setSelectedMaxExperience] = useState(null);
-  // const [selectedSoftwareSkills, setSelectedSoftwareSkills] = useState(null);
-  // const [selectedHardwareSkills, setSelectedHardwareSkills] = useState(null);
-  // const [isSubmissionSuccessful, setIsSubmissionSuccessful] = useState(false);
 
   const toastRef = useRef(null);
   const getReqId = 1;
@@ -42,7 +35,6 @@ const CreateRequisitionBody = () => {
     genderId: 0,
     requisitionDateUtc: "",
     reportsToEmployeeId: 0,
-    // gradeId: 0,
     minGradeId: 0,
     maxGradeId: 0,
     employmentTypeId: 0,
@@ -53,7 +45,6 @@ const CreateRequisitionBody = () => {
     mrfStatusId: 0,
     jdDocPath: "",
     locationId: 0,
-    //
     justification: "",
     softwaresRequired: "",
     hardwaresRequired: "",
@@ -66,6 +57,8 @@ const CreateRequisitionBody = () => {
     annualCtc: 0,
     annualGross: 0,
     replaceJustification: "",
+    resumeReviewerEmployeeIds: null,
+    interviewerEmployeeIds: null,
   };
 
   // Initialize the formData state using the form schema
@@ -146,8 +139,6 @@ const CreateRequisitionBody = () => {
       updatedByEmployeeId: 1,
       updatedOnUtc: new Date().toISOString(),
       justification: formData.justification,
-      // softwaresRequired: formData.softwaresRequired,
-      // hardwaresRequired: formData.hardwaresRequired,
       jobDescription: formData.jobDescription,
       skills: formData.skills,
       minTargetSalary: formData.minTargetSalary,
@@ -198,6 +189,13 @@ const CreateRequisitionBody = () => {
     }
   };
 
+  const strToArray = (s) => {
+    if (typeof s === "string") {
+      s = s.split(",").map(Number);
+    }
+    return s;
+  };
+
   //need to change this
   const handleCancel = () => {
     setDropdownData({});
@@ -214,28 +212,19 @@ const CreateRequisitionBody = () => {
         className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
         style={{ height: "95%" }}
       >
-        <div className="flex justify-content-between gap-5">
-          {getReqId ? (
+        {getReqId ? (
+          <div className="flex justify-content-between gap-5">
             <div className="flex flex-column w-6 gap-2">
-              <label htmlFor="refno" className="font-bold text-sm">
-                Reference Number
-              </label>
-              <InputTextCp
-                id="refno"
-                onChange={(e) =>
-                  setFormData({ ...formData, referenceNo: e.target.value })
-                }
-                value={formData.referenceNo}
-                className="bg-white border-none p-disabled text-black-alpha-90 font-bold"
-              />
+              <h4 className="text-xl my-2">
+                Reference Number: {formData.referenceNo}
+              </h4>
             </div>
-          ) : (
-            ""
-          )}
-
-          <div
-            className={`flex flex-column gap-2 ${getReqId ? "w-6" : "w-full"}`}
-          >
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column gap-2 w-full">
             <label htmlFor="position-title" className="font-bold text-sm">
               Position Title
             </label>
@@ -258,12 +247,10 @@ const CreateRequisitionBody = () => {
               optionLabel="name"
               optionValue="id"
               type="Department"
-              options={dropdownData.departments || []}
+              options={dropdownData.departments}
               value={formData.departmentId}
               onChange={(e) => {
-                // const selectedDepartment = e.value;
                 setFormData({ ...formData, departmentId: e.target.value });
-                // fetchSubDepartments(selectedDepartment);
               }}
             />
           </div>
@@ -371,24 +358,15 @@ const CreateRequisitionBody = () => {
               Grade of the proposed employee
             </label>
 
-            {/* <DropdownComponent
-              optionLabel="name"
-              optionValue="id"
-              type="grade"
-              options={dropdownData.grades}
-              value={formData.gradeId}
-              onChange={(e) =>
-                setFormData({ ...formData, gradeId: e.target.value })
-              }
-            /> */}
             <div className="p-col-7">
               <label className="font-bold text-sm label-with-padding-right">
                 Min
               </label>
               <DropdownComponent
-                value={formData.minExperience}
-                options={dropdownData.minGradeId}
+                value={formData.minGradeId}
+                options={dropdownData.grades}
                 optionLabel="name"
+                optionValue='id'
                 placeholder="Min"
                 onChange={(e) =>
                   setFormData({ ...formData, minGradeId: e.target.value })
@@ -399,9 +377,10 @@ const CreateRequisitionBody = () => {
                 Max
               </label>
               <DropdownComponent
-                value={formData.maxExperience}
-                options={dropdownData.maxGradeId}
+                value={formData.maxGradeId}
+                options={dropdownData.grades}
                 optionLabel="name"
+                optionValue='id'
                 placeholder="Max"
                 onChange={(e) =>
                   setFormData({ ...formData, maxGradeId: e.target.value })
@@ -520,12 +499,6 @@ const CreateRequisitionBody = () => {
           </div>
         </div>
         {formData.isReplacement && (
-          // <div
-          //   className={`transition-div ${
-          //     formData.isReplacement ? "show-div" : ""
-          //   }`}
-          //   id="DivreplacedEmp"
-          // >
           <>
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
@@ -631,7 +604,6 @@ const CreateRequisitionBody = () => {
               </div>
             </div>
           </>
-          // </div>
         )}
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
@@ -678,48 +650,6 @@ const CreateRequisitionBody = () => {
               }
             />
           </div>
-          {/* <div className="flex flex-column w-4 gap-2">
-            <label htmlFor="Software skills" className="font-bold text-sm">
-              Software Skills
-            </label>
-
-            <MultiSelectDropdown
-              data={multiSoftwareSkill}
-              value={selectedSoftwareSkills}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  softwaresRequired: selectedSoftwareSkills,
-                });
-                setSelectedSoftwareSkills(e.value);
-              }}
-              options={multiSoftwareSkill}
-              optionLabel="name"
-              placeholder="Select Software Skill"
-              maxSelectedLabels={3}
-              className="w-full md:w-20rem"
-            />
-
-            <label htmlFor="Hardware skills" className="font-bold text-sm">
-              Hardware Skills
-            </label>
-            <MultiSelectDropdown
-              data={multiHardwareSkill}
-              value={selectedHardwareSkills}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  multiHardwareSkill: selectedHardwareSkills,
-                });
-                setSelectedHardwareSkills(e.value);
-              }}
-              options={multiHardwareSkill}
-              optionLabel="name"
-              placeholder="Select Hardware Skill"
-              maxSelectedLabels={3}
-              className="w-full md:w-20rem"
-            />
-          </div> */}
           <div className="flex flex-column gap-4 w-6">
             <div className="flex flex-column gap-2">
               <label htmlFor="MinTargetSalary" className="font-bold text-sm">
@@ -745,6 +675,47 @@ const CreateRequisitionBody = () => {
                 value={formData.maxTargetSalary}
               />
             </div>
+          </div>
+        </div>
+        <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="resumeReviewer" className="font-bold text-sm">
+              Resume Reviewer
+            </label>
+
+            <MultiSelectDropdown
+              id="resumeReviewer"
+              options={dropdownData.resumereviewer}
+              value={strToArray(formData.resumeReviewerEmployeeIds)}
+              onChange={(e) => {
+                console.log(e.value);
+                setFormData({
+                  ...formData,
+                  resumeReviewerEmployeeIds: e.value,
+                });
+              }}
+              optionLabel="name"
+              optionValue="employeeId"
+            />
+          </div>
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="interviewer" className="font-bold text-sm">
+              Interviewer/Panel
+            </label>
+
+            <MultiSelectDropdown
+              id="interviewer"
+              options={dropdownData.interviewReviewer}
+              value={strToArray(formData.interviewerEmployeeIds)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  interviewerEmployeeIds: e.value,
+                })
+              }
+              optionLabel="name"
+              optionValue="employeeId"
+            />
           </div>
         </div>
       </section>

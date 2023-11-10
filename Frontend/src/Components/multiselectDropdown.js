@@ -1,26 +1,27 @@
-import React, { useState } from "react";
 import { MultiSelect } from "primereact/multiselect";
 
 export default function MultiSelectDropdown({
-  data = [],
+  options,
+  value,
+  onChange,
   placeholder,
+  optionLabel,
+  optionValue,
   addFilter = false,
-  ClassName,
+  className,
   maxSelectedLabels,
 }) {
-  const [selectedItem, setSelectedItem] = useState();
-  const optionData = data;
-
   return (
     <MultiSelect
-      value={selectedItem}
-      onChange={(e) => setSelectedItem(e.value)}
-      options={optionData}
-      optionLabel="name"
+      value={value}
+      onChange={onChange}
+      options={options}
+      optionLabel={optionLabel}
+      optionValue={optionValue}
       filter={addFilter}
       placeholder={placeholder}
       maxSelectedLabels={maxSelectedLabels}
-      className={ClassName}
+      className={className}
     />
   );
 }
