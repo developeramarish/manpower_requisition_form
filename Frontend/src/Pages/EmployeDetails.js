@@ -87,7 +87,7 @@ export default function  EmployeDetails() {
         <LeftPanel />
        {!editMode && 
         <div className = "bar">
-          <div class="containerH">
+          <div className="containerH">
               <label class="box" >Employee Details</label>
               <div class="SearchText"><SearchText/></div>
           </div>
