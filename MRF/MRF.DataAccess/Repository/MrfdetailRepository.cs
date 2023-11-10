@@ -96,10 +96,10 @@ namespace MRF.DataAccess.Repository
             foreach (var r in query)
             {
                 if (interviewR.Count() > 0)
-                    r.InterviewerEmployeeIds = "[" + interviewR.First().InterviewerEmployeeIds + "]";
+                    r.InterviewerEmployeeIds =  interviewR.First().InterviewerEmployeeIds ;
 
                 if (resumeR.Count() > 0)
-                    r.ResumeReviewerEmployeeIds = "[" + resumeR.First().ResumeReviewerEmployeeIds + "]";
+                    r.ResumeReviewerEmployeeIds =  resumeR.First().ResumeReviewerEmployeeIds ;
             }
 
             return query.FirstOrDefault();
