@@ -5,6 +5,7 @@ namespace MRF.Models.DTO
     public class MrfdetailRequestModel
     {
         public int mrfID { get; set; }
+        public string? RequisitionType { get; set; }
         public string? ReferenceNo { get; set; } 
         public string PositionTitle { get; set; } = null!;
         public int DepartmentId { get; set; }

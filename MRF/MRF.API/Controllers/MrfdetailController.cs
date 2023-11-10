@@ -122,8 +122,10 @@ namespace MRF.API.Controllers
                     GenderId = request.GenderId,
                     RequisitionDateUtc = request.RequisitionDateUtc,
                     ReportsToEmployeeId = request.ReportsToEmployeeId,
-                    MinGradeId = request.MinGradeId,
-                    MaxGradeId = request.MaxGradeId,
+                    //MinGradeId = request.MinGradeId,
+                    //MaxGradeId = request.MaxGradeId,
+                    MinGradeId = 1,
+                    MaxGradeId = 4,
                     EmploymentTypeId = request.EmploymentTypeId,
                     MinExperience = request.MinExperience,
                     MaxExperience = request.MaxExperience,
@@ -464,9 +466,10 @@ namespace MRF.API.Controllers
 
             Locationmaster locationmaster = _unitOfWork.Locationmaster.Get(u => u.Id == request.LocationId);
             string month= request.CreatedOnUtc.ToString("MMM").ToUpper(); 
-            string Year= request.CreatedOnUtc.ToString("YY");
-            
-            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ FR/ " + month + "/ " + Year + "/ " 
+            string Year= request.CreatedOnUtc.ToString("yy");
+            string RequisitionType = request.RequisitionType;
+
+            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ " +RequisitionType+"/ " + month + "/ " + Year + "/ " 
                 + (Number.LastNumber++).ToString("D3");
             
             return (Reference, Number);

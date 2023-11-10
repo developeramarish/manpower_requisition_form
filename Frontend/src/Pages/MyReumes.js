@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import SearchText from "./SearchText";
 import DataTableCustom from "../Components/DataTableCustom";
 import { InputTextarea } from "primereact/inputtextarea";
+import LeftPanel from "./LeftPanel";
+
+import DashboardHeader from "./Header";
 import DropdownComponent from "../Components/Dropdown";
 import {
   SingleDropDownOptions,
@@ -217,6 +220,11 @@ const [value, setValue] = useState(myResumeData);
 
   return (
     <div>
+      <DashboardHeader />
+      <div className="flex bg-gray-200">
+        <LeftPanel />
+        <div className="flex flex-column gap-2 w-full p-3 py-2 h-full ">
+          
       <div className="MyDashBoard">
         <div className="containerH">
           <div className="box">
@@ -241,6 +249,8 @@ const [value, setValue] = useState(myResumeData);
           />
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

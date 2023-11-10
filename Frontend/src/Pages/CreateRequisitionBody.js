@@ -14,6 +14,7 @@ import {
   minExperienceOptions,
   maxExperienceOptions,
   Gender,
+  RequisitionType
 } from "../Components/constant";
 
 const CreateRequisitionBody = () => {
@@ -28,6 +29,7 @@ const CreateRequisitionBody = () => {
   const formSchema = {
     referenceNo: "",
     positionTitle: "",
+    RequisitionType: "",
     departmentId: 0,
     subDepartmentId: 0,
     projectId: 0,
@@ -117,6 +119,7 @@ const CreateRequisitionBody = () => {
 
     const data = {
       referenceNo: formData.referenceNo,
+      RequisitionType:formData.RequisitionType,
       positionTitle: formData.positionTitle,
       departmentId: formData.departmentId,
       subDepartmentId: formData.subDepartmentId,
@@ -224,7 +227,22 @@ const CreateRequisitionBody = () => {
           ""
         )}
         <div className="flex justify-content-between gap-5">
-          <div className="flex flex-column gap-2 w-full">
+        <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="RequisitionType" className="font-bold text-sm">
+            Requisition Type
+            </label>
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="code"
+              type="RequisitionType"
+              options={RequisitionType}
+              value={formData.RequisitionType}
+              onChange={(e) => {
+                setFormData({ ...formData, RequisitionType: e.target.value });
+              }}
+            />
+          </div>
+          <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-title" className="font-bold text-sm">
               Position Title
             </label>
