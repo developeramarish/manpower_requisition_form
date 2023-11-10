@@ -47,6 +47,16 @@ const LeftPanel = () => {
         </Link>
       ),
     },
+    {
+      label: (
+        <Link to="/MyReumes" className="menu-link-class">
+          <i className="pi pi-file-edit text-2xl"></i>
+          <h4 className="my-2 line-height-2 text-center text-xs">
+            My Resume
+          </h4>
+        </Link>
+      ),
+    },
     
     // Add more menu items as needed
   ];
