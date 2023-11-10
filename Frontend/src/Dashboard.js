@@ -3,6 +3,7 @@ import React from "react";
 import DashboardHeader from "./Pages/Header";
 import LeftPanel from "./Pages/LeftPanel";
 import DashboardContent from "./Pages/DashboardContent";
+import MyReumes from "./Pages/MyReumes";
 
 const Dashboard = () => {
   return (
@@ -12,6 +13,7 @@ const Dashboard = () => {
         <LeftPanel />
         <div className="MyDashboard">
           <DashboardContent />
+         
         </div>
       </div>
     </div>
