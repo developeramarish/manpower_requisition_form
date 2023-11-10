@@ -50,6 +50,8 @@ namespace MRF.Models.DTO
 
         public int ResumeReviewerEmployeeId { get; set; }
         public int InterviewerEmployeeId { get; set; }
+        public string? ResumeReviewerEmployeeIds { get; set; }
+        public string? InterviewerEmployeeIds { get; set; }
 
     }
     public class MrfdetaiResponseModel
