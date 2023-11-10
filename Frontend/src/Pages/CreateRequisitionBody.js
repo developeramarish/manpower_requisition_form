@@ -124,7 +124,7 @@ const CreateRequisitionBody = () => {
       vacancyNo: formData.vacancyNo,
       genderId: formData.genderId,
       requisitionDateUtc: new Date().toISOString().slice(0, 10),
-      reportsToEmployeeId: formData.reportingTo,
+      reportsToEmployeeId: formData.reportsToEmployeeId,
       gradeId: formData.gradeId,
       employmentTypeId: formData.employmentTypeId,
       minExperience: formData.minExperience,
