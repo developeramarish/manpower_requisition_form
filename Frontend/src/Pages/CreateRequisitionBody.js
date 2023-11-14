@@ -799,16 +799,7 @@ const CreateRequisitionBody = () => {
     />
   </div>
 
-  <div className="flex flex-column gap-2">
-    <label htmlFor="Signature" className="font-bold text-sm">
-      Signature
-    </label>
-    <InputTextCp
-      id="Signature"
-      onChange={(e) => setFormData({ ...formData, Signature: e.target.value })}
-      value={formData.Signature}
-    />
-  </div>
+
 
   <div className="flex flex-column gap-2">
     <label htmlFor="ApprovalDate" className="font-bold text-sm">
@@ -866,14 +857,7 @@ const CreateRequisitionBody = () => {
     />
   </div>
 
-  <div className="flex flex-column gap-2">
-    
-    <InputTextCp
-      id="Signature"
-      onChange={(e) => setFormData({ ...formData, Signature: e.target.value })}
-      value={formData.Signature}
-    />
-  </div>
+ 
 
   <div className="flex flex-column gap-2">
    
@@ -929,14 +913,7 @@ const CreateRequisitionBody = () => {
     />
   </div>
 
-  <div className="flex flex-column gap-2">
-   
-    <InputTextCp
-      id="Signature"
-      onChange={(e) => setFormData({ ...formData, Signature: e.target.value })}
-      value={formData.Signature}
-    />
-  </div>
+ 
 
   <div className="flex flex-column gap-2">
     
@@ -991,14 +968,7 @@ const CreateRequisitionBody = () => {
     />
   </div>
 
-  <div className="flex flex-column gap-2">
-    
-    <InputTextCp
-      id="Signature"
-      onChange={(e) => setFormData({ ...formData, Signature: e.target.value })}
-      value={formData.Signature}
-    />
-  </div>
+ 
 
   <div className="flex flex-column gap-2">
    
@@ -1053,14 +1023,7 @@ const CreateRequisitionBody = () => {
     />
   </div>
 
-  <div className="flex flex-column gap-2">
-    
-    <InputTextCp
-      id="Signature"
-      onChange={(e) => setFormData({ ...formData, Signature: e.target.value })}
-      value={formData.Signature}
-    />
-  </div>
+  
 
   <div className="flex flex-column gap-2">
     

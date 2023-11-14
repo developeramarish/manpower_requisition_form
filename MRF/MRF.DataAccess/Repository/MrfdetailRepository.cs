@@ -1,8 +1,10 @@
-﻿using MRF.DataAccess.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
 namespace MRF.DataAccess.Repository
@@ -94,6 +96,26 @@ namespace MRF.DataAccess.Repository
   })
   ).ToList();
 
+
+            List<MrfdetailRequestModel> emploeeyemailId = (from mrfDetails in _db.Mrfdetails
+                                                           join mail in _db.MrfEmailApproval on mrfDetails.Id equals mail.MrfId
+                                                           join employee in _db.Employeedetails on mail.EmployeeId equals employee.Id
+                                                           join role in _db.Employeerolemap on employee.Id equals role.EmployeeId
+                                                           where mrfDetails.Id == MrfId
+                                                           select new MrfdetailRequestModel
+                                                           {
+                                                               mrfID = mrfDetails.Id,
+                                                               HiringManagerEmpId = mail.EmployeeId,
+                                                               EmployeeCode= employee.Id,// update later with employeecode
+                                                               HiringManagerId = employee.Id,
+                                                               roleId = role.RoleId,
+                                                               HMApprovalDate = mail.ApprovalDate,
+                                                           }
+                                                            ).ToList();
+
+            
+
+
             foreach (var r in query)
             {
                 if (interviewR.Count() > 0)
@@ -101,6 +123,25 @@ namespace MRF.DataAccess.Repository
 
                 if (resumeR.Count() > 0)
                     r.ResumeReviewerEmployeeIds =  resumeR.First().ResumeReviewerEmployeeIds ;
+
+
+                if(emploeeyemailId.Count>0)
+                {
+                    foreach (var e in emploeeyemailId)
+                    {
+                        if (e.roleId == 7) 
+                        { r.HiringManagerEmpId = e.HiringManagerEmpId; r.HiringManagerId = e.HiringManagerId; r.HMApprovalDate = e.HMApprovalDate; }
+                        else if (e.roleId == 8)
+                        { r.FunctionHeadEmpId = e.HiringManagerEmpId; r.FunctionHeadId = e.HiringManagerId; r.FHApprovalDate = e.HMApprovalDate; }
+                        else if (e.roleId == 9)
+                        { r.SiteHRSPOCEmpId = e.HiringManagerEmpId; r.SiteHRSPOCId = e.HiringManagerId; r.SPApprovalDate = e.HMApprovalDate; }
+                        else if (e.roleId == 10)
+                        { r.FinanceHeadEmpId = e.HiringManagerEmpId; r.FinanceHeadId = e.HiringManagerId; r.FIApprovalDate = e.HMApprovalDate; }
+                        else if (e.roleId == 11)
+                        { r.PresidentnCOOEmpId = e.HiringManagerEmpId; r.PresidentnCOOId = e.HiringManagerId; r.PCApprovalDate = e.HMApprovalDate; }
+
+                    }
+                }
             }
 
             return query.FirstOrDefault();
