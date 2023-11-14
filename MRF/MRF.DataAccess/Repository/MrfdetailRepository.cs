@@ -127,20 +127,28 @@ namespace MRF.DataAccess.Repository
 
                 if(emploeeyemailId.Count>0)
                 {
-                    foreach (var e in emploeeyemailId)
-                    {
-                        if (e.roleId == 7) 
-                        { r.HiringManagerEmpId = e.HiringManagerEmpId; r.HiringManagerId = e.HiringManagerId; r.HMApprovalDate = e.HMApprovalDate; }
-                        else if (e.roleId == 8)
-                        { r.FunctionHeadEmpId = e.HiringManagerEmpId; r.FunctionHeadId = e.HiringManagerId; r.FHApprovalDate = e.HMApprovalDate; }
-                        else if (e.roleId == 9)
-                        { r.SiteHRSPOCEmpId = e.HiringManagerEmpId; r.SiteHRSPOCId = e.HiringManagerId; r.SPApprovalDate = e.HMApprovalDate; }
-                        else if (e.roleId == 10)
-                        { r.FinanceHeadEmpId = e.HiringManagerEmpId; r.FinanceHeadId = e.HiringManagerId; r.FIApprovalDate = e.HMApprovalDate; }
-                        else if (e.roleId == 11)
-                        { r.PresidentnCOOEmpId = e.HiringManagerEmpId; r.PresidentnCOOId = e.HiringManagerId; r.PCApprovalDate = e.HMApprovalDate; }
+                    
+                        var e = emploeeyemailId.FirstOrDefault(e => e.roleId == 7);
+                        if (e != null)
+                         { r.HiringManagerEmpId = e.HiringManagerEmpId; r.HiringManagerId = e.HiringManagerId; r.HMApprovalDate = e.HMApprovalDate; }
+                    
+                    e = emploeeyemailId.FirstOrDefault(e => e.roleId == 8);
+                    if (e != null)
+                    { r.FunctionHeadEmpId = e.HiringManagerEmpId; r.FunctionHeadId = e.HiringManagerId; r.FHApprovalDate = e.HMApprovalDate; }
+                    
+                    e = emploeeyemailId.FirstOrDefault(e => e.roleId == 9);
+                    if (e != null)
+                    { r.SiteHRSPOCEmpId = e.HiringManagerEmpId; r.SiteHRSPOCId = e.HiringManagerId; r.SPApprovalDate = e.HMApprovalDate; }
+                    
+                    e = emploeeyemailId.FirstOrDefault(e => e.roleId == 10);
+                    if (e != null)
+                    { r.FinanceHeadEmpId = e.HiringManagerEmpId; r.FinanceHeadId = e.HiringManagerId; r.FIApprovalDate = e.HMApprovalDate; }
+                   
+                    e = emploeeyemailId.FirstOrDefault(e => e.roleId == 11);
+                    if (e != null)
+                    { r.PresidentnCOOEmpId = e.HiringManagerEmpId; r.PresidentnCOOId = e.HiringManagerId; r.PCApprovalDate = e.HMApprovalDate; }
 
-                    }
+                    
                 }
             }
 
