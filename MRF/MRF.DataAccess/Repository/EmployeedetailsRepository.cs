@@ -27,7 +27,8 @@ namespace MRF.DataAccess.Repository
                 Email = empdetails.Email,
                 ContactNo = empdetails.ContactNo,
                 RoleName = role.Name,
-                RoleId = role.Id
+                RoleId = role.Id,
+                EmployeeCode = empdetails.EmployeeCode,
 
             };
              

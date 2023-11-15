@@ -10,6 +10,9 @@
 
         public string ContactNo { get; set; } = null!;
 
+        public int EmployeeCode { get; set; }
+
+        public bool IsDeleted { get; set; }
         public int  RoleId { get; set; } 
 
         public bool IsAllowed { get; set; }
@@ -23,7 +26,7 @@
         public int UpdatedByEmployeeId { get; set; }
 
         public DateTime UpdatedOnUtc { get; set; }
-        public int EmployeCode { get; set; }
+         
     }
 
     public class EmployeedetailsResponseModel

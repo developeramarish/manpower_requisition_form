@@ -12,6 +12,10 @@ public class Employeedetails
 
     public string ContactNo { get; set; } = null!;
 
+    public int  EmployeeCode { get; set; }
+
+    public bool IsDeleted { get; set; }
+
     [NotMapped]
     public string RoleName { get; set; } = null!;
 

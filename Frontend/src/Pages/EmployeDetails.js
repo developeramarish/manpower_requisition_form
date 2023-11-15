@@ -34,9 +34,11 @@ export default function  EmployeDetails() {
      }, []);
   
     const columns = [
+      
         {columnName : 'Name', field : 'name'},
         {columnName : 'Email', field : 'email'},
         {columnName : 'contactNo', field : 'contactNo'},
+        
         {columnName : 'Role', field : 'roleName'},
           
       ]
@@ -48,16 +50,26 @@ export default function  EmployeDetails() {
             </div>
         );
     };
+    const [isDeleted] = useState(true);
+     
     const Removefunction = (id) => {
+      const empdata = { isDeleted};
+     
       if (window.confirm('Do you want to remove?')) {
-          fetch("https://localhost:7128/api/Employeedetails/" + id, {
-              method: "DELETE"
-          }).then((res) => {
-              alert('Removed successfully.')
-              window.location.reload();
-          }).catch((err) => {
-              console.log(err.message)
+        fetch("https://localhost:7128/api/Employeedetails/Put/"+id, {
+          method: "Put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(empdata)
+           
+        }).then((res) => {
+          alert('Deleted successfully.')
+          var oData= data.filter((row)=>{
+            return row.id !== id
           })
+          setData(oData);
+        }).catch((err) => {
+          console.log(err.message)
+        })
       }
   }
   const updateData = (p_BVal) =>{
@@ -66,9 +78,7 @@ export default function  EmployeDetails() {
   const LoadEdit = (id) => {
     setEditData(id);
     setEditMode(true);
-    // navigate('/EmployeeDtailsEdit/' + id);
-  
-    //navigate("/employee/edit/" + id);
+
 }
     const actionBodyTemplate = (rowData) => {
       return (
