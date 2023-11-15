@@ -26,9 +26,14 @@ namespace MRF.DataAccess.Repository
                 Name = empdetails.Name,
                 Email = empdetails.Email,
                 ContactNo = empdetails.ContactNo,
-                RoleName = role.Name,
-                RoleId = role.Id,
+                RoleName =  role.Name,
+                RoleId = emprole.Id,
                 EmployeeCode = empdetails.EmployeeCode,
+                IsAllowed = empdetails.IsAllowed,
+                IsDeleted = empdetails.IsDeleted,
+                AllowedByEmployeeId = empdetails.AllowedByEmployeeId,
+                CreatedByEmployeeId = empdetails.CreatedByEmployeeId,
+                UpdatedOnUtc = empdetails.UpdatedOnUtc,
 
             };
              

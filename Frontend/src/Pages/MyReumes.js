@@ -12,7 +12,7 @@ const MyReumes = () => {
   const [statusOptions, setStatusOptions] = useState([]);
   const [forwardOptions, setForwardOptions] = useState([]);
   const [myResumeData, setMyResumeData] = useState([]);
-  const [selectedststatus, setSelectedststatus] = useState(null);
+  const [candidateStatusId, setSelectedststatus] = useState(null);
   const [selectedforwardedStatus, setForwardedStatus] = useState(null);
 
 
@@ -80,12 +80,10 @@ const MyReumes = () => {
 
     fetchData();
   }, []);
-
-
-
   const TextBoxComponent = (Reason) => {
     const [textBoxValue, setTextBoxValue] = useState(Reason.value);
     const handleTextBoxChange = (e) => {
+      console.log("changes",e.target.value);
       setTextBoxValue(e.target.value);
       // Additional logic if needed
     };
@@ -96,6 +94,9 @@ const MyReumes = () => {
       />
     );
   };
+  
+
+  
 
 
   const openPdfInNewTab = (pdfLink) => {
@@ -134,7 +135,7 @@ const MyReumes = () => {
             placeholder={"Select Status"}
             onChange={e =>{
               console.log("changes done",e);
-              setSelectedststatus(e.target)
+              setSelectedststatus(e.target.value)
             }}
           />
         ),
@@ -151,9 +152,9 @@ const MyReumes = () => {
           setForwardedStatus(e.value)
         }}
         />),
-
+       
         Reason: <TextBoxComponent value={x.reason} />,
-
+        
         Action: (
           <ButtonC
             icon="pi pi-save"
@@ -162,27 +163,34 @@ const MyReumes = () => {
             className="mr-2"
             severity="primary"
             onClick={() => {
-              updateData(x.id);
+             
+              updateData(x.id,x.name,x.emailId,x.contactNo,x.resumePath,x.reviewedByEmployeeId);
             }}
           />
         ),
       };
     });
 
-  const multiSelectObject = {
-    ForwardTo: forwardOptions,
+    
 
-    //add more option in this way
-  };
-
-  const singleSelectObject = {
-    Status: statusOptions,
-
-    //add more option in this way
-  };
-
-  const updateData = (id) => {
+  const updateData = (id,name,emailId,contactNo,resumePath,reviewedByEmployeeId) => {
     console.log("frromm updatea data", id);
+    
+    const empdata = {name,emailId,contactNo,resumePath,candidateStatusId,reviewedByEmployeeId};
+    fetch("https://localhost:7128/api/Candidatedetail/"+id, {
+      method: "Put",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(empdata)
+       
+    }).then((res) => {
+      alert('updated successfully.')
+
+    }).catch((err) => {
+      console.log(err.message)
+    })
+
+  
+
   };
 
   return (

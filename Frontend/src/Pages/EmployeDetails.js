@@ -13,6 +13,7 @@ import { Column } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
 import { useNavigate } from 'react-router-dom';
 import EmployeeDtailsEdit from './EmployeeDtailsEdit';
+import { ColumnGroup } from 'primereact/columngroup';
 export default function  EmployeDetails() {
     const [data, setData] = useState([{}]);
     const [value, setValue] = useState([{}]);
@@ -51,9 +52,10 @@ export default function  EmployeDetails() {
         );
     };
     const [isDeleted] = useState(true);
-     
-    const Removefunction = (id) => {
-      const empdata = { isDeleted};
+    
+    const Removefunction = (id,name,email,contactNo,employeeCode,isAllowed,allowedByEmployeeId,createdByEmployeeId,updatedByEmployeeId,roleId) => {
+      const empdata = {isDeleted,name,email,contactNo,employeeCode,isAllowed,allowedByEmployeeId,createdByEmployeeId,updatedByEmployeeId,
+       roleId};
      
       if (window.confirm('Do you want to remove?')) {
         fetch("https://localhost:7128/api/Employeedetails/Put/"+id, {
@@ -81,10 +83,13 @@ export default function  EmployeDetails() {
 
 }
     const actionBodyTemplate = (rowData) => {
+       
       return (
           <React.Fragment>
               <ButtonC icon="pi pi-pencil" rounded outlined className="mr-2" onClick={()=>{LoadEdit(rowData.id)}} />
-              <ButtonC icon="pi pi-trash" rounded outlined severity="danger" onClick={()=>{Removefunction(rowData.id) }} />
+              <ButtonC icon="pi pi-trash" rounded outlined severity="danger" onClick={()=>{Removefunction(rowData.id,rowData.name,rowData.email
+                ,rowData.contactNo,rowData.employeeCode,rowData.isAllowed,rowData.allowedByEmployeeId,rowData.createdByEmployeeId
+                ,rowData.updatedByEmployeeId,rowData.roleId) }} />
             
           </React.Fragment>
       );
