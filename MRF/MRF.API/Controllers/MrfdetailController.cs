@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using MRF.DataAccess.Repository;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
@@ -115,6 +116,7 @@ namespace MRF.API.Controllers
                 {
                     ReferenceNo = ReferenceNo,
                     PositionTitle = request.PositionTitle,
+                    RequisitionType = request.RequisitionType,
                     DepartmentId = request.DepartmentId,
                     SubDepartmentId = request.SubDepartmentId,
                     ProjectId = request.ProjectId,
@@ -186,7 +188,7 @@ namespace MRF.API.Controllers
 
             if (freshmrResponse.Id != 0)
             {
-               
+                CallEmailApprovalController(request, mrfId);
                 CallReplacementController(request,mrfId);
                 CallreviewerController(request, mrfId);
                
@@ -197,6 +199,68 @@ namespace MRF.API.Controllers
 
             }
         }
+
+        private void CallEmailApprovalController(MrfdetailRequestModel request, int mrfId)
+        {
+            if (request.HiringManagerId != 0)
+            {
+                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                {
+                    MrfId = mrfId,
+                    EmployeeId = request.HiringManagerId,
+                    ApprovalDate = request.HMApprovalDate
+                };
+                postMrfEmail(MrfdetailRequestModelRequest);
+
+            }
+            if (request.FunctionHeadId != 0)
+            {
+                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                {
+                    MrfId = mrfId,
+                    EmployeeId = request.FunctionHeadId,
+                    ApprovalDate = request.FHApprovalDate
+                };
+                postMrfEmail(MrfdetailRequestModelRequest);
+            }
+            if (request.SiteHRSPOCId != 0)
+            {
+                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                {
+                    MrfId = mrfId,
+                    EmployeeId = request.SiteHRSPOCId,
+                    ApprovalDate = request.SPApprovalDate
+                };
+                postMrfEmail(MrfdetailRequestModelRequest);
+            }
+            if (request.FinanceHeadId != 0)
+            {
+                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                {
+                    MrfId = mrfId,
+                    EmployeeId = request.FinanceHeadId,
+                    ApprovalDate = request.FIApprovalDate
+                };
+                postMrfEmail(MrfdetailRequestModelRequest);
+            }
+            if (request.FinanceHeadId != 0)
+            {
+                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                {
+                    MrfId = mrfId,
+                    EmployeeId = request.PresidentnCOOId,
+                    ApprovalDate = request.PCApprovalDate
+                };
+                postMrfEmail(MrfdetailRequestModelRequest);
+            }
+        }
+
+    private void postMrfEmail(MrfEmailApprovalRequestModel MrfdetailRequestModelRequest)
+    {
+        MrfEmailApprovalController MrfEmailApprovalController = new MrfEmailApprovalController(_unitOfWork, _logger);
+        var MrfEmailApprovalResponse = MrfEmailApprovalController.Post(MrfdetailRequestModelRequest);
+    }
+        
 
         private void CallReplacementController(MrfdetailRequestModel request, int mrfId)
         {
@@ -229,39 +293,50 @@ namespace MRF.API.Controllers
 
         private void CallreviewerController(MrfdetailRequestModel request, int mrfId)
         {
-            if (request.ResumeReviewerEmployeeId != 0)
+            if (!string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
             {
-                var mrfresumereviewermap = new MrfresumereviewermapRequestModel
+                // Split the comma-separated string into an array of IDs
+                var employeeIds = request.ResumeReviewerEmployeeIds.Split(',');
+
+                // Create a new MrfresumereviewermapRequestModel for each employee ID
+                foreach (var employeeId in employeeIds)
                 {
-                    MrfId = mrfId,
-                    ResumeReviewerEmployeeId = request.ResumeReviewerEmployeeId,
-                    IsActive = true,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                    var mrfresumereviewermap = new MrfresumereviewermapRequestModel
+                    {
+                        MrfId = mrfId,
+                        ResumeReviewerEmployeeId = int.Parse(employeeId), // Convert the ID to the appropriate type
+                        IsActive = true,
+                        CreatedByEmployeeId = request.CreatedByEmployeeId,
+                        CreatedOnUtc = request.CreatedOnUtc,
+                        UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                        UpdatedOnUtc = request.UpdatedOnUtc
+                    };
 
-                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger,_emailService, _hostEnvironment);
-                var resumereviewermapResponse = resumereviewermap.Post(mrfresumereviewermap);
+                    MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+                    var resumereviewermapResponse = resumereviewermap.Post(mrfresumereviewermap);
 
+                }
             }
 
-            if (request.InterviewerEmployeeId != 0)
+            if (!string.IsNullOrEmpty(request.InterviewerEmployeeIds))
             {
-                var mrfinterviewermap = new MrfinterviewermapRequestModel
+                var employeeIds = request.InterviewerEmployeeIds.Split(',');
+                foreach (var employeeId in employeeIds)
                 {
-                    MrfId = mrfId,
-                    InterviewerEmployeeId = request.InterviewerEmployeeId,
-                    IsActive = true,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
+                    var mrfinterviewermap = new MrfinterviewermapRequestModel
+                    {
+                        MrfId = mrfId,
+                        InterviewerEmployeeId = int.Parse(employeeId),
+                        IsActive = true,
+                        CreatedByEmployeeId = request.CreatedByEmployeeId,
+                        CreatedOnUtc = request.CreatedOnUtc,
+                        UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                        UpdatedOnUtc = request.UpdatedOnUtc
+                    };
 
-                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
-                var interviewermapResponse = interviewermap.Post(mrfinterviewermap);
+                    MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+                    var interviewermapResponse = interviewermap.Post(mrfinterviewermap);
+                }
             }
         }
 
@@ -307,7 +382,7 @@ namespace MRF.API.Controllers
                 existingStatus.CreatedOnUtc = request.CreatedOnUtc;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
-
+                
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
                 _responseModel.Id = existingStatus.Id;                
@@ -464,9 +539,10 @@ namespace MRF.API.Controllers
 
             Locationmaster locationmaster = _unitOfWork.Locationmaster.Get(u => u.Id == request.LocationId);
             string month= request.CreatedOnUtc.ToString("MMM").ToUpper(); 
-            string Year= request.CreatedOnUtc.ToString("YY");
-            
-            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ FR/ " + month + "/ " + Year + "/ " 
+            string Year= request.CreatedOnUtc.ToString("yy");
+            string RequisitionType = request.RequisitionType;
+
+            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ " +RequisitionType+"/ " + month + "/ " + Year + "/ " 
                 + (Number.LastNumber++).ToString("D3");
             
             return (Reference, Number);
@@ -497,7 +573,11 @@ namespace MRF.API.Controllers
             sw.ReportingTo = _unitOfWork.Employeedetails.GetAll().ToList();
             sw.Resumereviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(5);
             sw.InterviewReviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(6);
-
+            sw.HiringManager= _unitOfWork.Employeerolemap.GetEmployeebyRole(7);
+            sw.FunctionHead = _unitOfWork.Employeerolemap.GetEmployeebyRole(8);
+            sw.SiteHRSPOC = _unitOfWork.Employeerolemap.GetEmployeebyRole(9);
+            sw.FinanceHead= _unitOfWork.Employeerolemap.GetEmployeebyRole(10);
+            sw.PresidentnCOO = _unitOfWork.Employeerolemap.GetEmployeebyRole(11);
             if (sw.Projects.Count == 0 || sw.Departments.Count == 0 || sw.Grades.Count == 0 || sw.Vaccancies.Count == 0 || sw.EmploymentTypes.Count == 0 || sw.location.Count == 0 || sw.Qualification.Count == 0 || sw.ReportingTo.Count == 0)
             {
                 _logger.LogError("No record is found");
@@ -513,7 +593,13 @@ namespace MRF.API.Controllers
                 sw.Qualification,
                 sw.ReportingTo,
                 sw.Resumereviewer,
-                sw.InterviewReviewer
+                sw.InterviewReviewer,
+                sw.HiringManager ,
+                sw.FunctionHead ,
+                sw.SiteHRSPOC,
+                sw.FinanceHead ,
+                sw.PresidentnCOO
+
             };
 
             int Count = sw.Projects.Count + sw.Departments.Count + sw.Grades.Count + sw.Vaccancies.Count + sw.EmploymentTypes.Count + sw.location.Count + sw.Qualification.Count + sw.ReportingTo.Count;
@@ -533,9 +619,15 @@ namespace MRF.API.Controllers
             public List<Locationmaster> location { get; set; } = new List<Locationmaster>();
             public List<Qualificationmaster> Qualification { get; set; } = new List<Qualificationmaster>();
             public List<Employeedetails> ReportingTo { get; set; } = new List<Employeedetails>();
-            public List<Employeerolemap> Resumereviewer { get; set; } = new List<Employeerolemap>();
-            public List<Employeerolemap> InterviewReviewer { get; set; } = new List<Employeerolemap>();
+            public List<Employeerolemap> Resumereviewer { get; set; } = new List<Employeerolemap>();//5
+            public List<Employeerolemap> InterviewReviewer { get; set; } = new List<Employeerolemap>();//6
+            public List<Employeerolemap> HiringManager { get; set; } = new List<Employeerolemap>();//7
+            public List<Employeerolemap> FunctionHead { get; set; } = new List<Employeerolemap>();//8
+            public List<Employeerolemap> SiteHRSPOC { get; set; } = new List<Employeerolemap>();//9
+            public List<Employeerolemap> FinanceHead { get; set; } = new List<Employeerolemap>();//10
 
+            public List<Employeerolemap> PresidentnCOO { get; set; } = new List<Employeerolemap>();//11
+          
         }
 
 

@@ -5,6 +5,7 @@ using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -184,7 +185,7 @@ namespace MRF.API.Controllers
 
 
         // GET api/<MrfinterviewermapController>/5
-        [HttpGet("{id}")]
+        [HttpGet("GetInterviewDetails")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(InterviewDetailsViewModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -192,7 +193,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetInterviewDetails(int id)
+        public ResponseDTO GetInterviewDetails(int id, bool DashBoard)
         {
             _logger.LogInfo($"Fetching All Mrf Interviewer Map by Id: {id}");
             List<InterviewDetailsViewModel> InterviewDetails = _unitOfWork.InterviewDetail.GetInterviewDetails(id);
@@ -200,8 +201,32 @@ namespace MRF.API.Controllers
             {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            _response.Result = InterviewDetails;
+            else
+            {
+                if (DashBoard)
+                {
+
+                    CombinedResponseDTO combinedResult = new CombinedResponseDTO
+                    {
+                        InterviewDetails = InterviewDetails,
+                        Interviewstatus = _unitOfWork.Evaluationstatusmaster.GetStatus(),
+                    };
+                    _response.Result = combinedResult;
+                }
+                else
+                {
+                    _response.Result = InterviewDetails;
+                }
+
+            }
             return _response;
         }
+
+        public class CombinedResponseDTO
+        {
+            public List<InterviewDetailsViewModel> InterviewDetails { get; set; }
+            public List<Interviewstatus> Interviewstatus { get; set; }
+        }
+
     }
 }

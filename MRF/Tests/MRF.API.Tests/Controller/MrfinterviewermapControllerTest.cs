@@ -344,7 +344,7 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = 0;
-
+            bool Dashboard = false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
@@ -357,7 +357,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
 
             // Act
-            var result = Controller.GetInterviewDetails(id);
+            var result = Controller.GetInterviewDetails(id, Dashboard);
 
             // Assert
             result.Should().NotBeNull();
@@ -371,7 +371,7 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = -3;
-
+            bool Dashboard = false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
@@ -384,7 +384,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
 
             // Act
-            var result = Controller.GetInterviewDetails(id);
+            var result = Controller.GetInterviewDetails(id, Dashboard);
 
             // Assert
             result.Should().NotBeNull();
@@ -398,7 +398,7 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = 2;
-
+            bool Dashboard = false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
@@ -411,7 +411,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
 
             // Act
-            var result = Controller.GetInterviewDetails(id);
+            var result = Controller.GetInterviewDetails(id, Dashboard);
 
             // Assert
             Assert.NotNull(result);

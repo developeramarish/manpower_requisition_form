@@ -5,6 +5,7 @@ namespace MRF.Models.DTO
     public class MrfdetailRequestModel
     {
         public int mrfID { get; set; }
+        public string? RequisitionType { get; set; }
         public string? ReferenceNo { get; set; } 
         public string PositionTitle { get; set; } = null!;
         public int DepartmentId { get; set; }
@@ -52,6 +53,23 @@ namespace MRF.Models.DTO
         public int InterviewerEmployeeId { get; set; }
         public string? ResumeReviewerEmployeeIds { get; set; }
         public string? InterviewerEmployeeIds { get; set; }
+
+        public int  HiringManagerId { get; set; }
+        public int HiringManagerEmpId { get; set; }
+        public DateTime HMApprovalDate { get; set; }
+        public int FunctionHeadId { get; set; }
+        public int FunctionHeadEmpId { get; set; }
+        public DateTime FHApprovalDate { get; set; }
+        public int  SiteHRSPOCId { get; set; }
+        public int SiteHRSPOCEmpId { get; set; }
+        public DateTime SPApprovalDate { get; set; }
+        public int FinanceHeadId { get; set; }
+        public int FinanceHeadEmpId { get; set; }
+        public DateTime FIApprovalDate { get; set; }
+        public int PresidentnCOOId { get; set; }
+        public int PresidentnCOOEmpId { get; set; }
+        public DateTime PCApprovalDate { get; set; }
+        public int roleId { get; set; }
 
     }
     public class MrfdetaiResponseModel
