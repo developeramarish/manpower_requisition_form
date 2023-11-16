@@ -27,3 +27,8 @@ export const maxExperienceOptions = Array.from({ length: 31 }, (_, i) => ({
   label: i.toString(),
   value: i,
 }));
+
+
+
+
+export const constantResumePath="D:\\inetpub\\wwwroot\\MRF";
