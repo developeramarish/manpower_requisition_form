@@ -25,6 +25,7 @@ namespace MRF.DataAccess.Repository
                                                               EmployeeId = emprole.EmployeeId,
                                                               name= empdetails.Name,
                                                               RoleId = emprole.RoleId,
+                                                              EmployeeCode = empdetails.EmployeeCode,
                                                           };
 
             return query.ToList();

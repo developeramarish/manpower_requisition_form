@@ -7,7 +7,7 @@ import CalendarComponent from "../Components/Calendar";
 import CheckboxComponent from "../Components/Checkbox";
 import InputTextareaComponent from "../Components/InputTextarea";
 import ToastMessages from "../Components/ToastMessages";
-
+import storageService from "../Components/storageService";
 import MultiSelectDropdown from "../Components/multiselectDropdown";
 
 import {
@@ -24,7 +24,7 @@ const CreateRequisitionBody = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toastRef = useRef(null);
-  const getReqId = 1;
+  const getReqId = '';
 
   const formSchema = {
     referenceNo: "",
@@ -48,6 +48,7 @@ const CreateRequisitionBody = () => {
     mrfStatusId: 0,
     jdDocPath: "",
     locationId: 0,
+    qualificationId:0,
     justification: "",
     softwaresRequired: "",
     hardwaresRequired: "",
@@ -63,15 +64,15 @@ const CreateRequisitionBody = () => {
     resumeReviewerEmployeeIds: null,
     interviewerEmployeeIds: null,
     hiringManagerId: 0,
-    hiringManagerEmpId: 0,
     functionHeadId: 0,
-    functionHeadEmpId: 0,
     siteHRSPOCId: 0,
-    siteHRSPOCEmpId: 0,
     financeHeadId: 0,
-    financeHeadEmpId: 0,
     presidentnCOOId: 0,
-    presidentnCOOEmpId: 0,
+    pcApprovalDate:"",
+    fhApprovalDate:"",
+    fiApprovalDate:"",
+    spApprovalDate:"",
+    hmApprovalDate:""
   };
 
   // Initialize the formData state using the form schema
@@ -83,6 +84,8 @@ const CreateRequisitionBody = () => {
       .then((response) => response.json())
       .then((data) => {
         const dropdown = data.result;
+        // Store the dropdown data in localStorage using your storageService
+        storageService.set('dropdownData', dropdown);
         // Update the state with the new dropdown data
         setDropdownData(dropdown);
       })
@@ -150,6 +153,7 @@ const CreateRequisitionBody = () => {
       mrfStatusId: mrfStatusId,
       jdDocPath: "string",
       locationId: formData.locationId,
+      qualificationId:formData.qualificationId,
       createdByEmployeeId: 1,
       createdOnUtc: new Date().toISOString(),
       updatedByEmployeeId: 1,
@@ -166,8 +170,8 @@ const CreateRequisitionBody = () => {
       annualCtc: formData.annualCtc,
       annualGross: formData.annualGross,
       replaceJustification: formData.replaceJustification,
-      resumeReviewerEmployeeIds: formData.resumeReviewerEmployeeIds,
-      interviewerEmployeeIds: formData.interviewerEmployeeIds,
+      resumeReviewerEmployeeIds: formData.resumeReviewerEmployeeIds.join(','),
+      interviewerEmployeeIds: formData.interviewerEmployeeIds.join(','),
       hiringManagerId: formData.hiringManagerId,
       hiringManagerEmpId: formData.hiringManagerEmpId,
       functionHeadId: formData.functionHeadId,
@@ -178,6 +182,12 @@ const CreateRequisitionBody = () => {
       financeHeadEmpId: formData.financeHeadEmpId,
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
+      pcApprovalDate:formData.pcApprovalDate,
+      fhApprovalDate:formData.fhApprovalDate,
+      fiApprovalDate:formData.fiApprovalDate,
+      spApprovalDate:formData.fiApprovalDate,
+      hmApprovalDate:formData.hmApprovalDate,
+      
     };
     try {
       const response = await fetch(
@@ -225,7 +235,10 @@ const CreateRequisitionBody = () => {
   };
 
   const arrayToObj = (options = [], selectedOpt) => {
-    return options.filter((e) => selectedOpt.includes(e.employeeId));
+    if (Array.isArray(selectedOpt)) {
+      return options.filter((e) => selectedOpt.includes(e.employeeId));
+    }
+    
   };
 
   const objToArray = (selectedOpt = []) => {
@@ -531,9 +544,9 @@ const CreateRequisitionBody = () => {
               optionValue="id"
               type="Qualification"
               options={dropdownData.qualification}
-              value={formData.qualification}
+              value={formData.qualificationId}
               onChange={(e) =>
-                setFormData({ ...formData, qualification: e.target.value })
+                setFormData({ ...formData, qualificationId: e.target.value })
               }
             />
           </div>
@@ -806,12 +819,18 @@ const CreateRequisitionBody = () => {
               type="hiringManager"
               options={dropdownData.hiringManager}
               value={formData.hiringManagerId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  hiringManagerId: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                const selectedHiringManagerId = e.target.value;
+                const selectedHiringManager = dropdownData.hiringManager.find(manager => manager.employeeId === selectedHiringManagerId);
+            
+                if (selectedHiringManager) {
+                  setFormData({
+                    ...formData,
+                    hiringManagerId: selectedHiringManagerId,
+                    hiringManagerEmpId: selectedHiringManager.employeeCode, 
+                  });
+                }
+              }}
             />
           </div>
 
@@ -820,7 +839,8 @@ const CreateRequisitionBody = () => {
               Employee ID
             </label>
             <InputTextCp
-              id="EmployeeCode"
+              id="hiringManagerEmpId"
+              className="p-disabled"
               onChange={(e) =>
                 setFormData({ ...formData, hiringManagerEmpId: e.target.value })
               }
@@ -865,18 +885,25 @@ const CreateRequisitionBody = () => {
               type="functionHead"
               options={dropdownData.functionHead}
               value={formData.functionHeadId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  functionHeadId: e.target.value,
-                })
-              }
-            />
+              onChange={(e) => {
+                  const selectedfunctionHeadId = e.target.value;
+                  const selectedfunctionHead = dropdownData.functionHead.find(manager => manager.employeeId === selectedfunctionHeadId);
+              
+                  if (selectedfunctionHead) {
+                    setFormData({
+                      ...formData,
+                      functionHeadId: selectedfunctionHeadId,
+                      functionHeadEmpId: selectedfunctionHead.employeeCode, 
+                    });
+                  }
+                }}
+             />
           </div>
 
           <div className="flex flex-column gap-2">
             <InputTextCp
-              id="EmployeeCode"
+              id="functionHeadEmpId"
+              className="p-disabled"
               onChange={(e) =>
                 setFormData({ ...formData, functionHeadEmpId: e.target.value })
               }
@@ -887,7 +914,7 @@ const CreateRequisitionBody = () => {
           <div className="flex flex-column gap-2">
             {/* Assuming CalendarComponent renders an input */}
             <CalendarComponent
-              id="ApprovalDate"
+              id="fhApprovalDate"
               inputClassName="bg-gray-100"
               value={new Date(formData.fhApprovalDate)}
               onChange={(e) =>
@@ -917,17 +944,24 @@ const CreateRequisitionBody = () => {
               type="siteHRSPOCId"
               options={dropdownData.siteHRSPOC}
               value={formData.siteHRSPOCId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  siteHRSPOCId: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                const selectedsiteHRSPOCId = e.target.value;
+                const selectedsiteHRSPOCEmpId = dropdownData.siteHRSPOC.find(manager => manager.employeeId === selectedsiteHRSPOCId);
+            
+                if (selectedsiteHRSPOCEmpId) {
+                  setFormData({
+                    ...formData,
+                    siteHRSPOCId: selectedsiteHRSPOCId,
+                    siteHRSPOCEmpId: selectedsiteHRSPOCEmpId.employeeCode, 
+                  });
+                }
+              }}
             />
           </div>
           <div className="flex flex-column gap-2">
             <InputTextCp
-              id="EmployeeCode"
+              id="siteHRSPOCEmpId"
+              className="p-disabled"
               onChange={(e) =>
                 setFormData({ ...formData, siteHRSPOCEmpId: e.target.value })
               }
@@ -967,17 +1001,24 @@ const CreateRequisitionBody = () => {
               type="financeHead"
               options={dropdownData.financeHead}
               value={formData.financeHeadId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  financeHeadId: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                const selectedfinanceHeadId = e.target.value;
+                const selectedfinanceHeadEmpId = dropdownData.financeHead.find(manager => manager.employeeId === selectedfinanceHeadId);
+            
+                if (selectedfinanceHeadEmpId) {
+                  setFormData({
+                    ...formData,
+                    financeHeadId: selectedfinanceHeadId,
+                    financeHeadEmpId: selectedfinanceHeadEmpId.employeeCode, 
+                  });
+                }
+              }}
             />
           </div>
           <div className="flex flex-column gap-2">
             <InputTextCp
-              id="EmployeeCode"
+              id="financeHeadEmpId"
+              className="p-disabled"
               onChange={(e) =>
                 setFormData({ ...formData, financeHeadEmpId: e.target.value })
               }
@@ -1014,22 +1055,29 @@ const CreateRequisitionBody = () => {
             {/* Assuming DropdownComponent renders an input */}
             <DropdownComponent
               optionLabel="name"
-              optionValue="id"
+              optionValue="employeeId"
               type="presidentnCOO"
               options={dropdownData.presidentnCOO}
               value={formData.presidentnCOOId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  presidentnCOOId: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                const selectedpresidentnCOOId = e.target.value;
+                const selectedpresidentnCOOEmpId = dropdownData.presidentnCOO.find(manager => manager.employeeId === selectedpresidentnCOOId);
+            
+                if (selectedpresidentnCOOEmpId) {
+                  setFormData({
+                    ...formData,
+                    presidentnCOOId: selectedpresidentnCOOId,
+                    presidentnCOOEmpId: selectedpresidentnCOOEmpId.employeeCode, 
+                  });
+                }
+              }}
             />
           </div>
 
           <div className="flex flex-column gap-2">
             <InputTextCp
-              id="EmployeeCode"
+              id="presidentnCOOEmpId"
+              className="p-disabled"
               onChange={(e) =>
                 setFormData({ ...formData, presidentnCOOEmpId: e.target.value })
               }
@@ -1040,7 +1088,7 @@ const CreateRequisitionBody = () => {
           <div className="flex flex-column gap-2">
             {/* Assuming CalendarComponent renders an input */}
             <CalendarComponent
-              id="ApprovalDate"
+              id="pcApprovalDate"
               inputClassName="bg-gray-100"
               value={new Date(formData.pcApprovalDate)}
               onChange={(e) =>

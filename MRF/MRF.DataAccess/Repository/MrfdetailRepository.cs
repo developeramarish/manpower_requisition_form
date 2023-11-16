@@ -106,8 +106,7 @@ namespace MRF.DataAccess.Repository
                                                            select new MrfdetailRequestModel
                                                            {
                                                                mrfID = mrfDetails.Id,
-                                                               HiringManagerEmpId = mail.EmployeeId,
-                                                               EmployeeCode= employee.Id,// update later with employeecode
+                                                               HiringManagerEmpId = employee.EmployeeCode,
                                                                HiringManagerId = employee.Id,
                                                                roleId = role.RoleId,
                                                                HMApprovalDate = mail.ApprovalDate,

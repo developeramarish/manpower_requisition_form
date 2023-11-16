@@ -244,7 +244,7 @@ namespace MRF.API.Controllers
                 };
                 postMrfEmail(MrfdetailRequestModelRequest);
             }
-            if (request.FinanceHeadId != 0)
+            if (request.PresidentnCOOId != 0)
             {
                 var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
                 {
