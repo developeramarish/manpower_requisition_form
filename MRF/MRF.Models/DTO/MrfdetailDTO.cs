@@ -25,6 +25,7 @@ namespace MRF.Models.DTO
         public int MrfStatusId { get; set; }
         public string JdDocPath { get; set; } = null!;
         public int LocationId { get; set; }
+        public int QualificationId { get; set; }
         public int CreatedByEmployeeId { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public int UpdatedByEmployeeId { get; set; }

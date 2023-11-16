@@ -50,6 +50,7 @@ namespace MRF.DataAccess.Repository
                                                      MrfStatusId = mrfDetails.MrfStatusId,
                                                      JdDocPath = mrfDetails.JdDocPath,
                                                      LocationId = mrfDetails.LocationId,
+                                                     QualificationId=mrfDetails.QualificationId,
                                                      Justification = fr.Justification ?? "",
                                                      JobDescription = fr.JobDescription ?? "",
                                                      Skills = fr.Skills ?? "",
