@@ -16,3 +16,12 @@ public class Evaluationstatusmaster
 
     public int UpdatedOnUtc { get; set; }
 }
+
+public class Interviewstatus
+{
+    public int Id { get; set; }
+
+    public string Status { get; set; } = null!;
+    public string CandidateorEvalution { get; set; } = null!;
+
+}

@@ -5,5 +5,6 @@ namespace MRF.DataAccess.Repository.IRepository
     public interface IEvaluationstatusmasterRepository : IRepository<Evaluationstatusmaster>
     {
         public void Update(Evaluationstatusmaster evaluationstatusmaster);
+        public List<Interviewstatus> GetStatus();
     }
 }
