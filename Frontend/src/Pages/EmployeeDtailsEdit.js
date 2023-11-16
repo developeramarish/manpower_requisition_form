@@ -3,37 +3,11 @@ import DropdownComponent from '../Components/Dropdown';
 import InputTextCp from "../Components/Textbox";
 import ButtonC from "../Components/Button";
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import LeftPanel from './LeftPanel';
-import DashboardHeader from './Header';
-
 const EmployeeDtailsEdit = ({id, updateData}) => {
-    // const { id } = useParams();
-  
-  
- 
-  
   const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
-  console.log("buri"+id);
-//   useEffect(() => {
-//     const apiUrl = `https://localhost:7128/api/Employeedetails/GetEmployee/${id}`;
-//     console.log("bahan");
-//     fetch(apiUrl)
-//     //fetch("https://localhost:7128/api/Employeedetails/GetEmployee/${id}")
-//     .then((response) => response.json()
-//     ).then((resp) => {
-//         //idchange(resp.id);
-//         namechange(resp.name);
-//         emailchange(resp.email);
-//         phonechange(resp.contactNo);
-         
-//         //activechange(resp.isactive);
-//     }).catch((err) => {
-//         console.log(err.message);
-//     })
-// }, []);
 useEffect(() => {
   console.log("id   ",id)
   fetch("https://localhost:7128/api/Employeedetails/GetEmployee/" + id).then((res) => {
@@ -42,12 +16,12 @@ useEffect(() => {
   }).then((result) => {
     
     console.log("result   =   ",result)
-    //  idchange(resp.id);
      namechange(result.result[0].name);
     emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
+      employeeChange(result.result[0].employeeCode);
       setRole(result.result[0].roleName);
-     // activechange(resp.isactive);
+      
   }).catch((err) => {
       console.log(err.message);
   })
@@ -56,6 +30,8 @@ const [name, namechange] = useState("");
 const [email, emailchange] = useState("");
 const [roleId, setRole] = useState(null);
 const [contactNo,phonechange] = useState("");
+const [isDeleted] = useState(false);
+const [employeeCode,employeeChange] = useState("");
 const [allowedByEmployeeId] = useState("1");
 const [createdByEmployeeId] = useState("1");
 const [createdOnUtc] = useState(new Date().toISOString());
@@ -86,7 +62,7 @@ const [roleOptions, roleOptionchange] = useState([]);
   }
   const handlesubmit = (e) => {
     e.preventDefault();
-    const empdata = { name, email, contactNo,  roleId: roleId.value,isAllowed,allowedByEmployeeId,createdByEmployeeId,
+    const empdata = { name, email, contactNo,employeeCode,isDeleted,roleId: roleId.value,isAllowed,allowedByEmployeeId,createdByEmployeeId,
       createdOnUtc,updatedByEmployeeId,updatedOnUtc};
 
 
@@ -124,7 +100,7 @@ const [roleOptions, roleOptionchange] = useState([]);
             <label htmlFor="refno" className="font-bold text-sm">
               Name
             </label>
-            <p>{name}</p>
+             
             <InputTextCp id="refno" value={name} onChange={(e) => namechange(e.target.value)} />
           </div>
         </div>
@@ -143,8 +119,18 @@ const [roleOptions, roleOptionchange] = useState([]);
             </label>
             <InputTextCp id="position-title" value={contactNo} onChange={(e) => phonechange(e.target.value)} />
           </div>
-        </div>
-
+          </div>
+          <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="position-title" className="font-bold text-sm">
+               Employee Id
+            </label>
+            <InputTextCp id="position-title" value={employeeCode} onChange={(e) => employeeChange(e.target.value)} />
+          </div>
+          </div>
+           
+          
+          
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
@@ -164,18 +150,14 @@ const [roleOptions, roleOptionchange] = useState([]);
             />
          
          </div>
+         {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
+        {<ButtonC to="/" className="btn btn-danger" label="CANCEL" disabled onClick={() => updateEditmode(false)}></ButtonC>}
+        {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}
+      </div>}
         </div>
       
         </section>
 
-
-           
-      {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
-        {<ButtonC to="/" className="btn btn-danger" label="CENCEL" disabled onClick={() => updateEditmode(false)}></ButtonC>}
-        {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}
-      </div>}
-      
-      
       </div>  
       </div>
    

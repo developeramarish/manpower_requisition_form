@@ -1,21 +1,14 @@
 import React, {useEffect,useState } from 'react';
-import RequisitionBody from "../Components/RequisitionBody";
-import SearchHeader from "../Components/SearchHeader";
 import DashboardHeader from "./Header";
 import LeftPanel from "./LeftPanel";
 import DataTableComponents from '../Components/DataTableComponent';
 import SearchText from './SearchText';
 import ButtonC  from "../Components/Button";
 import { Toolbar } from 'primereact/toolbar';
-import EmployeDetailsCreate from './EmployeDetailsCreate';
-import { Button } from 'primereact/button';
-import { Column } from 'primereact/column';
-import { Dialog } from 'primereact/dialog';
 import { useNavigate } from 'react-router-dom';
 import EmployeeDtailsEdit from './EmployeeDtailsEdit';
 export default function  EmployeDetails() {
     const [data, setData] = useState([{}]);
-    const [value, setValue] = useState([{}]);
     const [editMode, setEditMode] = useState(false);
     const [editData, setEditData] = useState()
     const navigate= useNavigate();
@@ -38,9 +31,7 @@ export default function  EmployeDetails() {
         {columnName : 'Email', field : 'email'},
         {columnName : 'contactNo', field : 'contactNo'},
         {columnName : 'Role', field : 'roleName'},
-          
-      ]
-       
+       ] 
       const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
@@ -48,16 +39,27 @@ export default function  EmployeDetails() {
             </div>
         );
     };
-    const Removefunction = (id) => {
+    const [isDeleted] = useState(true);
+    
+    const Removefunction = (id,name,email,contactNo,employeeCode,isAllowed,allowedByEmployeeId,createdByEmployeeId,updatedByEmployeeId,roleId) => {
+      const empdata = {isDeleted,name,email,contactNo,employeeCode,isAllowed,allowedByEmployeeId,createdByEmployeeId,updatedByEmployeeId,
+       roleId};
+     
       if (window.confirm('Do you want to remove?')) {
-          fetch("https://localhost:7128/api/Employeedetails/" + id, {
-              method: "DELETE"
-          }).then((res) => {
-              alert('Removed successfully.')
-              window.location.reload();
-          }).catch((err) => {
-              console.log(err.message)
+        fetch("https://localhost:7128/api/Employeedetails/Put/"+id, {
+          method: "Put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(empdata)
+           
+        }).then((res) => {
+          alert('Deleted successfully.')
+          var oData= data.filter((row)=>{
+            return row.id !== id
           })
+          setData(oData);
+        }).catch((err) => {
+          console.log(err.message)
+        })
       }
   }
   const updateData = (p_BVal) =>{
@@ -66,15 +68,16 @@ export default function  EmployeDetails() {
   const LoadEdit = (id) => {
     setEditData(id);
     setEditMode(true);
-    // navigate('/EmployeeDtailsEdit/' + id);
-  
-    //navigate("/employee/edit/" + id);
+
 }
     const actionBodyTemplate = (rowData) => {
+       
       return (
           <React.Fragment>
               <ButtonC icon="pi pi-pencil" rounded outlined className="mr-2" onClick={()=>{LoadEdit(rowData.id)}} />
-              <ButtonC icon="pi pi-trash" rounded outlined severity="danger" onClick={()=>{Removefunction(rowData.id) }} />
+              <ButtonC icon="pi pi-trash" rounded outlined severity="danger" onClick={()=>{Removefunction(rowData.id,rowData.name,rowData.email
+                ,rowData.contactNo,rowData.employeeCode,rowData.isAllowed,rowData.allowedByEmployeeId,rowData.createdByEmployeeId
+                ,rowData.updatedByEmployeeId,rowData.roleId) }} />
             
           </React.Fragment>
       );
@@ -91,9 +94,7 @@ export default function  EmployeDetails() {
               <label class="box" >Employee Details</label>
               <div class="SearchText"><SearchText/></div>
           </div>
-          
-          
-          <Toolbar className="mb-4" left={leftToolbarTemplate} ></Toolbar>         
+        <Toolbar className="mb-4" left={leftToolbarTemplate} ></Toolbar>         
           <div className = "bar"><DataTableComponents data= {data}  columns={columns} body={actionBodyTemplate} rows={5} />
     
          </div>

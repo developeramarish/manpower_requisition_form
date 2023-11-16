@@ -12,6 +12,9 @@ const DataTableComponents = (props) => {
       rows={props.rows || 5}
       rowsPerPageOptions={[5, 10, 25, 50]}
       tableStyle={{ minWidth: "69rem" }}
+      scrollable 
+      scrollHeight="250px" 
+      //virtualScrollerOptions={{ itemSize: 46 }}
     >
       {props.columns.map((x) => {
         return (
@@ -19,6 +22,7 @@ const DataTableComponents = (props) => {
             field={x.field}
             header={x.columnName}
             style={{ width: "20%", color: "#0e0808" }}
+            
           ></Column>
         );
       })}

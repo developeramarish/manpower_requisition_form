@@ -8,10 +8,10 @@ import DashboardHeader from './Header';
 
 const EmployeDetailsCreate = () => {
   const [roleId, setRole] = useState(null);
-  const [data, getData] = useState([]);
   const [name, namechange] = useState("");
   const [email, emailchange] = useState("");
   const [contactNo,phonechange] = useState("");
+  const [employeeCode,employeeChange] = useState("");
   const [allowedByEmployeeId] = useState("1");
   const [createdByEmployeeId] = useState("1");
   const [createdOnUtc] = useState(new Date().toISOString());
@@ -30,7 +30,7 @@ const EmployeDetailsCreate = () => {
       .then(responseData => {
         if (Array.isArray(responseData.result)) {
           const data = responseData.result;
-          const options = data.map(x => { return { value: x.id, name: x.name } })
+          const options = data.map(x => { return { value: x.id,  name: x.name } })
           roleOptionchange(data);
         } else {
           console.error('API response result is not an array:', responseData);
@@ -43,7 +43,7 @@ const EmployeDetailsCreate = () => {
   };
   const handlesubmit = (e) => {
     e.preventDefault();
-    const empdata = { name, email, contactNo, roleId: roleId.value,isAllowed,allowedByEmployeeId,createdByEmployeeId,
+    const empdata = { name, email, contactNo,employeeCode, roleId: roleId.value,isAllowed,allowedByEmployeeId,createdByEmployeeId,
       createdOnUtc,updatedByEmployeeId,updatedOnUtc};
 
 
@@ -73,7 +73,7 @@ const EmployeDetailsCreate = () => {
       <h3 className="text-xl my-2">Fill the Details</h3>
       <section
         className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
-        style={{ height: "90%" }}
+        style={{ height: "70%" }}
       >
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
@@ -99,7 +99,14 @@ const EmployeDetailsCreate = () => {
             <InputTextCp id="position-title" onChange={(e) => phonechange(e.target.value)} />
           </div>
         </div>
-
+        <div className="flex justify-content-between gap-5">
+          <div className="flex flex-column w-6 gap-2">
+            <label htmlFor="position-title" className="font-bold text-sm">
+               Employee Id
+            </label>
+            <InputTextCp id="position-title" onChange={(e) => employeeChange(e.target.value)} />
+          </div>
+        </div>
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
@@ -108,7 +115,7 @@ const EmployeDetailsCreate = () => {
 
             <DropdownComponent
               optionLabel="name"
-              optionValue="id"
+              optionValue="id"//"value"
               type="roleId"
               options={roleOptions}
               onChange={e => {
@@ -119,18 +126,12 @@ const EmployeDetailsCreate = () => {
             />
          
          </div>
-        </div>
-      
-        </section>
-
-
-           
-      {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
-        {<ButtonC to="/" className="btn btn-danger" label="CENCEL" disabled onClick={() => navigate("/EmployeDetails")}></ButtonC>}
+         {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
+        {<ButtonC to="/" className="btn btn-danger" label="CANCEL" disabled onClick={() => navigate("/EmployeDetails")}></ButtonC>}
         {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}
       </div>}
-      
-      
+        </div>
+        </section>
       </div>  
       </div>
    

@@ -104,6 +104,8 @@ namespace MRF.API.Controllers
                 Name = request.Name,
                 Email = request.Email,
                 ContactNo = request.ContactNo,
+                RoleId = request.RoleId,
+                EmployeeCode = request.EmployeeCode,
                 IsAllowed = request.IsAllowed,
                 AllowedByEmployeeId = request.AllowedByEmployeeId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
@@ -181,6 +183,9 @@ namespace MRF.API.Controllers
                 existingStatus.Email = request.Email;
                 existingStatus.ContactNo = request.ContactNo;
                 existingStatus.IsAllowed = request.IsAllowed;
+                existingStatus.EmployeeCode = request.EmployeeCode;
+                existingStatus.IsDeleted = request.IsDeleted;
+                existingStatus.RoleId = request.RoleId;
                 existingStatus.AllowedByEmployeeId = request.AllowedByEmployeeId;
                 existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
@@ -207,6 +212,10 @@ namespace MRF.API.Controllers
 
 
             }
+            if (_responseModel.Id != 0)
+            {
+                CallEmployeeRoleMapControllerForUpdate(request, _responseModel.Id);
+            }
             else
             {
                 _logger.LogError($"No result found by this Id: {id}");
@@ -214,7 +223,31 @@ namespace MRF.API.Controllers
                 _responseModel.IsActive = false;
             }
 
+
             return _responseModel;
+        }
+
+        private void CallEmployeeRoleMapControllerForUpdate(EmployeedetailsRequestModel request, int id)
+        {
+            var existingStatus = _unitOfWork.Employeerolemap.Get(u => u.EmployeeId == id);
+            if (existingStatus != null)
+            {
+                existingStatus.EmployeeId = id;
+                existingStatus.RoleId = request.RoleId;
+                existingStatus.IsActive = request.IsAllowed;
+                existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
+                existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
+                _unitOfWork.Employeerolemap.Update(existingStatus);
+                _unitOfWork.Save();
+
+
+
+            }
+
+
+
+
         }
 
         // DELETE api/<EmployeedetailsController>/5
@@ -268,20 +301,25 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ResponseDTO GetEmployee(int id)
         {
+
             _logger.LogInfo("Fetching All Employee details");
             List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployee(id);
-
-
 
             if (obj.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
             _response.Result = obj;
-            return _response;
+            var r = from l in obj
+                    where l.IsDeleted == false
+                    select l;
+            _response.Result = r;
+            return _response;   
+
 
         }
-
     }
-
 }
+
+            
+       
