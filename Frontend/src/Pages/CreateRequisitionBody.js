@@ -14,7 +14,7 @@ import {
   minExperienceOptions,
   maxExperienceOptions,
   Gender,
-  RequisitionType
+  RequisitionType,
 } from "../Components/constant";
 
 const CreateRequisitionBody = () => {
@@ -24,17 +24,18 @@ const CreateRequisitionBody = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toastRef = useRef(null);
-  const getReqId = '';
+  const getReqId = 1;
 
   const formSchema = {
     referenceNo: "",
     positionTitle: "",
-    RequisitionType: "",
+    requisitionType: "",
     departmentId: 0,
     subDepartmentId: 0,
     projectId: 0,
     vacancyNo: 0,
     genderId: 0,
+    qualification: 0,
     requisitionDateUtc: "",
     reportsToEmployeeId: 0,
     minGradeId: 0,
@@ -61,12 +62,16 @@ const CreateRequisitionBody = () => {
     replaceJustification: "",
     resumeReviewerEmployeeIds: null,
     interviewerEmployeeIds: null,
-    hiringManagerId:0,
-    FunctionHeadId:0,
-    SiteHRSPOCId:0,
-    FinanceHeadId:0,
-    PresidentnCOOId:0
-
+    hiringManagerId: 0,
+    hiringManagerEmpId: 0,
+    functionHeadId: 0,
+    functionHeadEmpId: 0,
+    siteHRSPOCId: 0,
+    siteHRSPOCEmpId: 0,
+    financeHeadId: 0,
+    financeHeadEmpId: 0,
+    presidentnCOOId: 0,
+    presidentnCOOEmpId: 0,
   };
 
   // Initialize the formData state using the form schema
@@ -125,17 +130,18 @@ const CreateRequisitionBody = () => {
 
     const data = {
       referenceNo: formData.referenceNo,
-      RequisitionType:formData.RequisitionType,
+      requisitionType: formData.requisitionType,
       positionTitle: formData.positionTitle,
       departmentId: formData.departmentId,
       subDepartmentId: formData.subDepartmentId,
       projectId: formData.projectId,
       vacancyNo: formData.vacancyNo,
       genderId: formData.genderId,
+      qualification: formData.qualification,
       requisitionDateUtc: new Date().toISOString().slice(0, 10),
       reportsToEmployeeId: formData.reportsToEmployeeId,
       minGradeId: formData.minGradeId,
-      maxGradeId:formData.maxGradeId,
+      maxGradeId: formData.maxGradeId,
       employmentTypeId: formData.employmentTypeId,
       minExperience: formData.minExperience,
       maxExperience: formData.maxExperience,
@@ -160,11 +166,18 @@ const CreateRequisitionBody = () => {
       annualCtc: formData.annualCtc,
       annualGross: formData.annualGross,
       replaceJustification: formData.replaceJustification,
-      hiringManagerId:formData.hiringManagerId,
-      FunctionHeadId:formData.FunctionHeadId,
-      SiteHRSPOCId:formData.SiteHRSPOCId,
-      FinanceHeadId:formData.FinanceHeadId,
-      PresidentnCOOId:formData.PresidentnCOOId,
+      resumeReviewerEmployeeIds: formData.resumeReviewerEmployeeIds,
+      interviewerEmployeeIds: formData.interviewerEmployeeIds,
+      hiringManagerId: formData.hiringManagerId,
+      hiringManagerEmpId: formData.hiringManagerEmpId,
+      functionHeadId: formData.functionHeadId,
+      functionHeadEmpId: formData.functionHeadEmpId,
+      siteHRSPOCId: formData.siteHRSPOCId,
+      siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
+      financeHeadId: formData.financeHeadId,
+      financeHeadEmpId: formData.financeHeadEmpId,
+      presidentnCOOId: formData.presidentnCOOId,
+      presidentnCOOEmpId: formData.presidentnCOOEmpId,
     };
     try {
       const response = await fetch(
@@ -211,6 +224,14 @@ const CreateRequisitionBody = () => {
     return s;
   };
 
+  const arrayToObj = (options = [], selectedOpt) => {
+    return options.filter((e) => selectedOpt.includes(e.employeeId));
+  };
+
+  const objToArray = (selectedOpt = []) => {
+    return selectedOpt.map((e) => e.employeeId);
+  };
+
   //need to change this
   const handleCancel = () => {
     setDropdownData({});
@@ -231,7 +252,7 @@ const CreateRequisitionBody = () => {
           <div className="flex justify-content-between gap-5">
             <div className="flex flex-column w-6 gap-2">
               <h4 className="text-xl my-2">
-                Reference Number: {formData.referenceNo}
+                Reference Number: <span className="text-red-600">{formData.referenceNo}</span>
               </h4>
             </div>
           </div>
@@ -239,18 +260,18 @@ const CreateRequisitionBody = () => {
           ""
         )}
         <div className="flex justify-content-between gap-5">
-        <div className="flex flex-column w-6 gap-2">
+          <div className="flex flex-column w-6 gap-2">
             <label htmlFor="RequisitionType" className="font-bold text-sm">
-            Requisition Type
+              Requisition Type
             </label>
             <DropdownComponent
               optionLabel="name"
               optionValue="code"
               type="RequisitionType"
               options={RequisitionType}
-              value={formData.RequisitionType}
+              value={formData.requisitionType}
               onChange={(e) => {
-                setFormData({ ...formData, RequisitionType: e.target.value });
+                setFormData({ ...formData, requisitionType: e.target.value });
               }}
             />
           </div>
@@ -719,16 +740,18 @@ const CreateRequisitionBody = () => {
             <MultiSelectDropdown
               id="resumeReviewer"
               options={dropdownData.resumereviewer}
-              value={strToArray(formData.resumeReviewerEmployeeIds)}
-              onChange={(e) => {
-                console.log(e.value);
+              value={arrayToObj(
+                dropdownData.resumereviewer,
+                strToArray(formData.resumeReviewerEmployeeIds)
+              )}
+              onChange={(e) =>
                 setFormData({
                   ...formData,
-                  resumeReviewerEmployeeIds: e.value,
-                });
-              }}
+                  resumeReviewerEmployeeIds: objToArray(e.value),
+                })
+              }
               optionLabel="name"
-              optionValue="employeeId"
+              // optionValue="employeeId"
             />
           </div>
           <div className="flex flex-column w-6 gap-2">
@@ -739,311 +762,296 @@ const CreateRequisitionBody = () => {
             <MultiSelectDropdown
               id="interviewer"
               options={dropdownData.interviewReviewer}
-              value={strToArray(formData.interviewerEmployeeIds)}
+              value={arrayToObj(
+                dropdownData.interviewReviewer,
+                strToArray(formData.interviewerEmployeeIds)
+              )}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  interviewerEmployeeIds: e.value,
+                  interviewerEmployeeIds: objToArray(e.value),
                 })
               }
               optionLabel="name"
-              optionValue="employeeId"
+              // optionValue="employeeId"
             />
           </div>
         </div>
         <div className="flex justify-content-between">
-        <h1 className=" my-2">EMAIL APPROVAL/SIGNATURE DATES:</h1>
-       
+          <h1 className="my-2 mx-3">EMAIL APPROVAL/SIGNATURE DATES:</h1>
         </div>
-        <div id="first" className="flex justify-between gap-4">
-  <div className="flex flex-column gap-2">
-    <label htmlFor="Position" className="font-bold text-sm">
-      Position
-    </label>
-    <InputTextCp
-      type="text"
-      id="Position"
-      onChange={(e) => setFormData({ ...formData, Position: 7 })}
-      value={'Hiring Manager'}
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '200px' }}>
-    <label htmlFor="Name" className="font-bold text-sm">
-      Name
-    </label>
-    {/* Assuming DropdownComponent renders an input */}
-    <DropdownComponent 
-      optionLabel="name"
-      optionValue="id"
-      type="hiringManager"
-      options={dropdownData.hiringManager}
-      value={formData.hiringManagerId}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          reportsToEmployeeId: e.target.value,
-        })
-      }
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '100px' }}>
-    <label htmlFor="EmployeeCode" className="font-bold text-sm">
-      Employee ID
-    </label>
-    <InputTextCp
-      id="EmployeeCode"
-      onChange={(e) => setFormData({ ...formData, EmployeeCode: e.target.value })}
-      value={formData.EmployeeCode}
-    />
-  </div>
-
-
-
-  <div className="flex flex-column gap-2">
-    <label htmlFor="ApprovalDate" className="font-bold text-sm">
-      Approval Date
-    </label>
-    {/* Assuming CalendarComponent renders an input */}
-    <CalendarComponent
-      id="ApprovalDate"
-      inputClassName="bg-gray-100"
-      value={new Date(formData.ApprovalDate)}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          ApprovalDate: e.target.value,
-        })
-      }
-    />
-  </div>
-  </div>
-  <div id="second" className="flex justify-between gap-4">
-  <div className="flex flex-column gap-2">
-   
-    <InputTextCp
-      type="text"
-      id="Position"
-      onChange={(e) => setFormData({ ...formData, Position: 8 })}
-      value={'Function Head'}
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '200px' }}>
- 
-    {/* Assuming DropdownComponent renders an input */}
-    <DropdownComponent 
-      optionLabel="name"
-      optionValue="id"
-      type="functionHead"
-      options={dropdownData.functionHead}
-      value={formData.reportsToEmployeeId}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          reportsToEmployeeId: e.target.value,
-        })
-      }
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '100px' }}>
-    
-    <InputTextCp
-      id="EmployeeCode"
-      onChange={(e) => setFormData({ ...formData, EmployeeCode: e.target.value })}
-      value={formData.EmployeeCode}
-    />
-  </div>
-
- 
-
-  <div className="flex flex-column gap-2">
-   
-    {/* Assuming CalendarComponent renders an input */}
-    <CalendarComponent
-      id="ApprovalDate"
-      inputClassName="bg-gray-100"
-      value={new Date(formData.ApprovalDate)}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          ApprovalDate: e.target.value,
-        })
-      }
-    />
-  </div>
-  </div>
-  <div id="third" className="flex justify-between gap-4">
-  <div className="flex flex-column gap-2">
-   
-    <InputTextCp
-      type="text"
-      id="Position"
-      onChange={(e) => setFormData({ ...formData, Position: 9 })}
-      value={'Site HR SPOC'}
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '200px' }}>
-    
-    {/* Assuming DropdownComponent renders an input */}
-    <DropdownComponent 
-      optionLabel="name"
-      optionValue="id"
-      type="functionHead"
-      options={dropdownData.functionHead}
-      value={formData.reportsToEmployeeId}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          reportsToEmployeeId: e.target.value,
-        })
-      }
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '100px' }}>
-   
-    <InputTextCp
-      id="EmployeeCode"
-      onChange={(e) => setFormData({ ...formData, EmployeeCode: e.target.value })}
-      value={formData.EmployeeCode}
-    />
-  </div>
-
- 
-
-  <div className="flex flex-column gap-2">
-    
-    {/* Assuming CalendarComponent renders an input */}
-    <CalendarComponent
-      id="ApprovalDate"
-      inputClassName="bg-gray-100"
-      value={new Date(formData.ApprovalDate)}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          ApprovalDate: e.target.value,
-        })
-      }
-    />
-  </div> </div>
-  <div id="forth" className="flex justify-between gap-4">
-  <div className="flex flex-column gap-2">
-    
-    <InputTextCp
-      type="text"
-      id="Position"
-      onChange={(e) => setFormData({ ...formData, Position: 10 })}
-      value={'Finance Head'}
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '200px' }}>
-   
-    {/* Assuming DropdownComponent renders an input */}
-    <DropdownComponent 
-      optionLabel="name"
-      optionValue="id"
-      type="financeHead"
-      options={dropdownData.financeHead}
-      value={formData.reportsToEmployeeId}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          reportsToEmployeeId: e.target.value,
-        })
-      }
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '100px' }}>
-    
-    <InputTextCp
-      id="EmployeeCode"
-      onChange={(e) => setFormData({ ...formData, EmployeeCode: e.target.value })}
-      value={formData.EmployeeCode}
-    />
-  </div>
-
- 
-
-  <div className="flex flex-column gap-2">
-   
-    {/* Assuming CalendarComponent renders an input */}
-    <CalendarComponent
-      id="ApprovalDate"
-      inputClassName="bg-gray-100"
-      value={new Date(formData.ApprovalDate)}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          ApprovalDate: e.target.value,
-        })
-      }
-    />
-  </div> </div>
-  <div id="fifth" className="flex justify-between gap-4">
-  <div className="flex flex-column gap-2">
-   
-    <InputTextCp
-      type="text"
-      id="Position"
-      onChange={(e) => setFormData({ ...formData, Position: 11 })}
-      value={'President &COO'}
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '200px' }}>
-    
-    {/* Assuming DropdownComponent renders an input */}
-    <DropdownComponent 
-      optionLabel="name"
-      optionValue="id"
-      type="financeHead"
-      options={dropdownData.financeHead}
-      value={formData.reportsToEmployeeId}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          reportsToEmployeeId: e.target.value,
-        })
-      }
-    />
-  </div>
-
-  <div className="flex flex-column gap-2" style={{ width: '100px' }}>
-   
-    <InputTextCp
-      id="EmployeeCode"
-      onChange={(e) => setFormData({ ...formData, EmployeeCode: e.target.value })}
-      value={formData.EmployeeCode}
-    />
-  </div>
-
-  
-
-  <div className="flex flex-column gap-2">
-    
-    {/* Assuming CalendarComponent renders an input */}
-    <CalendarComponent
-      id="ApprovalDate"
-      inputClassName="bg-gray-100"
-      value={new Date(formData.ApprovalDate)}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          ApprovalDate: e.target.value,
-        })
-      }
-    />
-  </div>
-
- 
+        <div id="first" className="flex justify-content-evenly gap-4">
+          <div className="flex flex-column gap-2">
+            <label htmlFor="Position" className="font-bold text-sm">
+              Position
+            </label>
+            <InputTextCp
+              type="text"
+              id="Position"
+              className="p-disabled"
+              onChange={(e) => setFormData({ ...formData, Position: 7 })}
+              //
+              value="Hiring Manager"
+            />
           </div>
-       
+
+          <div className="flex flex-column gap-2 w-3">
+            <label htmlFor="Name" className="font-bold text-sm">
+              Name
+            </label>
+            {/* Assuming DropdownComponent renders an input */}
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="employeeId"
+              type="hiringManager"
+              options={dropdownData.hiringManager}
+              value={formData.hiringManagerId}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  hiringManagerId: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            <label htmlFor="EmployeeCode" className="font-bold text-sm">
+              Employee ID
+            </label>
+            <InputTextCp
+              id="EmployeeCode"
+              onChange={(e) =>
+                setFormData({ ...formData, hiringManagerEmpId: e.target.value })
+              }
+              value={formData.hiringManagerEmpId}
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            <label htmlFor="ApprovalDate" className="font-bold text-sm">
+              Approval Date
+            </label>
+            {/* Assuming CalendarComponent renders an input */}
+            <CalendarComponent
+              id="ApprovalDate"
+              inputClassName="bg-gray-100"
+              value={new Date(formData.hmApprovalDate)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  hmApprovalDate: e.target.value,
+                })
+              }
+            />
+          </div>
+        </div>
+        <div id="second" className="flex justify-content-evenly gap-4">
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              type="text"
+              id="Position"
+              className="p-disabled"
+              onChange={(e) => setFormData({ ...formData, Position: 8 })}
+              value="Function Head"
+            />
+          </div>
+
+          <div className="flex flex-column gap-2 w-3">
+            {/* Assuming DropdownComponent renders an input */}
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="employeeId"
+              type="functionHead"
+              options={dropdownData.functionHead}
+              value={formData.functionHeadId}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  functionHeadId: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              id="EmployeeCode"
+              onChange={(e) =>
+                setFormData({ ...formData, functionHeadEmpId: e.target.value })
+              }
+              value={formData.functionHeadEmpId}
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            {/* Assuming CalendarComponent renders an input */}
+            <CalendarComponent
+              id="ApprovalDate"
+              inputClassName="bg-gray-100"
+              value={new Date(formData.fhApprovalDate)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  fhApprovalDate: e.target.value,
+                })
+              }
+            />
+          </div>
+        </div>
+        <div id="third" className="flex justify-content-evenly gap-4">
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              type="text"
+              id="Position"
+              className="p-disabled"
+              onChange={(e) => setFormData({ ...formData, Position: 9 })}
+              value="Site HR SPOC"
+            />
+          </div>
+          <div className="flex flex-column gap-2 w-3">
+            {/* Assuming DropdownComponent renders an input */}
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="employeeId"
+              type="siteHRSPOCId"
+              options={dropdownData.siteHRSPOC}
+              value={formData.siteHRSPOCId}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  siteHRSPOCId: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              id="EmployeeCode"
+              onChange={(e) =>
+                setFormData({ ...formData, siteHRSPOCEmpId: e.target.value })
+              }
+              value={formData.siteHRSPOCEmpId}
+            />
+          </div>
+          <div className="flex flex-column gap-2">
+            {/* Assuming CalendarComponent renders an input */}
+            <CalendarComponent
+              id="ApprovalDate"
+              inputClassName="bg-gray-100"
+              value={new Date(formData.spApprovalDate)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  spApprovalDate: e.target.value,
+                })
+              }
+            />
+          </div>{" "}
+        </div>
+        <div id="forth" className="flex justify-content-evenly gap-4">
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              type="text"
+              id="Position"
+              className="p-disabled"
+              onChange={(e) => setFormData({ ...formData, Position: 10 })}
+              value="Finance Head"
+            />
+          </div>
+          <div className="flex flex-column gap-2 w-3">
+            {/* Assuming DropdownComponent renders an input */}
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="employeeId"
+              type="financeHead"
+              options={dropdownData.financeHead}
+              value={formData.financeHeadId}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  financeHeadId: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              id="EmployeeCode"
+              onChange={(e) =>
+                setFormData({ ...formData, financeHeadEmpId: e.target.value })
+              }
+              value={formData.financeHeadEmpId}
+            />
+          </div>
+          <div className="flex flex-column gap-2">
+            {/* Assuming CalendarComponent renders an input */}
+            <CalendarComponent
+              id="ApprovalDate"
+              inputClassName="bg-gray-100"
+              value={new Date(formData.fiApprovalDate)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  fiApprovalDate: e.target.value,
+                })
+              }
+            />
+          </div>{" "}
+        </div>
+        <div id="fifth" className="flex justify-content-evenly gap-4">
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              type="text"
+              id="Position"
+              className="p-disabled"
+              onChange={(e) => setFormData({ ...formData, Position: 11 })}
+              value="President & COO"
+            />
+          </div>
+
+          <div className="flex flex-column gap-2 w-3">
+            {/* Assuming DropdownComponent renders an input */}
+            <DropdownComponent
+              optionLabel="name"
+              optionValue="id"
+              type="presidentnCOO"
+              options={dropdownData.presidentnCOO}
+              value={formData.presidentnCOOId}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  presidentnCOOId: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            <InputTextCp
+              id="EmployeeCode"
+              onChange={(e) =>
+                setFormData({ ...formData, presidentnCOOEmpId: e.target.value })
+              }
+              value={formData.presidentnCOOEmpId}
+            />
+          </div>
+
+          <div className="flex flex-column gap-2">
+            {/* Assuming CalendarComponent renders an input */}
+            <CalendarComponent
+              id="ApprovalDate"
+              inputClassName="bg-gray-100"
+              value={new Date(formData.pcApprovalDate)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  pcApprovalDate: e.target.value,
+                })
+              }
+            />
+          </div>
+        </div>
       </section>
 
       <div className="flex flex-wrap justify-content-end gap-5 mt-3">
