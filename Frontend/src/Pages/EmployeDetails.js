@@ -1,22 +1,14 @@
 import React, {useEffect,useState } from 'react';
-import RequisitionBody from "../Components/RequisitionBody";
-import SearchHeader from "../Components/SearchHeader";
 import DashboardHeader from "./Header";
 import LeftPanel from "./LeftPanel";
 import DataTableComponents from '../Components/DataTableComponent';
 import SearchText from './SearchText';
 import ButtonC  from "../Components/Button";
 import { Toolbar } from 'primereact/toolbar';
-import EmployeDetailsCreate from './EmployeDetailsCreate';
-import { Button } from 'primereact/button';
-import { Column } from 'primereact/column';
-import { Dialog } from 'primereact/dialog';
 import { useNavigate } from 'react-router-dom';
 import EmployeeDtailsEdit from './EmployeeDtailsEdit';
-import { ColumnGroup } from 'primereact/columngroup';
 export default function  EmployeDetails() {
     const [data, setData] = useState([{}]);
-    const [value, setValue] = useState([{}]);
     const [editMode, setEditMode] = useState(false);
     const [editData, setEditData] = useState()
     const navigate= useNavigate();
@@ -35,15 +27,11 @@ export default function  EmployeDetails() {
      }, []);
   
     const columns = [
-      
         {columnName : 'Name', field : 'name'},
         {columnName : 'Email', field : 'email'},
         {columnName : 'contactNo', field : 'contactNo'},
-        
         {columnName : 'Role', field : 'roleName'},
-          
-      ]
-       
+       ] 
       const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
@@ -106,9 +94,7 @@ export default function  EmployeDetails() {
               <label class="box" >Employee Details</label>
               <div class="SearchText"><SearchText/></div>
           </div>
-          
-          
-          <Toolbar className="mb-4" left={leftToolbarTemplate} ></Toolbar>         
+        <Toolbar className="mb-4" left={leftToolbarTemplate} ></Toolbar>         
           <div className = "bar"><DataTableComponents data= {data}  columns={columns} body={actionBodyTemplate} rows={5} />
     
          </div>

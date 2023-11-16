@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SearchText from "./SearchText";
 import DataTableCustom from "../Components/DataTableCustom";
-import { InputTextarea } from "primereact/inputtextarea";
 import DropdownComponent from "../Components/Dropdown";
 import MultiSelectDropdown from "../Components/multiselectDropdown";
 import InputTextareaComponent from "../Components/InputTextarea";
@@ -94,11 +92,6 @@ const MyReumes = () => {
       />
     );
   };
-  
-
-  
-
-
   const openPdfInNewTab = (pdfLink) => {
     window.open(pdfLink, "_blank");
   };

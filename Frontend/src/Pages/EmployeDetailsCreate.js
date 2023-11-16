@@ -119,7 +119,7 @@ const EmployeDetailsCreate = () => {
               type="roleId"
               options={roleOptions}
               onChange={e => {
-                console.log("kritika",e)
+                console.log(e)
                 setRole(e.target)
               }
               }
@@ -127,19 +127,11 @@ const EmployeDetailsCreate = () => {
          
          </div>
          {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
-        {<ButtonC to="/" className="btn btn-danger" label="CENCEL" disabled onClick={() => navigate("/EmployeDetails")}></ButtonC>}
+        {<ButtonC to="/" className="btn btn-danger" label="CANCEL" disabled onClick={() => navigate("/EmployeDetails")}></ButtonC>}
         {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}
       </div>}
         </div>
-        
-      
         </section>
-
-
-           
-     
-      
-      
       </div>  
       </div>
    

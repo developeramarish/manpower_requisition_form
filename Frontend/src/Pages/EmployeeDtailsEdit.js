@@ -3,37 +3,11 @@ import DropdownComponent from '../Components/Dropdown';
 import InputTextCp from "../Components/Textbox";
 import ButtonC from "../Components/Button";
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import LeftPanel from './LeftPanel';
-import DashboardHeader from './Header';
-
 const EmployeeDtailsEdit = ({id, updateData}) => {
-    // const { id } = useParams();
-  
-  
- 
-  
   const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
-  console.log("buri"+id);
-//   useEffect(() => {
-//     const apiUrl = `https://localhost:7128/api/Employeedetails/GetEmployee/${id}`;
-//     console.log("bahan");
-//     fetch(apiUrl)
-//     //fetch("https://localhost:7128/api/Employeedetails/GetEmployee/${id}")
-//     .then((response) => response.json()
-//     ).then((resp) => {
-//         //idchange(resp.id);
-//         namechange(resp.name);
-//         emailchange(resp.email);
-//         phonechange(resp.contactNo);
-         
-//         //activechange(resp.isactive);
-//     }).catch((err) => {
-//         console.log(err.message);
-//     })
-// }, []);
 useEffect(() => {
   console.log("id   ",id)
   fetch("https://localhost:7128/api/Employeedetails/GetEmployee/" + id).then((res) => {
@@ -42,13 +16,12 @@ useEffect(() => {
   }).then((result) => {
     
     console.log("result   =   ",result)
-    //  idchange(resp.id);
      namechange(result.result[0].name);
     emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
       employeeChange(result.result[0].employeeCode);
       setRole(result.result[0].roleName);
-     // activechange(resp.isactive);
+      
   }).catch((err) => {
       console.log(err.message);
   })
@@ -178,18 +151,13 @@ const [roleOptions, roleOptionchange] = useState([]);
          
          </div>
          {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
-        {<ButtonC to="/" className="btn btn-danger" label="CENCEL" disabled onClick={() => updateEditmode(false)}></ButtonC>}
+        {<ButtonC to="/" className="btn btn-danger" label="CANCEL" disabled onClick={() => updateEditmode(false)}></ButtonC>}
         {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}
       </div>}
         </div>
       
         </section>
 
-
-           
-      
-      
-      
       </div>  
       </div>
    
