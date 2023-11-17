@@ -42,5 +42,6 @@ namespace MRF.DataAccess.Data
         public DbSet<MrfStatusRoleMap> mrfStatusrolemap { get; set; }
 
         public DbSet<MrfLastNumber> MrfLastNumber { get; set; }
+        public DbSet<MrfEmailApproval> MrfEmailApproval { get; set; }
     }
 }

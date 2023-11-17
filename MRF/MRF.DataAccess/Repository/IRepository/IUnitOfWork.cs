@@ -37,6 +37,7 @@
         IEmailRepository emailmaster { get; }
         IMrfStatusRoleMapRepository MrfStatusRoleMap { get; }
         IMrfLastNumberRepository MrfLastNo { get; }
+        IMrfEmailApprovalRepository MrfEmailApproval { get; }
         void Save();
     }
 }

@@ -35,7 +35,7 @@ namespace MRF.DataAccess.Repository
                             UpdatedOnUtc = mrfDetails.UpdatedOnUtc,
                             Salary = salary.MinTargetSalary + "-" + salary.MaxTargetSalary,
                             VacancyNo = mrfDetails.VacancyNo,
-                            RequisitionType = Vacancy.Type,
+                            RequisitionType = mrfDetails.RequisitionType,
                         };
 
             return query.ToList();
