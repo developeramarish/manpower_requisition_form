@@ -1117,7 +1117,6 @@ const CreateRequisitionBody = () => {
         <ButtonC
           label="SUBMIT"
           className="w-2"
-          disabled
           onClick={() => handleSubmit(1)}
         />
         <ToastMessages ref={toastRef} />
