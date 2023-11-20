@@ -5,15 +5,22 @@ import MultiSelectDropdown from "../Components/multiselectDropdown";
 import InputTextareaComponent from "../Components/InputTextarea";
 import "primeicons/primeicons.css";
 import ButtonC from "../Components/Button";
-
+import { MultiSelect } from "primereact/multiselect";
+import { InputTextarea } from "primereact/inputtextarea";
+import { constantResumePath } from "../Components/constant";
+import DashboardHeader from "./Header";
+import LeftPanel from "./LeftPanel";
 const MyReumes = () => {
   const [statusOptions, setStatusOptions] = useState([]);
   const [forwardOptions, setForwardOptions] = useState([]);
   const [myResumeData, setMyResumeData] = useState([]);
-  const [candidateStatusId, setSelectedststatus] = useState(null);
-  const [selectedforwardedStatus, setForwardedStatus] = useState(null);
-
-
+ 
+  const [textBoxValue, setTextBoxValue] = useState([]);
+  // const [valuess, setValue] = useState("");
+ const [dbSelect, setDBSelect] = useState();
+ const updateDB = (param) =>{
+  setDBSelect(param)
+ }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,13 +36,13 @@ const MyReumes = () => {
           const value = dataStatus.result.map((x) => {
             return { id: x.id, status: x.status };
           });
-
+ 
           setStatusOptions(value);
           console.log("candidate Status    ", value);
         } else {
           console.log("Api is not an array");
         }
-
+ 
         // Fetch Candidatedetail
         const responseCandidateDetail = await fetch(
           "https://localhost:7128/api/Candidatedetail"
@@ -47,12 +54,12 @@ const MyReumes = () => {
         if (Array.isArray(dataCandidateDetail.result)) {
           setMyResumeData(dataCandidateDetail.result);
           const detail = dataCandidateDetail.result;
-
+ 
           console.log("candidate deatil    ", dataCandidateDetail.result);
         } else {
           console.log("Api is not an array");
         }
-
+ 
         // Fetch Employeerolemap
         const responseEmployeeRole = await fetch(
           "https://localhost:7128/api/Employeerolemap/GetEmployeebyRole/5"
@@ -62,9 +69,9 @@ const MyReumes = () => {
         }
         const dataEmployeeRole = await responseEmployeeRole.json();
         if (Array.isArray(dataEmployeeRole.result)) {
-          const forwardOptions = dataEmployeeRole.result;
+          //const forwardOptions = dataEmployeeRole.result;
           const value = dataEmployeeRole.result.map((x) => {
-            return { id: x.id, name: x.name };
+            return { id: x.employeeId, name: x.name };
           });
           setForwardOptions(value);
           console.log("candidate employee role    ", value);
@@ -75,43 +82,84 @@ const MyReumes = () => {
         console.error("Error fetching data:", error);
       }
     };
-
+ 
     fetchData();
   }, []);
-  const TextBoxComponent = (Reason) => {
-    const [textBoxValue, setTextBoxValue] = useState(Reason.value);
+ 
+  const TextBoxComponent = (reason) => {
+    // console.log(reason)
+    const [textBoxValue, setTextBoxValue] = useState(reason.reason);
     const handleTextBoxChange = (e) => {
-      console.log("changes",e.target.value);
+      console.log(e.target.value);
       setTextBoxValue(e.target.value);
       // Additional logic if needed
     };
     return (
-      <InputTextareaComponent
+      <InputTextarea
         value={textBoxValue}
         onChange={handleTextBoxChange}
       />
     );
   };
+ 
   const openPdfInNewTab = (pdfLink) => {
     window.open(pdfLink, "_blank");
   };
-
+ 
+ 
+  const SingleSelect = (param) => {
+    const id=param.statusId;
+    const [selectStatus, setSelectedststatus] = useState(id);
+    // console.log(param);
+    return (
+      <DropdownComponent
+        optionLabel="status"
+        optionValue="id"
+        value={selectStatus}
+        options={statusOptions || []}
+        placeholder="Select Status"
+       onChange={(e) => {
+          console.log("changes done", e);
+          setSelectedststatus(e.target.value);
+          param.fnCallback(e.target.value)
+        }}
+      />
+    );
+  };
+ 
+  const MultiSelect = () => {
+    const [reviewedByEmployeeId, setreviewedByEmployeeId] = useState(null);
+    return (
+      <MultiSelectDropdown
+        data={forwardOptions}
+        value={reviewedByEmployeeId}
+        optionLabel="name"
+        options={forwardOptions}
+        placeholder="Select Forward To"
+        maxSelectedLabels={3}
+        onChange={(e) => {
+          console.log("changes done", e);
+          setreviewedByEmployeeId(e.value);
+        }}
+      />
+    );
+  };
   const value = myResumeData;
   let i = 1;
-
   const tableData =
     value &&
     value.map((x) => {
+      let resumeLink = `${constantResumePath}\\Resume\\${x.resumePath}`;
       return {
         SrNo: i++,
         Resume: (
           <a
-            href={x.resumePath}
+            href={resumeLink}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => {
               e.preventDefault();
-              openPdfInNewTab(x.resumePath);
+              openPdfInNewTab(resumeLink);
             }}
             style={{ color: "red" }}
           >
@@ -119,35 +167,13 @@ const MyReumes = () => {
             {".pdf"}
           </a>
         ),
-
-        Status: (
-          <DropdownComponent
-            optionLabel="status"
-            optionValue="id"
-            options={statusOptions || []}
-            placeholder={"Select Status"}
-            onChange={e =>{
-              console.log("changes done",e);
-              setSelectedststatus(e.target.value)
-            }}
-          />
-        ),
-
-        ForwardTo: (<MultiSelectDropdown 
-          data={forwardOptions}
-        value={forwardOptions}
-        optionLabel="name"
-        placeholder="Select Forward To"
-        options={forwardOptions}
-        maxSelectedLabels={3}
-        onChange={e =>{
-          console.log("changes done",e);
-          setForwardedStatus(e.value)
-        }}
-        />),
-       
-        Reason: <TextBoxComponent value={x.reason} />,
-        
+ 
+        Status: <SingleSelect statusId={x.candidateStatusId} fnCallback={updateDB}/>,
+ 
+        ForwardTo: <MultiSelect />,
+ 
+        Reason: <TextBoxComponent reason={x.reason} />,
+ 
         Action: (
           <ButtonC
             icon="pi pi-save"
@@ -156,39 +182,50 @@ const MyReumes = () => {
             className="mr-2"
             severity="primary"
             onClick={() => {
-             
-              updateData(x.id,x.name,x.emailId,x.contactNo,x.resumePath,x.reviewedByEmployeeId);
+              updateData(
+                x.id,
+                x.name,
+                x.emailId,
+                x.contactNo,
+                x.resumePath,
+                x.reviewedByEmployeeId,
+                dbSelect
+              );
             }}
           />
         ),
       };
     });
-
-    
-
-  const updateData = (id,name,emailId,contactNo,resumePath,reviewedByEmployeeId) => {
-    console.log("frromm updatea data", id);
-    
-    const empdata = {name,emailId,contactNo,resumePath,candidateStatusId,reviewedByEmployeeId};
-    fetch("https://localhost:7128/api/Candidatedetail/"+id, {
+ 
+  const updateData = (id, name, emailId, contactNo, resumePath,empId, selectVal) => {
+    console.log("frromm updatea data ", selectVal);
+    const empdata = {
+      name,
+      emailId,
+      contactNo,
+      resumePath,
+     // candidateStatusId
+      //TextBoxComponent
+      //candidateStatusId,
+      //  reviewedByEmployeeId,
+    };
+    fetch("https://localhost:7128/api/Candidatedetail/" + id, {
       method: "Put",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(empdata)
-       
-    }).then((res) => {
-      alert('updated successfully.')
-
-    }).catch((err) => {
-      console.log(err.message)
+      body: JSON.stringify(empdata),
     })
-
-  
-
+      .then((res) => {
+        alert("updated successfully.");
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
-
+ 
   return (
     <div>
-      <div className="MyDashBoard">
+     
+        <div className="MyDashBoard">
         <div className="containerH">
           <div className="box">
             <label>My Resumes</label>
@@ -221,5 +258,5 @@ const MyReumes = () => {
     </div>
   );
 };
-
+ 
 export default MyReumes;

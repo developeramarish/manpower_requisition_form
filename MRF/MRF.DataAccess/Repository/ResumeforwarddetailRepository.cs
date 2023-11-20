@@ -14,5 +14,17 @@ namespace MRF.DataAccess.Repository
         {
             _db.Resumeforwarddetails.Update(resumeforwarddetail);
         }
+        public List<Resumeforwarddetails> GetEmployeeByCandidateid(int candidateId)
+        {
+            IQueryable<Resumeforwarddetails> query = from resumedetails in _db.Resumeforwarddetails
+                                                     where resumedetails.CandidateId == candidateId
+                                                     select resumedetails;
+
+            return query.ToList();
+        }
+
+        
+
+    
     }
 }

@@ -24,3 +24,11 @@ export const maxExperienceOptions = Array.from({ length: 31 }, (_, i) => ({
   label: i.toString(),
   value: i,
 }));
+
+export const RequisitionType = [
+  { name: "FR", code: "FR" },
+  { name: "RP", code: "RP" },
+ 
+  // Add more options as needed
+];
+export const constantResumePath="C:\\inetpub\\wwwroot\\MRF";

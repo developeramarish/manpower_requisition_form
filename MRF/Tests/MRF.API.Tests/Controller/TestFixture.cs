@@ -25,7 +25,7 @@ namespace MRF.API.Test.Controllers
             MockHostEnvironment = new Mock<IHostEnvironment>();
             MockUserService = new Mock<IUserService>();
           
-        Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object);
+        Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object,MockHostEnvironment.Object);
         }
     }
 }
