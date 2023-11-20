@@ -134,6 +134,7 @@ namespace MRF.API.Controllers
                     MrfStatusId = request.MrfStatusId,
                     JdDocPath = request.JdDocPath,
                     LocationId = request.LocationId,
+                    QualificationId = request.QualificationId,
                     CreatedByEmployeeId = request.CreatedByEmployeeId,
                     CreatedOnUtc = request.CreatedOnUtc,
                     UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -243,7 +244,7 @@ namespace MRF.API.Controllers
                 };
                 postMrfEmail(MrfdetailRequestModelRequest);
             }
-            if (request.FinanceHeadId != 0)
+            if (request.PresidentnCOOId != 0)
             {
                 var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
                 {
@@ -378,6 +379,7 @@ namespace MRF.API.Controllers
                 existingStatus.MrfStatusId = request.MrfStatusId;
                 existingStatus.JdDocPath = request.JdDocPath;
                 existingStatus.LocationId = request.LocationId;
+                existingStatus.QualificationId = request.QualificationId;
                 existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
                 existingStatus.CreatedOnUtc = request.CreatedOnUtc;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
