@@ -602,7 +602,7 @@ public partial class MRFDBContext : DbContext
 
             entity.ToTable("replacementmrfdetails");
 
-            entity.HasIndex(e => e.GradeId, "FK_GradeMasterReplacementMrfDetails");
+            //entity.HasIndex(e => e.GradeId, "FK_GradeMasterReplacementMrfDetails");
 
             entity.HasIndex(e => e.MrfId, "FK_MrfDetailsReplacementMrfDetails");
 
@@ -618,7 +618,7 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.EmailId).HasMaxLength(80);
             entity.Property(e => e.EmployeeCode).HasColumnType("int(11)");
             entity.Property(e => e.EmployeeName).HasMaxLength(80);
-            entity.Property(e => e.GradeId).HasColumnType("int(11)");
+            //entity.Property(e => e.GradeId).HasColumnType("int(11)");
             entity.Property(e => e.Justification).HasColumnType("text");
             entity.Property(e => e.MrfId).HasColumnType("int(11)");
             entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
