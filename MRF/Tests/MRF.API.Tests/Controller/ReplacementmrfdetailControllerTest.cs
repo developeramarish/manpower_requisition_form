@@ -37,9 +37,9 @@ namespace MRF.API.Test.Controllers
             var SampleReplacementmrfDetails = new List<Replacementmrfdetails>
             {
             new Replacementmrfdetails { Id=1,MrfId =3452,EmployeeName = "gaurav",EmailId ="g@keglobal.com",
-                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000,GradeId = 'A'},
+                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000},
             new Replacementmrfdetails { Id=2,MrfId =3452,EmployeeName = "gaurav",EmailId ="g@keglobal.com",
-                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000,GradeId = 'A'},
+                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000},
 
             };
 
@@ -86,9 +86,9 @@ namespace MRF.API.Test.Controllers
             var SampleReplacementmrfDetails = new List<Replacementmrfdetails>
             {
             new Replacementmrfdetails  {MrfId =3452,EmployeeName = "gaurav",EmailId ="g@keglobal.com",
-                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000,GradeId = 'A'},
+                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000},
             new Replacementmrfdetails{ MrfId =3452,EmployeeName = "gaurav",EmailId ="g@keglobal.com",
-                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000,GradeId = 'A'},
+                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000},
 
             };
 
@@ -116,9 +116,9 @@ namespace MRF.API.Test.Controllers
             var SampleReplacementmrfDetails = new List<Replacementmrfdetails>
             {
             new Replacementmrfdetails {MrfId =3452,EmployeeName = "gaurav",EmailId ="g@keglobal.com",
-                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000,GradeId = 'A'},
+                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000},
             new Replacementmrfdetails {MrfId =3452,EmployeeName = "gaurav",EmailId ="g@keglobal.com",
-                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000,GradeId = 'A'},
+                EmployeeCode = 45324,AnnualCtc = 4000000,AnnualGross = 4500000},
                 // Add more sample data as needed   
             };
 
@@ -145,7 +145,7 @@ namespace MRF.API.Test.Controllers
                 EmployeeCode = 45324,
                 AnnualCtc = 4000000,
                 AnnualGross = 4500000,
-                GradeId = 'A',
+                //GradeId = 'A',
                  
                 CreatedOnUtc = DateTime.Now,
                 UpdatedByEmployeeId = 1,
@@ -296,7 +296,7 @@ namespace MRF.API.Test.Controllers
                 EmployeeCode = 45324,
                 AnnualCtc = 4000000,
                 AnnualGross = 4500000,
-                GradeId = 'A',
+                //GradeId = 'A',
 
             };
 
@@ -337,7 +337,7 @@ namespace MRF.API.Test.Controllers
                 EmployeeCode = 45324,
                 AnnualCtc = 4000000,
                 AnnualGross = 4500000,
-                GradeId = 'A',
+                //GradeId = 'A',
 
             };
 

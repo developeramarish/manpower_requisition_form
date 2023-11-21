@@ -89,7 +89,7 @@ namespace MRF.API.Controllers
                 LastWorkingDate = request.LastWorkingDate,
                 AnnualCtc = request.AnnualCtc,
                 AnnualGross = request.AnnualGross,
-                GradeId = request.GradeId,
+                //GradeId = request.GradeId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -129,7 +129,7 @@ namespace MRF.API.Controllers
                 existingStatus.LastWorkingDate = request.LastWorkingDate;
                 existingStatus.AnnualCtc = request.AnnualCtc;
                 existingStatus.AnnualGross = request.AnnualGross;
-                existingStatus.GradeId = request.GradeId;
+                //existingStatus.GradeId = request.GradeId;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
                 existingStatus.Justification = request.Justification;

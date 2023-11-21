@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
@@ -56,6 +57,8 @@ builder.Services.AddCors(options =>
                     .AllowAnyHeader();
         });
 });
+
+
 builder.Services.AddSwaggerGen(
     c =>
     {
@@ -94,10 +97,19 @@ builder.Services.AddSwaggerGen(
 
 var app = builder.Build();
 
+app.UseStaticFiles();
+
+// If you want to serve files from a specific directory, you can use:
+var staticFilesPath = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Resume");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath),
+    RequestPath = "/Resume"
+});
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI(c => {
     c.OAuthClientId(builder.Configuration["SwaggerAzureAD:ClientId"]);
     c.OAuthUsePkce();
