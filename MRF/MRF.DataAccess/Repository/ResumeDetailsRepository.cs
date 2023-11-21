@@ -41,9 +41,30 @@ namespace MRF.DataAccess.Repository
                             CreatedByEmployeeId = Emp.Id,
                             CreatedName = Emp.Name,
                             CreatedOnUtc = resume.CreatedOnUtc,
-                            ResumePath = Candidate.ResumePath
+                            ResumePath = Candidate.ResumePath,
+                            CandidateId= Candidate.Id
                         };
-            return query.ToList();
+
+
+            var groupedResults = query
+    .GroupBy(item => item.CandidateId)
+    .Select(group => new ResumeDetailsViewModel
+    {
+        MrfId = group.First().MrfId,
+        ReferenceNo = group.First().ReferenceNo,
+        CandidateStatusId = group.First().CandidateStatusId,
+        Candidatestatus = group.First().Candidatestatus,
+        ResumeReviewerEmployeeIds = string.Join(",", group.Select(item => item.ResumeReviewerEmployeeId)),
+        CreatedByEmployeeId = group.First().CreatedByEmployeeId,
+        CreatedName = group.First().CreatedName,
+        CreatedOnUtc = group.First().CreatedOnUtc,
+        ResumePath = group.First().ResumePath,
+        CandidateId = group.Key  
+    })
+    .ToList();
+
+
+            return groupedResults.ToList();
            
         }
     }

@@ -20,7 +20,7 @@ public class Replacementmrfdetails
 
     public int AnnualGross { get; set; }
 
-    public int GradeId { get; set; }
+    //public int GradeId { get; set; }
 
     public int CreatedByEmployeeId { get; set; }
 
