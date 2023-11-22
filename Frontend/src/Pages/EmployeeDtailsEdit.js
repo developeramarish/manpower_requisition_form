@@ -14,21 +14,20 @@ useEffect(() => {
     console.log("resut for res  ", res)
       return res.json();
   }).then((result) => {
-    
-    console.log("result   =   ",result)
      namechange(result.result[0].name);
     emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
       employeeChange(result.result[0].employeeCode);
-      setRole(result.result[0].roleName);
+      setRole(result.result[0].roleId);
       
   }).catch((err) => {
       console.log(err.message);
   })
 }, []);
+
 const [name, namechange] = useState("");
 const [email, emailchange] = useState("");
-const [roleId, setRole] = useState(null);
+const [roleId, setRole] = useState({});
 const [contactNo,phonechange] = useState("");
 const [isDeleted] = useState(false);
 const [employeeCode,employeeChange] = useState("");
@@ -84,8 +83,6 @@ const [roleOptions, roleOptionchange] = useState([]);
    {/*  <DashboardHeader /> */}
     <div style={{ display: 'flex' }}>
       {/* <LeftPanel /> */}
-      
-       
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
       style={{ width: "210vh" } }
@@ -127,10 +124,7 @@ const [roleOptions, roleOptionchange] = useState([]);
             </label>
             <InputTextCp id="position-title" value={employeeCode} onChange={(e) => employeeChange(e.target.value)} />
           </div>
-          </div>
-           
-          
-          
+          </div> 
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
@@ -140,11 +134,13 @@ const [roleOptions, roleOptionchange] = useState([]);
             <DropdownComponent
               optionLabel="name"
               optionValue="id"
+              value={roleId.value}
               type="roleId"
               options={roleOptions}
+              //placeholder={}
               onChange={e => {
-                console.log(e)
-                setRole(e.target)
+                console.log(e.target)
+                setRole(e.target )
               }
               }
             />

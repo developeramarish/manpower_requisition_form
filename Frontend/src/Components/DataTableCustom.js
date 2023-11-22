@@ -109,7 +109,7 @@ const DataTableCustom = ({
         scrollHeight="400px"
         // tableStyle={{ minWidth: "50rem" }}
       >
-        {data.length > 0 &&
+        {data &&
           Object.keys(data[0]).map((field, index) => {
             if (showColum.includes(field)) {
               if (addTextBoxTo.includes(field)) {
