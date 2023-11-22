@@ -15,7 +15,7 @@ import {
   minExperienceOptions,
   maxExperienceOptions,
   Gender,
-  RequisitionType,
+  RequisitionType,APIPath
 } from "../Components/constant";
 
 const CreateRequisitionBody = ({ getReqId = null }) => {
@@ -53,14 +53,14 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     justification: "",
     softwaresRequired: "",
     hardwaresRequired: "",
-    minTargetSalary: "",
-    maxTargetSalary: "",
+    minTargetSalary: 0,
+    maxTargetSalary: 0,
     employeeName: "",
     emailId: "",
     employeeCode: "",
     lastWorkingDate: "",
-    annualCtc: "",
-    annualGross: "",
+    annualCtc: 0,
+    annualGross: 0,
     replaceJustification: "",
     jobDescription: "",
     skills: "",
@@ -76,11 +76,11 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     financeHeadEmpId: "",
     presidentnCOOId: "",
     presidentnCOOEmpId: "",
-    pcApprovalDate: "",
-    fhApprovalDate: "",
-    fiApprovalDate: "",
-    spApprovalDate: "",
-    hmApprovalDate: "",
+    pcApprovalDate: new Date().toISOString(),
+    fhApprovalDate: new Date().toISOString(),
+    fiApprovalDate: new Date().toISOString(),
+    spApprovalDate: new Date().toISOString(),
+    hmApprovalDate: new Date().toISOString(),
   };
 
   // Initialize the formData state using the form schema
@@ -88,7 +88,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
 
   useEffect(() => {
     // Fetch the data for all the dropdowns
-    fetch("https://localhost:7128/api/Mrfdetail/GetMRFDropdownlist")
+    fetch(APIPath+"Mrfdetail/GetMRFDropdownlist")
       .then((response) => response.json())
       .then((data) => {
         const dropdown = data.result;
@@ -102,7 +102,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
       });
 
     if (getReqId) {
-      const apiUrl = `https://localhost:7128/api/Mrfdetail/GetRequisition/${getReqId}`;
+      const apiUrl =APIPath+ `Mrfdetail/GetRequisition/${getReqId}`;
       fetch(apiUrl)
         .then((response) => response.json())
         .then((response) => {
@@ -119,7 +119,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
   }, [getReqId]);
 
   const fetchSubDepartments = (selectedDepartment) => {
-    const apiUrl = `https://localhost:7128/api/Subdepartment/GetInfo/${selectedDepartment}`;
+    const apiUrl =APIPath+ `Subdepartment/GetInfo/${selectedDepartment}`;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((responseData) => {
@@ -177,7 +177,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
       maxTargetSalary: formData.maxTargetSalary,
       employeeName: formData.employeeName,
       emailId: formData.emailId,
-      employeeCode: formData.employeeCode,
+      employeeCode: formData.employeeCode!=""?formData.employeeCode:0,
       lastWorkingDate: new Date().toISOString().slice(0, 10),
       annualCtc: formData.annualCtc,
       annualGross: formData.annualGross,
@@ -206,7 +206,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     };
     try {
       const response = await fetch(
-        "https://localhost:7128/api/mrfdetail/POST",
+        APIPath+"mrfdetail/POST",
         {
           method: "POST",
           headers: {
@@ -223,7 +223,10 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           toastRef.current.showConflictMessage(responseData.message);
         } else {
           toastRef.current.showSuccessMessage("Form submitted successfully!");
-          // window.location.href = '/MyRequisitions';
+          setTimeout(() => {
+            navigate("/MyRequisitions");
+          }, 2000);
+          
         }
       } else {
         console.error("Request failed with status:", response.status);
@@ -240,7 +243,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     } finally {
       setIsLoading(false);
     }
-    navigate("/MyRequisitions");
+
+    
   };
 
   const strToArray = (s) => {

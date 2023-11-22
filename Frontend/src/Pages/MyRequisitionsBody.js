@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link } from "react-router-dom";
-
+import {
+  APIPath
+} from "../Components/constant";
 function MyRequisitionsBody() {
   const [reqData, setReqData] = useState([]);
 
   useEffect(() => {
     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1
-    const apiUrl = "https://localhost:7128/api/Mrfdetail/GetMrfDetails/0";
+    const apiUrl = APIPath+"Mrfdetail/GetMrfDetails/0";
     fetch(apiUrl)
       .then((response) => response.json())
       .then((response) => {

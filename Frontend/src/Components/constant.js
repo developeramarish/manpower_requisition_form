@@ -31,4 +31,7 @@ export const RequisitionType = [
  
   // Add more options as needed
 ];
+
+export const APIPath="https://localhost:7128/api/";
+//export const APIPath="https://10.22.11.101:90/API/";
 export const constantResumePath="https://10.22.11.101:90";
