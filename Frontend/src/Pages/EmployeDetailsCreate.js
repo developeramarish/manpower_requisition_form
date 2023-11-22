@@ -59,6 +59,7 @@ const EmployeDetailsCreate = () => {
     })
 
   }
+  
   return (
     <div >
     <DashboardHeader />
@@ -115,14 +116,20 @@ const EmployeDetailsCreate = () => {
 
             <DropdownComponent
               optionLabel="name"
+              value={roleId}
               optionValue="id"//"value"
               type="roleId"
+              placeholder={"Select Role"}
               options={roleOptions}
               onChange={e => {
                 console.log(e)
+                
                 setRole(e.target)
+                
               }
+              
               }
+              
             />
          
          </div>

@@ -18,6 +18,8 @@
 
         public int ReviewedByEmployeeId { get; set; }
 
+        public string? ReviewedByEmployeeIds { get; set; }
+
         public int CreatedByEmployeeId { get; set; }
 
         public DateTime CreatedOnUtc { get; set; }
