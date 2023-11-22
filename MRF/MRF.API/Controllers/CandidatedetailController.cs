@@ -7,11 +7,12 @@ using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.Xml.Linq;
 
 namespace MRF.API.Controllers
-{ 
+{
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class CandidatedetailController : ControllerBase
@@ -169,67 +170,68 @@ namespace MRF.API.Controllers
 
         private void CallResumeForwarddetailsController(CandidatedetailRequestModel request, int id)
         {
-            List<Resumeforwarddetails>  resumeforwarddetails = _unitOfWork.Resumeforwarddetail.GetEmployeeByCandidateid(id);
+            List<Resumeforwarddetails> resumeforwarddetails = _unitOfWork.Resumeforwarddetail.GetEmployeeByCandidateid(id);
             ResumeforwarddetailController interviewermap = new ResumeforwarddetailController(_unitOfWork, _logger, _emailService, _hostEnvironment);
             if (resumeforwarddetails != null)
             {
                 foreach (Resumeforwarddetails resumeforward in resumeforwarddetails)
                 {
                     interviewermap.Delete(resumeforward.Id);
-                } 
+                }
                 var employeeIds = request.ReviewedByEmployeeIds.Split(',');
-                    if (!string.IsNullOrEmpty(request.ReviewedByEmployeeIds))
+                if (!string.IsNullOrEmpty(request.ReviewedByEmployeeIds))
+                {
+
+                    foreach (var employeeId in employeeIds)
                     {
 
-                        foreach (var employeeId in employeeIds)
+
+                        var forwardResume = new ResumeforwarddetailRequestModel
                         {
+                            CandidateId = id,
+                            ForwardedToEmployeeId = int.Parse(employeeId),
+                            // as we discussed with ashutosh we are adding ForwardedFromEmployeeId as a 1
+                            ForwardedFromEmployeeId = 1,
 
 
-                            var forwardResume = new ResumeforwarddetailRequestModel
-                            {
-                                CandidateId = id,
-                                ForwardedToEmployeeId = int.Parse(employeeId),
-                                // as we discussed with ashutosh we are adding ForwardedFromEmployeeId as a 1
-                                ForwardedFromEmployeeId = 1,
-                                 
+                        };
+                        var interviewermapResponse = interviewermap.Post(forwardResume);
 
-                            };
-                            var interviewermapResponse = interviewermap.Post(forwardResume);
+                    }
 
-                        }
 
-                        
-                         
-                    
+
+
                 }
             }
         }
 
         // DELETE api/<CandidatedetailController>/5
         [HttpDelete("{Id}")]
-                    [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(CandidatedetailResponseModel))]
-                    [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful deletion)")]
-                    [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
-                    [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
-                    [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
-                    [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
-                    [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
-                    [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-                    public void Delete(int Id)
-                    {
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(CandidatedetailResponseModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful deletion)")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public void Delete(int Id)
+        {
 
-                        Candidatedetails? obj = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
-                        if (obj != null)
-                        {
-                            _unitOfWork.Candidatedetail.Remove(obj);
-                            _unitOfWork.Save();
-                        }
-                        else {
-                            _logger.LogError($"No result found by this Id: {Id}");
-                        }
+            Candidatedetails? obj = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
+            if (obj != null)
+            {
+                _unitOfWork.Candidatedetail.Remove(obj);
+                _unitOfWork.Save();
+            }
+            else
+            {
+                _logger.LogError($"No result found by this Id: {Id}");
+            }
 
 
-                    }
+        }
 
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<CanditeResponseDTO>))]
@@ -242,18 +244,16 @@ namespace MRF.API.Controllers
         public ResponseDTO GetResumeDropdownlist()
         {
             _logger.LogInfo("Fetching create MRF Dropdown list");
-            List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetAll().ToList(); 
-            List<Resumeforwarddetails> obj1= _unitOfWork.Resumeforwarddetail.GetAll().ToList();
-         
-            
+            List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetForwardedTodata();
+             
             CanditeResponseDTO sw = new CanditeResponseDTO();
 
 
             sw.Resumereviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(5);
-            sw.status = _unitOfWork.Candidatestatusmaster.GetAll().ToList();
+            sw.status = _unitOfWork.Candidatestatusmaster.GetCandidatesByResumestatus().ToList();
             var combinedData = new
             {
-                 
+
                 CandidateDetails = obj,
                 sw.Resumereviewer,
                 sw.status
@@ -271,7 +271,7 @@ namespace MRF.API.Controllers
 
         public class CanditeResponseDTO
         {
-            public List<Candidatedetails>  CandidateDetails { get; set; }
+            public List<Candidatedetails> CandidateDetails { get; set; }
             public List<Employeerolemap> Resumereviewer { get; set; } = new List<Employeerolemap>();//5
             public List<Candidatestatusmaster> status { get; set; } = new List<Candidatestatusmaster>();
 
