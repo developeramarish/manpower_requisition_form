@@ -166,56 +166,44 @@ namespace MRF.API.Controllers
 
             return _responseModel;
         }
-        /*  private void CallResumeForwarddetailsController(CandidatedetailRequestModel request, int id)
-          {
 
-              var existingStatus = _unitOfWork.Resumeforwarddetail.Get(u => u.ForwardedToEmployeeId == id);
-              if (existingStatus != null)
-              {
-                  existingStatus.ForwardedToEmployeeId = id;
-
-                  _unitOfWork.Resumeforwarddetail.Update(existingStatus);
-                  _unitOfWork.Save();
-
-              }
-          }*/
         private void CallResumeForwarddetailsController(CandidatedetailRequestModel request, int id)
         {
-            List<Resumeforwarddetails> existingStatus = _unitOfWork.Resumeforwarddetail.GetEmployeeByCandidateid(id);
-            if (existingStatus != null)
+            List<Resumeforwarddetails>  resumeforwarddetails = _unitOfWork.Resumeforwarddetail.GetEmployeeByCandidateid(id);
+            ResumeforwarddetailController interviewermap = new ResumeforwarddetailController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+            if (resumeforwarddetails != null)
             {
-                foreach (Resumeforwarddetails status in existingStatus)
+                foreach (Resumeforwarddetails resumeforward in resumeforwarddetails)
                 {
+                    interviewermap.Delete(resumeforward.Id);
+                } 
+                var employeeIds = request.ReviewedByEmployeeIds.Split(',');
                     if (!string.IsNullOrEmpty(request.ReviewedByEmployeeIds))
                     {
-                        var employeeIds = request.ReviewedByEmployeeIds.Split(',');
+
                         foreach (var employeeId in employeeIds)
                         {
 
-                            
+
                             var forwardResume = new ResumeforwarddetailRequestModel
                             {
                                 CandidateId = id,
-                             ForwardedToEmployeeId = int.Parse(employeeId),
-                             ForwardedFromEmployeeId=status.ForwardedFromEmployeeId,
-                             ForwardedOnUtc = status.ForwardedOnUtc
+                                ForwardedToEmployeeId = int.Parse(employeeId),
+                                // as we discussed with ashutosh we are adding ForwardedFromEmployeeId as a 1
+                                ForwardedFromEmployeeId = 1,
+                                 
 
-                        };
-
-                            ResumeforwarddetailController interviewermap = new ResumeforwarddetailController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+                            };
                             var interviewermapResponse = interviewermap.Post(forwardResume);
 
-
-
-
                         }
-                    }
+
+                        
+                         
+                    
                 }
             }
         }
-
-
-
 
         // DELETE api/<CandidatedetailController>/5
         [HttpDelete("{Id}")]
@@ -255,6 +243,9 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching create MRF Dropdown list");
             List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetAll().ToList(); 
+            List<Resumeforwarddetails> obj1= _unitOfWork.Resumeforwarddetail.GetAll().ToList();
+         
+            
             CanditeResponseDTO sw = new CanditeResponseDTO();
 
 
@@ -262,6 +253,7 @@ namespace MRF.API.Controllers
             sw.status = _unitOfWork.Candidatestatusmaster.GetAll().ToList();
             var combinedData = new
             {
+                 
                 CandidateDetails = obj,
                 sw.Resumereviewer,
                 sw.status
