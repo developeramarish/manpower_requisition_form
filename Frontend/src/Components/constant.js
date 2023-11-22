@@ -31,4 +31,4 @@ export const RequisitionType = [
  
   // Add more options as needed
 ];
-export const constantResumePath="C:\\inetpub\\wwwroot\\MRF";
+export const constantResumePath="https://10.22.11.101:90";
