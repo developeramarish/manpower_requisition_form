@@ -1,0 +1,230 @@
+
+ 
+  
+  .dash-body {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+  
+    & nav {
+      background-color: rgb(7, 7, 32);
+      height: 92vh;
+      width: 8%;
+      display: flex;
+      flex-direction: column;
+      color: rgb(131, 131, 131);
+  
+      & a {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5vw;
+  
+        & i {
+          font-size: 1.8rem;
+          margin-bottom: 1vh;
+        }
+  
+        & h4 {
+          font-size: 0.6rem;
+          text-align: center;
+        }
+      }
+  
+      .a-is-active {
+        color: white;
+        background-color: rgb(37, 37, 53);
+      }
+    }
+  }
+  
+  .dash {
+    background-color: rgb(243, 242, 242);
+    padding: 1.5vh 1.4vw;
+    width: 92%;
+  }
+  
+  .dash-top {
+    width: 100%;
+    margin-bottom: 2vh;
+  
+    & h3 {
+      margin-right: auto;
+      font-size: 1.4rem;
+    }
+  }
+  
+  .srch {
+    width: 26%;
+    height: 4.6vh;
+    background: white;
+    border: 1px solid rgb(212, 212, 212);
+    border-radius: calc(4.6vh / 2);
+    padding: 4px 10px;
+    color: gray;
+    font-size: 0.8rem;
+  
+    & input {
+      margin-left: 8px;
+      outline: none;
+      width: 85%;
+    }
+  }
+  
+  .dash-left {
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid rgb(212, 212, 212);
+    border-radius: 2vh;
+    padding: 1% 0;
+    width: 27%;
+    height: 82vh;
+  
+    & h4 {
+      padding: 2% 5%;
+      font-size: 1.1rem;
+      margin-bottom: 3%;
+      width: 100%;
+    }
+  }
+  
+  .mrf-table {
+    width: 100%;
+    font-size: 0.9rem;
+    list-style: none;
+  }
+  
+  .mrf-head,
+  .mrf-body {
+    padding: 5%;
+    text-align: left;
+    border-top: 1px solid rgb(212, 212, 212);
+  
+    & li {
+      width: 70%;
+      margin-right: 10%;
+      text-wrap: balance;
+  
+      &:last-of-type {
+        margin-right: 0;
+        width: 35%;
+        text-decoration: underline;
+        color: blue;
+      }
+    }
+  }
+  
+  .mrf-head {
+    background-color: rgb(245, 245, 245);
+  
+    & li {
+      font-weight: bold;
+  
+      &:last-of-type {
+        text-decoration: none;
+        color: black;
+      }
+    }
+  }
+  
+  .dash-right {
+    flex-direction: column;
+    width: 70%;
+    height: 82vh;
+    margin-left: 1.5vw;
+  }
+  
+  .tab-card {
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid rgb(212, 212, 212);
+    border-radius: 2vh;
+    padding: 1% 0;
+    font-size: 0.9rem;
+    height: 40vh;
+    margin-bottom: 2vh;
+  }
+  
+  .tab-head {
+    padding: 2%;
+    font-size: 1.1rem;
+    width: 100%;
+  
+    & h4 {
+      margin-right: auto;
+    }
+  
+    & button {
+      background: none;
+      color: blue;
+      font-size: 0.95rem;
+  
+      & p {
+        margin-right: 5px;
+      }
+    }
+  }
+  
+  .tab-cname {
+    width: 100%;
+    font-weight: bold;
+    background-color: rgb(245, 245, 245);
+    border-top: 1px solid rgb(212, 212, 212);
+    padding: 1% 2% 0 2%;
+  
+    & li {
+      width: 70%;
+      &:last-of-type {
+        text-align: center;
+        border-bottom: 1px solid rgb(212, 212, 212);
+        padding-bottom: 10px;
+      }
+  
+      &:first-of-type {
+        width: 35%;
+      }
+    }
+  }
+  
+  .tab-body {
+    width: 100%;
+    padding: 1% 0px;
+    border-top: 1px solid rgb(212, 212, 212);
+  
+    & li {
+      width: 18%;
+      padding: 0px 10px;
+      text-align: center;
+  
+      &:first-of-type {
+        border-top: none;
+        width: 35%;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        color: blue;
+        text-align: left;
+      }
+    }
+  }
+  .add-gray {
+    background-color: rgb(245, 245, 245);
+    border-top: none;
+    color: gray;
+    font-weight: bold;
+  }
+  
+  .pop {
+    background: rgba(0, 0, 0, 0.413);
+    height: 100%;
+    width: 100%;
+    padding: 5% 3% 5% 10%;
+  }
+  .pop-head {
+    padding-right: 3%;
+    & h4 {
+      margin-right: auto;
+    }
+    & button {
+      background: none;
+    }
+  }
+  
