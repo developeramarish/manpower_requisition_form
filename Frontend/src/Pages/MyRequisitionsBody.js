@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link } from "react-router-dom";
-import {
-  APIPath
-} from "../Components/constant";
+import { APIPath } from "../Components/constant";
+import "../styles/layout/MyRequisitionsBody.css";
+
 function MyRequisitionsBody() {
   const [reqData, setReqData] = useState([]);
 
   useEffect(() => {
     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1
-    const apiUrl = APIPath+"Mrfdetail/GetMrfDetails/0";
+    const apiUrl = APIPath + "Mrfdetail/GetMrfDetails/0";
     fetch(apiUrl)
       .then((response) => response.json())
       .then((response) => {
@@ -26,23 +26,29 @@ function MyRequisitionsBody() {
       });
   }, []);
 
-  const header = <h3 className="text-base m-0">My Requisitions</h3>;
+  const header = <h3 className="req-header">My Requisitions</h3>;
 
-  const columnHeaderClass = "text-base text-red-600";
+  const columnHeaderTemplate = (title) => {
+    return <h3 className="req-table-header">{title}</h3>;
+  };
 
   const referenceBodyTemplate = (mrf) => {
     return (
       <Link to={`/EditRequisition/${mrf.mrfId}`}>
-        <h4 className="underline text-red-600">{mrf.referenceNo}</h4>
+        <h4 className="ref-col-cell">{mrf.referenceNo}</h4>
       </Link>
     );
   };
+  //underline text-red-600
+  const createdOnBodyTemplate = (mrf) => {
+    return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
+  };
+  const updatedOnBodyTemplate = (mrf) => {
+    return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
+  };
 
   return (
-    <div
-      className="card border-round-lg bg-white p-2"
-      style={{ height: "81vh" }}
-    >
+    <div className="req-card">
       <DataTable
         value={reqData}
         paginator
@@ -51,26 +57,64 @@ function MyRequisitionsBody() {
         scrollable
         header={header}
         scrollHeight="62vh"
-        size="medium"
       >
         <Column
           field="referenceNo"
-          header="MRF ID"
+          header={columnHeaderTemplate("MRF ID")}
+          s
           body={referenceBodyTemplate}
-          bodyClassName="w-2"
+          bodyClassName="req-col ref-col"
         ></Column>
-        <Column field="name" header="Created By" sortable></Column>
-        <Column field="createdOnUtc" header="Created On" sortable></Column>
-        <Column field="updatedOnUtc" header="Last Updated" sortable></Column>
         <Column
-          field="requisitionType"
-          header="Requisition Type"
+          field="name"
+          header={columnHeaderTemplate("Created By")}
+          bodyClassName="req-col"
           sortable
         ></Column>
-        <Column field="vacancyNo" header="No. of Positions" sortable></Column>
-        <Column field="experience" header="Exp Required" sortable></Column>
-        <Column field="salary" header="Salary Range" sortable></Column>
-        <Column field="mrfStatus" header="Status" sortable></Column>
+        <Column
+          field="createdOnUtc"
+          header={columnHeaderTemplate("Created On")}
+          body={createdOnBodyTemplate}
+          bodyClassName="req-col"
+          sortable
+        ></Column>
+        <Column
+          field="updatedOnUtc"
+          header={columnHeaderTemplate("Last Updated")}
+          body={updatedOnBodyTemplate}
+          bodyClassName="req-col"
+          sortable
+        ></Column>
+        <Column
+          field="requisitionType"
+          header={columnHeaderTemplate("Requisition Type")}
+          bodyClassName="req-col"
+          sortable
+        ></Column>
+        <Column
+          field="vacancyNo"
+          header={columnHeaderTemplate("No. of Positions")}
+          bodyClassName="req-col"
+          sortable
+        ></Column>
+        <Column
+          field="experience"
+          header={columnHeaderTemplate("Exp Required")}
+          bodyClassName="req-col"
+          sortable
+        ></Column>
+        <Column
+          field="salary"
+          header={columnHeaderTemplate("Salary Range")}
+          bodyClassName="req-col"
+          sortable
+        ></Column>
+        <Column
+          field="mrfStatus"
+          header={columnHeaderTemplate("Status")}
+          bodyClassName="req-col"
+          sortable
+        ></Column>
       </DataTable>
     </div>
   );
