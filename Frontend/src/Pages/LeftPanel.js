@@ -52,7 +52,7 @@ const LeftPanel = () => {
         <Link to="/Candidate" className="menu-link-class">
           <i className="pi pi-file-edit text-2xl"></i>
           <h4 className="my-2 line-height-2 text-center text-xs">
-            ADD CANDIDATE
+            VIEW CANDIDATE
           </h4>
         </Link>
       ),
