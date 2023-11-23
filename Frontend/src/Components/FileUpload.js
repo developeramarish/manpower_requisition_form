@@ -1,48 +1,33 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 
-const FileUpload = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [resumeOrAssign, setResumeOrAssign] = useState('');
+const SingleFileUpload = ({ onChange }) => {
+  const fileInputRef = useRef(null);
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  const onFileSelect = (event) => {
+    const selectedFile = event.target.files && event.target.files.length > 0 ? event.target.files[0] : null;
 
-  const handleResumeOrAssignChange = (event) => {
-    setResumeOrAssign(event.target.value);
-  };
-
-  const handleFileUpload = () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      // Replace 'YOUR_UPLOAD_API_ENDPOINT' with your actual API endpoint
-      fetch('https://localhost:7128/api/Upload?ResumeOrAssign=' + resumeOrAssign, {
-        method: 'POST',
-        body: formData,
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('File uploaded successfully:', data);
-          // Clear the selected file after upload
-          setSelectedFile(null);
-        })
-        .catch(error => {
-          console.error('Error uploading file:', error);
-        });
+    if (selectedFile && selectedFile.type === 'application/pdf') {
+      // Call the parent component's onChange callback with the selected file
+      onChange(selectedFile);
     } else {
-      console.error('No file selected');
+      alert('Please select a PDF file.');
+      // Clear the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
     }
   };
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
-      <input type="text" placeholder="ResumeOrAssign" onChange={handleResumeOrAssignChange} value={resumeOrAssign} />
-      <button onClick={handleFileUpload}>Upload</button>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf"
+        onChange={onFileSelect}
+      />
     </div>
   );
 };
 
-export default FileUpload;
+export default SingleFileUpload;
