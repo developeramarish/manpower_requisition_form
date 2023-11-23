@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import DropdownComponent from "../Components/Dropdown";
 import InputTextCp from "../Components/Textbox";
@@ -14,18 +15,18 @@ import {
   minExperienceOptions,
   maxExperienceOptions,
   Gender,
-  RequisitionType,
+  RequisitionType,APIPath
 } from "../Components/constant";
 
-const CreateRequisitionBody = () => {
+const CreateRequisitionBody = ({ getReqId = null }) => {
   // State to hold all the dropdown data
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const toastRef = useRef(null);
-  const getReqId = '';
-
+  const navigate = useNavigate();
+  const RedAsterisk = () => <span className="text-red-500">*</span>;
   const formSchema = {
     referenceNo: "",
     positionTitle: "",
@@ -33,22 +34,22 @@ const CreateRequisitionBody = () => {
     departmentId: 0,
     subDepartmentId: 0,
     projectId: 0,
-    vacancyNo: 0,
+    vacancyNo: "",
     genderId: 0,
-    qualification: 0,
+    qualification: "",
     requisitionDateUtc: "",
-    reportsToEmployeeId: 0,
+    reportsToEmployeeId: "",
     minGradeId: 0,
     maxGradeId: 0,
-    employmentTypeId: 0,
-    minExperience: 0,
-    maxExperience: 0,
-    vacancyTypeId: 0,
+    employmentTypeId: "",
+    minExperience: "",
+    maxExperience: "",
+    vacancyTypeId: "",
     isReplacement: false,
-    mrfStatusId: 0,
+    mrfStatusId: "",
     jdDocPath: "",
-    locationId: 0,
-    qualificationId:0,
+    locationId: "",
+    qualificationId: "",
     justification: "",
     softwaresRequired: "",
     hardwaresRequired: "",
@@ -56,23 +57,30 @@ const CreateRequisitionBody = () => {
     maxTargetSalary: 0,
     employeeName: "",
     emailId: "",
-    employeeCode: 0,
+    employeeCode: "",
     lastWorkingDate: "",
     annualCtc: 0,
     annualGross: 0,
     replaceJustification: "",
-    resumeReviewerEmployeeIds: null,
-    interviewerEmployeeIds: null,
-    hiringManagerId: 0,
-    functionHeadId: 0,
-    siteHRSPOCId: 0,
-    financeHeadId: 0,
-    presidentnCOOId: 0,
-    pcApprovalDate:"",
-    fhApprovalDate:"",
-    fiApprovalDate:"",
-    spApprovalDate:"",
-    hmApprovalDate:""
+    jobDescription: "",
+    skills: "",
+    resumeReviewerEmployeeIds: [],
+    interviewerEmployeeIds: [],
+    hiringManagerId: "",
+    hiringManagerEmpId: "",
+    functionHeadId: "",
+    functionHeadEmpId: "",
+    siteHRSPOCId: "",
+    siteHRSPOCEmpId: "",
+    financeHeadId: "",
+    financeHeadEmpId: "",
+    presidentnCOOId: "",
+    presidentnCOOEmpId: "",
+    pcApprovalDate: new Date().toISOString(),
+    fhApprovalDate: new Date().toISOString(),
+    fiApprovalDate: new Date().toISOString(),
+    spApprovalDate: new Date().toISOString(),
+    hmApprovalDate: new Date().toISOString(),
   };
 
   // Initialize the formData state using the form schema
@@ -80,12 +88,12 @@ const CreateRequisitionBody = () => {
 
   useEffect(() => {
     // Fetch the data for all the dropdowns
-    fetch("https://localhost:7128/api/Mrfdetail/GetMRFDropdownlist")
+    fetch(APIPath+"Mrfdetail/GetMRFDropdownlist")
       .then((response) => response.json())
       .then((data) => {
         const dropdown = data.result;
         // Store the dropdown data in localStorage using your storageService
-        storageService.set('dropdownData', dropdown);
+        storageService.set("dropdownData", dropdown);
         // Update the state with the new dropdown data
         setDropdownData(dropdown);
       })
@@ -94,7 +102,7 @@ const CreateRequisitionBody = () => {
       });
 
     if (getReqId) {
-      const apiUrl = `https://localhost:7128/api/Mrfdetail/GetRequisition/${getReqId}`;
+      const apiUrl =APIPath+ `Mrfdetail/GetRequisition/${getReqId}`;
       fetch(apiUrl)
         .then((response) => response.json())
         .then((response) => {
@@ -106,8 +114,12 @@ const CreateRequisitionBody = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setFormData(formSchema);
+  }, [getReqId]);
+
   const fetchSubDepartments = (selectedDepartment) => {
-    const apiUrl = `https://localhost:7128/api/Subdepartment/GetInfo/${selectedDepartment}`;
+    const apiUrl =APIPath+ `Subdepartment/GetInfo/${selectedDepartment}`;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((responseData) => {
@@ -125,6 +137,7 @@ const CreateRequisitionBody = () => {
   };
 
   useEffect(() => {
+    
     fetchSubDepartments(formData.departmentId);
   }, [formData.departmentId]);
 
@@ -153,7 +166,7 @@ const CreateRequisitionBody = () => {
       mrfStatusId: mrfStatusId,
       jdDocPath: "string",
       locationId: formData.locationId,
-      qualificationId:formData.qualificationId,
+      qualificationId: formData.qualificationId,
       createdByEmployeeId: 1,
       createdOnUtc: new Date().toISOString(),
       updatedByEmployeeId: 1,
@@ -165,13 +178,17 @@ const CreateRequisitionBody = () => {
       maxTargetSalary: formData.maxTargetSalary,
       employeeName: formData.employeeName,
       emailId: formData.emailId,
-      employeeCode: formData.employeeCode,
+      employeeCode: formData.employeeCode!=""?formData.employeeCode:0,
       lastWorkingDate: new Date().toISOString().slice(0, 10),
       annualCtc: formData.annualCtc,
       annualGross: formData.annualGross,
       replaceJustification: formData.replaceJustification,
-      resumeReviewerEmployeeIds: formData.resumeReviewerEmployeeIds.join(','),
-      interviewerEmployeeIds: formData.interviewerEmployeeIds.join(','),
+      resumeReviewerEmployeeIds: strToArray(
+        formData.resumeReviewerEmployeeIds
+      ).toString(),
+      interviewerEmployeeIds: strToArray(
+        formData.interviewerEmployeeIds
+      ).toString(),
       hiringManagerId: formData.hiringManagerId,
       hiringManagerEmpId: formData.hiringManagerEmpId,
       functionHeadId: formData.functionHeadId,
@@ -182,16 +199,15 @@ const CreateRequisitionBody = () => {
       financeHeadEmpId: formData.financeHeadEmpId,
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
-      pcApprovalDate:formData.pcApprovalDate,
-      fhApprovalDate:formData.fhApprovalDate,
-      fiApprovalDate:formData.fiApprovalDate,
-      spApprovalDate:formData.fiApprovalDate,
-      hmApprovalDate:formData.hmApprovalDate,
-      
+      pcApprovalDate: formData.pcApprovalDate,
+      fhApprovalDate: formData.fhApprovalDate,
+      fiApprovalDate: formData.fiApprovalDate,
+      spApprovalDate: formData.fiApprovalDate,
+      hmApprovalDate: formData.hmApprovalDate,
     };
     try {
       const response = await fetch(
-        "https://localhost:7128/api/mrfdetail/POST",
+        APIPath+"mrfdetail/POST",
         {
           method: "POST",
           headers: {
@@ -208,7 +224,10 @@ const CreateRequisitionBody = () => {
           toastRef.current.showConflictMessage(responseData.message);
         } else {
           toastRef.current.showSuccessMessage("Form submitted successfully!");
-          // window.location.href = '/MyRequisitions';
+          setTimeout(() => {
+            navigate("/MyRequisitions");
+          }, 2000);
+          
         }
       } else {
         console.error("Request failed with status:", response.status);
@@ -225,6 +244,8 @@ const CreateRequisitionBody = () => {
     } finally {
       setIsLoading(false);
     }
+
+    
   };
 
   const strToArray = (s) => {
@@ -238,16 +259,15 @@ const CreateRequisitionBody = () => {
     if (Array.isArray(selectedOpt)) {
       return options.filter((e) => selectedOpt.includes(e.employeeId));
     }
-    
   };
 
   const objToArray = (selectedOpt = []) => {
     return selectedOpt.map((e) => e.employeeId);
   };
 
-  //need to change this
   const handleCancel = () => {
-    setDropdownData({});
+    setFormData(formSchema);
+    //setDropdownData({});
     setSubDepartments([]);
   };
 
@@ -265,7 +285,8 @@ const CreateRequisitionBody = () => {
           <div className="flex justify-content-between gap-5">
             <div className="flex flex-column w-6 gap-2">
               <h4 className="text-xl my-2">
-                Reference Number: <span className="text-red-600">{formData.referenceNo}</span>
+                Reference Number:{" "}
+                <span className="text-red-600">{formData.referenceNo}</span>
               </h4>
             </div>
           </div>
@@ -275,7 +296,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="RequisitionType" className="font-bold text-sm">
-              Requisition Type
+              Requisition Type<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -290,7 +311,7 @@ const CreateRequisitionBody = () => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-title" className="font-bold text-sm">
-              Position Title
+              Position Title<RedAsterisk />
             </label>
             <InputTextCp
               id="position-title"
@@ -305,7 +326,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
-              Department
+              Department<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -320,7 +341,7 @@ const CreateRequisitionBody = () => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="sub-department" className="font-bold text-sm">
-              Sub-Department
+              Sub-Department<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -337,7 +358,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="project" className="font-bold text-sm">
-              Project
+              Project<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -352,7 +373,7 @@ const CreateRequisitionBody = () => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="location" className="font-bold text-sm">
-              Location
+              Location<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="location"
@@ -369,7 +390,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-reporting" className="font-bold text-sm">
-              Position Reporting to
+              Position Reporting to<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -388,7 +409,7 @@ const CreateRequisitionBody = () => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="initiation-date" className="font-bold text-sm">
-              Hiring Initiation Date
+              Hiring Initiation Date<RedAsterisk />
             </label>
             <CalendarComponent
               id="initiation-date"
@@ -406,7 +427,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="employment-type-req" className="font-bold text-sm">
-              Type of employment required
+              Type of employment required<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -422,7 +443,7 @@ const CreateRequisitionBody = () => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="mingrade" className="font-bold text-sm">
-              Grade of the proposed employee
+              Grade of the proposed employee<RedAsterisk />
             </label>
 
             <div className="p-col-7">
@@ -459,7 +480,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="no-vacancies" className="font-bold text-sm">
-              Number of Vaccancies
+              Number of Vaccancies<RedAsterisk />
             </label>
             <InputTextCp
               id="vaccancies"
@@ -473,7 +494,7 @@ const CreateRequisitionBody = () => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="vacancy-type" className="font-bold text-sm">
-              Type of vacancy
+              Type of vacancy<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -490,7 +511,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5 ">
           <div className="flex flex-column w-5 gap-2">
             <label htmlFor="experience" className="font-bold text-sm">
-              Experience
+              Experience<RedAsterisk />
             </label>
             <div className="p-col-7">
               <label className="font-bold text-sm label-with-padding-right">
@@ -522,7 +543,7 @@ const CreateRequisitionBody = () => {
           </div>
           <div className="flex flex-column w-6 row-gap-2">
             <label htmlFor="gender" className="font-bold text-sm">
-              Gender
+              Gender<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="label"
@@ -537,7 +558,7 @@ const CreateRequisitionBody = () => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="qualification" className="font-bold text-sm">
-              Qualification
+              Qualification<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -675,7 +696,7 @@ const CreateRequisitionBody = () => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="jobDescription" className="font-bold text-sm">
-              Job Description
+              Job Description<RedAsterisk />
             </label>
             <InputTextareaComponent
               autoResize
@@ -689,7 +710,7 @@ const CreateRequisitionBody = () => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="skills" className="font-bold text-sm">
-              Skills
+              Skills <RedAsterisk />
             </label>
             <InputTextareaComponent
               autoResize
@@ -720,7 +741,7 @@ const CreateRequisitionBody = () => {
           <div className="flex flex-column gap-4 w-6">
             <div className="flex flex-column gap-2">
               <label htmlFor="MinTargetSalary" className="font-bold text-sm">
-                Min Target Salary
+                Min Target Salary<RedAsterisk />
               </label>
               <InputTextCp
                 id="MinTargetSalary"
@@ -732,7 +753,7 @@ const CreateRequisitionBody = () => {
             </div>
             <div className="flex flex-column gap-2">
               <label htmlFor="MaxTargetSalary" className="font-bold text-sm">
-                Max Target Salary
+                Max Target Salary<RedAsterisk />
               </label>
               <InputTextCp
                 id="MaxTargetSalary"
@@ -791,7 +812,7 @@ const CreateRequisitionBody = () => {
           </div>
         </div>
         <div className="flex justify-content-between">
-          <h1 className="my-2 mx-3">EMAIL APPROVAL/SIGNATURE DATES:</h1>
+          <h1 className="my-2 mx-3">EMAIL APPROVAL/SIGNATURE DATES:<RedAsterisk /></h1>
         </div>
         <div id="first" className="flex justify-content-evenly gap-4">
           <div className="flex flex-column gap-2">
@@ -821,13 +842,15 @@ const CreateRequisitionBody = () => {
               value={formData.hiringManagerId}
               onChange={(e) => {
                 const selectedHiringManagerId = e.target.value;
-                const selectedHiringManager = dropdownData.hiringManager.find(manager => manager.employeeId === selectedHiringManagerId);
-            
+                const selectedHiringManager = dropdownData.hiringManager.find(
+                  (manager) => manager.employeeId === selectedHiringManagerId
+                );
+
                 if (selectedHiringManager) {
                   setFormData({
                     ...formData,
                     hiringManagerId: selectedHiringManagerId,
-                    hiringManagerEmpId: selectedHiringManager.employeeCode, 
+                    hiringManagerEmpId: selectedHiringManager.employeeCode,
                   });
                 }
               }}
@@ -886,18 +909,20 @@ const CreateRequisitionBody = () => {
               options={dropdownData.functionHead}
               value={formData.functionHeadId}
               onChange={(e) => {
-                  const selectedfunctionHeadId = e.target.value;
-                  const selectedfunctionHead = dropdownData.functionHead.find(manager => manager.employeeId === selectedfunctionHeadId);
-              
-                  if (selectedfunctionHead) {
-                    setFormData({
-                      ...formData,
-                      functionHeadId: selectedfunctionHeadId,
-                      functionHeadEmpId: selectedfunctionHead.employeeCode, 
-                    });
-                  }
-                }}
-             />
+                const selectedfunctionHeadId = e.target.value;
+                const selectedfunctionHead = dropdownData.functionHead.find(
+                  (manager) => manager.employeeId === selectedfunctionHeadId
+                );
+
+                if (selectedfunctionHead) {
+                  setFormData({
+                    ...formData,
+                    functionHeadId: selectedfunctionHeadId,
+                    functionHeadEmpId: selectedfunctionHead.employeeCode,
+                  });
+                }
+              }}
+            />
           </div>
 
           <div className="flex flex-column gap-2">
@@ -946,13 +971,15 @@ const CreateRequisitionBody = () => {
               value={formData.siteHRSPOCId}
               onChange={(e) => {
                 const selectedsiteHRSPOCId = e.target.value;
-                const selectedsiteHRSPOCEmpId = dropdownData.siteHRSPOC.find(manager => manager.employeeId === selectedsiteHRSPOCId);
-            
+                const selectedsiteHRSPOCEmpId = dropdownData.siteHRSPOC.find(
+                  (manager) => manager.employeeId === selectedsiteHRSPOCId
+                );
+
                 if (selectedsiteHRSPOCEmpId) {
                   setFormData({
                     ...formData,
                     siteHRSPOCId: selectedsiteHRSPOCId,
-                    siteHRSPOCEmpId: selectedsiteHRSPOCEmpId.employeeCode, 
+                    siteHRSPOCEmpId: selectedsiteHRSPOCEmpId.employeeCode,
                   });
                 }
               }}
@@ -1003,13 +1030,15 @@ const CreateRequisitionBody = () => {
               value={formData.financeHeadId}
               onChange={(e) => {
                 const selectedfinanceHeadId = e.target.value;
-                const selectedfinanceHeadEmpId = dropdownData.financeHead.find(manager => manager.employeeId === selectedfinanceHeadId);
-            
+                const selectedfinanceHeadEmpId = dropdownData.financeHead.find(
+                  (manager) => manager.employeeId === selectedfinanceHeadId
+                );
+
                 if (selectedfinanceHeadEmpId) {
                   setFormData({
                     ...formData,
                     financeHeadId: selectedfinanceHeadId,
-                    financeHeadEmpId: selectedfinanceHeadEmpId.employeeCode, 
+                    financeHeadEmpId: selectedfinanceHeadEmpId.employeeCode,
                   });
                 }
               }}
@@ -1061,13 +1090,16 @@ const CreateRequisitionBody = () => {
               value={formData.presidentnCOOId}
               onChange={(e) => {
                 const selectedpresidentnCOOId = e.target.value;
-                const selectedpresidentnCOOEmpId = dropdownData.presidentnCOO.find(manager => manager.employeeId === selectedpresidentnCOOId);
-            
+                const selectedpresidentnCOOEmpId =
+                  dropdownData.presidentnCOO.find(
+                    (manager) => manager.employeeId === selectedpresidentnCOOId
+                  );
+
                 if (selectedpresidentnCOOEmpId) {
                   setFormData({
                     ...formData,
                     presidentnCOOId: selectedpresidentnCOOId,
-                    presidentnCOOEmpId: selectedpresidentnCOOEmpId.employeeCode, 
+                    presidentnCOOEmpId: selectedpresidentnCOOEmpId.employeeCode,
                   });
                 }
               }}
