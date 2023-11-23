@@ -101,7 +101,7 @@ function App() {
   }
   let Comp = ROUTES[currentPageKey];
   return (
-    <div className={"App " + currentDevice}>
+    <div className={"App " + currentDevice + " "+currentPageKey}>
       <AuthenticatedTemplate>
         {profile && profile.roleId &&
           <>

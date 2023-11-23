@@ -4,10 +4,10 @@ import './../css/Header.css'
 
 const HeaderBar = ({ userFirstName, userLastName }) => {
   return (
-    <div>
+    <div className='top_band'>
       <header className="flex-add">
         <div className="flex-add logo">
-          <img src="./images/logo.jpg" alt="mrf logo" />
+          <img src="./images/logo.png" alt="mrf logo" />
           <h4>MANPOWER REQUISITION</h4>
         </div>
         <div className="flex-add acc-name">
@@ -18,7 +18,7 @@ const HeaderBar = ({ userFirstName, userLastName }) => {
             </p>
             <p className='logged-in-user'>{userFirstName} {userLastName}</p>
           </button>
-          |
+         <span>|</span> 
           <button>LOGOUT</button>
         </div>
       </header>

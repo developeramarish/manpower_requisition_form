@@ -10,5 +10,7 @@ export const ROUTES = {
     /* DASHBOARD: "dashboard",
     CREATE_REQUISITION: "create_requisition",
     MY_REQUISITION: "my_requisition" */
-    dashboard: "Dashboard"
+    dashboard: "Dashboard",
+    my_requisition: "my_requisition",
+    create_requisition: "create_requisition"
 }

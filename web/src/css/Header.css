@@ -1,36 +1,64 @@
+.top_band{
+  height: 75px;
+}
+header{
+  height: 100%;
+  padding: 15px;
+  border-bottom: 1px solid rgb(212, 212, 212);
+ }
+
+ h4{
+  margin-left: 6px;
+  color: 333333;
+  font-family: 'Poppins';
+  font-size: 14px;
+  font-weight:600 ;
+ }
+
+ .acc-name span{
+  color: #979799;
+
+ }
  
-  header {
-    height: 8vh;
-    padding: 1.6vh;
-    border-bottom: 1px solid rgb(212, 212, 212);
-  }
-  
+.flex-add{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
   .logo {
     margin-right: auto;
-  
-    & h4 {
-      font-weight: light;
-    }
-  }
+   }
+   
+ 
   .logged-in-user{
     text-transform: uppercase;
+   
+    font-size: 12px;
+
   }
-  .acc-name {
-    color: gray;
-  
-    & button {
-      background-color: transparent;
-      color: gray;
-      margin: auto 2vw;
-    }
+  .acc-name p {
+    /* color: #979799; */
+    font-size: 12px;
+    font-weight:500;
+    
   }
   
-  .acc-logo {
+  
+  .acc-name button{
+    color: #979799;
+    margin: auto 10px;
+    font-size: 12px;
+    font-weight:500;
+    
+  }
+  
+  .acc-name .acc-logo {
     border: 1px solid gray;
     text-align: center;
     border-radius: 50%;
     padding: 1.2vh;
     color: black;
-    font-weight: bolder;
-    margin-right: 1vw;
+    margin-right: 10px;
+    font-weight:700;
   }
