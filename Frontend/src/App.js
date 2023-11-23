@@ -13,6 +13,7 @@ import EmployeDetails from "./Pages/EmployeDetails";
 import Candidate from "./Pages/Candidate";
 import EmployeDetailsCreate from "./Pages/EmployeDetailsCreate";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
+import AddCandidate from "./Pages/AddCandidate";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/MyReumes" element={<MyReumes />} />
           <Route path="/EmployeDetails" element={<EmployeDetails />}></Route>
           <Route path="/Candidate" element={<Candidate />} />
+          <Route path="/AddCandidate" element={<AddCandidate />} />
           <Route
             path="/EmployeDetailsCreate"
             element={<EmployeDetailsCreate />}
