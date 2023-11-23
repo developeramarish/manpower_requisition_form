@@ -1,0 +1,19 @@
+.p-button.p-button-icon-only,
+.p-checkbox .p-checkbox-box.p-highlight {
+  background-color: #d32f2e;
+  border-color: #d32f2e;
+}
+
+.p-checkbox-box:hover,
+.p-multiselect:hover,
+.p-dropdown:hover,
+.p-inputtext:hover {
+  border-color: #d32f2e;
+}
+
+.p-focus,
+.p-inputtext:focus,
+.p-button:focus {
+  border-color: #d32f2e;
+  box-shadow: 0 0 0 0.2rem #faa5a5;
+}
