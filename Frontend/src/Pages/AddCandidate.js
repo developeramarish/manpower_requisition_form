@@ -3,6 +3,7 @@ import InputTextCp from "../Components/Textbox";
 import ButtonC from "../Components/Button";
 import ToastMessages from "../Components/ToastMessages";
 import SingleFileUpload from "../Components/FileUpload";
+import {APIPath} from "../Components/constant";
 const AddCandidate = () => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -10,6 +11,7 @@ const AddCandidate = () => {
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
+  
   const formSchema = {
     id: 0,
   mrfId: 2,
@@ -36,7 +38,7 @@ const AddCandidate = () => {
     fileUploadData.append('file', selectedFile);
 
     try {
-        const fileUploadResponse = await fetch('https://localhost:7128/api/Upload?ResumeOrAssign=Resume', {
+        const fileUploadResponse = await fetch(APIPath+'Upload?ResumeOrAssign=Resume', {
         method: 'POST',
         body: fileUploadData,
       });
@@ -61,7 +63,7 @@ const AddCandidate = () => {
    
     try {
         const response = await fetch(
-            "https://localhost:7128/api/Candidatedetail",
+            APIPath+"Candidatedetail",
             {
               method: "POST",
               headers: {
