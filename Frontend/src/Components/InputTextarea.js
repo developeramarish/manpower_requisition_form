@@ -1,10 +1,16 @@
 // InputTextareaComponent.js
-import React from 'react';
-import { InputTextarea } from 'primereact/inputtextarea';
+import React from "react";
+import { InputTextarea } from "primereact/inputtextarea";
 
-const InputTextareaComponent = ({ value, onChange }) => {
+const InputTextareaComponent = ({ value, onChange, rows = 5, cols }) => {
   return (
-    <InputTextarea rows={5} value={value} onChange={onChange} autoResize={true} />
+    <InputTextarea
+      rows={rows}
+      cols={cols}
+      value={value}
+      onChange={onChange}
+      autoResize={true}
+    />
   );
 };
 
