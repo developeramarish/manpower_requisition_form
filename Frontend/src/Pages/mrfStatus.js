@@ -3,7 +3,7 @@ const referenceBodyTemplate = (mrf) => {
    
   
     if (mrf.mrfStatus === "Open") {
-      // If the status is "Save as draft", navigate to a different page
+      
       return (
         <Link to={`/AddCandidate`}>
           <h4 className="ref-col-cell">{mrf.referenceNo}</h4>

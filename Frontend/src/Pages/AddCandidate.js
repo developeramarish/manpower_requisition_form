@@ -6,10 +6,11 @@ import ButtonC from "../Components/Button";
 import ToastMessages from "../Components/ToastMessages";
 import SingleFileUpload from "../Components/FileUpload";
 import {APIPath,removeSpaces} from "../Components/constant";
+import { useNavigate } from "react-router-dom";
 const AddCandidate = () => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const navigate = useNavigate();
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
@@ -82,7 +83,9 @@ const AddCandidate = () => {
         
 
           toastRef.current.showSuccessMessage("Form submitted successfully!");
-          
+          setTimeout(() => {
+            navigate("/Candidate");
+          }, 2000);
         
       } else {
         console.error("Request failed with status:", response.status);
