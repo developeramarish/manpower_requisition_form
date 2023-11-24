@@ -3,6 +3,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link } from "react-router-dom";
 import { APIPath } from "../Components/constant";
+import referenceBodyTemplate from "./mrfStatus"
 import "../styles/layout/MyRequisitionsBody.css";
 
 function MyRequisitionsBody() {
@@ -32,13 +33,8 @@ function MyRequisitionsBody() {
     return <h3 className="req-table-header">{title}</h3>;
   };
 
-  const referenceBodyTemplate = (mrf) => {
-    return (
-      <Link to={`/EditRequisition/${mrf.mrfId}`}>
-        <h4 className="ref-col-cell">{mrf.referenceNo}</h4>
-      </Link>
-    );
-  };
+
+
   //underline text-red-600
   const createdOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
