@@ -46,7 +46,7 @@ const [roleOptions, roleOptionchange] = useState([]);
         if (Array.isArray(responseData.result)) {
           const data = responseData.result;
           const options = data.map(x => { return { value: x.id, name: x.name } })
-          roleOptionchange(data);
+          roleOptionchange(options);
         } else {
           console.error('API response result is not an array:', responseData);
         }
@@ -133,8 +133,8 @@ const [roleOptions, roleOptionchange] = useState([]);
 
             <DropdownComponent
               optionLabel="name"
-              optionValue="id"
-              value={roleId.value}
+              optionValue="value"
+              value={roleId}
               type="roleId"
               options={roleOptions}
               //placeholder={}

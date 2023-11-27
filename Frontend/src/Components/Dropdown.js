@@ -6,6 +6,7 @@ const DropdownComponent = ({
   optionValue,
   options,
   placeholder,
+  className,
   onChange,
   value = null,
 }) => {
@@ -17,6 +18,7 @@ const DropdownComponent = ({
       options={options}
       onChange={onChange}
       placeholder={placeholder}
+      className={className}
     />
   );
 };
