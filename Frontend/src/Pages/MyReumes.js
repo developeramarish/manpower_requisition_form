@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from "react";
-import DataTableCustom from "../Components/DataTableCustom";
+import React, { useState, useEffect, useRef } from "react";
 import DropdownComponent from "../Components/Dropdown";
 import MultiSelectDropdown from "../Components/multiselectDropdown";
-import InputTextareaComponent from "../Components/InputTextarea";
 import "primeicons/primeicons.css";
 import ButtonC from "../Components/Button";
-import { MultiSelect } from "primereact/multiselect";
 import { InputTextarea } from "primereact/inputtextarea";
 import { constantResumePath } from "../Components/constant";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { InputText } from "primereact/inputtext";
 import DashboardHeader from "./Header";
 import LeftPanel from "./LeftPanel";
 
 const MyReumes = () => {
   const [myResumeData, setMyResumeData] = useState({});
-  const [myResumeDsata, setMyResumeDsata] = useState({});
-
-  const [textBoxValue, setTextBoxValue] = useState([]);
-
-  const [dbSelect, setDBSelect] = useState();
-  const updateDB = (param) => {
-    setDBSelect(param);
-  };
+  const [statusData, setStatusData] = useState({});
+  const [forwardData, setForwardData] = useState({});
+  const [values, setValues] = useState([]);
 
   useEffect(() => {
     const fetchData = () => {
@@ -31,188 +26,118 @@ const MyReumes = () => {
           .then((response) => response.json())
           .then((data) => {
             setMyResumeData(data.result);
+            setValues(data.result.candidateDetails);
+            setForwardData(data.result.resumereviewer);
+            setStatusData(data.result.status);
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
           });
-
-        
       } catch (error) {
         console.error("Error fetching data:", error);
-        //   }
       }
     };
 
     fetchData();
   }, []);
 
-  const TextBoxComponent = (reason) => {
-    // console.log(reason)
-    const [textBoxValue, setTextBoxValue] = useState(reason.reason);
-    const handleTextBoxChange = (e) => {
-      console.log(e.target.value);
-      setTextBoxValue(e.target.value);
-      // Additional logic if needed
-    };
-    return (
-      <InputTextarea value={textBoxValue} onChange={handleTextBoxChange} />
-    );
-  };
+  // const  TextBoxComponent = (reason,param) => {
+  //    const [textBoxValue, setTextBoxValue] = useState(reason.reason);
+  //   const handleTextBoxChange = (e) => {
+  //   console.log(e.target.value);
+  //  // setTextBoxValue(e.target.value);
+  //   reason.editorCallback(e.target.value);
+  //    };
+  // return (
+  //     <InputTextarea  value={textBoxValue} onChange={handleTextBoxChange} rows={2} cols={30}  />
+  //     );
+  // };
 
   const openPdfInNewTab = (pdfLink) => {
     window.open(pdfLink, "_blank");
   };
-
-  const SingleSelect = (data, param) => {
-    // console.log(statusId)
-    const statusop = data.data;
-    const id = param.statusId;
+  const SingleSelect = (statusdata) => {
+    const id = statusdata.candidateStatusId;
     const [selectStatus, setSelectedststatus] = useState(id);
-    // console.log(param);
     return (
       <DropdownComponent
         optionLabel="status"
         optionValue="id"
-        value={selectStatus}
-        options={statusop || []}
+        value={statusdata.candidateStatusId}
+        options={statusData || []}
         placeholder="Select Status"
-        onChange={(e) => {
-          console.log("changes done", e.target.value);
-          setSelectedststatus(e.target.value);
-          param.fnCallback(e.target.value);
-        }}
+        className="w-full md:w-23rem"
+        onChange={(e) => statusdata.editorCallback(e.target.value)}
       />
     );
   };
 
-  // const MultiSelect = (data) => {
-  //   console.log(data.data)
-  //   const [forwarddata,setForeard]=useState(data.data)
-  //        const [reviewedByEmployeeId, setreviewedByEmployeeId] = useState(null);
-  //     return (
-  //         <MultiSelectDropdown
-  //           data={forwarddata}
-  //           value={reviewedByEmployeeId}
-  //           optionLabel="name"
-  //           options={forwarddata}
-  //           placeholder="Select Forward To"
-  //           maxSelectedLabels={3}
-  //           onChange={(e) => {
-  //               console.log("changes done", e);
-  //               setreviewedByEmployeeId(e.value);
-  //             }}
-  //           />
-  //         );
-  //       };
+  const MultiSelectTemplate = (options) => {
+    return <div></div>;
+  };
 
-  const MultiSelect = (data, param) => {
-    const [forwarddata, setForwarddata] = useState(data.data);
-    // const id = param.resumereviewer.roleId;
-    const [reviewedByEmployeeId, setreviewedByEmployeeId] = useState(null);
+  const MultiSelect = (data) => {
+    console.log("multiselect", data);
+    const [review, setreviewedByEmployeeId] = useState();
+
     return (
+      // <MultiSelectDropdown
+      //   data={forwardData}
+      //   value={reviewedByEmployeeId}
+      //   optionLabel="name"
+      //   options={forwardData}
+      //   placeholder="Select Forward To"
+      //   maxSelectedLabels={3}
+      //   className="w-full md:w-23rem"
+      // // onChange={(e) => {
+      //   //   console.log("changes done", e.target.value);
+      //   //   setreviewedByEmployeeId(e.value);
+      //   //   //param.fnCallback(e.target.value);
+      //   // }}
+      //   onChange= {(e) =>  data.editorCallback(e.target.value)}
+      // />
       <MultiSelectDropdown
-        data={forwarddata}
-        value={reviewedByEmployeeId}
-        optionLabel="name"
-        options={forwarddata}
-        placeholder="Select Forward To"
-        maxSelectedLabels={3}
+        // id="resumeReviewer"
+        //options={dropdownData.resumereviewer}
+        options={forwardData}
+        value={arrayToObj(forwardData, strToArray(data.reviewedByEmployeeIds))}
         onChange={(e) => {
-          console.log("changes done", e.target.value);
-          setreviewedByEmployeeId(e.value);
-          // param.fnCallback(e.target.value);
+          console.log(e.value);
+          //setreviewedByEmployeeId(objToArray(e.value));
+          data.editorCallback(e.value);
         }}
+        // setFormData({
+        //   ...formData,
+        //   resumeReviewerEmployeeIds: objToArray(e.value),
+        // })
+
+        optionLabel="name"
+        // optionValue="employeeId"
       />
     );
   };
-
-  console.log(myResumeData);
-  console.log(myResumeDsata);
-  const value = myResumeData.candidateDetails;
-
-  let i = 1;
-  // console.log(i);
-  const tableData =
-    value &&
-    value.map((x) => {
-      let resumeLink = `${constantResumePath}/Resume/${x.resumePath}`;
-      return {
-        SrNo: i++,
-
-        Resume: (
-          <a
-            href={resumeLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => {
-              e.preventDefault();
-              openPdfInNewTab(resumeLink);
-            }}
-            style={{ color: "red" }}
-          >
-            {x.name}
-            {".pdf"}
-          </a>
-        ),
-
-        Status: (
-          <SingleSelect
-            data={myResumeData.status}
-            statusId={x.candidateStatusId}
-            fnCallback={updateDB}
-          />
-        ),
-
-        ForwardTo: <MultiSelect data={myResumeData.resumereviewer} />,
-
-        Reason: <TextBoxComponent reason={x.reason} />,
-
-        Action: (
-          <ButtonC
-            icon="pi pi-save"
-            rounded
-            outlined
-            className="mr-2"
-            severity="primary"
-            onClick={() => {
-              updateData(
-                x.id,
-                x.name,
-                x.emailId,
-                x.contactNo,
-                x.resumePath,
-                x.reviewedByEmployeeId,
-                dbSelect
-              );
-            }}
-          />
-        ),
-      };
-    });
-
   const updateData = (
     id,
     name,
     emailId,
     contactNo,
     resumePath,
-    empId,
-    selectVal
+    reviewedByEmployeeId,
+    reviewedByEmployeeIds,
+    candidateStatusId,
+    reason
   ) => {
-    console.log("id", id);
-    console.log("status ", selectVal);
-    // console.log("reason",)
     const empdata = {
       name,
       emailId,
       contactNo,
       resumePath,
-      // candidateStatusId
-      //TextBoxComponent
-      //candidateStatusId,
-      //  reviewedByEmployeeId,
+      reviewedByEmployeeId,
+      reviewedByEmployeeIds,
+      candidateStatusId,
+      reason,
     };
-    fetch("https://localhost:7128/api/Candidatedetail/" + id, {
+    fetch("https://localhost:7128/api/Candidatedetail/Put/" + id, {
       method: "Put",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(empdata),
@@ -224,9 +149,87 @@ const MyReumes = () => {
         console.log(err.message);
       });
   };
+  const header = <h3 className="req-header">My Resume</h3>;
 
-  console.log(tableData);
+  
+  const textEditor = (options) => {
+    console.log("reason", options.value);
+    return (
+      <InputTextarea
+        type="text"
+        value={options.value}
+        rows={2}
+        cols={30}
+        autoResize
+        onChange={(e) => options.editorCallback(e.target.value)}
+      />
+    );
+  };
 
+  const actionBodyTemplate = (rowData) => {
+    console.log("click", rowData);
+    return (
+      <React.Fragment>
+        <ButtonC
+          icon="pi pi-save"
+          rounded
+          outlined
+          className="mr-2 text-white"
+          onClick={() => {
+            updateData(
+              rowData.id,
+              rowData.name,
+              rowData.emailId,
+              rowData.contactNo,
+              rowData.resumePath,
+              rowData.reviewedByEmployeeId,
+              rowData.reviewedByEmployeeIds,
+              rowData.candidateStatusId,
+              rowData.reason
+            );
+          }}
+        />
+      </React.Fragment>
+    );
+  };
+  const strToArray = (s) => {
+    if (typeof s === "string") {
+      s = s.split(",").map(Number);
+    }
+    return s;
+  };
+
+  const arrayToObj = (options = [], selectedOpt) => {
+    if (Array.isArray(selectedOpt)) {
+      return options.filter((e) => selectedOpt.includes(e.employeeId));
+    }
+  };
+
+  const objToArray = (selectedOpt = []) => {
+    return selectedOpt.map((e) => e.employeeId);
+  };
+  const ResumeHyperLink = (resume) => {
+    console.log(resume);
+    let resumeLink = `${constantResumePath}/Resume/${resume.resumePath}`;
+
+    return (
+      <div>
+        <a
+          href={resumeLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => {
+            e.preventDefault();
+            openPdfInNewTab(resumeLink);
+          }}
+          style={{ color: "red", fontFamily: "Poppins", fontWeight: 600 }}
+        >
+          {resume.name}
+          {".pdf"}
+        </a>
+      </div>
+    );
+  };
   return (
     <>
       <div>
@@ -243,23 +246,47 @@ const MyReumes = () => {
                 My Resumes
               </h3>
             </div>
-            <div className=" ">
-              <DataTableCustom
-                data={tableData}
-                tableName={"My Resume"}
-                searching={true}
-                paginator={true}
-                row={9}
-                sorting={["SrNo", "Resume"]}
-                showColum={[
-                  "SrNo",
-                  "Resume",
-                  "Status",
-                  "ForwardTo",
-                  "Reason",
-                  "Action",
-                ]}
-              />
+            <div className="">
+              <DataTable
+                value={values}
+                paginator
+                removableSort
+                rows={6}
+                scrollable
+                header={header}
+                scrollHeight="62vh"
+              >
+                <Column field="id" header="Sr No."></Column>
+                <Column
+                  field="resumePath"
+                  header="Resume"
+                  body={ResumeHyperLink}
+                ></Column>
+                <Column
+                  field="candidateStatusId"
+                  header="Status"
+                  body={SingleSelect}
+                  editor={(options) => SingleSelect(options)}
+                ></Column>
+                <Column
+                  field="reviewedByEmployeeId"
+                  header="Forward to"
+                  body={MultiSelect}
+                  editor={(options) => MultiSelect(options)}
+                ></Column>
+                <Column
+                  field="reason"
+                  header="Reason"
+                  // body={TextBoxComponent}
+                  editor={(options) => textEditor(options)}
+                ></Column>
+
+                <Column
+                  headerStyle={{ width: "10%", minWidth: "8rem" }}
+                  bodyStyle={{ textAlign: "center" }}
+                  body={actionBodyTemplate}
+                ></Column>
+              </DataTable>
             </div>
           </div>
         </div>
