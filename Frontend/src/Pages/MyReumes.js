@@ -270,7 +270,7 @@ const MyReumes = () => {
                 ></Column>
                 <Column
                   field="reviewedByEmployeeId"
-                  header="Forward to"
+                  header="Forward To"
                   body={MultiSelect}
                   editor={(options) => MultiSelect(options)}
                 ></Column>

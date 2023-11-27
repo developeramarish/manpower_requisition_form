@@ -31,7 +31,7 @@ const EmployeDetailsCreate = () => {
         if (Array.isArray(responseData.result)) {
           const data = responseData.result;
           const options = data.map(x => { return { value: x.id,  name: x.name } })
-          roleOptionchange(data);
+          roleOptionchange(options);
         } else {
           console.error('API response result is not an array:', responseData);
         }
@@ -59,7 +59,6 @@ const EmployeDetailsCreate = () => {
     })
 
   }
-  
   return (
     <div >
     <DashboardHeader />
@@ -117,16 +116,14 @@ const EmployeDetailsCreate = () => {
             <DropdownComponent
               optionLabel="name"
               value={roleId}
-              optionValue="id"//"value"
+              optionValue="value"
               type="roleId"
               placeholder={"Select Role"}
               options={roleOptions}
               onChange={e => {
-                console.log(e)
-                
-                setRole(e.target)
-                
-              }
+                console.log(e.target.value)
+                setRole(e.target.value)
+               }
               
               }
               

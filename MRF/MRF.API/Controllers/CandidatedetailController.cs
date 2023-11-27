@@ -178,10 +178,10 @@ namespace MRF.API.Controllers
                 {
                     interviewermap.Delete(resumeforward.Id);
                 }
-                var employeeIds = request.ReviewedByEmployeeIds.Split(',');
+                
                 if (!string.IsNullOrEmpty(request.ReviewedByEmployeeIds))
                 {
-
+                    var employeeIds = request.ReviewedByEmployeeIds.Split(',');
                     foreach (var employeeId in employeeIds)
                     {
 
