@@ -4,6 +4,25 @@
   border-color: #d32f2e;
 }
 
+.p-dropdown-label {
+  color: #6d6d6d;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.p-multiselect-label {
+  color: #6d6d6d;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.p-dropdown-item,
+.p-multiselect-item {
+  color: #0b1016;
+  font-weight: 400;
+  font-size: 14px;
+}
+
 .p-checkbox-box:hover,
 .p-multiselect:hover,
 .p-dropdown:hover,
