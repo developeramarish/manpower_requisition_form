@@ -1,5 +1,6 @@
 ﻿using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
+using MRF.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,16 @@ namespace MRF.DataAccess.Repository
         public void Update(MrfEmailApproval MrfEmailApproval)
         {
             _db.MrfEmailApproval.Update(MrfEmailApproval);
+        }
+
+        public List<MrfEmailApproval> GetList(int mrfId)
+        {
+
+            IQueryable<MrfEmailApproval> query = from mrfDetails in _db.MrfEmailApproval
+                                                 where mrfDetails.MrfId == mrfId
+                                                 select mrfDetails;
+                                                       
+            return query.ToList();
         }
     }
 }

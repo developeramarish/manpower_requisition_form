@@ -9,6 +9,7 @@ namespace MRF.DataAccess.Repository.IRepository
 {
     public interface IMrfEmailApprovalRepository : IRepository<MrfEmailApproval>
     {
+        public List<MrfEmailApproval> GetList(int mrfId);
         public void Update(MrfEmailApproval MrfEmailApproval);
     }
 }
