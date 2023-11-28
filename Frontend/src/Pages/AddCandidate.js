@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import DashboardHeader from "./Header";
+import LeftPanel from "./LeftPanel";
 import InputTextCp from "../Components/Textbox";
 import ButtonC from "../Components/Button";
 import ToastMessages from "../Components/ToastMessages";
 import SingleFileUpload from "../Components/FileUpload";
-import {APIPath} from "../Components/constant";
+import {APIPath,removeSpaces} from "../Components/constant";
+import { useNavigate } from "react-router-dom";
 const AddCandidate = () => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const navigate = useNavigate();
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
@@ -32,38 +35,39 @@ const AddCandidate = () => {
   const [formData, setFormData] = useState(formSchema);
  
   const handleSubmit = async () => {
-
-    
+  
     const fileUploadData = new FormData();
     fileUploadData.append('file', selectedFile);
-
+   
     try {
-        const fileUploadResponse = await fetch(APIPath+'Upload?ResumeOrAssign=Resume', {
+        const fileUploadResponse = await fetch(APIPath+'Upload?ResumeOrAssign=Resume&FileName='+removeSpaces(formData.name), {
         method: 'POST',
         body: fileUploadData,
       });
 
       if (fileUploadResponse.ok) {
         const data = {
-            id: 0,
+          id:0, 
       mrfId: formData.mrfId,
       name: formData.name,
       emailId: formData.emailId,
       contactNo: formData.contactNo,
-      resumePath: formData.name+"_"+formData.mrfId+".pdf",
+      resumePath: removeSpaces(formData.name)+".pdf",
       candidateStatusId: 1,
+     // resumePath: "ddd.pdf",
       reviewedByEmployeeId: 1,
+      reviewedByEmployeeIds: "",
       createdByEmployeeId: 1,
       createdOnUtc: new Date().toISOString(),
       updatedByEmployeeId: 1,
       updatedOnUtc: new Date().toISOString(),
       reason: ""
-        };
+      
      
-   
+    };
     try {
         const response = await fetch(
-            APIPath+"Candidatedetail",
+            APIPath+"Candidatedetail/Post",
             {
               method: "POST",
               headers: {
@@ -79,7 +83,9 @@ const AddCandidate = () => {
         
 
           toastRef.current.showSuccessMessage("Form submitted successfully!");
-          
+          setTimeout(() => {
+            navigate("/Candidate");
+          }, 2000);
         
       } else {
         console.error("Request failed with status:", response.status);
@@ -111,6 +117,13 @@ const AddCandidate = () => {
   };
 
   return (
+    <div>
+    <DashboardHeader />
+    <div className="flex bg-gray-200">
+      <LeftPanel />
+      <div className="flex flex-column gap-2 w-full p-3 py-2 h-full ">
+        
+       
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
       style={{ height: "81vh" }}
@@ -178,18 +191,20 @@ const AddCandidate = () => {
         <ButtonC
           label="CANCEL"
           outlined
-          className="mr-auto w-2"
+          className="mr-auto w-2 border-red-600 text-red-600"
           onClick={handleCancel}
         />
         
         <ButtonC
           label="SUBMIT"
-          className="w-2"
+          className="w-2 bg-red-600 border-red-600"
           onClick={() => handleSubmit()}
         />
         <ToastMessages ref={toastRef} />
       </div>
     </div>
+    </div>
+    </div></div>
   );
 };
 

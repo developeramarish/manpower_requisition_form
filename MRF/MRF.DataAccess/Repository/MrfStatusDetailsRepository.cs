@@ -23,7 +23,9 @@ namespace MRF.DataAccess.Repository
                         join salary in _db.Freshmrfdetails on mrfDetails.Id equals salary.MrfId
                         join Vacancy in _db.Vacancytypemaster on mrfDetails.VacancyTypeId equals Vacancy.Id
                         where (statusId == 0 || (statusId !=0 && mrfStatus.Id == statusId)) && (mrfRolemap.RoleId == roleId)
-                         select new MrfDetailsViewModel
+                        orderby mrfDetails.Id descending
+                        select new MrfDetailsViewModel
+ 
                         {
                             MrfId = mrfDetails.Id,
                             ReferenceNo = mrfDetails.ReferenceNo,

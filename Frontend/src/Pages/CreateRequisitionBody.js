@@ -1145,7 +1145,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <ButtonC
           label="SUBMIT"
           className="w-2 bg-red-600 border-red-600"
-          onClick={() => handleSubmit(1)}
+          onClick={() => handleSubmit(3)}
         />
         <ToastMessages ref={toastRef} />
       </div>

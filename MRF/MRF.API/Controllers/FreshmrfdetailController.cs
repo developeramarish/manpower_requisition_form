@@ -116,8 +116,15 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public FreshmrfdetailResponseModel Put(int id, [FromBody] FreshmrfdetailRequestModel request)
         {
-            var existingFreshmr = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
-
+            Freshmrfdetails existingFreshmr =new Freshmrfdetails();
+            if (id != 0)
+            {
+                existingFreshmr = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
+            }
+            else
+            {
+                existingFreshmr = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == request.MrfId);
+            }
             if (existingFreshmr != null)
             {
                 existingFreshmr.MrfId = request.MrfId;
