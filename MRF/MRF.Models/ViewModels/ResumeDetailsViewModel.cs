@@ -20,6 +20,7 @@ namespace MRF.Models.ViewModels
         public string Candidatestatus { get; set; } = null!;
         public int CandidateStatusId { get; set; }
         public string ResumePath { get; set; } = null!;
+        public string Reason { get; set; } = null!;
 
 
     }

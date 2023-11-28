@@ -42,7 +42,8 @@ namespace MRF.DataAccess.Repository
                             CreatedName = Emp.Name,
                             CreatedOnUtc = resume.CreatedOnUtc,
                             ResumePath = Candidate.ResumePath,
-                            CandidateId= Candidate.Id
+                            CandidateId= Candidate.Id,
+                            Reason=Candidate.Reason,
                         };
 
 
@@ -59,7 +60,8 @@ namespace MRF.DataAccess.Repository
         CreatedName = group.First().CreatedName,
         CreatedOnUtc = group.First().CreatedOnUtc,
         ResumePath = group.First().ResumePath,
-        CandidateId = group.Key  
+        CandidateId = group.Key,
+        Reason = group.First().Reason
     })
     .ToList();
 
