@@ -106,15 +106,6 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(staticFilesPath),
     RequestPath = "/Resume"
 });
-
-var staticFilesPath1 = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Attachment");
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(staticFilesPath1),
-    RequestPath = "/Attachment"
-});
-
-
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
