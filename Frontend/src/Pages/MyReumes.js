@@ -10,6 +10,8 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import DashboardHeader from "./Header";
 import LeftPanel from "./LeftPanel";
+import "../styles/layout/InputComponents.css";
+import "../styles/layout/myResume.css"
 
 const MyReumes = () => {
   const [myResumeData, setMyResumeData] = useState({});
@@ -66,8 +68,9 @@ const MyReumes = () => {
         value={statusdata.candidateStatusId}
         options={statusData || []}
         placeholder="Select Status"
-        className="w-full md:w-23rem"
+        className="w-full md:w-23rem "
         onChange={(e) => statusdata.editorCallback(e.target.value)}
+        style={{color:"red"}}
       />
     );
   };
@@ -81,21 +84,7 @@ const MyReumes = () => {
     const [review, setreviewedByEmployeeId] = useState();
 
     return (
-      // <MultiSelectDropdown
-      //   data={forwardData}
-      //   value={reviewedByEmployeeId}
-      //   optionLabel="name"
-      //   options={forwardData}
-      //   placeholder="Select Forward To"
-      //   maxSelectedLabels={3}
-      //   className="w-full md:w-23rem"
-      // // onChange={(e) => {
-      //   //   console.log("changes done", e.target.value);
-      //   //   setreviewedByEmployeeId(e.value);
-      //   //   //param.fnCallback(e.target.value);
-      //   // }}
-      //   onChange= {(e) =>  data.editorCallback(e.target.value)}
-      // />
+      
       <MultiSelectDropdown
         // id="resumeReviewer"
         //options={dropdownData.resumereviewer}
@@ -106,10 +95,9 @@ const MyReumes = () => {
           //setreviewedByEmployeeId(objToArray(e.value));
           data.editorCallback(e.value);
         }}
-        // setFormData({
-        //   ...formData,
-        //   resumeReviewerEmployeeIds: objToArray(e.value),
-        // })
+        className="w-full md:w-23rem"
+        // style={{color: "#d32f2e", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
+               
 
         optionLabel="name"
         // optionValue="employeeId"
@@ -149,7 +137,7 @@ const MyReumes = () => {
         console.log(err.message);
       });
   };
-  const header = <h3 className="req-header">My Resume</h3>;
+  const header = <h3 className="req-header">My Resumes</h3>;
 
   
   const textEditor = (options) => {
@@ -159,8 +147,9 @@ const MyReumes = () => {
         type="text"
         value={options.value}
         rows={2}
-        cols={30}
+        cols={28}
         autoResize
+        style={{color: "#6d6d6d", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
         onChange={(e) => options.editorCallback(e.target.value)}
       />
     );
@@ -222,7 +211,7 @@ const MyReumes = () => {
             e.preventDefault();
             openPdfInNewTab(resumeLink);
           }}
-          style={{ color: "red", fontFamily: "Poppins", fontWeight: 600 }}
+          style={{ color: "#d32f2e", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
         >
           {resume.name}
           {".pdf"}
@@ -240,13 +229,13 @@ const MyReumes = () => {
           <div className=" ">
             <LeftPanel />
           </div>
-          <div className="MyDashboard">
-            <div className="">
+          <div className="MyResume">
+            <div >
               <h3 className="text-black-alpha-90	text-2xl font-bold  m-4">
                 My Resumes
               </h3>
             </div>
-            <div className="">
+            <div >
               <DataTable
                 value={values}
                 paginator
@@ -278,6 +267,7 @@ const MyReumes = () => {
                   field="reason"
                   header="Reason"
                   // body={TextBoxComponent}
+                  // style={{ width: '10%' }}
                   editor={(options) => textEditor(options)}
                 ></Column>
 
