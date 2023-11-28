@@ -182,6 +182,41 @@ namespace MRF.API.Controllers
             }
             
         }
+        // DELETE api/<MrfinterviewermapController>/5
+        [HttpDelete("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(MrfinterviewermapResponseModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful deletion)")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+
+        public void DeleteMRFInterview(int id)
+        {
+            Mrfinterviewermap? obj = _unitOfWork.Mrfinterviewermap.Get(u => u.MrfId == id);
+
+            if (obj != null)
+            {
+                _unitOfWork.Mrfinterviewermap.Remove(obj);
+                _unitOfWork.Save();
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                }
+
+            }
+            else
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+            }
+
+        }
 
 
         // GET api/<MrfinterviewermapController>/5
