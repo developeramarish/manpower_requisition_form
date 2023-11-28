@@ -481,7 +481,7 @@ namespace MRF.API.Controllers
 
 
         // GET api/<MrfdetailController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{statusId},{roleId}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(MrfDetailsViewModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -489,13 +489,12 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetMrfDetails(int id)
-        {
-            _logger.LogInfo($"Fetching All MRF Details by Id: {id}");
-            List<MrfDetailsViewModel> mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(id);
+        public ResponseDTO GetMrfDetails(int statusId,int roleId)
+        {  
+            List<MrfDetailsViewModel> mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(statusId,roleId);
             if (mrfdetail == null)
             {
-                _logger.LogError($"No result found by this Id:{id}");
+                _logger.LogError($"No result found by this Id:");
             }
             _response.Result = mrfdetail;
             return _response;
