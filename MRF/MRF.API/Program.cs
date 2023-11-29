@@ -106,6 +106,14 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(staticFilesPath),
     RequestPath = "/Resume"
 });
+
+// If you want to serve files from a specific directory, you can use:
+var staticFilesPath1 = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Assignment");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath1),
+    RequestPath = "/Assignment"
+});
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
