@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import DropdownComponent from "../Components/Dropdown";
 import MultiSelectDropdown from "../Components/multiselectDropdown";
@@ -12,13 +13,13 @@ import DashboardHeader from "./Header";
 import LeftPanel from "./LeftPanel";
 import "../styles/layout/InputComponents.css";
 import "../styles/layout/myResume.css"
-
+ 
 const MyReumes = () => {
   const [myResumeData, setMyResumeData] = useState({});
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
   const [values, setValues] = useState([]);
-
+ 
   useEffect(() => {
     const fetchData = () => {
       try {
@@ -39,10 +40,10 @@ const MyReumes = () => {
         console.error("Error fetching data:", error);
       }
     };
-
+ 
     fetchData();
   }, []);
-
+ 
   // const  TextBoxComponent = (reason,param) => {
   //    const [textBoxValue, setTextBoxValue] = useState(reason.reason);
   //   const handleTextBoxChange = (e) => {
@@ -54,7 +55,7 @@ const MyReumes = () => {
   //     <InputTextarea  value={textBoxValue} onChange={handleTextBoxChange} rows={2} cols={30}  />
   //     );
   // };
-
+ 
   const openPdfInNewTab = (pdfLink) => {
     window.open(pdfLink, "_blank");
   };
@@ -74,17 +75,17 @@ const MyReumes = () => {
       />
     );
   };
-
+ 
   const MultiSelectTemplate = (options) => {
     return <div></div>;
   };
-
+ 
   const MultiSelect = (data) => {
     console.log("multiselect", data);
     const [review, setreviewedByEmployeeId] = useState();
-
+ 
     return (
-      
+     
       <MultiSelectDropdown
         // id="resumeReviewer"
         //options={dropdownData.resumereviewer}
@@ -98,7 +99,7 @@ const MyReumes = () => {
         className="w-full md:w-23rem"
         // style={{color: "#d32f2e", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
                
-
+ 
         optionLabel="name"
         // optionValue="employeeId"
       />
@@ -138,8 +139,8 @@ const MyReumes = () => {
       });
   };
   const header = <h3 className="req-header">My Resumes</h3>;
-
-  
+ 
+ 
   const textEditor = (options) => {
     console.log("reason", options.value);
     return (
@@ -154,7 +155,7 @@ const MyReumes = () => {
       />
     );
   };
-
+ 
   const actionBodyTemplate = (rowData) => {
     console.log("click", rowData);
     return (
@@ -187,20 +188,20 @@ const MyReumes = () => {
     }
     return s;
   };
-
+ 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
       return options.filter((e) => selectedOpt.includes(e.employeeId));
     }
   };
-
+ 
   const objToArray = (selectedOpt = []) => {
     return selectedOpt.map((e) => e.employeeId);
   };
   const ResumeHyperLink = (resume) => {
     console.log(resume);
     let resumeLink = `${constantResumePath}/Resume/${resume.resumePath}`;
-
+ 
     return (
       <div>
         <a
@@ -219,6 +220,7 @@ const MyReumes = () => {
       </div>
     );
   };
+ 
   return (
     <>
       <div>
@@ -231,7 +233,7 @@ const MyReumes = () => {
           </div>
           <div className="MyResume">
             <div >
-              <h3 className="text-black-alpha-90	text-2xl font-bold  m-4">
+              <h3 className="text-black-alpha-90  text-2xl font-bold  m-4">
                 My Resumes
               </h3>
             </div>
@@ -266,14 +268,14 @@ const MyReumes = () => {
                 <Column
                   field="reason"
                   header="Reason"
-                  // body={TextBoxComponent}
-                  // style={{ width: '10%' }}
+                 
                   editor={(options) => textEditor(options)}
                 ></Column>
-
+ 
                 <Column
+                header="Action"
                   headerStyle={{ width: "10%", minWidth: "8rem" }}
-                  bodyStyle={{ textAlign: "center" }}
+                  bodyStyle={{ textAlign: "left" }}
                   body={actionBodyTemplate}
                 ></Column>
               </DataTable>
@@ -285,3 +287,4 @@ const MyReumes = () => {
   );
 };
 export default MyReumes;
+ 

@@ -8,10 +8,10 @@ import "../styles/layout/MyRequisitionsBody.css";
 
 function MyRequisitionsBody() {
   const [reqData, setReqData] = useState([]);
-
+  const rolId=3;
   useEffect(() => {
     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1
-    const apiUrl = APIPath + "Mrfdetail/GetMrfDetails/0";
+    const apiUrl = APIPath + "Mrfdetail/GetMrfDetails/0,"+rolId;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((response) => {
