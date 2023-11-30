@@ -39,6 +39,7 @@ namespace MRF.DataAccess.Repository
                             Salary = salary.MinTargetSalary + "-" + salary.MaxTargetSalary,
                             VacancyNo = mrfDetails.VacancyNo,
                             RequisitionType = mrfDetails.RequisitionType,
+                            RoleId  = mrfRolemap.RoleId,
                         };
 
             return query.ToList();

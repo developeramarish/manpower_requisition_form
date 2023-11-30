@@ -7,6 +7,7 @@ import ButtonC  from "../Components/Button";
 import { Toolbar } from 'primereact/toolbar';
 import { useNavigate } from 'react-router-dom';
 import EmployeeDtailsEdit from './EmployeeDtailsEdit';
+import '../styles/layout/MyRequisitions.css'
 export default function  EmployeDetails() {
     const [data, setData] = useState([{}]);
     const [editMode, setEditMode] = useState(false);
