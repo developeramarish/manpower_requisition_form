@@ -91,7 +91,7 @@ public partial class MRFDBContext : DbContext
 
             entity.HasIndex(e => e.MrfId, "FK_MrfDetailsCandidateDetails");
 
-            entity.HasIndex(e => e.ReviewedByEmployeeId, "FK_UserMasterCandidateDetails");
+            
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CandidateStatusId).HasColumnType("int(11)");
@@ -105,7 +105,7 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.ResumePath).HasColumnType("text");
             entity.Property(e => e.Reason).HasColumnType("text");
-            entity.Property(e => e.ReviewedByEmployeeId).HasColumnType("int(11)");
+            entity.Property(e => e.ReviewedByEmployeeIds).HasColumnType("text");
             entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
             entity.Property(e => e.UpdatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

@@ -17,10 +17,9 @@ public class Candidatedetails
     public string ResumePath { get; set; } = null!;
 
     public int CandidateStatusId { get; set; }
-   
-    public int ReviewedByEmployeeId { get; set; }
-
     [NotMapped]
+    public int ReviewedByEmployeeId { get; set; }
+    
     public String? ReviewedByEmployeeIds { get; set; }
 
     public int CreatedByEmployeeId { get; set; }

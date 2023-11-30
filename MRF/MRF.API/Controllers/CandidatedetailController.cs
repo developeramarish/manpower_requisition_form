@@ -99,7 +99,7 @@ namespace MRF.API.Controllers
                 EmailId = request.EmailId,
                 ContactNo = request.ContactNo,
                 ResumePath = request.ResumePath,
-                ReviewedByEmployeeId = request.ReviewedByEmployeeId,
+                ReviewedByEmployeeIds = request.ReviewedByEmployeeIds,
                 CandidateStatusId = request.CandidateStatusId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 Reason = request.Reason,
