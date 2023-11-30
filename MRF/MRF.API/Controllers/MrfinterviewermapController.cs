@@ -245,6 +245,7 @@ namespace MRF.API.Controllers
                     {
                         InterviewDetails = InterviewDetails,
                         Interviewstatus = _unitOfWork.Evaluationstatusmaster.GetStatus(),
+                        InterviewReviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(6),
                     };
                     _response.Result = combinedResult;
                 }
@@ -259,9 +260,10 @@ namespace MRF.API.Controllers
 
         public class CombinedResponseDTO
         {
-            public List<InterviewDetailsViewModel> InterviewDetails { get; set; }
-            public List<Interviewstatus> Interviewstatus { get; set; }
-        }
+            public List<InterviewDetailsViewModel> InterviewDetails { get; set; }= new List<InterviewDetailsViewModel> { };
+            public List<Interviewstatus> Interviewstatus { get; set; } = new List<Interviewstatus> { };
+            public List<Employeerolemap> InterviewReviewer { get; set; } = new List<Employeerolemap>();
+    }
 
     }
 }
