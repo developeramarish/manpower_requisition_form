@@ -22,7 +22,7 @@ const AddCandidate = () => {
   emailId: "",
   contactNo: "",
   resumePath: "",
-  candidateStatusId: 1,
+  candidateStatusId: 16,
   reviewedByEmployeeId: 1,
   createdByEmployeeId: 1,
   createdOnUtc: "",
