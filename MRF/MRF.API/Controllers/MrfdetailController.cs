@@ -552,6 +552,7 @@ namespace MRF.API.Controllers
 
         // GET api/<MrfdetailController>/5
         [HttpGet("{statusId},{roleId}")]
+       // [HttpGet("GetMrfDetails")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(MrfDetailsViewModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
