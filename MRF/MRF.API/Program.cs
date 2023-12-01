@@ -55,7 +55,9 @@ builder.Services.AddCors(options =>
             policy.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader();
+                  
         });
+   
 });
 
 
@@ -114,6 +116,16 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(staticFilesPath1),
     RequestPath = "/Assignment"
 });
+
+var staticFilesPath2 = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Feedback");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath2),
+    RequestPath = "/Feedback"
+});
+
+
+
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
