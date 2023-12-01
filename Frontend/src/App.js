@@ -25,6 +25,7 @@ function App() {
           <Route path="/MyRequisitions" element={<MyRequisitions />} />
           <Route path="/CreateRequisition" element={<CreateRequisition />} />
           <Route path="/EditRequisition/:reqId" element={<CreateRequisition />} />
+          <Route path="/MyReumes" element={<MyReumes />} />
           <Route path="/OpenStatus" element={<OpenStatus />} />
           <Route path="/EmployeDetails" element={<EmployeDetails />}></Route>
           <Route path="/Candidate" element={<Candidate />} />
