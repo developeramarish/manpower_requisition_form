@@ -136,16 +136,25 @@ namespace MRF.API.Controllers
 
             var existingDetails = _unitOfWork.Candidatedetail.Get(u => u.Id == id);
             if (existingDetails != null)
-            {
-                existingDetails.Name = request.Name;
-                existingDetails.EmailId = request.EmailId;
-                existingDetails.ContactNo = request.ContactNo;
-                existingDetails.ResumePath = request.ResumePath;
-                existingDetails.ReviewedByEmployeeIds = request.ReviewedByEmployeeIds;
-                existingDetails.CandidateStatusId = request.CandidateStatusId;
-                existingDetails.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                existingDetails.UpdatedOnUtc = request.UpdatedOnUtc;
-                existingDetails.Reason = request.Reason;
+            {   if (request.ReviewedByEmployeeIds != "")
+                {
+                    existingDetails.ReviewedByEmployeeIds = request.ReviewedByEmployeeIds;
+                    existingDetails.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                    existingDetails.UpdatedOnUtc = request.UpdatedOnUtc;
+                    
+                }
+                else
+                {
+                    existingDetails.Name = request.Name;
+                    existingDetails.EmailId = request.EmailId;
+                    existingDetails.ContactNo = request.ContactNo;
+                    existingDetails.ResumePath = request.ResumePath;
+                    existingDetails.ReviewedByEmployeeIds = request.ReviewedByEmployeeIds;
+                    existingDetails.CandidateStatusId = request.CandidateStatusId;
+                    existingDetails.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                    existingDetails.UpdatedOnUtc = request.UpdatedOnUtc;
+                    existingDetails.Reason = request.Reason;
+                }
                 _unitOfWork.Candidatedetail.Update(existingDetails);
                 _unitOfWork.Save();
                 _responseModel.Id = existingDetails.Id;

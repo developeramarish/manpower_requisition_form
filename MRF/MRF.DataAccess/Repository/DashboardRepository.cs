@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MRF.DataAccess.Repository.IRepository;
+using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using System;
@@ -30,7 +31,13 @@ namespace MRF.DataAccess.Repository
         public List<MrfSummaryViewModel> GroupByMrfStatus()
         {
             int RoleId= _userService.GetRoleId();
-            //int RoleId = 3;
+            if(RoleId == 0)
+            {
+                ResponseDTO _response = _userService.GetRoledetails(false);
+
+            }
+            RoleId= _userService.GetRoleId();
+ 
             var query = from mrfStatus in _db.Mrfstatusmaster
                         join mrfstatusRole in _db.mrfStatusrolemap on mrfStatus.Id equals mrfstatusRole.statusId
                         join mrfDetails in _db.Mrfdetails
