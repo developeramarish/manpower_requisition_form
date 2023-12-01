@@ -30,6 +30,7 @@
 
 .dashboard_wrapper .dashboard_body .dashboard_body_left {
   width: 30%;
+  padding-top: 15px;
 }
 
 .dashboard_wrapper .dashboard_body .dashboard_body_right {
@@ -56,8 +57,8 @@
 }
 
 .dashboard_body_left .mrf_status_summary {
-  height: 69vh;
-  margin: 15px;
+  height: 100%;
+  margin: 0px 15px;
   background-color: #ffffff;
   border-radius: 10px;
   border: 1px solid #e3e3e3;
