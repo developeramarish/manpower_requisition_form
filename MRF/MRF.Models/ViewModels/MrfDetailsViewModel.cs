@@ -11,6 +11,8 @@ namespace MRF.Models.ViewModels
         //join mrfdetails ,Mrfstatusmaster,Freshmrfdetails ,Employeedetails
         public int MrfId { get; set; }
         public int MrfStatusId { get; set; }
+
+        public int RoleId { get; set; }
         public string   MrfStatus { get; set; } = null!;
         public string ReferenceNo { get; set; } = null!;
         public int CreatedByEmployeeId { get; set; }

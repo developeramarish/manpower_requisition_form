@@ -14,6 +14,7 @@ import Candidate from "./Pages/Candidate";
 import EmployeDetailsCreate from "./Pages/EmployeDetailsCreate";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 import AddCandidate from "./Pages/AddCandidate";
+import OpenStatus from "./Pages/OpenStatus";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/CreateRequisition" element={<CreateRequisition />} />
           <Route path="/EditRequisition/:reqId" element={<CreateRequisition />} />
           <Route path="/MyReumes" element={<MyReumes />} />
+          <Route path="/OpenStatus" element={<OpenStatus />} />
           <Route path="/EmployeDetails" element={<EmployeDetails />}></Route>
           <Route path="/Candidate" element={<Candidate />} />
           <Route path="/AddCandidate" element={<AddCandidate />} />

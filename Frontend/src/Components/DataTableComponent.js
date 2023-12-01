@@ -13,7 +13,8 @@ const DataTableComponents = (props) => {
       rowsPerPageOptions={[5, 10, 25, 50]}
       tableStyle={{ minWidth: "69rem" }}
       scrollable 
-      scrollHeight="250px" 
+      
+      scrollHeight="50vh"
       //virtualScrollerOptions={{ itemSize: 46 }}
     >
       {props.columns.map((x) => {
@@ -21,12 +22,13 @@ const DataTableComponents = (props) => {
           <Column
             field={x.field}
             header={x.columnName}
-            style={{ width: "20%", color: "#0e0808" }}
+            style={{ width: "15%", color: "#0e0808" }}
             
           ></Column>
         );
       })}
-       <Column body={props.body} exportable={false} style={{ minWidth: '12rem' }} ></Column> 
+       <Column             header={"Action"}
+body={props.body} exportable={false} style={{ minWidth: '12rem' }} ></Column> 
     </DataTable>
   );
 };

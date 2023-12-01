@@ -6,12 +6,12 @@ import { APIPath } from "../Components/constant";
 import referenceBodyTemplate from "./mrfStatus"
 import "../styles/layout/MyRequisitionsBody.css";
 
-function MyRequisitionsBody() {
+function MyRequisitionsBody({roleId}) {
   const [reqData, setReqData] = useState([]);
-
+   
   useEffect(() => {
     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1
-    const apiUrl = APIPath + "Mrfdetail/GetMrfDetails/0";
+    const apiUrl = APIPath + "Mrfdetail/GetMrfDetails/GetMrfDetails?statusId=0&roleId="+roleId;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((response) => {

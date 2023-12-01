@@ -43,7 +43,7 @@ const EmployeDetailsCreate = () => {
   };
   const handlesubmit = (e) => {
     e.preventDefault();
-    const empdata = { name, email, contactNo,employeeCode, roleId: roleId.value,isAllowed,allowedByEmployeeId,createdByEmployeeId,
+    const empdata = { name, email, contactNo,employeeCode, roleId: roleId,isAllowed,allowedByEmployeeId,createdByEmployeeId,
       createdOnUtc,updatedByEmployeeId,updatedOnUtc};
 
 
