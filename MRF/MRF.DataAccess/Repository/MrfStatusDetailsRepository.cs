@@ -22,7 +22,7 @@ namespace MRF.DataAccess.Repository
                         join Emp in _db.Employeedetails on mrfDetails.CreatedByEmployeeId equals Emp.Id
                         join salary in _db.Freshmrfdetails on mrfDetails.Id equals salary.MrfId
                         join Vacancy in _db.Vacancytypemaster on mrfDetails.VacancyTypeId equals Vacancy.Id
-                        where (statusId == 0 || (statusId !=0 && mrfStatus.Id == statusId)) && (mrfRolemap.RoleId == roleId)
+                        where (statusId == 0 || (statusId !=0 && mrfStatus.Id == statusId)) &&(roleId == 0 || (roleId != 0 && mrfRolemap.RoleId == roleId)) 
                         orderby mrfDetails.Id descending
                         select new MrfDetailsViewModel
  

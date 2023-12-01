@@ -11,8 +11,7 @@ function MyRequisitionsBody({roleId}) {
    
   useEffect(() => {
     //if we pass id 0 then ge get all the data otherwise we get specific data like id=1
-    
-    const apiUrl = APIPath + "Mrfdetail/GetMrfDetails/0,"+roleId;
+    const apiUrl = APIPath + "Mrfdetail/GetMrfDetails/GetMrfDetails?statusId=0&roleId="+roleId;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((response) => {
