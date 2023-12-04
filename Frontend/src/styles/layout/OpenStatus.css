@@ -57,19 +57,4 @@
 h4:hover {
   cursor:pointer;
  }
- .p-dialog{
-  background-color: #d32f2e;
-  box-shadow: 0 0 0 0.2rem #faa5a5;
-  font-weight: 500;
-  font-size: 17px;
-    }
-.p-dialog-titlebar-close{
-  box-shadow: 0 0 0 0.2rem #faa5a5;
-   
-}
-.p-dialog-titlebar-icon{
-  box-shadow: 0 0 0 0.2rem #faa5a5;
-  
-  background-color: #d32f2e;
-}
  

@@ -3,7 +3,7 @@ import { DataTable } from "primereact/datatable";
 import React, { useState, useEffect } from "react";
 import { APIPath } from "../Components/constant";
 import { Dialog } from "primereact/dialog";
-import "../styles/layout/MrfDrafted.css"
+import "../styles/layout/MrfDrafted.css";
 
 const DraftedMrf = ({ visible, onHide }) => {
   const [data, setdata] = useState([]);
@@ -39,32 +39,25 @@ const DraftedMrf = ({ visible, onHide }) => {
   };
   console.log(data);
 
+  const refernceTemplate = (mrf) => {
+    return <h4 className="mrfdraft-col-cell ">{mrf.referenceNo}</h4>;
+  };
 
-const refernceTemplate=(mrf)=>{
-  return(
-    <h4 className="mrfdraft-col-cell ">{mrf.referenceNo}</h4>
-
-  )
-
-
-
-}
-
-const salaryTemplate=(mrf)=>{
-  return(
-    <h4 className="mrfdraft-col">{mrf.salary}{" LPA"}</h4>
-
-  )
-}
-
-
-
-
-  // console.log(datas)
+  const salaryTemplate = (mrf) => {
+    return (
+      <h4 className="mrfdraft-col">
+        {mrf.salary}
+        {" LPA"}
+      </h4>
+    );
+  };
   return (
-      <Dialog header="Drafted MRF" 
-      visible={visible} onHide={onHide} 
-      className="mrfdraft-card">
+    <Dialog
+      header="Drafted MRF"
+      visible={visible}
+      onHide={onHide}
+      className="mrfdraft-card"
+    >
       <DataTable
         value={data}
         paginator
@@ -72,7 +65,6 @@ const salaryTemplate=(mrf)=>{
         scrollable
         scrollHeight="50vh"
         rowsPerPageOptions={[5, 10, 25, 50]}
-        
       >
         <Column
           field="referenceNo"
@@ -106,9 +98,7 @@ const salaryTemplate=(mrf)=>{
           header={columnHeaderTemplate("Requistion Type")}
           bodyClassName="mrfdraft-col"
           sortable
-        >
-          
-        </Column>
+        ></Column>
         <Column
           field="vacancyNo"
           header={columnHeaderTemplate("No of Postion")}
@@ -122,19 +112,18 @@ const salaryTemplate=(mrf)=>{
           sortable
         ></Column>
         <Column
-         field="salary" 
-         header={columnHeaderTemplate("Salary")} 
-        sortable
-        body={salaryTemplate}
-         bodyClassName="mrfdraft-col mrfdraft-ref-col "
-         ></Column>
-        <Column 
-        field="mrfStatus"
-         header={columnHeaderTemplate("Status")}
+          field="salary"
+          header={columnHeaderTemplate("Salary")}
           sortable
-           bodyClassName="mrfdraft-col mrfdraft-ref-col">
-          
-        </Column>
+          body={salaryTemplate}
+          bodyClassName="mrfdraft-col mrfdraft-ref-col "
+        ></Column>
+        <Column
+          field="mrfStatus"
+          header={columnHeaderTemplate("Status")}
+          sortable
+          bodyClassName="mrfdraft-col mrfdraft-ref-col"
+        ></Column>
       </DataTable>
     </Dialog>
   );
