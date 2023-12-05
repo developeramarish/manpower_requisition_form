@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import SearchText from "./SearchText";
-import { InputTextarea } from "primereact/inputtextarea";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { MultiSelect } from "primereact/multiselect";
+import ToastMessages from "../Components/ToastMessages";
 import { constantResumePath } from "../Components/constant";
 import "../styles/layout/ResumeSummary.css";
+import MultiSelectDropdown from "../Components/multiselectDropdown";
 
-const MyResumeDetail = ({ visible, onHide }) => {
+const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
-
+  const [saveBttn, setSaveBttn] = useState([]);
+  const toastRef = useRef(null);
   useEffect(() => {
     const fetchData = () => {
       try {
         fetch(
-          "https://localhost:7128/api/Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?id=2&DashBoard=true"
+          `https://localhost:7128/api/Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?id=${mrfId}&DashBoard=true`
         )
           .then((response) => response.json())
           .then((data) => {
             setdata(data.result.resumeDetails);
             setResumeReviewer(data.result.employeeRoleMap);
+            let array = new Array(data.result.resumeDetails.length).fill(false);
+            setSaveBttn(array);
           })
           .catch((error) => {
             console.error("Error fetching data:", error);
@@ -35,37 +37,30 @@ const MyResumeDetail = ({ visible, onHide }) => {
     fetchData();
   }, []);
 
-  console.log(data);
-  console.log(resumeReviewer);
-
-  const MultiSelectDrop = (data) => {
-    console.log("shows", data);
-
-    // const selte=arrayToObj(resumeReviewer,strToArray(data.resumeReviewerEmployeeIds));
-
-    // const [selectedReviewers, setSelectedReviewers] = useState(selte);
+  const MultiSelectDrop = (rowData, options) => {
     return (
       <div>
-        <MultiSelect
+        <MultiSelectDropdown
           id="resumeReviewerEmployeeIds"
-          value={arrayToObj(resumeReviewer, strToArray(data.value))}
-          // value={selectedReviewers}
+          value={arrayToObj(
+            resumeReviewer,
+            strToArray(rowData.resumeReviewerEmployeeIds)
+          )}
           onChange={(e) => {
-            // const valueInArray=objToArray(e.value)
-            // console.log(valueInArray)
-            // const arraytoStr=valueInArray.toString();
-            // console.log(arraytoStr)
-            // setSelectedReviewers(e.value)
-
-            console.log(e.value);
-            data.editorCallback(objToArray(e.target.value));
+            let resumeReviewers = JSON.parse(JSON.stringify(data));
+            let sv = [...saveBttn];
+            sv[options.rowIndex] = e.value.length > 0 ? true : false;
+            resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
+              objToArray(e.value);
+            setdata(resumeReviewers);
+            setSaveBttn(sv);
           }}
           options={resumeReviewer}
           optionLabel="name"
           filter
           placeholder="Select Reviewer"
-          maxSelectedLabels={2}
-          className="w-full "
+          maxSelectedLabels={5}
+          className="w-full md:w-23rem "
         />
       </div>
     );
@@ -81,14 +76,8 @@ const MyResumeDetail = ({ visible, onHide }) => {
     if (Array.isArray(selectedOpt)) {
       return options.filter((e) => selectedOpt.includes(e.employeeId));
     }
+    // return [selectedOpt];
   };
-  const srt = "89,90,67,5";
-
-  const arr = strToArray(srt);
-  // console.log(arr)
-
-  const obj = arrayToObj(resumeReviewer, arr);
-  console.log(obj);
 
   const objToArray = (selectedOpt = []) => {
     return selectedOpt.map((e) => e.employeeId);
@@ -98,116 +87,97 @@ const MyResumeDetail = ({ visible, onHide }) => {
     window.open(pdfLink, "_blank");
   };
 
-  const actionBodyTemplate = (rowData) => {
-    // console.log("action buttton",rowData)
+  const actionBodyTemplate = (rowData, options) => {
+    const onClickHandleSave = () => {
+      update(rowData);
+      let sv = [...saveBttn];
+      sv[options.rowIndex] = false;
+      setSaveBttn(sv);
+    };
 
-    return (
-      <React.Fragment>
-        <Button
-          icon="pi pi-save"
-          outlined
-          className="mr-2 text-white"
-          onClick={() => {
-            // updateData(
-            // rowData.candidateId,
-            // rowData.reason,
-            // rowData.candidatestatus,
-            // rowData.resumeReviewerEmployeeIds,
-            // )
-          }}
-        />
-      </React.Fragment>
-    );
+    if (saveBttn[options.rowIndex]) {
+      return <Button icon="pi pi-save " onClick={onClickHandleSave} />;
+    }
+    return <Button icon="pi pi-save" disabled />;
   };
-  const update = (data) => {
-    console.log("from on complete function");
-    console.log(data)
-    
-    
-    // {
-      //   "id": 0,
-      //   "mrfId": 0, ==========
-      //   "name": "string",
-      //   "emailId": "string",
-      //   "contactNo": "string",
-      //   "resumePath": "string",  =====
-      //   "candidateStatusId": 0,
-      //   "reviewedByEmployeeId": 0,
-      //   "reviewedByEmployeeIds": "string",
-      //   "createdByEmployeeId": 0,
-      //   "createdOnUtc": "2023-11-30T14:11:20.978Z",
-      //   "updatedByEmployeeId": 0,
-      //   "updatedOnUtc": "2023-11-30T14:11:20.978Z",
-      //   "reason": "string"   =====
-      // }
-      
-      // const id=
-      
-      const resumeRevierInArray = data.newData.resumeReviewerEmployeeIds;
-      const resumeReviewerEmployeeIds = resumeRevierInArray.toString();
-      console.log("resumeReviewerEmployeeIds",resumeReviewerEmployeeIds);
-      const name="ramkrsishna"
-      const emailId="ramkrsishna@gamil.com"
-      const contactNo="8790998980"
-      const id=data.newData.candidateId
-      const candidateStatusId=data.newData.candidateStatusId
-const candidatestatus=data.newData.candidatestatus
-const createdName=data.newData.createdName
-const mrfId=data.newData.mrfId
-const reason=data.newData.reason
-const referenceNo=data.newData.referenceNo
-const resumePath=data.newData.resumePath
-const createdByEmployeeId=data.newData.createdByEmployeeId
-const createdOnUtc=data.newData.createdOnUtc
+  const update = async (data) => {
+    const resumeRevierInArray = data.resumeReviewerEmployeeIds;
+    const reviewedByEmployeeIds = resumeRevierInArray.toString();
+    const name = "string"; // this because we are handling data in backend it not save as string
+    const emailId = "string";
+    const contactNo = "string";
 
-const candidateDetailsData={
-  id,
-  mrfId,
-  name, 
-  emailId, 
-  contactNo,
-  resumePath,
-  candidateStatusId,
-  resumeReviewerEmployeeIds,
-  createdByEmployeeId,
-  createdOnUtc,
-  reason,
+    const id = data.candidateId;
+    const candidateStatusId = data.candidateStatusId;
+    const createdName = data.createdName;
+    const mrfId = data.mrfId;
+    const reason = data.reason;
+    const referenceNo = data.referenceNo;
+    const resumePath = data.resumePath;
+    const createdByEmployeeId = data.createdByEmployeeId;
+    const createdOnUtc = data.createdOnUtc;
 
-}
+    // console.log(id);
+    // console.log(candidateStatusId);
+    // console.log(createdName);
+    // console.log(mrfId);
+    // console.log(reason);
+    // console.log(referenceNo);
+    // console.log(resumePath);
 
-console.log(id);
-console.log(candidateStatusId);
-
-    console.log(candidatestatus);
-    console.log(createdName);
-    console.log(mrfId);
-    console.log(reason);
-    console.log(referenceNo);
-    console.log(resumePath);
-    // console.log(candidateId);
     // console.log(data.newData.resumeReviewerEmployeeIds);
+    const candidateDetailsData = {
+      id,
+      mrfId,
+      name,
+      emailId,
+      contactNo,
+      resumePath,
+      candidateStatusId,
+      reviewedByEmployeeIds,
+      createdByEmployeeId,
+      createdOnUtc,
+      reason,
+    };
 
+    try {
+      const response = await fetch(
+        "https://localhost:7128/api/Candidatedetail/Put/" + id,
+        {
+          method: "Put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(candidateDetailsData),
+        }
+      );
 
-
-    fetch("https://localhost:7128/api/Candidatedetail/Put/"+id,{
-      method:"Put",
-      headers:{"content-type":"application/json"},
-      body: JSON.stringify(candidateDetailsData),
-    }).then((res) => {
-      alert("updated successfully dbbbbbbb.");
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-
+      if (response.ok) {
+        const responseData = await response.json();
+        if (responseData.statusCode === 409) {
+          toastRef.current.showConflictMessage(responseData.message);
+        } else {
+          toastRef.current.showSuccessMessage(
+            "Resume Reviewers updated successfully!"
+          );
+        }
+      } else {
+        console.error("Request failed with status:", response.status);
+        const errorData = await response.text();
+        console.error("Error Data:", errorData);
+        if (response.status === 400) {
+          toastRef.current.showBadRequestMessage(
+            "Bad request: " + response.url
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const createdOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
-  };
-
-  const handleEditorCallback = (rowData, value) => {
-    rowData.resumeReviewerEmployeeIds = value;
   };
 
   const columnHeaderTemplate = (title) => {
@@ -215,10 +185,7 @@ console.log(candidateStatusId);
   };
 
   const ResumeHyperLink = (resume) => {
-    // console.log(resume.resumePath);
     let resumeLink = `${constantResumePath}${resume.resumePath}`;
-    // console.log(resumeLink);
-
     return (
       <div>
         <a
@@ -253,12 +220,11 @@ console.log(candidateStatusId);
         <DataTable
           value={data}
           paginator
-          rows={5}
+          rows={10}
           scrollable
           onRowEditComplete={update}
           editMode="row"
           scrollHeight="50vh"
-          rowsPerPageOptions={[5, 10, 25, 50]}
         >
           <Column
             // field="mrfId"
@@ -289,13 +255,7 @@ console.log(candidateStatusId);
           <Column
             field="resumeReviewerEmployeeIds"
             header={columnHeaderTemplate("Resume Reviewers")}
-            // body={MultiSelectDrop}
-            editor={(options) => MultiSelectDrop(options)}
-            // body={(rowData) => (
-            //   <MultiSelectDrop
-            //     data={rowData}
-            //     editorCallbacks={handleEditorCallback}/>)}
-
+            body={MultiSelectDrop}
             bodyClassName="resume-col resume-ref-col  "
           ></Column>
           <Column
@@ -311,12 +271,11 @@ console.log(candidateStatusId);
           ></Column>
           <Column
             header={columnHeaderTemplate("Action")}
-            // headerStyle={{ width: "10%", minWidth: "8rem" }}
             bodyStyle={{ textAlign: "left" }}
-            rowEditor
-            // body={actionBodyTemplate}
+            body={actionBodyTemplate}
           ></Column>
         </DataTable>
+        <ToastMessages ref={toastRef} />
       </Dialog>
     </div>
   );
