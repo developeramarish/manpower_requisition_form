@@ -14,7 +14,9 @@ import Candidate from "./Pages/Candidate";
 import EmployeDetailsCreate from "./Pages/EmployeDetailsCreate";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 import AddCandidate from "./Pages/AddCandidate";
-import OpenStatus from "./Pages/OpenStatus";
+import ReceivedHODApproval from "./Pages/ReceivedHODApproval";
+import ReceivedCOOApproval from "./Pages/ReceivedCOOApproval";
+import ReceivedStatus from "./Pages/ReceivedStatus";
 
 function App() {
   return (
@@ -26,10 +28,13 @@ function App() {
           <Route path="/CreateRequisition" element={<CreateRequisition />} />
           <Route path="/EditRequisition/:reqId" element={<CreateRequisition />} />
           <Route path="/MyReumes" element={<MyReumes />} />
-          <Route path="/OpenStatus" element={<OpenStatus />} />
+          <Route path="/ReceivedStatus/:reqId" element={<ReceivedStatus />} />
           <Route path="/EmployeDetails" element={<EmployeDetails />}></Route>
           <Route path="/Candidate" element={<Candidate />} />
           <Route path="/AddCandidate" element={<AddCandidate />} />
+          <Route path="/ReceivedHODApproval/:reqId" element={<ReceivedHODApproval />} />
+          <Route path="/ReceivedCOOApproval/:reqId" element={<ReceivedCOOApproval />} />
+          
           <Route
             path="/EmployeDetailsCreate"
             element={<EmployeDetailsCreate />}

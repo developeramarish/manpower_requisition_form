@@ -72,6 +72,8 @@ namespace MRF.Models.DTO
         public DateTime PCApprovalDate { get; set; }
         public int roleId { get; set; }
 
+        public string? Note { get; set; }
+
     }
     public class MrfdetaiResponseModel
     {
