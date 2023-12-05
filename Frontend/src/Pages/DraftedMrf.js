@@ -4,14 +4,17 @@ import React, { useState, useEffect } from "react";
 import { APIPath } from "../Components/constant";
 import { Dialog } from "primereact/dialog";
 import "../styles/layout/MrfDrafted.css";
+import { Link } from "react-router-dom";
+import ReferenceBodyTemplate from "./mrfStatus";
 
-const DraftedMrf = ({ visible, onHide }) => {
+const DraftedMrf = ({ header, visible, onHide, roleId = 3, statusId = 2 }) => {
   const [data, setdata] = useState([]);
 
   useEffect(() => {
     const fetchData = () => {
       try {
-        fetch("https://localhost:7128/api/Mrfdetail/GetMrfDetails/2,3")
+        fetch(
+          `${APIPath}Mrfdetail/GetMrfDetails/GetMrfDetails?statusId=${statusId}&roleId=${roleId}`)
           .then((response) => response.json())
           .then((data) => {
             setdata(data.result);
@@ -37,11 +40,6 @@ const DraftedMrf = ({ visible, onHide }) => {
   const updatedOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
   };
-  console.log(data);
-
-  const refernceTemplate = (mrf) => {
-    return <h4 className="mrfdraft-col-cell ">{mrf.referenceNo}</h4>;
-  };
 
   const salaryTemplate = (mrf) => {
     return (
@@ -53,7 +51,7 @@ const DraftedMrf = ({ visible, onHide }) => {
   };
   return (
     <Dialog
-      header="Drafted MRF"
+      header={header}
       visible={visible}
       onHide={onHide}
       className="mrfdraft-card"
@@ -64,12 +62,11 @@ const DraftedMrf = ({ visible, onHide }) => {
         rows={10}
         scrollable
         scrollHeight="50vh"
-        rowsPerPageOptions={[5, 10, 25, 50]}
       >
         <Column
           field="referenceNo"
-          header={columnHeaderTemplate("Mrf ID")}
-          body={refernceTemplate}
+          header={columnHeaderTemplate("MRF ID")}
+          body={ReferenceBodyTemplate}
           bodyClassName="mrfdraft-col mrfdraft-ref-col  "
           sortable
         ></Column>
@@ -101,7 +98,7 @@ const DraftedMrf = ({ visible, onHide }) => {
         ></Column>
         <Column
           field="vacancyNo"
-          header={columnHeaderTemplate("No of Postion")}
+          header={columnHeaderTemplate("No. of Postion")}
           bodyClassName="mrfdraft-col"
           sortable
         ></Column>
@@ -113,7 +110,7 @@ const DraftedMrf = ({ visible, onHide }) => {
         ></Column>
         <Column
           field="salary"
-          header={columnHeaderTemplate("Salary")}
+          header={columnHeaderTemplate("Salary Range")}
           sortable
           body={salaryTemplate}
           bodyClassName="mrfdraft-col mrfdraft-ref-col "

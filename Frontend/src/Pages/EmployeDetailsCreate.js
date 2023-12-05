@@ -68,12 +68,12 @@ const EmployeDetailsCreate = () => {
        
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
-      style={{ width: "210vh" } }
+      style={{ width: "210vw" } }
     >
       <h3 className="text-xl my-2">Fill the Details</h3>
       <section
         className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
-        style={{ height: "70%" }}
+        style={{ height: "900%" }}
       >
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
@@ -128,12 +128,12 @@ const EmployeDetailsCreate = () => {
               }
               
             />
-         
+          </div>
          </div>
-         {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
-        {<ButtonC to="/" className="btn btn-danger" label="CANCEL" disabled onClick={() => navigate("/EmployeDetails")}></ButtonC>}
-        {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}
-      </div>}
+         <div className="flex justify-content gap-5">
+        <ButtonC to="/"  severity="danger" label="CANCEL" disabled onClick={() => navigate("/EmployeDetails")}></ButtonC>
+        <ButtonC label="SUBMIT" severity="primary" disabled onClick={handlesubmit} />
+     
         </div>
         </section>
       </div>  

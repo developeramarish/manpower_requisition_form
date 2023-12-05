@@ -3,6 +3,7 @@ import DropdownComponent from '../Components/Dropdown';
 import InputTextCp from "../Components/Textbox";
 import ButtonC from "../Components/Button";
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Button } from 'primereact/button';
 const EmployeeDtailsEdit = ({id, updateData}) => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -85,7 +86,7 @@ const [roleOptions, roleOptionchange] = useState([]);
       {/* <LeftPanel /> */}
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
-      style={{ width: "210vh" } }
+      style={{ width: "210vw"} }
     >
       <h3 className="text-xl my-2">Fill the Details</h3>
       <section
@@ -146,14 +147,14 @@ const [roleOptions, roleOptionchange] = useState([]);
             />
          
          </div>
-         {<div className="flex flex-wrap justify-content-end gap-5 mt-3">
-        {<ButtonC to="/" className="btn btn-danger" label="CANCEL" disabled onClick={() => updateEditmode(false)}></ButtonC>}
-        {<ButtonC label="SUBMIT" className="w-2" disabled onClick={handlesubmit} />}
-      </div>}
+         
         </div>
-      
-        </section>
+      <div className="flex justify-content gap-5">
+        <ButtonC  severity="danger" label="CANCEL" onClick={() => updateEditmode(false)}></ButtonC>
+        <Button label="SUBMIT" severity="primary" onClick={handlesubmit} />
+      </div>
 
+        </section>
       </div>  
       </div>
    
