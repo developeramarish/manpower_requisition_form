@@ -49,4 +49,8 @@ public class Mrfdetails
     public int UpdatedByEmployeeId { get; set; }
 
     public DateTime UpdatedOnUtc { get; set; }
+
+    public string?  Note { get; set; } 
+
+
 }
