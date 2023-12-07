@@ -1,6 +1,7 @@
-export const APIPath="https://localhost:7128/api/";
-//export const APIPath="https://10.22.11.101:90/API/";
-export const constantResumePath="https://10.22.11.101:90/Resume/";
+// export const APIPath="https://localhost:7128/api/";
+export const APIPath = "https://10.22.11.101:90/API/";
+export const constantResumePath = "https://10.22.11.101:90/Resume/";
+export const constantAssignmentPath = "https://10.22.11.101:90/Assignment/";
 
 export const multiSoftwareSkill = [
   { name: "Visual Studio", code: "Visual Studio" },
@@ -15,6 +16,18 @@ export const multiHardwareSkill = [
   { name: "Mouse", code: "Mouse" },
   // Add more options as needed
 ];
+
+export const mrfStatus = {
+  draft: 2,
+  submToHr: 3,
+  resubReq: 4,
+  open: 9,
+  rejected: 11,
+  closed: 13,
+  withdrawn: 12,
+  onHold: 10,
+};
+
 export const Gender = [
   { label: "Male", id: 1 },
   { label: "Female", id: 2 },
@@ -32,10 +45,10 @@ export const maxExperienceOptions = Array.from({ length: 31 }, (_, i) => ({
 export const RequisitionType = [
   { name: "FR", code: "FR" },
   { name: "RP", code: "RP" },
- 
+
   // Add more options as needed
 ];
 
 export const removeSpaces = (str) => {
-  return str.replace(/\s/g, ''); // This regular expression replaces all spaces globally
+  return str.replace(/\s/g, ""); // This regular expression replaces all spaces globally
 };

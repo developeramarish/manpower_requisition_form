@@ -1,0 +1,79 @@
+.int-card {
+  position: absolute;
+  top: 10%;
+  right: 2%;
+  width: 88%;
+  border-radius: 0.5rem;
+  background-color: white;
+  padding: 0.5rem;
+  max-height: 86vh;
+  font-family: "Poppins", sans-serif;
+}
+.int-card .p-dialog-title {
+  font-size: 16px;
+}
+.int-card .p-dialog-content {
+  padding-bottom: 15px;
+}
+.int-header {
+  margin: 0;
+  font-size: 16px;
+  color: black;
+}
+
+.int-card th {
+  font-size: 14px;
+  color: black;
+  /* text-align: center; */
+}
+.int-card .p-highlight,
+.int-card .p-highlight .p-sortable-column-icon {
+  color: #d32f2e;
+}
+.int-link-cell {
+  margin: 0;
+  color: #d32f2e;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  cursor: pointer;
+}
+
+.int-col {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b1016;
+  width: 10%;
+  min-width: max-content;
+}
+.drop-col {
+  width: 20%;
+}
+.int-status-col {
+  width: 15%;
+}
+.int-edit-col {
+  width: 4%;
+}
+
+.drop-width {
+  width: 100%;
+  text-wrap: balance;
+}
+
+.p-dropdown,
+.p-inputtextarea {
+  font-size: 14px;
+  font-weight: 400;
+  color: #6d6d6d;
+}
+.p-dropdown-label {
+  text-wrap: balance;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background-color: rgba(215, 107, 107, 0.249);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+  background-color: rgba(184, 89, 89, 0.103);
+}
