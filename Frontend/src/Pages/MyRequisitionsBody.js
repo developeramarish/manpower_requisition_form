@@ -3,7 +3,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link } from "react-router-dom";
 import { APIPath } from "../Components/constant";
-import referenceBodyTemplate from "./mrfStatus"
+import ReferenceBodyTemplate from "./MrfStatus";
 import "../styles/layout/MyRequisitionsBody.css";
 
 function MyRequisitionsBody() {
@@ -29,12 +29,6 @@ function MyRequisitionsBody() {
 
   const header = <h3 className="req-header">My Requisitions</h3>;
 
-  const columnHeaderTemplate = (title) => {
-    return <h3 className="req-table-header">{title}</h3>;
-  };
-
-
-
   //underline text-red-600
   const createdOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
@@ -49,65 +43,64 @@ function MyRequisitionsBody() {
         value={reqData}
         paginator
         removableSort
-        rows={6}
+        rows={10}
         scrollable
         header={header}
         scrollHeight="62vh"
       >
         <Column
           field="referenceNo"
-          header={columnHeaderTemplate("MRF ID")}
-          s
-          body={referenceBodyTemplate}
+          header="MRF ID"
+          body={ReferenceBodyTemplate}
           bodyClassName="req-col ref-col"
         ></Column>
         <Column
           field="name"
-          header={columnHeaderTemplate("Created By")}
+          header="Created By"
           bodyClassName="req-col"
           sortable
         ></Column>
         <Column
           field="createdOnUtc"
-          header={columnHeaderTemplate("Created On")}
+          header="Created On"
           body={createdOnBodyTemplate}
           bodyClassName="req-col"
           sortable
         ></Column>
         <Column
           field="updatedOnUtc"
-          header={columnHeaderTemplate("Last Updated")}
+          header="Last Updated"
           body={updatedOnBodyTemplate}
           bodyClassName="req-col"
           sortable
         ></Column>
         <Column
           field="requisitionType"
-          header={columnHeaderTemplate("Requisition Type")}
+          header="Requisition Type"
           bodyClassName="req-col"
           sortable
         ></Column>
         <Column
           field="vacancyNo"
-          header={columnHeaderTemplate("No. of Positions")}
+          header="No. of Positions"
           bodyClassName="req-col"
           sortable
         ></Column>
         <Column
           field="experience"
-          header={columnHeaderTemplate("Exp Required")}
+          header="Exp Required"
           bodyClassName="req-col"
           sortable
         ></Column>
         <Column
           field="salary"
-          header={columnHeaderTemplate("Salary Range")}
+          header="Salary Range"
           bodyClassName="req-col"
           sortable
         ></Column>
         <Column
           field="mrfStatus"
-          header={columnHeaderTemplate("Status")}
+          header="Status"
           bodyClassName="req-col"
           sortable
         ></Column>

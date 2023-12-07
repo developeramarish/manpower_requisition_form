@@ -4,6 +4,7 @@ import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
+import  "./styles/layout/InputComponents.css";
 import Dashboard from "./Dashboard";
 import MyRequisitions from "./MyRequisitions";
 import CreateRequisition from "./Pages/CreateRequisition";
