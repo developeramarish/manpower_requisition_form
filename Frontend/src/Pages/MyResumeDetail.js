@@ -4,11 +4,11 @@ import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ToastMessages from "../Components/ToastMessages";
-import { constantResumePath } from "../Components/constant";
+import { APIPath, constantResumePath } from "../Components/constant";
 import "../styles/layout/ResumeSummary.css";
 import MultiSelectDropdown from "../Components/multiselectDropdown";
 
-const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
+const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
@@ -17,7 +17,7 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
     const fetchData = () => {
       try {
         fetch(
-          `https://localhost:7128/api/Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?id=${mrfId}&DashBoard=true`
+          `${APIPath}Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?id=${mrfId}&DashBoard=${dashboard}`
         )
           .then((response) => response.json())
           .then((data) => {
@@ -38,6 +38,8 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
   }, []);
 
   const MultiSelectDrop = (rowData, options) => {
+    console.log(options)
+
     return (
       <div>
         <MultiSelectDropdown
@@ -59,8 +61,8 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
           optionLabel="name"
           filter
           placeholder="Select Reviewer"
-          maxSelectedLabels={5}
-          className="w-full md:w-23rem "
+          // maxSelectedLabels={5}
+          className="w-full md:w-20rem "
         />
       </div>
     );
@@ -101,6 +103,7 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
     return <Button icon="pi pi-save" disabled />;
   };
   const update = async (data) => {
+    console.log(data);
     const resumeRevierInArray = data.resumeReviewerEmployeeIds;
     const reviewedByEmployeeIds = resumeRevierInArray.toString();
     const name = "string"; // this because we are handling data in backend it not save as string
@@ -117,15 +120,6 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
     const createdByEmployeeId = data.createdByEmployeeId;
     const createdOnUtc = data.createdOnUtc;
 
-    // console.log(id);
-    // console.log(candidateStatusId);
-    // console.log(createdName);
-    // console.log(mrfId);
-    // console.log(reason);
-    // console.log(referenceNo);
-    // console.log(resumePath);
-
-    // console.log(data.newData.resumeReviewerEmployeeIds);
     const candidateDetailsData = {
       id,
       mrfId,
@@ -141,16 +135,13 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
     };
 
     try {
-      const response = await fetch(
-        "https://localhost:7128/api/Candidatedetail/Put/" + id,
-        {
-          method: "Put",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(candidateDetailsData),
-        }
-      );
+      const response = await fetch(`${APIPath}Candidatedetail/Put/${id}`, {
+        method: "Put",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(candidateDetailsData),
+      });
 
       if (response.ok) {
         const responseData = await response.json();
@@ -222,9 +213,7 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
           paginator
           rows={10}
           scrollable
-          onRowEditComplete={update}
-          editMode="row"
-          scrollHeight="50vh"
+        scrollHeight="400px"
         >
           <Column
             // field="mrfId"
@@ -237,10 +226,11 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
             field="resumePath"
             header={columnHeaderTemplate("Resume")}
             body={ResumeHyperLink}
+            sortable
           ></Column>
           <Column
             field="createdOnUtc"
-            header={columnHeaderTemplate("Created On")}
+            header={columnHeaderTemplate("Uploaded On")}
             body={createdOnBodyTemplate}
             sortable
             bodyClassName="resume-col  "
@@ -256,7 +246,8 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
             field="resumeReviewerEmployeeIds"
             header={columnHeaderTemplate("Resume Reviewers")}
             body={MultiSelectDrop}
-            bodyClassName="resume-col resume-ref-col  "
+            bodyClassName="resume-col  "
+            sortable
           ></Column>
           <Column
             field="candidatestatus"
@@ -268,6 +259,7 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2 }) => {
             field="reason"
             header={columnHeaderTemplate("Reason")}
             bodyClassName="resume-col resume-ref-col  "
+            sortable
           ></Column>
           <Column
             header={columnHeaderTemplate("Action")}
