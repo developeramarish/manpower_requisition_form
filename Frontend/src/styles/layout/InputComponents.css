@@ -4,6 +4,15 @@
   border-color: #d32f2e;
 }
 
+.p-dialog-header-icon {
+  background-color: #d32f2e;
+  border-radius: 2px;
+  color: white;
+}
+.p-dialog-header-icon:focus-visible {
+  box-shadow: 0 0 0 0.2rem #d32f2e;
+}
+
 .p-dropdown-label {
   color: #6d6d6d;
   font-weight: 400;
