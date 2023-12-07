@@ -213,9 +213,7 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
           paginator
           rows={10}
           scrollable
-          onRowEditComplete={update}
-          editMode="row"
-          scrollHeight="50vh"
+        scrollHeight="400px"
         >
           <Column
             // field="mrfId"

@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 import { APIPath } from "../Components/constant";
 import { Dialog } from "primereact/dialog";
 import "../styles/layout/MrfDrafted.css";
-import { Link } from "react-router-dom";
-import ReferenceBodyTemplate from "./mrfStatus";
+import ReferenceBodyTemplate from "./MrfRefStatus";
 
 const DraftedMrf = ({ header, visible, onHide, roleId = 3, statusId = 2 }) => {
   const [data, setdata] = useState([]);
@@ -61,7 +60,7 @@ const DraftedMrf = ({ header, visible, onHide, roleId = 3, statusId = 2 }) => {
         paginator
         rows={10}
         scrollable
-        scrollHeight="50vh"
+        scrollHeight="400px"
       >
         <Column
           field="referenceNo"

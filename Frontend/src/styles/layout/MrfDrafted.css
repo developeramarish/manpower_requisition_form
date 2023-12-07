@@ -1,15 +1,20 @@
 .mrfdraft-card {
     position: absolute;
-    bottom: 5%;
+    top: 15%;
     right: 5%;
     width: 80%;
     border-radius: 1rem;
     background-color: white;
     padding: 0.5rem;
-    height: 81vh;
+    max-height: 600px;
+    overflow-y: hidden;
     font-family: "Poppins", sans-serif;
   }
 
+  .mrfdraft-card .p-dialog-content {
+    overflow-y: hidden;
+    /* flex-grow: 1; */
+}
   
 /* .req-header {
     margin: 0;
