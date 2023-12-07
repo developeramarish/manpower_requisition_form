@@ -3,7 +3,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link } from "react-router-dom";
 import { APIPath } from "../Components/constant";
-import ReferenceBodyTemplate from "./MrfStatus";
+import ReferenceBodyTemplate from "./MrfRefStatus";
 import "../styles/layout/MyRequisitionsBody.css";
 
 function MyRequisitionsBody() {
