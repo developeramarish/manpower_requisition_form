@@ -38,6 +38,7 @@
         IMrfStatusRoleMapRepository MrfStatusRoleMap { get; }
         IMrfLastNumberRepository MrfLastNo { get; }
         IMrfEmailApprovalRepository MrfEmailApproval { get; }
+        ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; }
         void Save();
     }
 }
