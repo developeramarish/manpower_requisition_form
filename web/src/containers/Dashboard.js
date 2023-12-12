@@ -5,6 +5,7 @@ import { API_URL } from "../constants/config";
 import { storageService } from "../constants/storage";
 import InterviewSummary from "../components/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
+import ResumeSummary from "../components/ResumeSummary";
 
 function Dashboard() {
   const [mrfStatus, setMrfStatus] = useState([]);
@@ -14,6 +15,8 @@ function Dashboard() {
   const [interviewPopupId, setInterviewPopupId] = useState(null);
   const [mrfStatusPopup, setMrfStatusPopup] = useState(false);
   const [mrfStatusPopupId, setrfStatusPopupId] = useState(null);
+  const [resumePopup, setResumePopup] = useState(false);
+  const [resumePopupId, setResumePopupId] = useState(null);
 
   useEffect(() => {
     getSummaryData();
@@ -26,11 +29,9 @@ function Dashboard() {
     setMrfStatus(mrfStatusData.result);
     setResumeSummary(resumeSummaryData.result);
     setInterviewSummary(interviewSummaryData.result);
-    console.log(interviewSummaryData);
   }
 
   const onMRFIdClicked = (e) => {
-    console.log(e);
     setrfStatusPopupId(e);
     setMrfStatusPopup(true);
   };
@@ -38,6 +39,10 @@ function Dashboard() {
   const onInterviewMRFIdClicked = (e) => {
     setInterviewPopupId(e);
     setInterviewPopup(true);
+  };
+  const onResumeMRFIdClicked = (e) => {
+    setResumePopupId(e);
+    setResumePopup(true);
   };
 
   return (
@@ -168,6 +173,7 @@ function Dashboard() {
               <h4>Resume Summary</h4>
             </div>
             <div className="mrf_table">
+			<ResumeSummary visible={resumePopup} onHide={()=>setResumePopup(false)} mrfId={resumePopupId} />
               <table>
                 <thead>
                   <tr>
@@ -192,7 +198,7 @@ function Dashboard() {
                         <td>
                           <a
                             className="btn_mrf_id"
-                            onClick={(e) => onMRFIdClicked(data.mrfId)}
+                            onClick={(e) => onResumeMRFIdClicked(data.mrfId)}
                           >
                             {data.referenceno}
                           </a>

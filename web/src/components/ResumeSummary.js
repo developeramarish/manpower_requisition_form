@@ -3,43 +3,57 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import ToastMessages from "./../components/ToastMessages";
-import { APIPath, constantResumePath } from "./../components/constant";
-import "../styles/layout/ResumeSummary.css";
-import MultiSelectDropdown from "./../components/multiselectDropdown";
+import ToastMessages from "./ToastMessages";
+import "../css/ResumeSummary.css";
+import "../css/InterviewSummary.css";
+import MultiSelectDropdown from "./multiselectDropdown";
+import { API_URL, FILE_URL } from "../constants/config";
+import { changeDateFormat, strToArray } from "../constants/Utils";
 
-const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
+const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
   const toastRef = useRef(null);
+
   useEffect(() => {
-    const fetchData = () => {
-      try {
-        fetch(
-          `${APIPath}Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?id=${mrfId}&DashBoard=${dashboard}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setdata(data.result.resumeDetails);
-            setResumeReviewer(data.result.employeeRoleMap);
-            let array = new Array(data.result.resumeDetails.length).fill(false);
-            setSaveBttn(array);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    if (mrfId) {
+      fetchData();
+    }
+  }, [mrfId]);
 
-    fetchData();
-  }, []);
+  const fetchData = () => {
+    try {
+      fetch(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setdata(data.result.resumeDetails);
+          setResumeReviewer(data.result.employeeRoleMap);
+          let array = new Array(data.result.resumeDetails.length).fill(false);
+          setSaveBttn(array);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  if (data.length < 1) {
+    return (
+      <Dialog
+        header="MRF ID (Interview Summary)"
+        visible={visible}
+        onHide={onHide}
+        draggable={false}
+        className="int-card no-res-card"
+      >
+        No Result Found
+      </Dialog>
+    );
+  }
   const MultiSelectDrop = (rowData, options) => {
-    console.log(options)
-
     return (
       <div>
         <MultiSelectDropdown
@@ -61,19 +75,12 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
           optionLabel="name"
           filter
           placeholder="Select Reviewer"
-          // maxSelectedLabels={5}
           className="w-full md:w-20rem "
         />
       </div>
     );
   };
 
-  const strToArray = (s) => {
-    if (typeof s === "string") {
-      s = s.split(",").map(Number);
-    }
-    return s;
-  };
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
       return options.filter((e) => selectedOpt.includes(e.employeeId));
@@ -83,10 +90,6 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
 
   const objToArray = (selectedOpt = []) => {
     return selectedOpt.map((e) => e.employeeId);
-  };
-
-  const openPdfInNewTab = (pdfLink) => {
-    window.open(pdfLink, "_blank");
   };
 
   const actionBodyTemplate = (rowData, options) => {
@@ -112,10 +115,8 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
 
     const id = data.candidateId;
     const candidateStatusId = data.candidateStatusId;
-    const createdName = data.createdName;
     const mrfId = data.mrfId;
     const reason = data.reason;
-    const referenceNo = data.referenceNo;
     const resumePath = data.resumePath;
     const createdByEmployeeId = data.createdByEmployeeId;
     const createdOnUtc = data.createdOnUtc;
@@ -135,7 +136,7 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
     };
 
     try {
-      const response = await fetch(`${APIPath}Candidatedetail/Put/${id}`, {
+      const response = await fetch(`${API_URL.RESUME_SUMMARY_POST}${id}`, {
         method: "Put",
         headers: {
           "Content-Type": "application/json",
@@ -167,38 +168,66 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
     }
   };
 
-  const createdOnBodyTemplate = (mrf) => {
-    return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
+  const uploadedOnBodyTemplate = (data) => {
+    return changeDateFormat(data.createdOnUtc);
   };
 
-  const columnHeaderTemplate = (title) => {
-    return <h3 className="resume-table-header">{title}</h3>;
-  };
-
-  const ResumeHyperLink = (resume) => {
-    let resumeLink = `${constantResumePath}${resume.resumePath}`;
+  const resumeBodyTemplate = (interview) => {
+    let resumeLink = FILE_URL.RESUME + interview.resumePath;
     return (
-      <div>
-        <a
-          href={resumeLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => {
-            e.preventDefault();
-            openPdfInNewTab(resumeLink);
-          }}
-          style={{
-            color: "#d32f2e",
-            fontFamily: "Poppins",
-            fontWeight: 500,
-            fontSize: "14px",
-          }}
-        >
-          {resume.resumePath}
-        </a>
-      </div>
+      <a href={resumeLink} target="_blank" className="int-link-cell">
+        {interview.resumePath}
+      </a>
     );
   };
+
+  const columns = [
+    {
+      header: "Sr.No",
+      body: (data, options) => options.rowIndex + 1,
+      bodyClassName: " resume-col ",
+      sortable: true,
+    },
+    {
+      field: "resumePath",
+      header: "Resume",
+      body: resumeBodyTemplate,
+      bodyClassName: "resume-ref-col  ",
+      sortable: true,
+    },
+    {
+      field: "createdOnUtc",
+      header: "Uploaded On",
+      body: uploadedOnBodyTemplate,
+      bodyClassName: "resume-ref-col resume-col",
+      sortable: true,
+    },
+    {
+      field: "resumeReviewerEmployeeIds",
+      header: "Resume Reviewers",
+      body: MultiSelectDrop,
+      bodyClassName: "resume-col resume-ref-col ",
+      sortable: true,
+    },
+    {
+      field: "candidatestatus",
+      header: "Resume Status",
+      bodyClassName: "resume-ref-col  ",
+      sortable: true,
+    },
+    {
+      field: "reason",
+      header: "Reason",
+      bodyClassName: "resume-reason-col",
+      sortable: true,
+    },
+    {
+      header: "Action",
+      bodyClassName: "mrfdraft-col ",
+      body: actionBodyTemplate,
+      sortable: true,
+    },
+  ];
 
   return (
     <div>
@@ -207,65 +236,26 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
         visible={visible}
         className="resume-card"
         onHide={onHide}
+        draggable={false}
       >
         <DataTable
           value={data}
-          paginator
+          paginator={data.length > 10}
+
           rows={10}
           scrollable
-        scrollHeight="400px"
+          scrollHeight="400px"
+          draggable={false}
         >
-          <Column
-            // field="mrfId"
-            header={columnHeaderTemplate("Sr.No")}
-            body={(data, options) => options.rowIndex + 1}
-            bodyClassName="resume-col  "
-            sortable
-          ></Column>
-          <Column
-            field="resumePath"
-            header={columnHeaderTemplate("Resume")}
-            body={ResumeHyperLink}
-            sortable
-          ></Column>
-          <Column
-            field="createdOnUtc"
-            header={columnHeaderTemplate("Uploaded On")}
-            body={createdOnBodyTemplate}
-            sortable
-            bodyClassName="resume-col  "
-          ></Column>
-          <Column
-            field="createdName"
-            header={columnHeaderTemplate("Uploaded By")}
-            bodyClassName="resume-col  "
-            sortable
-          ></Column>
-
-          <Column
-            field="resumeReviewerEmployeeIds"
-            header={columnHeaderTemplate("Resume Reviewers")}
-            body={MultiSelectDrop}
-            bodyClassName="resume-col  "
-            sortable
-          ></Column>
-          <Column
-            field="candidatestatus"
-            header={columnHeaderTemplate("Resume Status")}
-            bodyClassName="resume-col  "
-            sortable
-          ></Column>
-          <Column
-            field="reason"
-            header={columnHeaderTemplate("Reason")}
-            bodyClassName="resume-col resume-ref-col  "
-            sortable
-          ></Column>
-          <Column
-            header={columnHeaderTemplate("Action")}
-            bodyStyle={{ textAlign: "left" }}
-            body={actionBodyTemplate}
-          ></Column>
+          {columns.map((col) => (
+            <Column
+              field={col.field}
+              header={col.header}
+              body={col.body}
+              bodyClassName={col.bodyClassName}
+              sortable={col.sortable}
+            />
+          ))}
         </DataTable>
         <ToastMessages ref={toastRef} />
       </Dialog>
@@ -273,4 +263,4 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
   );
 };
 
-export default MyResumeDetail;
+export default ResumeSummary;

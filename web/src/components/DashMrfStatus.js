@@ -1,9 +1,8 @@
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useState, useEffect } from "react";
-import { APIPath } from "./constant";
 import { Dialog } from "primereact/dialog";
-import "../styles/layout/MrfDrafted.css";
+import "../css/DashMrfStatus.css";
 import ReferenceBodyTemplate from "./MrfRefStatus";
 import { API_URL } from "../constants/config";
 import { changeDateFormat, salaryInLPA } from "../constants/Utils";
@@ -13,18 +12,20 @@ const DashMrfStatus = ({
 	visible,
 	onHide,
 	roleId = 3,
-	statusId = 2,
+	statusId = null,
 }) => {
 	const [mrfStatusData, setMrfStatusData] = useState([]);
 	const [data, setdata] = useState([]);
 
-	useEffect(() => {
-		fetchData();
-	}, [statusId]);
+  useEffect(() => {
+    if (statusId) {
+      fetchData();
+    }
+  }, [statusId]);
 
 	const fetchData = () => {
 		try {
-			console.log(API_URL.MRF_STATUS_POPUP);
+			
 			fetch(`${API_URL.MRF_STATUS_POPUP}statusId=${statusId}&roleId=${roleId}`)
 				.then((response) => response.json())
 				.then((data) => {
@@ -37,6 +38,21 @@ const DashMrfStatus = ({
 			console.error("Error fetching data:", error);
 		}
 	};
+
+
+  if (data.length < 1) {
+    return (
+      <Dialog
+        header="MRF STATUS"
+        visible={visible}
+        onHide={onHide}
+        draggable={false}
+        className="int-card no-res-card"
+      >
+        No Result Found
+      </Dialog>
+    );
+  }
 
 	const uploadedOnBodyTemplate = (data) => {
 		return changeDateFormat(data.createdOnUtc);
@@ -51,7 +67,7 @@ const DashMrfStatus = ({
 			field: "referenceNo",
 			header: "MRF ID",
 			body: ReferenceBodyTemplate,
-			bodyClassName: " mrfdraft-ref-col mrfdraft-col-hyperlink  ",
+			bodyClassName: " mrfdraft-ref-col  ",
 			sortable: true,
 		},
 		{
@@ -109,7 +125,7 @@ const DashMrfStatus = ({
 
 	return (
 		<Dialog
-			header={"MRF Status "}
+			header={"MRF STATUS "}
 			visible={visible}
 			onHide={onHide}
 			draggable={false}
@@ -117,7 +133,7 @@ const DashMrfStatus = ({
 		>
 			<DataTable
 				value={data}
-				paginator
+				paginator={data.length > 10}
 				rows={10}
 				scrollable
 				scrollHeight="400px"
