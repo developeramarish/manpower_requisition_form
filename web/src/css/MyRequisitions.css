@@ -1,0 +1,71 @@
+.my-req {
+	font-family: "Poppins", sans-serif;
+	padding: 15px 20px;
+	background-color: #f6f6f6;
+	color: #0b1016;
+}
+
+.my-req .my-req-title {
+	font-size: 22px;
+	font-weight: 600;
+	margin: 0;
+	margin-bottom: 15px;
+}
+
+.req-table {
+	border-radius: 0.5rem;
+	background-color: white;
+	padding: 0.5rem;
+	height: 81vh;
+}
+
+.req-table .p-datatable-header {
+	background-color: white;
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #0b1016;
+}
+
+.req-table th {
+	font-size: 14px;
+	color: black;
+	/* text-align: center; */
+}
+.req-table .p-highlight,
+.req-table .p-highlight .p-sortable-column-icon {
+	color: #d32f2e;
+}
+
+.ref-col-cell {
+	margin: 0;
+	font-weight: 500;
+	color: #d32f2e;
+	text-decoration: underline;
+	text-underline-offset: 5px;
+	cursor: pointer;
+}
+
+.req-col {
+	font-size: 14px;
+	font-weight: 500;
+	color: #0b1016;
+	width: 8%;
+	min-width: max-content;
+}
+
+.ref-col {
+	width: 16%;
+}
+
+/* .stat-col {
+	width: 12%;
+} */
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+	background-color: rgba(215, 107, 107, 0.249);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+	background-color: rgba(184, 89, 89, 0.103);
+}

@@ -10,6 +10,7 @@ import {
 	changeDateFormat,
 	arrayToObj,
 	objToIntArray,
+	getData,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 import InterviewFeedbackComponent from "./InterviewFeedbackComponent";
@@ -48,28 +49,26 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 	const [selectedId, setSelectedId] = useState(null);
 
 	useEffect(() => {
-		if (mrfId) {
+		async function getIntData() {
 			const apiUrl =
 				API_URL.INTERVIEW_SUMMARY_POPUP + `?id=${mrfId}&DashBoard=true`;
-			fetch(apiUrl)
-				.then((response) => response.json())
-				.then((response) => {
-					const data = response.result;
-					let arr = new Array(data.interviewDetails.length).fill(false); // for save bttn
-					setInterviewData(data.interviewDetails);
-					setInterviewStatus(
-						data.interviewstatus.filter((x) => x.candidateorEvalution == "E")
-					);
-					setInterviewerData(data.interviewReviewer);
-					setSaveBttn(arr);
-				})
-				.catch((error) => {
-					console.error("Fetch error:", error);
-				});
+			let response = await getData(apiUrl);
+			const data = response.result;
+			let arr = new Array(data.interviewDetails.length).fill(false); // for save bttn
+			setInterviewData(data.interviewDetails);
+			setInterviewStatus(
+				data.interviewstatus.filter((x) => x.candidateorEvalution == "E")
+			);
+			setInterviewerData(data.interviewReviewer);
+			setSaveBttn(arr);
+		}
+
+		if (mrfId) {
+			getIntData();
 		}
 	}, [mrfId]);
 
-	if (interviewData.length < 1) {
+	if (interviewData[0] == null) {
 		return (
 			<Dialog
 				header="MRF ID (Interview Summary)"
@@ -231,7 +230,6 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 				rows={10}
 				scrollable
 				scrollHeight="flex"
-				draggable={false}
 			>
 				{columns.map((col) => (
 					<Column
