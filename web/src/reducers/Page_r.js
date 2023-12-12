@@ -4,7 +4,8 @@ const initialState = {
   currentPageKey: '',
   currentPageSubKey: '',
   loading: false,
-  prevPageKey: ''
+  prevPageKey: '',
+  params: null
 };
 
 const pageSlice = createSlice({
@@ -17,6 +18,9 @@ const pageSlice = createSlice({
       state.currentPageKey = action.payload.pageKey;
       state.currentPageSubKey = action.payload.pageSubKey;
       // console.log('Page Reducer # Current Page Key: ', state.currentPageKey, ' | Page Sybkey: ', state.currentPageSubKey);
+    },
+    setParams: (state, action)=>{
+      state.params = action.payload.params;
     },
     onPageReady: (state, action) => {
       state.loading = false;

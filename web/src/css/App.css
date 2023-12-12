@@ -1,8 +1,8 @@
 * {
-  margin: 0;
+ /*  margin: 0;
   padding: 0;
   box-sizing: border-box;
-  border: none;
+  border: none; */
   font-family: "Poppins";
   /*  overflow: hidden; */
 }
@@ -16,8 +16,8 @@ button {
   background-color: transparent;
   box-sizing: border-box;
   border: none;
-  margin: 0;
-  padding: 0;
+ /*  margin: 0;
+  padding: 0; */
   cursor: pointer;
   /* display: flex; */
 }
@@ -39,4 +39,8 @@ a {
 	min-height: 100vh;
     margin: 0 auto;
 	overflow: hidden;
+}
+
+.content_right_wrapper{
+  width: calc(100% - 100px);
 }

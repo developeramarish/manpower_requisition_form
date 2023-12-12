@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins');
+
+
+.bar {
+     
+  padding-left: 10px;   /* Adjust as needed for less padding on the left 10*/
+  padding-right: 10px;  /* Adjust as needed for less padding on the right 10*/ 
+  margin: 0;
+  font-family:'Poppins';
+  font-size: 15px; 
+  color:  #ffffff;
+  background: #202020; 
+  width: 80vw;
+  background-size: cover;
+  /* background-color: #c9c9c9; */
+  padding: '2px';
+  font-size: medium;
+  font-weight: bold;
+background-color: #f6f6f6;
+box-sizing: border-box;
+  
+}
+.search
+  {
+    text-align: right;
+  }
+  .containerH {
+    padding-top: 20px;    /* Adjust as needed */
+    padding-bottom: 20px; /* Adjust as needed 20 */
+    padding-left: 10px;   /* Adjust as needed for less padding on the left 10*/
+    padding-right: 10px;  /* Adjust as needed for less padding on the right 10*/
+    display: flex;
+    justify-content: space-between;
+    color:  #0e0808;
+  
+    /* Adjust as needed */
+  }
+  .box {
+    width: 22%; /* Adjust as needed 22*/
+    box-sizing: border-box; /* Optional: Include padding and border in the total width */
+    font-size: 20px; 
+  }
+  .SearchText
+{
+  text-align: right;
+  border-radius: 35px;
+}

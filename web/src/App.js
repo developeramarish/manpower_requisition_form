@@ -1,4 +1,10 @@
 import './css/App.css';
+import "./styles/layout/theme.css";
+import "primereact/resources/primereact.css";
+import "primeflex/primeflex.css";
+import "primeicons/primeicons.css";
+import "primereact/resources/primereact.min.css";
+import "./styles/layout/InputComponents.css";
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { detectDevice, getData, getKeyFromLocation, isTouchDevice, navigateTo } from './constants/Utils';
@@ -13,13 +19,15 @@ import { APP_KEY, ROUTES } from './constants/config';
 import Sidebar from './components/Sidebar';
 import { PAGE_ACTIONS, Page } from './reducers/Page_r';
 import Dashboard from './containers/Dashboard';
+import MyRequisitions from './containers/MyRequisitions';
+import CreateRequisition from './Pages/CreateRequisition';
 
 function App() {
 
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
   const dispatch = useDispatch();
-  const { currentPageKey } = useSelector((state) => state.page);
+  const { currentPageKey, params } = useSelector((state) => state.page);
   const { currentDevice, touchDevice } = useSelector((state) => state.device);
 
   const { instance, accounts } = useMsal();
@@ -101,14 +109,19 @@ function App() {
   }
   let Comp = ROUTES[currentPageKey];
   return (
-    <div className={"App " + currentDevice + " "+currentPageKey}>
+    <div className={"App " + currentDevice + " " + currentPageKey}>
       <AuthenticatedTemplate>
         {profile && profile.roleId &&
           <>
             <HeaderBar userFirstName={accounts.length > 0 && accounts[0].name.split(" ")[0]} userLastName={accounts.length > 0 && accounts[0].name.split(" ")[1]} />
             <div className='content'>
               <Sidebar />
-              {currentPageKey === 'dashboard' && <Dashboard />}
+              <div className='content_right_wrapper'>
+                {currentPageKey === 'dashboard' && <Dashboard />}
+                {currentPageKey === 'my_requisition' && <MyRequisitions />}
+                {(currentPageKey === 'create_requisition' || currentPageKey === 'edit_requisition') && <CreateRequisition reqId={params} />}
+                
+              </div>
             </div>
           </>
         }
