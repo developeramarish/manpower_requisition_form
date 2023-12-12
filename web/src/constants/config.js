@@ -9,6 +9,8 @@ export const API_URL = {
 		"https://10.22.11.101:90/api/Dashboard/GetMrfInterviewSummary/Count",
 	INTERVIEW_SUMMARY_POPUP:
 		"https://10.22.11.101:90/api/Mrfinterviewermap/GetInterviewDetails/GetInterviewDetails",
+
+        MRF_STATUS_POPUP:`https://10.22.11.101:90/api/Mrfdetail/GetMrfDetails/GetMrfDetails?`,
 };
 
 export const FILE_URL = {
