@@ -83,9 +83,8 @@ namespace MRF.API.Controllers
             var candidateInterviewFeedback = new CandidateInterviewFeedback
             {
                 CandidateId = request.CandidateId,
-                SoftSkills = request.SoftSkills,
-                HardSkills = request.HardSkills,
-                RequiredTraining = request.RequiredTraining,
+                EvaluationFeedBackId = request.EvaluationFeedBackId,
+                InterviewRound = request.InterviewRound,
                 Comments = request.Comments,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
@@ -120,9 +119,8 @@ namespace MRF.API.Controllers
             if (existingStatus != null)
             {
                 existingStatus.CandidateId = request.CandidateId;
-                existingStatus.SoftSkills = request.SoftSkills;
-                existingStatus.HardSkills = request.HardSkills;
-                existingStatus.RequiredTraining = request.RequiredTraining;
+                existingStatus.EvaluationFeedBackId = request.EvaluationFeedBackId;
+                existingStatus.InterviewRound = request.InterviewRound;                
                 existingStatus.Comments = request.Comments;
                 existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
                 existingStatus.CreatedOnUtc = request.CreatedOnUtc;

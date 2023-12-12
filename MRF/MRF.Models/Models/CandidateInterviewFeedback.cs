@@ -10,9 +10,8 @@ namespace MRF.Models.Models
     {
         public int Id { get; set; }
         public int CandidateId { get; set; }
-        public string SoftSkills { get; set; }
-        public string HardSkills { get; set; }
-        public string RequiredTraining { get; set; }
+        public int EvaluationFeedBackId { get; set; }
+        public int InterviewRound { get; set; }        
         public string Comments { get; set; }
         public int CreatedByEmployeeId { get; set; }
         public DateTime CreatedOnUtc { get; set; }

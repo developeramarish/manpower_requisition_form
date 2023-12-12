@@ -24,10 +24,10 @@ namespace MRF.API.Test.Controller
             // Create a list of sample CandidateInterviewFeedback for testing
             var SampleCandidateInterviewFeedback = new List<CandidateInterviewFeedback> {
         new CandidateInterviewFeedback {
-          Id = 1, CandidateId = 1, SoftSkills = "Java", HardSkills = "Quick Learner", RequiredTraining = "Tomcat", Comments = "This is comment 1"
+          Id = 1, CandidateId = 1, EvaluationFeedBackId = 1, InterviewRound =1,  Comments = "This is comment 1"
         },
         new CandidateInterviewFeedback {
-          Id = 2, CandidateId = 1, SoftSkills = ".NET", HardSkills = "Team Player", RequiredTraining = "IIS", Comments = "This is comment 2"
+          Id = 2, CandidateId = 1, EvaluationFeedBackId = 2, InterviewRound =2,  Comments = "This is comment 2"
         },
       };
 
@@ -67,10 +67,10 @@ namespace MRF.API.Test.Controller
             // Create a list of sample CandidateInterviewFeedback for testing
             var sampleCandidateInterviewFeedback = new List<CandidateInterviewFeedback> {
         new CandidateInterviewFeedback {
-          Id = 1, CandidateId = 1, SoftSkills = "Java", HardSkills = "Quick Learner", RequiredTraining = "Tomcat", Comments = "This is comment 1"
+          Id = 1, CandidateId = 1, EvaluationFeedBackId = 1, InterviewRound =1,  Comments = "This is comment 1"
         },
         new CandidateInterviewFeedback {
-          Id = 2, CandidateId = 1, SoftSkills = ".NET", HardSkills = "Team Player", RequiredTraining = "IIS", Comments = "This is comment 2"
+          Id = 2, CandidateId = 1, EvaluationFeedBackId = 2, InterviewRound =2,  Comments = "This is comment 2"
         },
         // Add more sample data as needed
       };
@@ -94,12 +94,12 @@ namespace MRF.API.Test.Controller
 
             // Create a list of sample CandidateInterviewFeedback for testing
             var sampleCandidateInterviewFeedback = new List<CandidateInterviewFeedback> {
-        new CandidateInterviewFeedback {
-          Id = 1, CandidateId = 1, SoftSkills = "Java", HardSkills = "Quick Learner", RequiredTraining = "Tomcat", Comments = "This is comment 1"
-        },
-        new CandidateInterviewFeedback {
-          Id = 2, CandidateId = 1, SoftSkills = ".NET", HardSkills = "Team Player", RequiredTraining = "IIS", Comments = "This is comment 2"
-        },
+           new CandidateInterviewFeedback {
+  Id = 1, CandidateId = 1, EvaluationFeedBackId = 1, InterviewRound =1,  Comments = "This is comment 1"
+},
+new CandidateInterviewFeedback {
+  Id = 2, CandidateId = 1, EvaluationFeedBackId = 2, InterviewRound =2,  Comments = "This is comment 2"
+},
         // Add more sample data as needed   
       };
 
@@ -121,14 +121,12 @@ namespace MRF.API.Test.Controller
             var requestModel = new CandidateInterviewFeedbackRequestModel
             {
                 CandidateId = 1,
-                SoftSkills = "Java",
-                HardSkills = ".NET",
-                RequiredTraining = "Azure",
+                EvaluationFeedBackId = 1,
+                InterviewRound = 1,
                 Comments = "Good Resource",
                 CreatedByEmployeeId = 1,
                 CreatedOnUtc = DateTime.Now,
                 UpdatedByEmployeeId = 1,
-
             };
 
             // Mock the behavior of IUnitOfWork
@@ -199,7 +197,8 @@ namespace MRF.API.Test.Controller
 
             // Mock the behavior of the Get and Remove methods in IUnitOfWork
             fixture.MockUnitOfWork.Setup(uow => uow.CandidateInterviewFeedback.Get(It.IsAny<Expression<Func<CandidateInterviewFeedback, bool>>>()))
-              .Returns((Expression<Func<CandidateInterviewFeedback, bool>> filter) => {
+              .Returns((Expression<Func<CandidateInterviewFeedback, bool>> filter) =>
+              {
                   // Simulate returning an object when the filter condition matches
                   if (filter.Compile().Invoke(new CandidateInterviewFeedback
                   {
@@ -269,14 +268,12 @@ namespace MRF.API.Test.Controller
             var requestModel = new CandidateInterviewFeedbackRequestModel
             {
                 CandidateId = 1,
-                SoftSkills = "Java",
-                HardSkills = ".NET",
-                RequiredTraining = "Azure",
+                EvaluationFeedBackId = 1,
+                InterviewRound = 1,
                 Comments = "Good Resource",
                 CreatedByEmployeeId = 1,
                 CreatedOnUtc = DateTime.Now,
                 UpdatedByEmployeeId = 1,
-
             };
 
             // Mock the behavior of IUnitOfWork's Get method to return an existing entity
@@ -307,14 +304,12 @@ namespace MRF.API.Test.Controller
             var requestModel = new CandidateInterviewFeedbackRequestModel
             {
                 CandidateId = 1,
-                SoftSkills = "Java",
-                HardSkills = ".NET",
-                RequiredTraining = "Azure",
+                EvaluationFeedBackId = 1,
+                InterviewRound = 1,
                 Comments = "Good Resource",
                 CreatedByEmployeeId = 1,
                 CreatedOnUtc = DateTime.Now,
                 UpdatedByEmployeeId = 1,
-
             };
 
             fixture.MockUnitOfWork.Setup(uow => uow.CandidateInterviewFeedback.Get(It.IsAny<Expression<Func<CandidateInterviewFeedback, bool>>>()))
