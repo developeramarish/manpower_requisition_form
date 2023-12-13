@@ -20,42 +20,170 @@ namespace MRF.DataAccess.Repository
 
         public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId)
         {
-            IQueryable<InterviewDetailsViewModel> query = from mrfDetails in _db.Mrfdetails
-                        join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
-                        join Emp in _db.Employeedetails on Candidate.CreatedByEmployeeId equals Emp.Id
-                        join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id 
-                        join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
-                        join Attachment in _db.AttachmentEvaluation on Ivaluation.EvaluationId equals Attachment.InterviewEvaluationId
-                        join Emp2 in _db.Employeedetails on Ivaluation.InterviewerId equals Emp2.Id
-                        join EvFeedback in _db.Evaluationfeedbackmaster on Ivaluation.EvaluationFeedbackId equals EvFeedback.Id
-                        where mrfDetails.Id == mrfId && !status.Status.Contains("resume")
-                        select new InterviewDetailsViewModel
-                        {
-                            MrfId = mrfDetails.Id,
-                            ReferenceNo = mrfDetails.ReferenceNo,
-                            ResumePath = Candidate.ResumePath,
-                            CreatedByEmployeeId = Emp.Id,
-                            CreatedName = Emp.Name,
-                            CreatedOnUtc = Candidate.CreatedOnUtc,
-                            CandidateId= Candidate.Id,
-                            CandidateStatusId = Candidate.CandidateStatusId,
-                            Candidatestatus = status.Status,
-                            InterviewerEmployeeId = Ivaluation.InterviewerId,
-                            InterviewerName = Emp2.Name,
-                            EvaluationId= Ivaluation.Id,
-                            EvaluationFeedbackId = Ivaluation.EvaluationFeedbackId,
-                            EvalutionStatus = EvFeedback.Description,
-                            CandidateStatusChangedOnUtc= Ivaluation.CreatedOnUtc,
-                            Attachment = Attachment.FilePath,
-                        };
+            /* take list from Interview reviewer assigned to mrfId   */
+            IQueryable<InterviewDetailsViewModel> Mrfinterviewmap =
+     _db.Mrfdetails
+     .Where(mrfDetails => mrfDetails.Id == mrfId)
+         .GroupJoin(
+             _db.Mrfinterviewermap,
+             mrfDetails => mrfDetails.Id,
+             Interview => Interview.MrfId,
+             (mrfDetails, InterviewGroup) => new InterviewDetailsViewModel
+             {
+                 MrfId = mrfDetails.Id,
+                 InterviewerEmployeeIds = string.Join(",", InterviewGroup.Select(r => r.InterviewerEmployeeId))
+             }
+         );
 
-            var latestRecords = query
-            .GroupBy(r => r.CandidateId)
-            .Select(g => g.OrderByDescending(r => r.EvaluationId).First());
+            /* take list from Interview reviewer assigned to candidate details   */
+            IQueryable<InterviewDetailsViewModel> interviewer = _db.Mrfdetails
+                .Where(mrfDetails => mrfDetails.Id == mrfId)
+                .Join(
+                    _db.Candidatedetails,
+                    mrfDetails => mrfDetails.Id,
+                    candidate => candidate.MrfId,
+                    (mrfDetails, candidate) => new { mrfDetails, candidate }
+                )
+                .GroupJoin(
+                    _db.Interviewevaluation,
+                    combined => combined.candidate.Id,
+                    interview => interview.CandidateId,
+                    (combined, interviewGroup) => new InterviewDetailsViewModel
+                    {
+                        CandidateId = combined.candidate.Id,
+                        InterviewerEmployeeIds = string.Join(",", interviewGroup.Select(r => r.InterviewerId.ToString()))
+                    }
+                );
+
+            /*  Assisgnment assigned to candidate details   */
+            IQueryable<InterviewDetailsViewModel> Attachments = from mrfDetails in _db.Mrfdetails
+                                                                join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
+                                                                join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId 
+                                                                join Attachment in _db.AttachmentEvaluation on Ivaluation.Id  equals Attachment.InterviewEvaluationId 
+                                                                where mrfDetails.Id == mrfId 
+                                                                select new InterviewDetailsViewModel
+                                                                {
+                                                                    CandidateId=Candidate.Id,
+                                                                    EvaluationId = Attachment.InterviewEvaluationId,
+                                                                    Attachment =  Attachment.FilePath ,
+                                                                };
+
+            /*IstatusGrouped contains only the latest status for each CandidateId.*/
+            var statusGrouped = from mrfDetails in _db.Mrfdetails
+                                 join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
+                                 join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
+                                 join status in _db.Evaluationstatusmaster on Ivaluation.EvalutionStatusId equals status.Id
+                                 where mrfDetails.Id == mrfId
+                                 select new InterviewStatus
+                                 {
+                                     CandidateId = Candidate.Id,
+                                     CandidateStatusId = Ivaluation.EvalutionStatusId,
+                                     CandidateStatusChangedOnUtc = Ivaluation.UpdatedOnUtc,
+                                     Candidatestatus = status.Status,
+                                 };
+            var IstatusGrouped = from status in statusGrouped
+                                           group status by status.CandidateId into grouped
+                                           select new InterviewStatus
+                                           {
+                                               CandidateId = grouped.Key,
+                                               CandidateStatusId = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().CandidateStatusId,
+                                               CandidateStatusChangedOnUtc = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().CandidateStatusChangedOnUtc,
+                                               Candidatestatus = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().Candidatestatus,
+                                           };
 
 
 
-            return latestRecords.ToList();
+            IQueryable<InterviewDetailsViewModel> firstlist = from mrfDetails in _db.Mrfdetails
+                            join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
+                            join Emp in _db.Employeedetails on Candidate.CreatedByEmployeeId equals Emp.Id
+                            where mrfDetails.Id == mrfId
+                            select new InterviewDetailsViewModel
+                            {
+                                MrfId = mrfDetails.Id,
+                                ReferenceNo = mrfDetails.ReferenceNo,
+                                ResumePath = Candidate.ResumePath,
+                                CreatedByEmployeeId = Emp.Id,
+                                CreatedName = Emp.Name,
+                                CreatedOnUtc = Candidate.CreatedOnUtc,
+                                CandidateId = Candidate.Id,
+                               
+                            };
+
+            IQueryable<InterviewDetailsViewModel> secondmerge = from q in firstlist
+                              join i in Mrfinterviewmap on q.MrfId equals i.MrfId into interviewResults
+                                 from i in interviewResults.DefaultIfEmpty()
+                                 select new InterviewDetailsViewModel
+                                 {
+                                     MrfId = q.MrfId,
+                                     ReferenceNo = q.ReferenceNo,
+                                     ResumePath = q.ResumePath,
+                                     CreatedByEmployeeId = q.CreatedByEmployeeId,
+                                     CreatedName = q.CreatedName,
+                                     CreatedOnUtc = q.CreatedOnUtc,
+                                     CandidateId = q.CandidateId,
+                                     InterviewerEmployeeIds = i.InterviewerEmployeeIds,
+                                     
+                                 };
+
+
+            IQueryable<InterviewDetailsViewModel> thirdmerge = from q in secondmerge
+                             join i in interviewer on q.CandidateId equals i.CandidateId into interviewResults
+                              from i in interviewResults.DefaultIfEmpty()
+                              select new InterviewDetailsViewModel
+                              {
+                                  MrfId = q.MrfId,
+                                  ReferenceNo = q.ReferenceNo,
+                                  ResumePath = q.ResumePath,
+                                  CreatedByEmployeeId = q.CreatedByEmployeeId,
+                                  CreatedName = q.CreatedName,
+                                  CreatedOnUtc = q.CreatedOnUtc,
+                                  CandidateId = q.CandidateId,
+                                  InterviewerEmployeeIds = i.InterviewerEmployeeIds==""? q.InterviewerEmployeeIds : i.InterviewerEmployeeIds,
+                                  
+                              };
+
+
+            IQueryable<InterviewDetailsViewModel> forthmerge = from q in thirdmerge
+                             join i in Attachments on q.CandidateId equals i.CandidateId into interviewResults
+                             from i in interviewResults.DefaultIfEmpty()
+                             select new InterviewDetailsViewModel
+                             {
+                                 MrfId = q.MrfId,
+                                 ReferenceNo = q.ReferenceNo,
+                                 ResumePath = q.ResumePath,
+                                 CreatedByEmployeeId = q.CreatedByEmployeeId,
+                                 CreatedName = q.CreatedName,
+                                 CreatedOnUtc = q.CreatedOnUtc,
+                                 CandidateId = q.CandidateId,
+                                 InterviewerEmployeeIds = q.InterviewerEmployeeIds,
+                                 Attachment =  i.Attachment==null ? "" : i.Attachment,
+                                 
+                             };
+          
+
+            IQueryable<InterviewDetailsViewModel> finalmerge = from q in forthmerge
+                                                               join i in IstatusGrouped on q.CandidateId equals i.CandidateId
+                                                               into interviewResults
+                                                               from i in interviewResults.DefaultIfEmpty()
+                                                               select new InterviewDetailsViewModel
+                                                               {
+                                                                   MrfId = q.MrfId,
+                                                                   ReferenceNo = q.ReferenceNo,
+                                                                   ResumePath = q.ResumePath,
+                                                                   CreatedByEmployeeId = q.CreatedByEmployeeId,
+                                                                   CreatedName = q.CreatedName,
+                                                                   CreatedOnUtc = q.CreatedOnUtc,
+                                                                   CandidateId = q.CandidateId,
+                                                                   InterviewerEmployeeIds = q.InterviewerEmployeeIds,
+                                                                   Attachment = q.Attachment,
+                                                                   CandidateStatusId = i != null ? i.CandidateStatusId ?? 0 : 0, // Check for null outside the query
+                                                                   Candidatestatus = i != null ? i.Candidatestatus : "",  // Check for null outside the query
+                                                                   CandidateStatusChangedOnUtc = i == null ? DateTime.MinValue : i.CandidateStatusChangedOnUtc ?? DateTime.MinValue,
+
+                                                               };
+
+
+            return finalmerge.ToList();
 
         }
     }

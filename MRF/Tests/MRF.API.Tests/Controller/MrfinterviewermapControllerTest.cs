@@ -348,8 +348,10 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
-            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
-            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,
+                },
+            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,
+                },
 
             };
 
@@ -375,8 +377,8 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
-            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
-            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
+            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
 
             };
 
@@ -402,8 +404,8 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
-            new InterviewDetailsViewModel  {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
-            new InterviewDetailsViewModel {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel  {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
+            new InterviewDetailsViewModel {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
 
             };
 
