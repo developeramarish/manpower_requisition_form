@@ -29,6 +29,7 @@ const DraftedMrf = ({ header, visible, onHide, roleId = 3, statusId = 2 }) => {
     fetchData();
   }, []);
 
+  console.log(data)
   const columnHeaderTemplate = (title) => {
     return <h3 className="mrfdraft-table-header">{title}</h3>;
   };
