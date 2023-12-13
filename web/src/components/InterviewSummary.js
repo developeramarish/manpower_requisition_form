@@ -5,6 +5,7 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import DropdownComponent from "./Dropdown";
 import MultiSelectDropdown from "./multiselectDropdown";
+import InterviewFeedbackComponent from "./InterviewFeedbackComponent";
 import { API_URL, FILE_URL, ROLES } from "../constants/config";
 import {
 	changeDateFormat,
@@ -13,7 +14,6 @@ import {
 	getData,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
-import InterviewFeedbackComponent from "./InterviewFeedbackComponent";
 
 const roleId = 3;
 
@@ -57,7 +57,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			let arr = new Array(data.interviewDetails.length).fill(false); // for save bttn
 			setInterviewData(data.interviewDetails);
 			setInterviewStatus(
-				data.interviewstatus.filter((x) => x.candidateorEvalution == "E")
+				data.interviewstatus.filter((x) => x.candidateorEvalution === "E")
 			);
 			setInterviewerData(data.interviewReviewer);
 			setSaveBttn(arr);
@@ -93,7 +93,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 		};
 
 		if (roleId === ROLES.mrfOwner) {
-			let is = interviewStatus.filter((x) => x.id == interview.evaluationId);
+			let is = interviewStatus.filter((x) => x.id === interview.evaluationId);
 			return <p className="drop-width">{is[0].status}</p>;
 		}
 
@@ -244,7 +244,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			<InterviewFeedbackComponent
 				visible={showFeed}
 				onHide={setShowFeed}
-				selectedId={selectedId}
+				cId={selectedId}
 			/>
 		</Dialog>
 	);

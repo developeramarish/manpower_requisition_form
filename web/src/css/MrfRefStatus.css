@@ -1,0 +1,41 @@
+.mrf-ref-link {
+	margin: 0;
+	font-weight: 500;
+	font-size: 14px;
+	color: #d32f2e;
+	text-decoration: underline;
+	text-underline-offset: 5px;
+	cursor: pointer;
+}
+
+.ref-popup .p-dialog-content {
+	padding: 0;
+}
+
+.ref-popup .p-dialog-title {
+	font-weight: 500;
+	font-size: 14px;
+}
+.ref-popup-content {
+	font-weight: 500;
+	font-size: 16px;
+	padding: 20px 30px;
+}
+.ref-popup-bttns {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+}
+.ref-popup-bttns .ref-bttn {
+	font-weight: 500;
+	font-size: 14px;
+	border: 2px solid #d32f2e;
+}
+
+.ref-popup-bttns .yes-bttn {
+	background-color: #d32f2e;
+}
+.ref-popup-bttns .no-bttn {
+	color: #d32f2e;
+}
