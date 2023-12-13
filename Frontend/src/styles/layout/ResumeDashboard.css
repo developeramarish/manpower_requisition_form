@@ -1,0 +1,32 @@
+.MyResumeDash {
+    background-color: #f6f6f6;
+    width: 92%;
+    padding-top: 1%;
+    padding-left: 1%;
+    font-family: "Poppins";
+    font-size: medium;
+    color: black;
+    
+    font-weight: bold;
+  }
+
+  .resumedash-ref-col {
+    width: 25%;
+    /* background-color: aqua; */
+  }
+  
+  .table-part{
+    background-color: aquamarine;
+    width: 90%;
+    /* height: 50px; */
+    /* overflow-y: hidden; */
+  }
+
+  .resumedash-col {
+    font-size: 14px;
+    color: #0b1016;
+    font-weight: 500;
+   width: 20%;
+   padding-right: 25px;
+   
+  }
