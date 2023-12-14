@@ -1,0 +1,27 @@
+.dashBoard_table .p-datatable .p-datatable-header {
+ background-color: #ffffff;   
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ border: 1px solid #e3e3e3;
+}
+
+.dashBoard_table {
+    
+    margin: 15px;
+   
+    
+}
+
+/* flex flex-row justify-content-between */
+
+.dash_table_header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dashBoard_table .p-datatable .p-datatable-thead > tr > th{
+    background-color: aqua;
+    border: 1px solid #e3e3e3;
+    border-collapse: collapse;
+}

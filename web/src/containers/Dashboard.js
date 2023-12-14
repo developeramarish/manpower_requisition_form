@@ -6,6 +6,7 @@ import { storageService } from "../constants/storage";
 import InterviewSummary from "../components/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
 import ResumeSummary from "../components/ResumeSummary";
+import DashBoardDataTable from "../components/DashBoardDataTable";
 
 function Dashboard() {
   const [mrfStatus, setMrfStatus] = useState([]);
@@ -41,10 +42,73 @@ function Dashboard() {
     setInterviewPopup(true);
   };
   const onResumeMRFIdClicked = (e) => {
+    console.log("lll");
     setResumePopupId(e);
     setResumePopup(true);
   };
 
+  const mrfIdBodyTemplate = (rowData) => {
+    // return rowData.resultGroups[0].totalstatusCount
+    console.log(rowData)
+    return (
+      <div>
+        <a
+          className="btn_mrf_id"
+          onClick={(e) => onResumeMRFIdClicked(rowData.mrfId)}
+        >
+          {rowData.referenceno}
+        </a>
+      </div>
+    );
+  };
+  
+
+  const statusNewBodyTemplate = (rowData, options) => {
+    return rowData.resultGroups[0].totalstatusCount;
+  };
+  const statusShortlistedBodyTemplate = (rowData, options) => {
+    return rowData.resultGroups[1].totalstatusCount;
+  };
+  const statusRejectedBodyTemplate = (rowData, options) => {
+    return rowData.resultGroups[2].totalstatusCount;
+  };
+  const statusOnHoldBodyTemplate = (rowData, options) => {
+    return rowData.resultGroups[3].totalstatusCount;
+  };
+
+  const column = [
+    {
+      field: "referenceno",
+      header: "MRF ID",
+      body: mrfIdBodyTemplate,
+    },
+
+    {
+      field: "new",
+      header: "New",
+      body: statusNewBodyTemplate,
+    },
+
+    {
+      field: "shortlisted",
+      header: "Shortlisted",
+      body: statusShortlistedBodyTemplate,
+    },
+
+    {
+      field: "referenceno",
+      header: "Rejected",
+      body: statusRejectedBodyTemplate,
+    },
+
+    {
+      field: "referenceno",
+      header: "on Hold",
+      body: statusOnHoldBodyTemplate,
+    },
+  ];
+
+  // console.log(data)
   return (
     <div className="dashboard_wrapper">
       <div className="dashboard_header">
@@ -168,7 +232,7 @@ function Dashboard() {
               </table>
             </div>
           </div>
-          <div className="mrf_resume_summary">
+          {/* <div className="mrf_resume_summary">
             <div className="header">
               <h4>Resume Summary</h4>
             </div>
@@ -227,7 +291,19 @@ function Dashboard() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
+          <DashBoardDataTable
+            value={resumeSummary}
+            coloumn={column}
+            headerRow={"Resume Status"}
+            header_title={"Resume Summary"}
+            
+          />
+          <ResumeSummary
+    visible={resumePopup}
+    onHide={() => setResumePopup(false)}
+    mrfId={resumePopupId}
+  />
         </div>
       </div>
     </div>
