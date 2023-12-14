@@ -4,15 +4,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+- azure-pipelines
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
-  buildConfiguration: 'Release'
-  buildPlatform: 'Any CPU'  
-  uiSource: 'Frontend'
+  uiSource: '**/Frontend/src'
   uiBuild: '$(uiSource)/build'
 
 steps:
