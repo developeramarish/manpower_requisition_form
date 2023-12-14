@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  uiSource: '**/Frontend/src'
+  uiSource: 'Frontend/src'
   uiBuild: '$(uiSource)/build'
 
 steps:
