@@ -12,7 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'  
-  uiSource: '**/Frontend'
+  uiSource: 'Frontend'
   uiBuild: '$(uiSource)/build'
 
 steps:
