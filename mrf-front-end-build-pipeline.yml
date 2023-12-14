@@ -1,3 +1,7 @@
+# Name of the pipeline
+name: MRF-Front-End-Build-Pipeline
+appendCommitMessageToRunName: false
+
 # Define the trigger for the pipeline to run when changes occur in azure-pipelines branch
 trigger:
 - main
