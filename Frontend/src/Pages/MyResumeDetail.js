@@ -211,11 +211,9 @@ const MyResumeDetail = ({ visible, onHide, mrfId = 2,dashboard=true }) => {
         <DataTable
           value={data}
           paginator
-          rows={10}
+          rows={6}
           scrollable
-          onRowEditComplete={update}
-          editMode="row"
-          scrollHeight="50vh"
+        scrollHeight="400px"
         >
           <Column
             // field="mrfId"
