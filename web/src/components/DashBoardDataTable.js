@@ -5,19 +5,18 @@ import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { FilterMatchMode } from "primereact/api";
 import InputTextCp from "./Textbox";
-import "../css/DashBoardDataTable.css"
-const DashBoardDataTable = ({ value, header_title,headerRow ,coloumn}) => {
-  
+import "../css/DashBoardDataTable.css";
+
+const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
-
 
   const renderHeader = () => {
     return (
       <div className="dash_table_header ">
-        <h5 className="m-2	">{header_title} </h5>
+        <h5 className="m-2">{table_title} </h5>
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
           <InputTextCp
@@ -30,11 +29,6 @@ const DashBoardDataTable = ({ value, header_title,headerRow ,coloumn}) => {
     );
   };
 
-  const bodyTemplate=(rowData,options)=>{
-// console.log(rowData.resultGroups[options.rowIndex].totalstatusCount)
-    return rowData.resultGroups[0].totalstatusCount
-  }
-
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
     let _filters = { ...filters };
@@ -44,48 +38,47 @@ const DashBoardDataTable = ({ value, header_title,headerRow ,coloumn}) => {
     setFilters(_filters);
     setGlobalFilterValue(value);
   };
-  const header = renderHeader();
-
 
   const headerGroup = (
     <ColumnGroup>
-      <Row className="tiiile">
+      <Row>
         <Column header="MRF ID" rowSpan={2} />
-        <Column header={headerRow} colSpan={4} />
+        <Column header={headerHeading} colSpan={4} />
       </Row>
       <Row>
-        {value.map((data, index) => {
-          return (
-            <Column
-              header={data.resultGroups[index].candidatestatus}
-              field={data.resultGroups[index].totalstatusCount}
-            />
-          );
-        })}
+        {value &&
+          value.map((data, index) => {
+            return (
+              <Column
+                key={index}
+                header={data.resultGroups[index].candidatestatus}
+              />
+            );
+          })}
       </Row>
     </ColumnGroup>
   );
+
+  const header = renderHeader();
 
   return (
     <div className="dashBoard_table">
       <DataTable
         value={value}
+        paginator
+        rows={7}
+        // rowsPerPageOptions={[ 10, 25, 50]}
         filters={filters}
         header={header}
         headerColumnGroup={headerGroup}
-        
+        scrollable
+        scrollHeight="flex"
       >
-        
-        {coloumn.map((col, index) => {
-          return (
-           
-            <Column
-              field={col.field}
-              header={col.header}
-              body={col.body}
-            />
-          );
-        })} 
+        {column.map((col, index) => {
+          // console.log(col)
+          return <Column key={index} field={col.field}
+          header={col.header} body={col.body} />;
+        })}
       </DataTable>
     </div>
   );

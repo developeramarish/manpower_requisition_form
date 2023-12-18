@@ -7,6 +7,10 @@ import InterviewSummary from "../components/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
 import ResumeSummary from "../components/ResumeSummary";
 import DashBoardDataTable from "../components/DashBoardDataTable";
+import {
+  filterSelectedColumn,
+  filterResultGroupByCandidatestatus,
+} from "../constants/Utils";
 
 function Dashboard() {
   const [mrfStatus, setMrfStatus] = useState([]);
@@ -32,6 +36,11 @@ function Dashboard() {
     setInterviewSummary(interviewSummaryData.result);
   }
 
+  const interviewSummaryTableData = filterResultGroupByCandidatestatus(
+    interviewSummary,
+    ["Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
+  );
+
   const onMRFIdClicked = (e) => {
     setrfStatusPopupId(e);
     setMrfStatusPopup(true);
@@ -42,14 +51,24 @@ function Dashboard() {
     setInterviewPopup(true);
   };
   const onResumeMRFIdClicked = (e) => {
-    console.log("lll");
     setResumePopupId(e);
     setResumePopup(true);
   };
 
-  const mrfIdBodyTemplate = (rowData) => {
-    // return rowData.resultGroups[0].totalstatusCount
-    console.log(rowData)
+  const mrfIdInterviewRefernceTemplate = (rowData) => {
+    return (
+      <div>
+        <a
+          className="btn_mrf_id"
+          onClick={(e) => onInterviewMRFIdClicked(rowData.mrfId)}
+        >
+          {rowData.referenceno}
+        </a>
+      </div>
+    );
+  };
+
+  const mrfIdResumeRefernceTemplate = (rowData) => {
     return (
       <div>
         <a
@@ -61,54 +80,65 @@ function Dashboard() {
       </div>
     );
   };
-  
-
-  const statusNewBodyTemplate = (rowData, options) => {
-    return rowData.resultGroups[0].totalstatusCount;
-  };
-  const statusShortlistedBodyTemplate = (rowData, options) => {
-    return rowData.resultGroups[1].totalstatusCount;
-  };
-  const statusRejectedBodyTemplate = (rowData, options) => {
-    return rowData.resultGroups[2].totalstatusCount;
-  };
-  const statusOnHoldBodyTemplate = (rowData, options) => {
-    return rowData.resultGroups[3].totalstatusCount;
-  };
-
-  const column = [
+  const resumeSummaryColums = [
     {
       field: "referenceno",
-      header: "MRF ID",
-      body: mrfIdBodyTemplate,
+      header: "Mrf Id",
+      body: mrfIdResumeRefernceTemplate,
     },
-
     {
       field: "new",
       header: "New",
-      body: statusNewBodyTemplate,
+      body: (rowData) => filterSelectedColumn(rowData, "New"),
     },
 
     {
       field: "shortlisted",
       header: "Shortlisted",
-      body: statusShortlistedBodyTemplate,
+      body: (rowData) => filterSelectedColumn(rowData, "Shortlisted"),
     },
 
     {
-      field: "referenceno",
+      field: "rejected",
       header: "Rejected",
-      body: statusRejectedBodyTemplate,
+      body: (rowData) => filterSelectedColumn(rowData, "Rejected"),
     },
-
     {
-      field: "referenceno",
+      field: "on Hold",
       header: "on Hold",
-      body: statusOnHoldBodyTemplate,
+      body: (rowData) => filterSelectedColumn(rowData, "on Hold"),
     },
   ];
 
-  // console.log(data)
+  const interviewSummaryColums = [
+    {
+      field: "referenceno",
+      header: "MRF ID",
+      body: mrfIdInterviewRefernceTemplate,
+    },
+    {
+      field: "referenceno",
+      header: "Selected",
+      body: (rowData) => filterSelectedColumn(rowData, "Selected"),
+    },
+    {
+      field: "referenceno",
+      header: "Onboarded",
+      body: (rowData) => filterSelectedColumn(rowData, "Onboarded"),
+    },
+    {
+      field: "new",
+      header: "Assignment Sent",
+      body: (rowData) => filterSelectedColumn(rowData, "Assignment Sent"),
+    },
+
+    {
+      field: "shortlisted",
+      header: "Assignment Received",
+      body: (rowData) => filterSelectedColumn(rowData, "Assignment Received"),
+    },
+  ];
+
   return (
     <div className="dashboard_wrapper">
       <div className="dashboard_header">
@@ -159,151 +189,29 @@ function Dashboard() {
           </div>
         </div>
         <div className="dashboard_body_right">
-          <div className="mrf_interview_summary">
-            <div className="header">
-              <h4>Interview Summary</h4>
-            </div>
-            <InterviewSummary
-              visible={interviewPopup}
-              onHide={() => setInterviewPopup(false)}
-              mrfId={interviewPopupId}
-            />
-            <div className="mrf_table">
-              <table>
-                <thead>
-                  <tr>
-                    <th rowSpan="2" className="table_heading">
-                      MRF ID
-                    </th>
-                    <th colSpan="4" className="table_heading_Resume">
-                      Interview Status
-                    </th>
-                  </tr>
-                  <tr>
-                    <th className="subheading">Assignment Sent</th>
-                    <th className="subheading">Assignment Received</th>
-                    <th className="subheading">Onboarded</th>
-                    <th className="subheading"> Candidate Selected</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {interviewSummary.map((data, index) => {
-                    return (
-                      <tr key={"interviewSum_" + index}>
-                        <td>
-                          <a
-                            className="btn_mrf_id"
-                            onClick={(e) => onInterviewMRFIdClicked(data.mrfId)}
-                          >
-                            {data.referenceno}
-                          </a>
-                        </td>
-                        {data.resultGroups
-                          .sort((a, b) => {
-                            return a.candidatestatus.toLowerCase() >
-                              b.candidatestatus.toLowerCase()
-                              ? 1
-                              : -1;
-                          })
-                          .map((resData, index) => {
-                            return (
-                              <React.Fragment key={"interviewSum_res_" + index}>
-                                {resData.candidatestatus ===
-                                  "Assignment Sent" && (
-                                  <td>{resData.totalstatusCount}</td>
-                                )}
-                                {resData.candidatestatus ===
-                                  "Assignment Received" && (
-                                  <td>{resData.totalstatusCount}</td>
-                                )}
-                                {resData.candidatestatus === "Onboarded" && (
-                                  <td>{resData.totalstatusCount}</td>
-                                )}
-                                {resData.candidatestatus === "Selected" && (
-                                  <td>{resData.totalstatusCount}</td>
-                                )}
-                              </React.Fragment>
-                            );
-                          })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          {/* <div className="mrf_resume_summary">
-            <div className="header">
-              <h4>Resume Summary</h4>
-            </div>
-            <div className="mrf_table">
-			<ResumeSummary visible={resumePopup} onHide={()=>setResumePopup(false)} mrfId={resumePopupId} />
-              <table>
-                <thead>
-                  <tr>
-                    <th rowSpan="2" className="table_heading">
-                      MRF ID
-                    </th>
-                    <th colSpan="4" className="table_heading_Resume">
-                      Resume Status
-                    </th>
-                  </tr>
-                  <tr>
-                    <th className="subheading">New</th>
-                    <th className="subheading">Shortlisted</th>
-                    <th className="subheading">Rejected</th>
-                    <th className="subheading">On Hold</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {resumeSummary.map((data, index) => {
-                    return (
-                      <tr key={"interviewSum_" + index}>
-                        <td>
-                          <a
-                            className="btn_mrf_id"
-                            onClick={(e) => onResumeMRFIdClicked(data.mrfId)}
-                          >
-                            {data.referenceno}
-                          </a>
-                        </td>
-                        {data.resultGroups.map((resData, index) => {
-                          return (
-                            <React.Fragment key={"interviewSum_res_" + index}>
-                              {resData.candidatestatus === "New" && (
-                                <td>{resData.totalstatusCount}</td>
-                              )}
-                              {resData.candidatestatus === "Shortlisted" && (
-                                <td>{resData.totalstatusCount}</td>
-                              )}
-                              {resData.candidatestatus === "Rejected" && (
-                                <td>{resData.totalstatusCount}</td>
-                              )}
-                              {resData.candidatestatus === "on Hold" && (
-                                <td>{resData.totalstatusCount}</td>
-                              )}
-                            </React.Fragment>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div> */}
+          <DashBoardDataTable
+            value={interviewSummaryTableData}
+            column={interviewSummaryColums}
+            headerHeading={"Interview Status"}
+            table_title={"Interview Summary"}
+          />
+          <InterviewSummary
+            visible={interviewPopup}
+            onHide={() => setInterviewPopup(false)}
+            mrfId={interviewPopupId}
+          />
+
           <DashBoardDataTable
             value={resumeSummary}
-            coloumn={column}
-            headerRow={"Resume Status"}
-            header_title={"Resume Summary"}
-            
+            column={resumeSummaryColums}
+            headerHeading={"Resume Status"}
+            table_title={"Resume Summary"}
           />
           <ResumeSummary
-    visible={resumePopup}
-    onHide={() => setResumePopup(false)}
-    mrfId={resumePopupId}
-  />
+            visible={resumePopup}
+            onHide={() => setResumePopup(false)}
+            mrfId={resumePopupId}
+          />
         </div>
       </div>
     </div>

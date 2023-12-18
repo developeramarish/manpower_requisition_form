@@ -26,6 +26,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const RedAsterisk = () => <span className="text-red-500">*</span>;
 
   const toastRef = useRef(null);
   // const navigate = useNavigate();
@@ -292,7 +293,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="RequisitionType" className="font-bold text-sm">
-              Requisition Type
+              Requisition Type<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -307,7 +308,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-title" className="font-bold text-sm">
-              Position Title
+              Position Title<RedAsterisk />
             </label>
             <InputTextCp
               id="position-title"
@@ -322,7 +323,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
-              Department
+              Department<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -337,7 +338,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="sub-department" className="font-bold text-sm">
-              Sub-Department
+              Sub-Department<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -354,7 +355,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="project" className="font-bold text-sm">
-              Project
+              Project<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -369,7 +370,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="location" className="font-bold text-sm">
-              Location
+              Location<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="location"
@@ -386,7 +387,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-reporting" className="font-bold text-sm">
-              Position Reporting to
+              Position Reporting to<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -405,7 +406,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="initiation-date" className="font-bold text-sm">
-              Hiring Initiation Date
+              Hiring Initiation Date<RedAsterisk />
             </label>
             <CalendarComponent
               id="initiation-date"
@@ -423,7 +424,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="employment-type-req" className="font-bold text-sm">
-              Type of employment required
+              Type of employment required<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -439,7 +440,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="mingrade" className="font-bold text-sm">
-              Grade of the proposed employee
+              Grade of the proposed employee<RedAsterisk />
             </label>
 
             <div className="p-col-7">
@@ -476,7 +477,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="no-vacancies" className="font-bold text-sm">
-              Number of Vaccancies
+              Number of Vaccancies<RedAsterisk />
             </label>
             <InputTextCp
               id="vaccancies"
@@ -490,7 +491,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="vacancy-type" className="font-bold text-sm">
-              Type of vacancy
+              Type of vacancy<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -507,7 +508,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5 ">
           <div className="flex flex-column w-5 gap-2">
             <label htmlFor="experience" className="font-bold text-sm">
-              Experience
+              Experience<RedAsterisk />
             </label>
             <div className="p-col-7">
               <label className="font-bold text-sm label-with-padding-right">
@@ -539,7 +540,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 row-gap-2">
             <label htmlFor="gender" className="font-bold text-sm">
-              Gender
+              Gender<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="label"
@@ -554,7 +555,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="qualification" className="font-bold text-sm">
-              Qualification
+              Qualification<RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -692,7 +693,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="jobDescription" className="font-bold text-sm">
-              Job Description
+              Job Description<RedAsterisk />
             </label>
             <InputTextareaComponent
               autoResize
@@ -706,7 +707,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="skills" className="font-bold text-sm">
-              Skills
+              Skills<RedAsterisk />
             </label>
             <InputTextareaComponent
               autoResize
@@ -737,7 +738,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           <div className="flex flex-column gap-4 w-6">
             <div className="flex flex-column gap-2">
               <label htmlFor="MinTargetSalary" className="font-bold text-sm">
-                Min Target Salary
+                Min Target Salary<RedAsterisk />
               </label>
               <InputTextCp
                 id="MinTargetSalary"
@@ -749,7 +750,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
             </div>
             <div className="flex flex-column gap-2">
               <label htmlFor="MaxTargetSalary" className="font-bold text-sm">
-                Max Target Salary
+                Max Target Salary<RedAsterisk />
               </label>
               <InputTextCp
                 id="MaxTargetSalary"
@@ -808,7 +809,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
         </div>
         <div className="flex justify-content-between">
-          <h1 className="my-2 mx-3">EMAIL APPROVAL/SIGNATURE DATES:</h1>
+          <h1 className="my-2 mx-3">EMAIL APPROVAL/SIGNATURE DATES:<RedAsterisk /></h1>
         </div>
         <div id="first" className="flex justify-content-evenly gap-4">
           <div className="flex flex-column gap-2">
