@@ -18,7 +18,7 @@ namespace MRF.Utility
             FromEmail = _configuration["SendGridSettings:FromEmail"];
             SenderName = _configuration["SendGridSettings:SenderName"];
         }
-        public async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
+        public async Task SendEmailAsync(string toEmail, string subject, string htmlContent, string attachmentPath = null)
         {
             try
             {
@@ -35,6 +35,12 @@ namespace MRF.Utility
 
                     msg.AddTo(emailTo[i]);
 
+                    if (attachmentPath != null)
+                    {
+                        byte[] fileBytes = File.ReadAllBytes(attachmentPath);
+                        msg.AddAttachment(Path.GetFileName(attachmentPath), Convert.ToBase64String(fileBytes));
+                    }
+
                     var response = await _sendGridClient.SendEmailAsync(msg);
                     if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
                     {
@@ -42,7 +48,7 @@ namespace MRF.Utility
                     }
                 }
             }
-            catch(Exception e) { }
+            catch (Exception e) { }
         }
 
         public bool IsValidUpdateValue(object value)
