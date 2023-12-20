@@ -6,7 +6,8 @@ import { Column } from "primereact/column";
 import "../css/MyRequisitions.css";
 import ReferenceBodyTemplate from "../components/MrfRefStatus";
 
-const roleId = 3;
+// const roleId = 4
+
 
 const createdOnBodyTemplate = (mrf) => {
 	return changeDateFormat(mrf.createdOnUtc);
@@ -19,12 +20,11 @@ const salaryTemplate = (mrf) => {
 	return salaryInLPA(mrf.salary);
 };
 
-const MyRequisitions = () => {
+const MyRequisitions = ({roleId,userId}) => {
 	const [reqData, setReqData] = useState([]);
-
 	useEffect(() => {
-		async function getReqData() {
-			const apiUrl = API_URL.MY_REQUISITION + "?statusId=0&" + roleId;
+		async function getReqData() {   
+			const apiUrl = API_URL.MY_REQUISITION + "?statusId=0&roleId=" + roleId+"&userId="+userId;
 			const data = await getData(apiUrl);
 			setReqData(data.result);
 		}
@@ -100,8 +100,9 @@ const MyRequisitions = () => {
 					scrollable
 					scrollHeight="flex"
 				>
-					{columns.map((col) => (
+					{columns.map((col,index) => (
 						<Column
+						key={index}
 							field={col.field}
 							header={col.header}
 							body={col.body}

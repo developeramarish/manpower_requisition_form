@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 // import { useNavigate } from "react-router-dom";
-
 import "../styles/layout/InputComponents.css";
-
 import DropdownComponent from "./../components/Dropdown";
 import InputTextCp from "./../components/Textbox";
 import ButtonC from "./../components/Button";
@@ -11,7 +9,8 @@ import CheckboxComponent from "./../components/Checkbox";
 import InputTextareaComponent from "./../components/InputTextarea";
 import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
-
+import { mrfStatus } from "../components/constant";
+import { navigateTo } from "../constants/Utils";
 import {
   minExperienceOptions,
   maxExperienceOptions,
@@ -20,13 +19,17 @@ import {
   APIPath,
 } from "./../components/constant";
 import { storageService } from "../constants/storage";
+import PopupDemo from "./PopupDemo";
+import { Dialog } from "primereact/dialog";
 
-const CreateRequisitionBody = ({ getReqId = null }) => {
+const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
   // State to hold all the dropdown data
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const RedAsterisk = () => <span className="text-red-500">*</span>;
+  const [visible, setVisible] = useState(false);
+  const [readOnly, setReadOnly] = useState(false);
 
   const toastRef = useRef(null);
   // const navigate = useNavigate();
@@ -38,22 +41,22 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     departmentId: 0,
     subDepartmentId: 0,
     projectId: 0,
-    vacancyNo: "",
+    vacancyNo: 0,
     genderId: 0,
     qualification: "",
     requisitionDateUtc: "",
-    reportsToEmployeeId: "",
+    reportsToEmployeeId: 0,
     minGradeId: 0,
     maxGradeId: 0,
-    employmentTypeId: "",
-    minExperience: "",
-    maxExperience: "",
-    vacancyTypeId: "",
+    employmentTypeId: 0,
+    minExperience: 0,
+    maxExperience: 0,
+    vacancyTypeId: 0,
     isReplacement: false,
-    mrfStatusId: "",
+    mrfStatusId: 0,
     jdDocPath: "",
-    locationId: "",
-    qualificationId: "",
+    locationId: 0,
+    qualificationId: 0,
     justification: "",
     softwaresRequired: "",
     hardwaresRequired: "",
@@ -70,16 +73,16 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     skills: "",
     resumeReviewerEmployeeIds: [],
     interviewerEmployeeIds: [],
-    hiringManagerId: "",
-    hiringManagerEmpId: "",
-    functionHeadId: "",
-    functionHeadEmpId: "",
-    siteHRSPOCId: "",
-    siteHRSPOCEmpId: "",
-    financeHeadId: "",
-    financeHeadEmpId: "",
-    presidentnCOOId: "",
-    presidentnCOOEmpId: "",
+    hiringManagerId: 0,
+    hiringManagerEmpId: 0,
+    functionHeadId: 0,
+    functionHeadEmpId: 0,
+    siteHRSPOCId: 0,
+    siteHRSPOCEmpId: 0,
+    financeHeadId: 0,
+    financeHeadEmpId: 0,
+    presidentnCOOId: 0,
+    presidentnCOOEmpId: 0,
     pcApprovalDate: new Date().toISOString(),
     fhApprovalDate: new Date().toISOString(),
     fiApprovalDate: new Date().toISOString(),
@@ -144,9 +147,14 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     fetchSubDepartments(formData.departmentId);
   }, [formData.departmentId]);
 
+  // if(getReqRoleId==4){
+  //   setReadOnly(true);
+  // }
+
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
 
+    console.log(formData);
     const data = {
       referenceNo: formData.referenceNo,
       requisitionType: formData.requisitionType,
@@ -172,7 +180,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
       qualificationId: formData.qualificationId,
       createdByEmployeeId: 1,
       createdOnUtc: new Date().toISOString(),
-      updatedByEmployeeId: storageService.getData('profile').employeeId,
+      updatedByEmployeeId: storageService.getData("profile").employeeId,
       updatedOnUtc: new Date().toISOString(),
       justification: formData.justification,
       jobDescription: formData.jobDescription,
@@ -181,6 +189,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
       maxTargetSalary: formData.maxTargetSalary,
       employeeName: formData.employeeName,
       emailId: formData.emailId,
+      note: formData.note,
       employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
       lastWorkingDate: new Date().toISOString().slice(0, 10),
       annualCtc: formData.annualCtc,
@@ -208,6 +217,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
       spApprovalDate: formData.fiApprovalDate,
       hmApprovalDate: formData.hmApprovalDate,
     };
+    console.log(data);
     try {
       const response = await fetch(APIPath + "mrfdetail/POST", {
         method: "POST",
@@ -225,7 +235,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         } else {
           toastRef.current.showSuccessMessage("Form submitted successfully!");
           setTimeout(() => {
-            // navigate("/MyRequisitions");
+            navigateTo("/MyRequisitions");
           }, 2000);
         }
       } else {
@@ -243,6 +253,51 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handelResubmission = (mrfid) => {
+    console.log(mrfid);
+    return (
+      <div>
+        <Dialog visible={visible} onHide={() => setVisible(false)}>
+          <div>
+            <h3>ihihi</h3>
+          </div>
+        </Dialog>
+      </div>
+    );
+  };
+
+  const handleDialog = () => {
+    setVisible(true);
+    return (
+      <div>
+        <Dialog
+          visible={visible}
+          onHide={() => setVisible(false)}
+          footer={footerContent(4)}
+        >
+          <h4>Do yo want to Hold this mrf</h4>
+        </Dialog>
+      </div>
+    );
+  };
+
+  const footerContent = (value) => {
+    console.log(value);
+    return (
+      <div>
+        {/* <Button label="No" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" /> */}
+        <ButtonC
+          label="Yes"
+          className=" bg-red-600 border-red-600"
+          onClick={() => {
+            handleSubmit(value);
+            setVisible(false);
+          }}
+        />
+      </div>
+    );
   };
 
   const strToArray = (s) => {
@@ -266,6 +321,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
     setFormData(formSchema);
     setDropdownData({});
     setSubDepartments([]);
+    navigateTo("my_requisition");
   };
 
   return (
@@ -273,11 +329,15 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
       style={{ height: "81vh" }}
     >
-      <h3 className="text-xl my-2">Fill the Details</h3>
+      {getReqId ? "" : <h3 className="text-xl my-2">Fill the Details</h3>}
+
       <section
-        className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
+        className="flex flex-column flex-nowrap gap-3 
+        border-y-2 border-gray-300 
+        py-3 px-1 overflow-y-scroll"
         style={{ height: "95%" }}
       >
+        {/* border-y-2 border-white-300  */}
         {getReqId ? (
           <div className="flex justify-content-between gap-5">
             <div className="flex flex-column w-6 gap-2">
@@ -293,7 +353,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="RequisitionType" className="font-bold text-sm">
-              Requisition Type<RedAsterisk />
+              Requisition Type
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -308,7 +369,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-title" className="font-bold text-sm">
-              Position Title<RedAsterisk />
+              Position Title
+              <RedAsterisk />
             </label>
             <InputTextCp
               id="position-title"
@@ -316,6 +378,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                 setFormData({ ...formData, positionTitle: e.target.value })
               }
               value={formData.positionTitle}
+              disable={readOnly}
             />
           </div>
         </div>
@@ -323,7 +386,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="department" className="font-bold text-sm">
-              Department<RedAsterisk />
+              Department
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -338,7 +402,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="sub-department" className="font-bold text-sm">
-              Sub-Department<RedAsterisk />
+              Sub-Department
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -355,7 +420,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="project" className="font-bold text-sm">
-              Project<RedAsterisk />
+              Project
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -370,7 +436,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="location" className="font-bold text-sm">
-              Location<RedAsterisk />
+              Location
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="location"
@@ -387,7 +454,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-reporting" className="font-bold text-sm">
-              Position Reporting to<RedAsterisk />
+              Position Reporting to
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="name"
@@ -406,7 +474,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="initiation-date" className="font-bold text-sm">
-              Hiring Initiation Date<RedAsterisk />
+              Hiring Initiation Date
+              <RedAsterisk />
             </label>
             <CalendarComponent
               id="initiation-date"
@@ -424,7 +493,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="employment-type-req" className="font-bold text-sm">
-              Type of employment required<RedAsterisk />
+              Type of employment required
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -440,7 +510,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="mingrade" className="font-bold text-sm">
-              Grade of the proposed employee<RedAsterisk />
+              Grade of the proposed employee
+              <RedAsterisk />
             </label>
 
             <div className="p-col-7">
@@ -477,7 +548,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="no-vacancies" className="font-bold text-sm">
-              Number of Vaccancies<RedAsterisk />
+              Number of Vacancies
+              <RedAsterisk />
             </label>
             <InputTextCp
               id="vaccancies"
@@ -486,12 +558,14 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
               onChange={(e) =>
                 setFormData({ ...formData, vacancyNo: e.target.value })
               }
+              disable={readOnly}
             />
           </div>
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="vacancy-type" className="font-bold text-sm">
-              Type of vacancy<RedAsterisk />
+              Type of vacancy
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -508,7 +582,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5 ">
           <div className="flex flex-column w-5 gap-2">
             <label htmlFor="experience" className="font-bold text-sm">
-              Experience<RedAsterisk />
+              Experience
+              <RedAsterisk />
             </label>
             <div className="p-col-7">
               <label className="font-bold text-sm label-with-padding-right">
@@ -540,7 +615,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 row-gap-2">
             <label htmlFor="gender" className="font-bold text-sm">
-              Gender<RedAsterisk />
+              Gender
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="label"
@@ -555,7 +631,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="qualification" className="font-bold text-sm">
-              Qualification<RedAsterisk />
+              Qualification
+              <RedAsterisk />
             </label>
             <DropdownComponent
               optionLabel="type"
@@ -596,6 +673,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                     setFormData({ ...formData, employeeName: e.target.value })
                   }
                   value={formData.employeeName}
+                  disable={readOnly}
                 />
               </div>
 
@@ -627,6 +705,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                     setFormData({ ...formData, emailId: e.target.value })
                   }
                   value={formData.emailId}
+                  disable={readOnly}
                 />
               </div>
 
@@ -640,6 +719,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                     setFormData({ ...formData, employeeCode: e.target.value })
                   }
                   value={formData.employeeCode}
+                  disable={readOnly}
                 />
               </div>
             </div>
@@ -654,6 +734,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                     setFormData({ ...formData, annualCtc: e.target.value })
                   }
                   value={formData.annualCtc}
+                  disable={readOnly}
                 />
                 <label htmlFor="AnnualGross" className="font-bold text-sm">
                   Annual Gross
@@ -693,7 +774,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="jobDescription" className="font-bold text-sm">
-              Job Description<RedAsterisk />
+              Job Description
+              <RedAsterisk />
             </label>
             <InputTextareaComponent
               autoResize
@@ -707,7 +789,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="skills" className="font-bold text-sm">
-              Skills<RedAsterisk />
+              Skills
+              <RedAsterisk />
             </label>
             <InputTextareaComponent
               autoResize
@@ -738,7 +821,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           <div className="flex flex-column gap-4 w-6">
             <div className="flex flex-column gap-2">
               <label htmlFor="MinTargetSalary" className="font-bold text-sm">
-                Min Target Salary<RedAsterisk />
+                Min Target Salary
+                <RedAsterisk />
               </label>
               <InputTextCp
                 id="MinTargetSalary"
@@ -750,7 +834,8 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
             </div>
             <div className="flex flex-column gap-2">
               <label htmlFor="MaxTargetSalary" className="font-bold text-sm">
-                Max Target Salary<RedAsterisk />
+                Max Target Salary
+                <RedAsterisk />
               </label>
               <InputTextCp
                 id="MaxTargetSalary"
@@ -758,6 +843,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                   setFormData({ ...formData, maxTargetSalary: e.target.value })
                 }
                 value={formData.maxTargetSalary}
+                disable={readOnly}
               />
             </div>
           </div>
@@ -809,7 +895,10 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
           </div>
         </div>
         <div className="flex justify-content-between">
-          <h1 className="my-2 mx-3">EMAIL APPROVAL/SIGNATURE DATES:<RedAsterisk /></h1>
+          <h1 className="my-2 mx-3">
+            EMAIL APPROVAL/SIGNATURE DATES:
+            <RedAsterisk />
+          </h1>
         </div>
         <div id="first" className="flex justify-content-evenly gap-4">
           <div className="flex flex-column gap-2">
@@ -865,6 +954,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                 setFormData({ ...formData, hiringManagerEmpId: e.target.value })
               }
               value={formData.hiringManagerEmpId}
+              disable={readOnly}
             />
           </div>
 
@@ -892,6 +982,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
               type="text"
               id="Position"
               className="p-disabled"
+              disable={readOnly}
               onChange={(e) => setFormData({ ...formData, Position: 8 })}
               value="Function Head"
             />
@@ -930,6 +1021,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                 setFormData({ ...formData, functionHeadEmpId: e.target.value })
               }
               value={formData.functionHeadEmpId}
+              disable={readOnly}
             />
           </div>
 
@@ -956,6 +1048,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
               className="p-disabled"
               onChange={(e) => setFormData({ ...formData, Position: 9 })}
               value="Site HR SPOC"
+              disable={readOnly}
             />
           </div>
           <div className="flex flex-column gap-2 w-3">
@@ -990,6 +1083,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                 setFormData({ ...formData, siteHRSPOCEmpId: e.target.value })
               }
               value={formData.siteHRSPOCEmpId}
+              disable={readOnly}
             />
           </div>
           <div className="flex flex-column gap-2">
@@ -1015,6 +1109,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
               className="p-disabled"
               onChange={(e) => setFormData({ ...formData, Position: 10 })}
               value="Finance Head"
+              disable={readOnly}
             />
           </div>
           <div className="flex flex-column gap-2 w-3">
@@ -1049,6 +1144,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                 setFormData({ ...formData, financeHeadEmpId: e.target.value })
               }
               value={formData.financeHeadEmpId}
+              disable={readOnly}
             />
           </div>
           <div className="flex flex-column gap-2">
@@ -1074,6 +1170,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
               className="p-disabled"
               onChange={(e) => setFormData({ ...formData, Position: 11 })}
               value="President & COO"
+              disable={readOnly}
             />
           </div>
 
@@ -1111,6 +1208,7 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
                 setFormData({ ...formData, presidentnCOOEmpId: e.target.value })
               }
               value={formData.presidentnCOOEmpId}
+              // disable={true}
             />
           </div>
 
@@ -1132,22 +1230,171 @@ const CreateRequisitionBody = ({ getReqId = null }) => {
       </section>
 
       <div className="flex flex-wrap justify-content-end gap-5 mt-3">
-        <ButtonC
-          label="CANCEL"
-          className="mr-auto w-2 border-red-600 text-red-600"
-          onClick={handleCancel}
-          outlined="true"
-        />
-        <ButtonC
-          label="SAVE AS A DRAFT"
-          className="w-2 bg-red-600 border-red-600"
-          onClick={() => handleSubmit(2)}
-        />
-        <ButtonC
-          label="SUBMIT"
-          className="w-2 bg-red-600 border-red-600"
-          onClick={() => handleSubmit(3)}
-        />
+        {(() => {
+          if (getReqRoleId == 3) {
+            switch (formData.mrfStatusId) {
+              case mrfStatus.draft:
+                return (
+                  <>
+                    <ButtonC
+                      label="CANCEL"
+                      className="mr-auto w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
+                    <ButtonC
+                      label="SAVE AS A DRAFT"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleSubmit(2)}
+                      // disable="true"
+                    />
+                    <ButtonC
+                      label="SUBMIT"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleSubmit(3)}
+                      // disable="true"
+                    />
+                  </>
+                );
+              case mrfStatus.submToHr:
+                return (
+                  <>
+                    <ButtonC
+                      label="Withdraw"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleSubmit(3)}
+                    />
+                  </>
+                );
+              case mrfStatus.closed:
+                return (
+                  <>
+                    {/* <Dialog visible={true} onHide={() => setVisible(false)}></Dialog>  */}
+                  </>
+                );
+              case mrfStatus.withdrawn:
+                return <></>;
+              case mrfStatus.onHold:
+                return <></>;
+              case mrfStatus.resubReq:
+                return <></>;
+              case mrfStatus.rejected:
+                return <></>;
+              case mrfStatus.open:
+                return (
+                  <>
+                    <ButtonC
+                      label="Withdraw"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleDialog()}
+                    />
+                    <Dialog
+                      visible={visible}
+                      onHide={() => setVisible(false)}
+                      footer={footerContent(12)}
+                    >
+                      <h4>Do yo want to Withdraw this mrf</h4>
+                    </Dialog>
+                  </>
+                );
+            }
+          } else if (getReqRoleId == 4) {
+            switch (formData.mrfStatusId) {
+              case mrfStatus.submToHr:
+                return (
+                  <>
+                    <ButtonC
+                      label="Re-submission Required"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handelResubmission(getReqId)}
+                    />
+                    <ButtonC
+                      label="Received HOD approval"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleDialog()}
+                    />
+                    <Dialog
+                      visible={visible}
+                      onHide={() => setVisible(false)}
+                      footer={footerContent(4)}
+                    >
+                      <h4>Do yo want to send for HOD Approval</h4>
+                    </Dialog>
+                    <ButtonC
+                      label="On Hold"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleDialog()}
+                    />
+                    {/* <Dialog
+                      visible={visible}
+                      onHide={() => setVisible(false)}
+                      footer={footerContent(4)}
+                    >
+                      <h4>Do yo want to Hold this mrf</h4>
+                    </Dialog> */}
+                  </>
+                );
+              case mrfStatus.closed:
+                return (
+                  <>
+                    <ButtonC
+                      label="CANCEL"
+                      className="mr-auto w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
+                  </>
+                );
+              case mrfStatus.withdrawn:
+                return <></>;
+              case mrfStatus.onHold:
+                return <></>;
+              case mrfStatus.resubReq:
+                return <></>;
+              case mrfStatus.rejected:
+                return <></>;
+              case mrfStatus.open:
+                return (
+                  <>
+                    {" "}
+                    <ButtonC
+                      label="Add Candidate"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => navigateTo("add_candidate")}
+                      // disable="true"
+                    />
+                  </>
+                );
+            }
+          } else {
+            return (
+              <>
+                <ButtonC
+                  label="CANCEL"
+                  className="mr-auto w-2 border-red-600 text-red-600"
+                  onClick={handleCancel}
+                  outlined="true"
+                  // disable="true"
+                />
+                <ButtonC
+                  label="SAVE AS DRAFT"
+                  className="w-2 bg-red-600 border-red-600"
+                  onClick={() => handleSubmit(2)}
+                  // disable="true"
+                />
+                <ButtonC
+                  label="SUBMIT"
+                  className="w-2 bg-red-600 border-red-600"
+                  onClick={() => handleSubmit(3)}
+                  // disable="true"
+                />
+              </>
+            );
+          }
+        })()}
+
         <ToastMessages ref={toastRef} />
       </div>
     </div>

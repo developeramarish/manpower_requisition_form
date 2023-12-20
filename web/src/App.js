@@ -21,13 +21,15 @@ import { PAGE_ACTIONS, Page } from './reducers/Page_r';
 import Dashboard from './containers/Dashboard';
 import MyRequisitions from './containers/MyRequisitions';
 import CreateRequisition from './Pages/CreateRequisition';
+import AddCandidate from './Pages/AddCandidate';
+
 
 function App() {
 
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
   const dispatch = useDispatch();
-  const { currentPageKey, params } = useSelector((state) => state.page);
+  const { currentPageKey, params,statusForTitle ,roleId} = useSelector((state) => state.page);
   const { currentDevice, touchDevice } = useSelector((state) => state.device);
 
   const { instance, accounts } = useMsal();
@@ -117,9 +119,10 @@ function App() {
             <div className='content'>
               <Sidebar />
               <div className='content_right_wrapper'>
-                {currentPageKey === 'dashboard' && <Dashboard />}
-                {currentPageKey === 'my_requisition' && <MyRequisitions />}
-                {(currentPageKey === 'create_requisition' || currentPageKey === 'edit_requisition') && <CreateRequisition reqId={params} />}
+                {currentPageKey === 'dashboard' && <Dashboard roleId={profile.roleId} userId={profile.employeeId} />}
+                {currentPageKey === 'my_requisition' && <MyRequisitions  roleId={profile.roleId} userId={profile.employeeId} />}
+                {currentPageKey === 'add_candidate' && <AddCandidate />}
+                {(currentPageKey === 'create_requisition' || currentPageKey === 'edit_requisition') && <CreateRequisition reqId={params} reqstatus={statusForTitle} reqRoleId={roleId}  />}
                 
               </div>
             </div>

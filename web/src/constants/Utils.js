@@ -30,6 +30,7 @@ export const isTouchDevice = () => {
 
 export async function getData(url) {
   const accessToken = storageService.getData("token");
+  
   const headers = new Headers();
   const bearer = `Bearer ${accessToken}`;
 
@@ -39,7 +40,7 @@ export async function getData(url) {
     method: "GET",
     headers: headers,
   };
-  // console.log(accessToken);
+ 
   return fetch(url, options)
     .then((response) => response.json())
     .catch((error) => error);

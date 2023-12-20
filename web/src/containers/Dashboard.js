@@ -12,7 +12,7 @@ import {
   filterResultGroupByCandidatestatus,
 } from "../constants/Utils";
 
-function Dashboard() {
+function Dashboard({roleId,userId}) {
   const [mrfStatus, setMrfStatus] = useState([]);
   const [resumeSummary, setResumeSummary] = useState([]);
   const [interviewSummary, setInterviewSummary] = useState([]);
@@ -27,10 +27,14 @@ function Dashboard() {
     getSummaryData();
   }, []);
 
+  // console.log(employeeCode);
+  console.log(roleId);
+  console.log(userId);
   async function getSummaryData() {
-    const mrfStatusData = await getData(API_URL.MRF_STATUS_SUMMARY);
-    const resumeSummaryData = await getData(API_URL.RESUME_SUMMARY);
-    const interviewSummaryData = await getData(API_URL.INTERVIEW_SUMMARY);
+    const mrfStatusData = await getData(API_URL.MRF_STATUS_SUMMARY+"?roleId="+roleId+"&userId="+userId);
+    // const mrfStatusData = API_URL.MRF_STATUS_SUMMARY;
+    const resumeSummaryData = await getData(API_URL.RESUME_SUMMARY+"?Count=0&roleId="+roleId+"&userId="+userId);
+    const interviewSummaryData = await getData(API_URL.INTERVIEW_SUMMARY+"?Count=0&roleId="+roleId+"&userId="+userId);
     setMrfStatus(mrfStatusData.result);
     setResumeSummary(resumeSummaryData.result);
     setInterviewSummary(interviewSummaryData.result);
@@ -41,6 +45,7 @@ function Dashboard() {
     ["Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
   );
 
+  console.log(interviewSummaryTableData)
   const onMRFIdClicked = (e) => {
     setrfStatusPopupId(e);
     setMrfStatusPopup(true);
@@ -117,12 +122,12 @@ function Dashboard() {
       body: mrfIdInterviewRefernceTemplate,
     },
     {
-      field: "referenceno",
+      field: "Selected",
       header: "Selected",
       body: (rowData) => filterSelectedColumn(rowData, "Selected"),
     },
     {
-      field: "referenceno",
+      field: "Onboarded",
       header: "Onboarded",
       body: (rowData) => filterSelectedColumn(rowData, "Onboarded"),
     },
@@ -133,7 +138,7 @@ function Dashboard() {
     },
 
     {
-      field: "shortlisted",
+      field: "Assignment Received",
       header: "Assignment Received",
       body: (rowData) => filterSelectedColumn(rowData, "Assignment Received"),
     },
