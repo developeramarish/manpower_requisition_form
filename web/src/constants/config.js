@@ -1,5 +1,5 @@
 export const APP_KEY = "MRF_v1.0";
-const APIPath="https://10.22.11.101:90/api/";
+const APIPath="https://localhost:7128/api/";
 export const API_URL = {
 	
 	MRF_STATUS_SUMMARY:
@@ -11,7 +11,7 @@ export const API_URL = {
 	INTERVIEW_SUMMARY_POPUP:
 		APIPath+"Mrfinterviewermap/GetInterviewDetails/GetInterviewDetails",
 	MRF_STATUS_POPUP:
-		APIPath+"/Mrfdetail/GetMrfDetails/GetMrfDetails?",
+		APIPath+"Mrfdetail/GetMrfDetails/GetMrfDetails?",
 	MY_REQUISITION:
 		APIPath+"Mrfdetail/GetMrfDetails/GetMrfDetails",
 	RESUME_SUMMARY_POPUP: APIPath+`Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
@@ -32,6 +32,7 @@ export const ROUTES = {
 	my_requisition: "my_requisition",
 	create_requisition: "create_requisition",
 	edit_requisition: "edit_requisition",
+	add_candidate: "add_candidate",
 };
 
 export const MRF_STATUS = {
