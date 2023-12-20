@@ -11,8 +11,7 @@ const DashMrfStatus = ({
 	header,
 	visible,
 	onHide,
-	roleId = null,
-	userId=null,
+	roleId = 3,
 	statusId = null,
 }) => {
 	const [mrfStatusData, setMrfStatusData] = useState([]);
@@ -24,12 +23,10 @@ const DashMrfStatus = ({
     }
   }, [statusId]);
 
-
-
 	const fetchData = () => {
 		try {
 			
-			fetch(`${API_URL.MRF_STATUS_POPUP}statusId=${statusId}&roleId=${roleId}&userId=${userId}`)
+			fetch(`${API_URL.MRF_STATUS_POPUP}statusId=${statusId}&roleId=${roleId}`)
 				.then((response) => response.json())
 				.then((data) => {
 					setdata(data.result);
