@@ -10,9 +10,9 @@ namespace MRF.DataAccess.Repository.IRepository
 {
     public interface IDashboardRepository:IRepository<MrDashboardViewModel>
     {
-        public List<MrfSummaryViewModel> GroupByMrfStatus();
-        public List<ResultViewModel> GetCountByMrfIdAndResumeStatus(int count);
+        public List<MrfSummaryViewModel> GroupByMrfStatus(int roleId, int userId);
+        public List<ResultViewModel> GetCountByMrfIdAndResumeStatus(int count, int roleId, int userId);
  
-        public List<ResultViewModel> GroupByMrfInterviewStatus(int count);
+        public List<ResultViewModel> GroupByMrfInterviewStatus(int count, int roleId, int userId);
     }
 }
