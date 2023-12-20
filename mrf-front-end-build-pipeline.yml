@@ -39,6 +39,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' # Set the path to publish artifacts
-    artifactName: 'MRF-Main-UI-Artifact'             # Define the name for the artifact
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(uiBuild)' # Set the path to publish artifacts
+    artifactName: 'drop'             # Define the name for the artifact
     publishLocation: 'Container'     # Publish artifacts to the build container
