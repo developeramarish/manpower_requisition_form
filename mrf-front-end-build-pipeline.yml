@@ -2,7 +2,7 @@
 name: MRF-Front-End-Build-Pipeline
 appendCommitMessageToRunName: false
 
-# Define the trigger for the pipeline to run when changes occur in azure-pipelines branch
+# Define the trigger for the pipeline to run when changes occur in the 'web_mrf' branch
 trigger:
 - web_mrf
 
@@ -12,24 +12,24 @@ pool:
 
 # Define variables for the source and build directories
 variables:
-  uiSource: 'web'
-  uiBuild: '$(uiSource)/build'
+  uiSource: 'web'               # Source directory name
+  uiBuild: '$(uiSource)/build' # Build output directory path
 
 # Define the sequence of steps to execute in the pipeline
 steps:
-- task: NodeTool@0
+- task: NodeTool@0                 # Use NodeTool task
   inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js' # Displayed name for the step
+    versionSpec: '14.x'           # Specify Node.js version
+  displayName: 'Install Node.js'   # Displayed name for the step
 
 - script: |
-    cd $(uiSource) # Change directory to the specified source
-    npm install    # Install dependencies
-    npm run build  # Build the application
+    cd $(uiSource)  # Change directory to the specified source
+    npm install     # Install project dependencies
+    npm run build   # Build the application using npm script
   displayName: 'npm install and build' # Displayed name for the step
 
-- task: PublishBuildArtifacts@1
+- task: PublishBuildArtifacts@1     # Publish build artifacts task
   inputs:
-    pathtoPublish: '$(uiBuild)' # Set the path to publish artifacts
-    artifactName: 'drop'         # Define the name for the artifact
-    publishLocation: 'Container' # Publish artifacts to the build container
+    pathtoPublish: '$(uiBuild)'    # Set the path to publish artifacts
+    artifactName: 'drop'           # Define the name for the artifact
+    publishLocation: 'Container'   # Publish artifacts to the build container
