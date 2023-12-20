@@ -28,8 +28,8 @@ function Dashboard({roleId,userId}) {
   }, []);
 
   // console.log(employeeCode);
-  console.log(roleId);
-  console.log(userId);
+  // console.log(roleId);
+  // console.log(userId);
   async function getSummaryData() {
     const mrfStatusData = await getData(API_URL.MRF_STATUS_SUMMARY+"?roleId="+roleId+"&userId="+userId);
     // const mrfStatusData = API_URL.MRF_STATUS_SUMMARY;
@@ -45,8 +45,8 @@ function Dashboard({roleId,userId}) {
     ["Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
   );
 
-  console.log(interviewSummaryTableData)
   const onMRFIdClicked = (e) => {
+    console.log(e)
     setrfStatusPopupId(e);
     setMrfStatusPopup(true);
   };
@@ -59,6 +59,7 @@ function Dashboard({roleId,userId}) {
     setResumePopupId(e);
     setResumePopup(true);
   };
+
 
   const mrfIdInterviewRefernceTemplate = (rowData) => {
     return (
@@ -158,6 +159,8 @@ function Dashboard({roleId,userId}) {
                 visible={mrfStatusPopup}
                 onHide={() => setMrfStatusPopup(false)}
                 statusId={mrfStatusPopupId}
+                userId={userId}
+                roleId={roleId}
               />
             </div>
             <table className="mrf_table">
@@ -169,6 +172,7 @@ function Dashboard({roleId,userId}) {
               </thead>
               <tbody className="mrf_table_body">
                 {mrfStatus.map((data, index) => {
+                 
                   return (
                     <tr key={"mrf_" + index}>
                       <td>{data.status}</td>
