@@ -29,16 +29,16 @@ steps:
     npm run build  # Build the application
   displayName: 'npm install and build' # Displayed name for the step
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(uiBuild)' # Set the root folder or file to be archived
-    includeRootFolder: false        # Exclude the root folder from the archive
-    archiveType: 'zip'              # Define the archive type as ZIP
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' # Define the archive file path
-    replaceExistingArchive: true    # Replace the existing archive, if any
+# - task: ArchiveFiles@2
+#   inputs:
+#     rootFolderOrFile: '$(uiBuild)' # Set the root folder or file to be archived
+#     includeRootFolder: false        # Exclude the root folder from the archive
+#     archiveType: 'zip'              # Define the archive type as ZIP
+#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' # Define the archive file path
+#     replaceExistingArchive: true    # Replace the existing archive, if any
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' # Set the path to publish artifacts
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(uiBuild)' # Set the path to publish artifacts
     artifactName: 'drop'             # Define the name for the artifact
     publishLocation: 'Container'     # Publish artifacts to the build container
