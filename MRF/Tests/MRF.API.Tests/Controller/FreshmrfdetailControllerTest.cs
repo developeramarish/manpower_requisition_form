@@ -35,12 +35,12 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Freshmrfdetail for testing
             var SampleFreshmrfDetails = new List<Freshmrfdetails>
             {
-            new Freshmrfdetails { Id=1,MrfId=1, Justification= "For a new project",SoftwaresRequired= "Visual Studio, MS Teams, MS Office",
-       HardwaresRequired= "Laptop",
+            new Freshmrfdetails { Id=1,MrfId=1, Justification= "For a new project",JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
        MinTargetSalary=500000,
       MaxTargetSalary= 700000,},
-            new Freshmrfdetails { Id=2,Justification= "For a new project",SoftwaresRequired= "Visual Studio, MS Teams, MS Office",
-       HardwaresRequired= "Laptop",
+            new Freshmrfdetails { Id=2,Justification= "For a new project",JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
        MinTargetSalary=500000,
       MaxTargetSalary= 700000,},
 
@@ -88,12 +88,12 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Freshmrfdetail for testing
             var sampleFreshmrfdetail = new List<Freshmrfdetails>
             {
-            new Freshmrfdetails {MrfId=1, Justification= "For a new project",SoftwaresRequired= "Visual Studio, MS Teams, MS Office",
-       HardwaresRequired= "Laptop",
+            new Freshmrfdetails {MrfId=1, Justification= "For a new project",JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
        MinTargetSalary=500000,
       MaxTargetSalary= 700000,},
-            new Freshmrfdetails {MrfId=1, Justification= "For a new project",SoftwaresRequired= "Visual Studio, MS Teams, MS Office",
-       HardwaresRequired= "Laptop",
+            new Freshmrfdetails {MrfId=1, Justification= "For a new project",JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
        MinTargetSalary=500000,
       MaxTargetSalary= 700000,},
                 // Add more sample data as needed
@@ -122,12 +122,12 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Freshmrfdetail for testing
             var sampleFreshmrfdetails = new List<Freshmrfdetails>
             {
-            new Freshmrfdetails {MrfId=1, Justification= "For a new project",SoftwaresRequired= "Visual Studio, MS Teams, MS Office",
-       HardwaresRequired= "Laptop",
+            new Freshmrfdetails {MrfId=1, Justification= "For a new project",JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
        MinTargetSalary=500000,
       MaxTargetSalary= 700000,},
-            new Freshmrfdetails {MrfId=1, Justification= "For a new project",SoftwaresRequired= "Visual Studio, MS Teams, MS Office",
-       HardwaresRequired= "Laptop",
+            new Freshmrfdetails {MrfId=1, Justification= "For a new project",JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
        MinTargetSalary=500000,
       MaxTargetSalary= 700000,},
                 // Add more sample data as needed   
@@ -152,8 +152,8 @@ namespace MRF.API.Test.Controllers
             {
                 MrfId = 1,
                 Justification = "For a new project",
-                SoftwaresRequired = "Visual Studio, MS Teams, MS Office",
-                HardwaresRequired = "Laptop",
+                JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
                 MinTargetSalary = 500000,
                 MaxTargetSalary = 700000,
                 CreatedByEmployeeId = 1,
@@ -174,7 +174,7 @@ namespace MRF.API.Test.Controllers
             };
 
             // Act
-            var result = Controller.PostPost(requestModel);
+            var result = Controller.Post(requestModel);
 
             // Assert
             // Verify that the result is an OkObjectResult
@@ -204,7 +204,7 @@ namespace MRF.API.Test.Controllers
             };
 
             // Act
-            var result = Controller.PostPost(new FreshmrfdetailRequestModel());
+            var result = Controller.Post(new FreshmrfdetailRequestModel());
 
             // Assert
             // Verify that the result is an OkObjectResult
@@ -301,8 +301,8 @@ namespace MRF.API.Test.Controllers
             {
                 MrfId = 1,
                 Justification = "For a new project",
-                SoftwaresRequired = "Visual Studio, MS Teams, MS Office",
-                HardwaresRequired = "Laptop",
+                JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
                 MinTargetSalary = 500000,
                 MaxTargetSalary = 700000,
 
@@ -340,8 +340,8 @@ namespace MRF.API.Test.Controllers
 
                 MrfId = 1,
                 Justification = "For a new project",
-                SoftwaresRequired = "Visual Studio, MS Teams, MS Office",
-                HardwaresRequired = "Laptop",
+                JobDescription = "Visual Studio, MS Teams, MS Office",
+                Skills = "Laptop",
                 MinTargetSalary = 500000,
                 MaxTargetSalary = 700000,
             };

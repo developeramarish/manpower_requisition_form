@@ -77,14 +77,14 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public FreshmrfdetailResponseModel PostPost([FromBody] FreshmrfdetailRequestModel request)
+        public FreshmrfdetailResponseModel Post([FromBody] FreshmrfdetailRequestModel request)
         {
             var Freshmr = new Freshmrfdetails
             {
                 MrfId = request.MrfId,
                 Justification = request.Justification,
-                SoftwaresRequired = request.SoftwaresRequired,
-                HardwaresRequired = request.HardwaresRequired,
+                JobDescription = request.JobDescription,
+                Skills = request.Skills,
                 MinTargetSalary = request.MinTargetSalary,
                 MaxTargetSalary = request.MaxTargetSalary,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
@@ -116,14 +116,21 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public FreshmrfdetailResponseModel Put(int id, [FromBody] FreshmrfdetailRequestModel request)
         {
-            var existingFreshmr = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
-
+            Freshmrfdetails existingFreshmr =new Freshmrfdetails();
+            if (id != 0)
+            {
+                existingFreshmr = _unitOfWork.Freshmrfdetail.Get(u => u.Id == id);
+            }
+            else
+            {
+                existingFreshmr = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == request.MrfId);
+            }
             if (existingFreshmr != null)
             {
                 existingFreshmr.MrfId = request.MrfId;
                 existingFreshmr.Justification = request.Justification;
-                existingFreshmr.SoftwaresRequired=request.SoftwaresRequired;
-                existingFreshmr.HardwaresRequired = request.HardwaresRequired;
+                existingFreshmr.JobDescription=request.JobDescription;
+                existingFreshmr.Skills = request.Skills;
                 existingFreshmr.MinTargetSalary = request.MinTargetSalary;
                 existingFreshmr.MaxTargetSalary=request.MaxTargetSalary;
                 existingFreshmr.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
@@ -168,6 +175,8 @@ namespace MRF.API.Controllers
             }
            
         }
+
+        
     }
 }
 

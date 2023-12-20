@@ -1,110 +1,290 @@
-import React, { useState } from 'react'
-import SearchText from './SearchText';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import DashboardHeader from './Header';
-import LeftPanel from './LeftPanel';
-import {Dropdown} from 'primereact/dropdown';
-import { MultiSelect } from 'primereact/multiselect';
 
-import { InputTextarea } from 'primereact/inputtextarea';
-        
-
+import React, { useState, useEffect, useRef } from "react";
+import DropdownComponent from "../Components/Dropdown";
+import MultiSelectDropdown from "../Components/multiselectDropdown";
+import "primeicons/primeicons.css";
+import ButtonC from "../Components/Button";
+import { InputTextarea } from "primereact/inputtextarea";
+import { constantResumePath } from "../Components/constant";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { InputText } from "primereact/inputtext";
+import DashboardHeader from "./Header";
+import LeftPanel from "./LeftPanel";
+import "../styles/layout/InputComponents.css";
+import "../styles/layout/myResume.css"
+ 
 const MyReumes = () => {
-
-  const [resumeData, setResumeData] = useState([
-    { SrNo: "1", ResumeName: "Ramksrishna" , Status:"DummyDataforDroDown",ForwardTo:"DummyForForward",Reason:<InputTextarea placeholder='Enter Reason'  rows={1} cols={25} />},
-    { SrNo: "2", ResumeName: "Ashutosh m" , Status:"DummyDataforDroDown",ForwardTo:"DummyForForward",Reason:<InputTextarea placeholder='Enter Reason'  rows={1} cols={25} /> },
-    { SrNo: "3", ResumeName: "Gaurav"  , Status:"DummyDataforDroDown",ForwardTo:"DummyForForward",Reason:<InputTextarea placeholder='Enter Reason'  rows={1} cols={25} />},
-    { SrNo: "4", ResumeName: "Aditya" , Status:"DummyDataforDroDown",ForwardTo:"DummyForForward",Reason:<InputTextarea placeholder='Enter Reason'  rows={1} cols={25} /> },
-    { SrNo: "5", ResumeName: "priyanka" , Status:"DummyDataforDroDown",ForwardTo:"DummyForForward",Reason:<InputTextarea placeholder='Enter Reason'  rows={1} cols={25} />},
-    { SrNo: "6", ResumeName: "Manish"  , Status:"DummyDataforDroDown",ForwardTo:"DummyForForward",Reason:<InputTextarea placeholder='Enter Reason'  rows={1} cols={25} />},
-    { SrNo: "7", ResumeName: "Pratey"  , Status:"DummyDataforDroDown",ForwardTo:"DummyForForward",Reason:<InputTextarea placeholder='Enter Reason'  rows={1} cols={25} />}
-  ]);
-
-  const StatusDropdown = ({ value, onChange }) => {
-    const statusOptions = [
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
-      // Add more status options as needed
-    ];
-    return (
-      <Dropdown
-            value={value}
-            options={statusOptions}
-            onChange={(e) => onChange(e.value)}
-            placeholder="Select a status"
-          />
-        );
-      };
-
-  const statusTemplate = (rowData, column) => {
-    return (<StatusDropdown value={rowData.status} onChange={(value) => handleStatusChange(rowData, value)} />);
+  const [myResumeData, setMyResumeData] = useState({});
+  const [statusData, setStatusData] = useState({});
+  const [forwardData, setForwardData] = useState({});
+  const [values, setValues] = useState([]);
+ 
+  useEffect(() => {
+    const fetchData = () => {
+      try {
+        fetch(
+          "https://localhost:7128/api/Candidatedetail/GetResumeDropdownlist"
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setMyResumeData(data.result);
+            setValues(data.result.candidateDetails);
+            setForwardData(data.result.resumereviewer);
+            setStatusData(data.result.status);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+ 
+    fetchData();
+  }, []);
+ 
+  // const  TextBoxComponent = (reason,param) => {
+  //    const [textBoxValue, setTextBoxValue] = useState(reason.reason);
+  //   const handleTextBoxChange = (e) => {
+  //   console.log(e.target.value);
+  //  // setTextBoxValue(e.target.value);
+  //   reason.editorCallback(e.target.value);
+  //    };
+  // return (
+  //     <InputTextarea  value={textBoxValue} onChange={handleTextBoxChange} rows={2} cols={30}  />
+  //     );
+  // };
+ 
+  const openPdfInNewTab = (pdfLink) => {
+    window.open(pdfLink, "_blank");
   };
-
-
-
-  const handleStatusChange = (rowData, value) => {
-    const updatedData = resumeData.map((item) =>
-      item.id === rowData.id ? { ...item, status: value } : item);
-      setResumeData(updatedData);
-  };
-
-
-
-  {/*for ForwardTo*/}
-
-
-
-  const FilterDemo=() =>{
-    const [selectedCities, setSelectedCities] = useState(null);
-    const cities = [
-        { name: 'Manotosh', code: 'NY' },
-        { name: 'Zia', code: 'RM' },
-        { name: 'Arun Goyel', code: 'LDN' },
-        { name: 'IAmeya', code: 'IST' },
-        { name: 'Ntin', code: 'PRS' },
-        { name: 'Raj', code: 'PRS' }
-    ];
+  const SingleSelect = (statusdata) => {
+    const id = statusdata.candidateStatusId;
+    const [selectStatus, setSelectedststatus] = useState(id);
     return (
-        <div className="card flex justify-content-center">
-            <MultiSelect value={selectedCities} onChange={(e) => setSelectedCities(e.value)} options={cities} optionLabel="name" 
-                filter placeholder="Select Reviewer" maxSelectedLabels={3} className="w-full md:w-20rem" />
-        </div>
+      <DropdownComponent
+        optionLabel="status"
+        optionValue="id"
+        value={statusdata.candidateStatusId}
+        options={statusData || []}
+        placeholder="Select Status"
+        className="w-full md:w-23rem "
+        onChange={(e) => statusdata.editorCallback(e.target.value)}
+        style={{color:"red"}}
+      />
     );
-}
-  
-
+  };
+ 
+  const MultiSelectTemplate = (options) => {
+    return <div></div>;
+  };
+ 
+  const MultiSelect = (data) => {
+    console.log("multiselect", data);
+    const [review, setreviewedByEmployeeId] = useState();
+ 
+    return (
+     
+      <MultiSelectDropdown
+        // id="resumeReviewer"
+        //options={dropdownData.resumereviewer}
+        options={forwardData}
+        value={arrayToObj(forwardData, strToArray(data.reviewedByEmployeeIds))}
+        onChange={(e) => {
+          console.log(e.value);
+          //setreviewedByEmployeeId(objToArray(e.value));
+          data.editorCallback(e.value);
+        }}
+        className="w-full md:w-23rem"
+        // style={{color: "#d32f2e", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
+               
+ 
+        optionLabel="name"
+        // optionValue="employeeId"
+      />
+    );
+  };
+  const updateData = (
+    id,
+    name,
+    emailId,
+    contactNo,
+    resumePath,
+    reviewedByEmployeeId,
+    reviewedByEmployeeIds,
+    candidateStatusId,
+    reason
+  ) => {
+    const empdata = {
+      name,
+      emailId,
+      contactNo,
+      resumePath,
+      reviewedByEmployeeId,
+      reviewedByEmployeeIds,
+      candidateStatusId,
+      reason,
+    };
+    fetch("https://localhost:7128/api/Candidatedetail/Put/" + id, {
+      method: "Put",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(empdata),
+    })
+      .then((res) => {
+        alert("updated successfully.");
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+  const header = <h3 className="req-header">My Resumes</h3>;
+ 
+ 
+  const textEditor = (options) => {
+    console.log("reason", options.value);
+    return (
+      <InputTextarea
+        type="text"
+        value={options.value}
+        rows={2}
+        cols={28}
+        autoResize
+        style={{color: "#6d6d6d", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
+        onChange={(e) => options.editorCallback(e.target.value)}
+      />
+    );
+  };
+ 
+  const actionBodyTemplate = (rowData) => {
+    console.log("click", rowData);
+    return (
+      <React.Fragment>
+        <ButtonC
+          icon="pi pi-save"
+          rounded
+          outlined
+          className="mr-2 text-white"
+          onClick={() => {
+            updateData(
+              rowData.id,
+              rowData.name,
+              rowData.emailId,
+              rowData.contactNo,
+              rowData.resumePath,
+              rowData.reviewedByEmployeeId,
+              rowData.reviewedByEmployeeIds,
+              rowData.candidateStatusId,
+              rowData.reason
+            );
+          }}
+        />
+      </React.Fragment>
+    );
+  };
+  const strToArray = (s) => {
+    if (typeof s === "string") {
+      s = s.split(",").map(Number);
+    }
+    return s;
+  };
+ 
+  const arrayToObj = (options = [], selectedOpt) => {
+    if (Array.isArray(selectedOpt)) {
+      return options.filter((e) => selectedOpt.includes(e.employeeId));
+    }
+  };
+ 
+  const objToArray = (selectedOpt = []) => {
+    return selectedOpt.map((e) => e.employeeId);
+  };
+  const ResumeHyperLink = (resume) => {
+    console.log(resume);
+    let resumeLink = `${constantResumePath}/Resume/${resume.resumePath}`;
+ 
+    return (
+      <div>
+        <a
+          href={resumeLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => {
+            e.preventDefault();
+            openPdfInNewTab(resumeLink);
+          }}
+          style={{ color: "#d32f2e", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
+        >
+          {resume.name}
+          {".pdf"}
+        </a>
+      </div>
+    );
+  };
+ 
   return (
-    <div>
-
-
-
-      <div className='MyDashBoard'>
-        <div className='containerH'>
-          <div className='box'>
-            <label>My Resumes</label>
+    <>
+      <div>
+        <div>
+          <DashboardHeader />
+        </div>
+        <div style={{ display: "flex" }}>
+          <div className=" ">
+            <LeftPanel />
           </div>
-          <SearchText />
+          <div className="MyResume">
+            <div >
+              <h3 className="text-black-alpha-90  text-2xl font-bold  m-4">
+                My Resumes
+              </h3>
+            </div>
+            <div >
+              <DataTable
+                value={values}
+                paginator
+                removableSort
+                rows={6}
+                scrollable
+                header={header}
+                scrollHeight="62vh"
+              >
+                <Column field="id" header="Sr No."></Column>
+                <Column
+                  field="resumePath"
+                  header="Resume"
+                  body={ResumeHyperLink}
+                ></Column>
+                <Column
+                  field="candidateStatusId"
+                  header="Status"
+                  body={SingleSelect}
+                  editor={(options) => SingleSelect(options)}
+                ></Column>
+                <Column
+                  field="reviewedByEmployeeId"
+                  header="Forward To"
+                  body={MultiSelect}
+                  editor={(options) => MultiSelect(options)}
+                ></Column>
+                <Column
+                  field="reason"
+                  header="Reason"
+                 
+                  editor={(options) => textEditor(options)}
+                ></Column>
+ 
+                <Column
+                header="Action"
+                  headerStyle={{ width: "10%", minWidth: "8rem" }}
+                  bodyStyle={{ textAlign: "left" }}
+                  body={actionBodyTemplate}
+                ></Column>
+              </DataTable>
+            </div>
+          </div>
         </div>
-        <div className='bar'>
-          <DataTable value={resumeData} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
-            <Column field='SrNo' header="Sr.No" sortable style={{ width: '20vw' }} ></Column>
-            <Column field='ResumeName' header="Resume" sortable style={{ width: '20vw' }}></Column>
-            <Column field='Status' header="Status" sortable   body={statusTemplate}  style={{ width: '40vw' }} ></Column>
-            <Column field='ForwardTo' header="Forward To"  body={FilterDemo} sortable style={{ width: '20vw' }}></Column>
-            <Column field='Reason' header="Resaon" sortable style={{ width: '20vw' }}></Column>
-
-          </DataTable>
-
-
-        </div>
-      </div >
-
-    </div>
-
-
+      </div>
+    </>
   );
 };
-
-export default MyReumes
+export default MyReumes;
+ 

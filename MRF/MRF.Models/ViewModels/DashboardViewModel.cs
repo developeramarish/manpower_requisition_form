@@ -13,7 +13,6 @@ namespace MRF.Models.ViewModels
         public List<MrfInterviewSummaryViewModel> MrIfstatus { get; set; }
     }
 
-
         public class MrfDashboardViewModel
     {
         public int MrfId { get; set; }
@@ -32,10 +31,23 @@ namespace MRF.Models.ViewModels
 
     public class MrfResumeSummaryViewModel : MrfDashboardViewModel
     {
-        // join in Candidatestatusmaster and Candidatedetails
-        public int CandidateId { get; set; } 
         public string Candidatestatus { get; set; } = null!;
-        public int CandidateStatusId { get; set; }
+        public int statusID { get; set; }
+        public int TotalCount { get; set; }
+
+    }
+
+    public class ResultViewModel
+{
+        public int mrfId { get; set; }
+        public string referenceno { get; set; }
+        public List<ResultGroup> resultGroups { get; set; }
+}
+
+    public class ResultGroup
+    {
+        public string Candidatestatus { get; set; } = null!;
+        public int TotalstatusCount { get; set; }
     }
 
     public class MrfInterviewSummaryViewModel : MrfDashboardViewModel
@@ -45,6 +57,7 @@ namespace MRF.Models.ViewModels
         public int EvaluationId { get; set; }
         public string Type { get; set; } = null!;
         public string Candidatestatus { get; set; } = null!;
+        public int ITotalCount { get; set; }
     }
 
 }

@@ -39,5 +39,10 @@ namespace MRF.DataAccess.Data
         public DbSet<AttachmentEvaluation> AttachmentEvaluation { get; set; }
 
         public DbSet<emailmaster> emailmaster { get; set; }
+        public DbSet<MrfStatusRoleMap> mrfStatusrolemap { get; set; }
+
+        public DbSet<MrfLastNumber> MrfLastNumber { get; set; }
+        public DbSet<MrfEmailApproval> MrfEmailApproval { get; set; }
+        public DbSet<CandidateInterviewFeedback> CandidateInterviewFeedback { get; set; }
     }
 }

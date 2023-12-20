@@ -21,4 +21,6 @@ public class Employeerolemap
     public DateTime UpdatedOnUtc { get; set; }
     [NotMapped]
     public string? name { get; set; }
+    [NotMapped]
+    public int EmployeeCode { get; set; }
 }

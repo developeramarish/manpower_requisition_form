@@ -35,6 +35,10 @@
         IInterviewDetailsRepository InterviewDetail { get; }
         IAttachmentEvaluationRepository AttachmentEvaluation { get; }
         IEmailRepository emailmaster { get; }
+        IMrfStatusRoleMapRepository MrfStatusRoleMap { get; }
+        IMrfLastNumberRepository MrfLastNo { get; }
+        IMrfEmailApprovalRepository MrfEmailApproval { get; }
+        ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; }
         void Save();
     }
 }

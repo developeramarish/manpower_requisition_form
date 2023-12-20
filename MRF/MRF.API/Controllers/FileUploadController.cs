@@ -18,24 +18,36 @@ namespace MRF.API.Controllers
             _fallbackPath = configuration["FileUploadSettings:FallbackPath"];
         }
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file,string ResumeOrAssign)
+        public async Task<IActionResult> Upload(IFormFile file, string ResumeOrAssign, string FileName)
         {
-            string directory =string.Empty;
+            string directory = string.Empty;
+            string filePath= string.Empty;
             // Check if a file was sent
             if (file == null || file.Length == 0)
                 return BadRequest("No file received.");
-            
-            if(_rootPath==null)
-                 directory = Path.Combine(_fallbackPath, ResumeOrAssign);
+
+            if (_rootPath == null)
+                directory = Path.Combine(_fallbackPath, ResumeOrAssign);
             else
-                 directory = Path.Combine(_rootPath, ResumeOrAssign);
+                directory = Path.Combine(_rootPath, ResumeOrAssign);
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
             // Make sure to validate the file type and size.
 
+            if (!string.IsNullOrEmpty(FileName))
+            {
+                string fileNameWithoutExtension = FileName;
+                string fileExtension = Path.GetExtension(file.FileName);
+                string newFileName = $"{fileNameWithoutExtension}{fileExtension}";
+                filePath = Path.Combine(directory, newFileName);
+            }
+            else
+            {
+                filePath = Path.Combine(directory, file.FileName);
+            }
             // Example: Save the file to a specific path
-            var filePath = Path.Combine(directory, file.FileName);
+            
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);

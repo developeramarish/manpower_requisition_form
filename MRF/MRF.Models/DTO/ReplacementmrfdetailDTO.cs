@@ -10,7 +10,7 @@
         public string Justification { get; set; } = null!;
         public int AnnualCtc { get; set; }
         public int AnnualGross { get; set; }
-        public int GradeId { get; set; }
+        //public int GradeId { get; set; }
         public int CreatedByEmployeeId { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public int UpdatedByEmployeeId { get; set; }

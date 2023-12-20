@@ -344,12 +344,14 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = 0;
-
+            bool Dashboard = false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
-            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
-            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,
+                },
+            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,
+                },
 
             };
 
@@ -357,7 +359,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
 
             // Act
-            var result = Controller.GetInterviewDetails(id);
+            var result = Controller.GetInterviewDetails(id, Dashboard);
 
             // Assert
             result.Should().NotBeNull();
@@ -371,12 +373,12 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = -3;
-
+            bool Dashboard = false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
-            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
-            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel  {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
+            new InterviewDetailsViewModel {MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
 
             };
 
@@ -384,7 +386,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
 
             // Act
-            var result = Controller.GetInterviewDetails(id);
+            var result = Controller.GetInterviewDetails(id, Dashboard);
 
             // Assert
             result.Should().NotBeNull();
@@ -398,12 +400,12 @@ namespace MRF.API.Test.Controllers
             // Arrange
 
             int id = 2;
-
+            bool Dashboard = false;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfinterviewDetails = new List<InterviewDetailsViewModel>
             {
-            new InterviewDetailsViewModel  {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
-            new InterviewDetailsViewModel {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,InterviewerName="kritika gupta",},
+            new InterviewDetailsViewModel  {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
+            new InterviewDetailsViewModel {CandidateId=2,MrfId=345,ReferenceNo="mum",InterviewerEmployeeId=47348,},
 
             };
 
@@ -411,7 +413,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.InterviewDetail.GetAll()).Returns(SampleMrfinterviewDetails);
 
             // Act
-            var result = Controller.GetInterviewDetails(id);
+            var result = Controller.GetInterviewDetails(id, Dashboard);
 
             // Assert
             Assert.NotNull(result);

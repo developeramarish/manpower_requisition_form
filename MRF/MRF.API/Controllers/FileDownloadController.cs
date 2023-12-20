@@ -16,7 +16,7 @@ namespace MRF.API.Controllers
             _rootPath = _env.WebRootPath;
             _fallbackPath = configuration["FileUploadSettings:FallbackPath"];
         }
-    [HttpGet("{fileName}/{ResumeOrAssign}")]
+    [HttpGet("GetFile")]
         public IActionResult GetFile(string fileName, string ResumeOrAssign)
         {
             try

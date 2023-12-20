@@ -1,4 +1,6 @@
-﻿namespace MRF.Models.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MRF.Models.Models;
 
 public class Candidatedetails
 {
@@ -15,8 +17,10 @@ public class Candidatedetails
     public string ResumePath { get; set; } = null!;
 
     public int CandidateStatusId { get; set; }
-
+    [NotMapped]
     public int ReviewedByEmployeeId { get; set; }
+    
+    public String? ReviewedByEmployeeIds { get; set; }
 
     public int CreatedByEmployeeId { get; set; }
 
@@ -25,4 +29,5 @@ public class Candidatedetails
     public int UpdatedByEmployeeId { get; set; }
 
     public DateTime UpdatedOnUtc { get; set; }
+    public string Reason { get; set; } = "";
 }

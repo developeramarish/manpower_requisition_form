@@ -1,4 +1,5 @@
 ﻿using MRF.DataAccess.Repository.IRepository;
+using MRF.Models.DTO;
 using MRF.Models.Models;
 namespace MRF.DataAccess.Repository
 {
@@ -12,6 +13,40 @@ namespace MRF.DataAccess.Repository
         public void Update(Candidatedetails candidatedetail)
         {
             _db.Candidatedetails.Update(candidatedetail);
+        }
+        public List<Candidatedetails> GetForwardedTodata()
+        {
+            IQueryable<Candidatedetails> query = from candidatedetails in _db.Candidatedetails
+                                                 select candidatedetails;
+            List<CandidatedetailRequestModel> resumeR = _db.Candidatedetails
+  .Join(_db.Resumeforwarddetails, candidatedetail => candidatedetail.Id, resumer => resumer.CandidateId, (candidatedetail, resumer) => new CandidatedetailRequestModel
+  {
+      Id = candidatedetail.Id,
+      ReviewedByEmployeeId = resumer.ForwardedToEmployeeId
+  })
+  .GroupBy(mrfDetail => mrfDetail.Id)
+  .Select(grouping => new CandidatedetailRequestModel
+  {
+      Id = grouping.Key,
+      ReviewedByEmployeeIds = string.Join(",", grouping.Select(candidatedetail => candidatedetail.ReviewedByEmployeeId))
+  })
+  .ToList();
+            foreach (var r in query)
+            {
+                foreach (CandidatedetailRequestModel r1 in resumeR)
+                {
+                    if (r.Id == r1.Id)
+                        r.ReviewedByEmployeeIds = r1.ReviewedByEmployeeIds;
+
+                }
+            }
+
+
+
+            return query.ToList();
+
+
+
         }
     }
 }

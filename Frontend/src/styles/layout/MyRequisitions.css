@@ -2,8 +2,7 @@
 
 
 .bar {
-  padding-top: 20px;    /* Adjust as needed */
-  padding-bottom: 20px; /* Adjust as needed 20 */
+     
   padding-left: 10px;   /* Adjust as needed for less padding on the left 10*/
   padding-right: 10px;  /* Adjust as needed for less padding on the right 10*/ 
   margin: 0;
@@ -11,6 +10,7 @@
   font-size: 15px; 
   color:  #ffffff;
   background: #202020; 
+  width: 80vw;
   background-size: cover;
   /* background-color: #c9c9c9; */
   padding: '2px';

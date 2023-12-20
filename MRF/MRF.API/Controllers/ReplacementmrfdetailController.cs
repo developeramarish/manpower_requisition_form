@@ -4,6 +4,7 @@ using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Diagnostics.Eventing.Reader;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -89,7 +90,7 @@ namespace MRF.API.Controllers
                 LastWorkingDate = request.LastWorkingDate,
                 AnnualCtc = request.AnnualCtc,
                 AnnualGross = request.AnnualGross,
-                GradeId = request.GradeId,
+                //GradeId = request.GradeId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -118,8 +119,15 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public ReplacementmrfdetailResponseModel Put(int id, [FromBody] ReplacementmrfdetailRequestModel request)
         {
-            var existingStatus = _unitOfWork.Replacementmrfdetail.Get(u => u.Id == id);
-
+            Replacementmrfdetails existingStatus = new Replacementmrfdetails();
+            if (id == 0)
+            {
+                existingStatus = _unitOfWork.Replacementmrfdetail.Get(u => u.MrfId == request.MrfId);
+            }
+            else
+            {
+                existingStatus = _unitOfWork.Replacementmrfdetail.Get(u => u.Id == id);
+            }
             if (existingStatus != null)
             {
                 existingStatus.MrfId = request.MrfId;
@@ -129,7 +137,7 @@ namespace MRF.API.Controllers
                 existingStatus.LastWorkingDate = request.LastWorkingDate;
                 existingStatus.AnnualCtc = request.AnnualCtc;
                 existingStatus.AnnualGross = request.AnnualGross;
-                existingStatus.GradeId = request.GradeId;
+                //existingStatus.GradeId = request.GradeId;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
                 existingStatus.Justification = request.Justification;

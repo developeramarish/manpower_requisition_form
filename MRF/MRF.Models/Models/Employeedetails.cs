@@ -1,4 +1,6 @@
-﻿namespace MRF.Models.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MRF.Models.Models;
 
 public class Employeedetails
 {
@@ -9,6 +11,16 @@ public class Employeedetails
     public string Email { get; set; } = null!;
 
     public string ContactNo { get; set; } = null!;
+
+    public int  EmployeeCode { get; set; }
+
+    public bool IsDeleted { get; set; }
+
+    [NotMapped]
+    public string RoleName { get; set; } = null!;
+
+    [NotMapped]
+    public int RoleId { get; set; }
 
     public bool IsAllowed { get; set; }
 

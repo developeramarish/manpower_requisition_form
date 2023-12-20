@@ -6,6 +6,7 @@ namespace MRF.DataAccess.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly Data.MRFDBContext _db;
+        private readonly IUserService _userService;
         public ICandidatestatusmasterRepository Candidatestatusmaster { get; private set; }
         public IDepartmentmasterRepository Departmentmaster { get; private set; }
         public IEmploymenttypemasterRepository Employmenttypemaster { get; private set; }
@@ -41,9 +42,14 @@ namespace MRF.DataAccess.Repository
         public IInterviewDetailsRepository InterviewDetail { get; private set; }
         public IAttachmentEvaluationRepository AttachmentEvaluation { get; private set; }
         public IEmailRepository emailmaster { get; private set; }
-        public UnitOfWork(Data.MRFDBContext db)
+        public IMrfStatusRoleMapRepository MrfStatusRoleMap { get; private set; }
+        public IMrfLastNumberRepository MrfLastNo { get; private set; }
+        public IMrfEmailApprovalRepository MrfEmailApproval { get; private set; }
+        public ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; private set; }
+        public UnitOfWork(Data.MRFDBContext db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
             Candidatestatusmaster = new CandidatestatusmasterRepository(_db);
             Departmentmaster = new DepartmentmasterRepository(_db);
             Employmenttypemaster = new EmploymenttypemasterRepository(_db);
@@ -71,12 +77,17 @@ namespace MRF.DataAccess.Repository
             Freshmrfdetail = new FreshmrfdetailRepository(_db);
             Candidatedetail = new CandidatedetailRepository(_db);
             Interviewevaluation = new InterviewevaluationRepository(_db);
-            Dashboard = new DashboardRepository(_db);
+            Dashboard = new DashboardRepository(_db, _userService);
             MrfStatusDetail = new MrfStatusDetailsRepository(_db);
-            ResumeDetail=new ResumeDetailsRepository(_db);
-            InterviewDetail=new InterviewDetailsRepository(_db);
+            ResumeDetail = new ResumeDetailsRepository(_db);
+            InterviewDetail = new InterviewDetailsRepository(_db);
             AttachmentEvaluation = new AttachmentEvaluationRepository(_db);
             emailmaster = new EmailRepository(_db);
+            MrfStatusRoleMap = new MrfStatusRoleMapRepository(_db);
+            MrfLastNo = new MrfLastNumberRepository(_db);
+            MrfEmailApproval = new MrfEmailApprovalRepository(_db);
+            CandidateInterviewFeedback = new CandidateInterviewFeedbackRepository(_db);
+
         }
         public void Save()
         {

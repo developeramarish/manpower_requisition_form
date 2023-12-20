@@ -31,7 +31,12 @@ namespace MRF.DataAccess.Repository
             IQueryable<T> query = dbSet;
             return query.ToList();
         }
-
+        public IEnumerable<T> GetA(Expression<Func<T, bool>> filter)
+        {
+            IQueryable<T> query = dbSet;
+            query = query.Where(filter);
+            return query.ToList();
+        }
         public void Remove(T entity)
         {
             if (entity != null)

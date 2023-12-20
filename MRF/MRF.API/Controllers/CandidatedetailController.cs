@@ -1,15 +1,19 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
+using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Immutable;
+using System.Drawing;
 using System.Xml.Linq;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CandidatedetailController : ControllerBase
     {
@@ -18,13 +22,15 @@ namespace MRF.API.Controllers
         private CandidatedetailResponseModel _responseModel;
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
-        public CandidatedetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService)
+        private readonly IHostEnvironment _hostEnvironment;
+        public CandidatedetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new CandidatedetailResponseModel();
-            _logger = logger;            
+            _logger = logger;
             _emailService = emailService;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: api/<CandidatedetailController>
@@ -47,7 +53,7 @@ namespace MRF.API.Controllers
             }
             _response.Result = obj;
             _response.Count = obj.Count;
-            _logger.LogInfo($"Total Candidate detail count: {_response.Count}");           
+            _logger.LogInfo($"Total Candidate detail count: {_response.Count}");
             return _response;
         }
 
@@ -64,13 +70,13 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo($"Fetching  Candidate detail by Id: {Id}");
             Candidatedetails Candidatedetail = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
-                if (Candidatedetail == null)
-                {
-                    
-                    _logger.LogError("No result found by this Id:" + Id);
-                }
-                _response.Result = Candidatedetail;
-            
+            if (Candidatedetail == null)
+            {
+
+                _logger.LogError("No result found by this Id:" + Id);
+            }
+            _response.Result = Candidatedetail;
+
             return _response;
         }
 
@@ -85,34 +91,35 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatedetailResponseModel Post([FromBody] CandidatedetailRequestModel request)
         {
-            
-                var Candidatedetail = new Candidatedetails
-                {
-                    Name = request.Name,
-                    MrfId=request.MrfId,
-                    EmailId = request.EmailId,
-                    ContactNo = request.ContactNo,
-                    ResumePath = request.ResumePath,
-                    ReviewedByEmployeeId = request.ReviewedByEmployeeId,
-                    CandidateStatusId = request.CandidateStatusId,
-                    CreatedByEmployeeId = request.CreatedByEmployeeId,
-                    CreatedOnUtc = request.CreatedOnUtc,
-                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                    UpdatedOnUtc = request.UpdatedOnUtc
-                };
 
-                _unitOfWork.Candidatedetail.Add(Candidatedetail);
-                _unitOfWork.Save();
+            var Candidatedetail = new Candidatedetails
+            {
+                Name = request.Name,
+                MrfId = request.MrfId,
+                EmailId = request.EmailId,
+                ContactNo = request.ContactNo,
+                ResumePath = request.ResumePath,
+                ReviewedByEmployeeIds = request.ReviewedByEmployeeIds,
+                CandidateStatusId = request.CandidateStatusId,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                Reason = request.Reason,
+                CreatedOnUtc = request.CreatedOnUtc,
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc
+            };
 
-                _responseModel.Id = Candidatedetail.Id;
-                _responseModel.IsActive = true;
+            _unitOfWork.Candidatedetail.Add(Candidatedetail);
+            _unitOfWork.Save();
+
+            _responseModel.Id = Candidatedetail.Id;
+            _responseModel.IsActive = true;
 
 
             return _responseModel;
         }
 
         // PUT api/<CandidatedetailController>/5
-        
+
         [HttpPut("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(CandidatedetailResponseModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
@@ -126,34 +133,88 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatedetailResponseModel Put(int id, [FromBody] CandidatedetailRequestModel request)
         {
-            
-                var existingDetails = _unitOfWork.Candidatedetail.Get(u => u.Id == id);
-                if (existingDetails != null)
+
+            var existingDetails = _unitOfWork.Candidatedetail.Get(u => u.Id == id);
+            if (existingDetails != null)
+            {   if (request.ReviewedByEmployeeIds != "")
                 {
-                    existingDetails.Name = request.Name;
-                    existingDetails.EmailId = request.EmailId;
-                    existingDetails.ContactNo = request.ContactNo;
+                    existingDetails.ReviewedByEmployeeIds = request.ReviewedByEmployeeIds;
+                    existingDetails.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                    existingDetails.UpdatedOnUtc = request.UpdatedOnUtc;
+                    
+                }
+                   // existingDetails.Name = request.Name;
+                existingDetails.Name = request.Name == "string" ? existingDetails.Name : request.Name;
+                
+                    existingDetails.EmailId = request.EmailId == "string" ? existingDetails.EmailId : request.EmailId;
+                existingDetails.ContactNo = request.ContactNo == "string" ? existingDetails.ContactNo : request.ContactNo;
                     existingDetails.ResumePath = request.ResumePath;
-                    existingDetails.ReviewedByEmployeeId = request.ReviewedByEmployeeId;
+                    existingDetails.ReviewedByEmployeeIds = request.ReviewedByEmployeeIds;
                     existingDetails.CandidateStatusId = request.CandidateStatusId;
                     existingDetails.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                     existingDetails.UpdatedOnUtc = request.UpdatedOnUtc;
+                    existingDetails.Reason = request.Reason;
+                
+                _unitOfWork.Candidatedetail.Update(existingDetails);
+                _unitOfWork.Save();
+                _responseModel.Id = existingDetails.Id;
+                _responseModel.IsActive = true;
 
-                    _unitOfWork.Candidatedetail.Update(existingDetails);
-                    _unitOfWork.Save();
-                    _responseModel.Id = existingDetails.Id;
-                    _responseModel.IsActive = true;
-                 }
-                else
-                {
-                    _logger.LogError($"No result found by this Id: {id}");
-                    _responseModel.Id = 0;
-                    _responseModel.IsActive = false;
-                }
-              
+            }
+            if (_responseModel.Id != 0)
+            {
+                CallResumeForwarddetailsController(request, _responseModel.Id);
+            }
+
+
+            else
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+                _responseModel.IsActive = false;
+            }
+
             return _responseModel;
         }
-        
+
+        private void CallResumeForwarddetailsController(CandidatedetailRequestModel request, int id)
+        {
+            List<Resumeforwarddetails> resumeforwarddetails = _unitOfWork.Resumeforwarddetail.GetEmployeeByCandidateid(id);
+            ResumeforwarddetailController interviewermap = new ResumeforwarddetailController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+            if (resumeforwarddetails != null)
+            {
+                foreach (Resumeforwarddetails resumeforward in resumeforwarddetails)
+                {
+                    interviewermap.Delete(resumeforward.Id);
+                }
+                
+                if (!string.IsNullOrEmpty(request.ReviewedByEmployeeIds))
+                {
+                    var employeeIds = request.ReviewedByEmployeeIds.Split(',');
+                    foreach (var employeeId in employeeIds)
+                    {
+
+
+                        var forwardResume = new ResumeforwarddetailRequestModel
+                        {
+                            CandidateId = id,
+                            ForwardedToEmployeeId = int.Parse(employeeId),
+                            // as we discussed with ashutosh we are adding ForwardedFromEmployeeId as a 1
+                            ForwardedFromEmployeeId = 1,
+
+
+                        };
+                        var interviewermapResponse = interviewermap.Post(forwardResume);
+
+                    }
+
+
+
+
+                }
+            }
+        }
+
         // DELETE api/<CandidatedetailController>/5
         [HttpDelete("{Id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(CandidatedetailResponseModel))]
@@ -166,18 +227,69 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int Id)
         {
-           
-                Candidatedetails? obj = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
+
+            Candidatedetails? obj = _unitOfWork.Candidatedetail.Get(u => u.Id == Id);
             if (obj != null)
             {
                 _unitOfWork.Candidatedetail.Remove(obj);
                 _unitOfWork.Save();
             }
-            else {
+            else
+            {
                 _logger.LogError($"No result found by this Id: {Id}");
             }
-            
+
+
         }
+
+        [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<CanditeResponseDTO>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetResumeDropdownlist()
+        {
+            _logger.LogInfo("Fetching create MRF Dropdown list");
+            List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetForwardedTodata();
+             
+            CanditeResponseDTO sw = new CanditeResponseDTO();
+
+
+            sw.Resumereviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(5);
+            sw.status = _unitOfWork.Candidatestatusmaster.GetCandidatesByResumestatus().ToList();
+            var combinedData = new
+            {
+
+                CandidateDetails = obj,
+                sw.Resumereviewer,
+                sw.status
+
+            };
+
+            int Count = 2;
+
+
+            _response.Result = combinedData;
+            _response.Count = Count;
+            //_logger.LogInfo($"Total MRF Dropdown list  count: {Count}");
+            return _response;
+        }
+
+        public class CanditeResponseDTO
+        {
+            public List<Candidatedetails> CandidateDetails { get; set; }
+            public List<Employeerolemap> Resumereviewer { get; set; } = new List<Employeerolemap>();//5
+            public List<Candidatestatusmaster> status { get; set; } = new List<Candidatestatusmaster>();
+
+        }
+
+
+
+
+
     }
 }
 

@@ -8,10 +8,11 @@ namespace MRF.Models.ViewModels
 {
     public class ResumeDetailsViewModel
     {
-        public int Id { get; set; }
+        public int CandidateId { get; set; }
         public int MrfId { get; set; }
         public string ReferenceNo { get; set; } = null!;
         public int ResumeReviewerEmployeeId { get; set; }
+        public string? ResumeReviewerEmployeeIds { get; set; }
         public string ResumeReviewerName { get; set; } = null!;
         public int CreatedByEmployeeId { get; set; }
         public string CreatedName { get; set; } = null!;
@@ -19,6 +20,7 @@ namespace MRF.Models.ViewModels
         public string Candidatestatus { get; set; } = null!;
         public int CandidateStatusId { get; set; }
         public string ResumePath { get; set; } = null!;
+        public string Reason { get; set; } = null!;
 
 
     }

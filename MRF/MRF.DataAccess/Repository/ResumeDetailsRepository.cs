@@ -23,26 +23,51 @@ namespace MRF.DataAccess.Repository
 
         public List<ResumeDetailsViewModel> GetResumeStatusDetails(int mrfId)
         {
-            IQueryable<ResumeDetailsViewModel> query = from mrfDetails in _db.Mrfdetails
-                        join resume in _db.Mrfresumereviewermap on mrfDetails.Id equals resume.MrfId
-                        join Emp in _db.Employeedetails on resume.CreatedByEmployeeId equals Emp.Id
-                        join Emp2 in _db.Employeedetails on resume.ResumeReviewerEmployeeId equals Emp2.Id
-                        join Candidate in _db.Candidatedetails on resume.MrfId equals Candidate.MrfId
-                        join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
-                        where mrfDetails.Id==mrfId && status.Status.Contains("resume")
-                        select new ResumeDetailsViewModel
-                        {
-                            MrfId = resume.MrfId,
-                            ReferenceNo = mrfDetails.ReferenceNo,
-                            CandidateStatusId = Candidate.CandidateStatusId,
-                            Candidatestatus = status.Status,
-                            ResumeReviewerEmployeeId = Emp2.Id,
-                            ResumeReviewerName = Emp2.Name,
-                            CreatedByEmployeeId = Emp.Id,
-                            CreatedName = Emp.Name,
-                            CreatedOnUtc = resume.CreatedOnUtc,
-                            ResumePath = Candidate.ResumePath
-                        };
+            
+           /* take list from resume reviewer assigned to mrfId   */
+            IQueryable<ResumeDetailsViewModel> Mrfresumereviewermap =
+     _db.Mrfdetails
+         .GroupJoin(
+             _db.Mrfresumereviewermap,
+             mrfDetails => mrfDetails.Id,
+             resume => resume.MrfId,
+             (mrfDetails, resumeGroup) => new ResumeDetailsViewModel
+             {
+                 MrfId = mrfDetails.Id,
+                 ResumeReviewerEmployeeIds = string.Join(",", resumeGroup.Select(r => r.ResumeReviewerEmployeeId))
+             }
+         );
+
+
+            /* if resume reviewer assigned to mrfId will assign if reviewer assigned not with candidate  */
+            IQueryable< ResumeDetailsViewModel > query =
+    from mrfDetails in _db.Mrfdetails
+    join candidate in _db.Candidatedetails on mrfDetails.Id equals candidate.MrfId
+    join emp in _db.Employeedetails on candidate.CreatedByEmployeeId equals emp.Id
+    join status in _db.Candidatestatusmaster on candidate.CandidateStatusId equals status.Id
+    // Left outer join with Mrfresumereviewermap only if candidate.ReviewedByEmployeeIds is an empty string
+    join resume in Mrfresumereviewermap
+         on new { MrfId = mrfDetails.Id, IsEmptyReview = candidate.ReviewedByEmployeeIds == "" }
+         equals new { resume.MrfId, IsEmptyReview = true } into resumeJoin
+    from resume in resumeJoin.DefaultIfEmpty()
+    where mrfDetails.Id == mrfId && status.Status.Contains("resume")
+    select new ResumeDetailsViewModel
+    {
+        MrfId = mrfDetails.Id,
+        ReferenceNo = mrfDetails.ReferenceNo,
+        CandidateStatusId = candidate.CandidateStatusId,
+        Candidatestatus = status.Status,
+        ResumeReviewerEmployeeIds = candidate.ReviewedByEmployeeIds == "" ? resume.ResumeReviewerEmployeeIds : candidate.ReviewedByEmployeeIds,
+        CreatedByEmployeeId = emp.Id,
+        CreatedName = emp.Name,
+        CreatedOnUtc = candidate.CreatedOnUtc,
+        ResumePath = candidate.ResumePath,
+        CandidateId = candidate.Id,
+        Reason = candidate.Reason,
+
+
+    };
+
             return query.ToList();
            
         }
