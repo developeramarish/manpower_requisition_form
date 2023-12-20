@@ -1246,13 +1246,13 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
                     <ButtonC
                       label="SAVE AS A DRAFT"
                       className="w-2 bg-red-600 border-red-600"
-                      onClick={() => handleSubmit(2)}
+                      onClick={() => handleSubmit(1)}
                       // disable="true"
                     />
                     <ButtonC
                       label="SUBMIT"
                       className="w-2 bg-red-600 border-red-600"
-                      onClick={() => handleSubmit(3)}
+                      onClick={() => handleSubmit(2)}
                       // disable="true"
                     />
                   </>
@@ -1263,7 +1263,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
                     <ButtonC
                       label="Withdraw"
                       className="w-2 bg-red-600 border-red-600"
-                      onClick={() => handleSubmit(3)}
+                      onClick={() => handleSubmit(9)}
                     />
                   </>
                 );
@@ -1381,13 +1381,13 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
                 <ButtonC
                   label="SAVE AS DRAFT"
                   className="w-2 bg-red-600 border-red-600"
-                  onClick={() => handleSubmit(2)}
+                  onClick={() => handleSubmit(1)}
                   // disable="true"
                 />
                 <ButtonC
                   label="SUBMIT"
                   className="w-2 bg-red-600 border-red-600"
-                  onClick={() => handleSubmit(3)}
+                  onClick={() => handleSubmit(2)}
                   // disable="true"
                 />
               </>
