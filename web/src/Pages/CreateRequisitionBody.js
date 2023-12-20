@@ -178,7 +178,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
       jdDocPath: "string",
       locationId: formData.locationId,
       qualificationId: formData.qualificationId,
-      createdByEmployeeId: 1,
+      createdByEmployeeId: storageService.getData("profile").employeeId,
       createdOnUtc: new Date().toISOString(),
       updatedByEmployeeId: storageService.getData("profile").employeeId,
       updatedOnUtc: new Date().toISOString(),
