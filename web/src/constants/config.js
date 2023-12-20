@@ -1,21 +1,22 @@
 export const APP_KEY = "MRF_v1.0";
-
+const APIPath="https://10.22.11.101:90/api/";
 export const API_URL = {
+	
 	MRF_STATUS_SUMMARY:
-		"https://10.22.11.101:90/api/Dashboard/GetMrfStatusSummary",
+		APIPath+"Dashboard/GetMrfStatusSummary",
 	RESUME_SUMMARY:
-		"https://10.22.11.101:90/api/Dashboard/GetMrfResumeSummary/Count",
+		APIPath+"Dashboard/GetMrfResumeSummary/Count",
 	INTERVIEW_SUMMARY:
-		"https://10.22.11.101:90/api/Dashboard/GetMrfInterviewSummary/Count",
+		APIPath+"Dashboard/GetMrfInterviewSummary/Count",
 	INTERVIEW_SUMMARY_POPUP:
-		"https://10.22.11.101:90/api/Mrfinterviewermap/GetInterviewDetails/GetInterviewDetails",
+		APIPath+"Mrfinterviewermap/GetInterviewDetails/GetInterviewDetails",
 	MRF_STATUS_POPUP:
-		"https://10.22.11.101:90/api/Mrfdetail/GetMrfDetails/GetMrfDetails?",
+		APIPath+"/Mrfdetail/GetMrfDetails/GetMrfDetails?",
 	MY_REQUISITION:
-		"https://10.22.11.101:90/api/Mrfdetail/GetMrfDetails/GetMrfDetails",
-	RESUME_SUMMARY_POPUP: `https://10.22.11.101:90/api/Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
-	RESUME_SUMMARY_POST: `https://10.22.11.101:90/api/Candidatedetail/Put/`,
-	INTERVIEW_FEEDBACK: "https://10.22.11.101:90/api/CandidateInterviewFeedback",
+		APIPath+"Mrfdetail/GetMrfDetails/GetMrfDetails",
+	RESUME_SUMMARY_POPUP: APIPath+`Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
+	RESUME_SUMMARY_POST: APIPath+`Candidatedetail/Put/`,
+	INTERVIEW_FEEDBACK: APIPath+"CandidateInterviewFeedback",
 };
 
 export const FILE_URL = {
