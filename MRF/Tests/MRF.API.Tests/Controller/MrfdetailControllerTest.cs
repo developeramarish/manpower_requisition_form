@@ -394,7 +394,7 @@ namespace MRF.API.Test.Controllers
 
             int id = 0;
             int roleId = 3;//MRFOwner
-
+            int userId = 1;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfDetails = new List<MrfDetailsViewModel>
             {
@@ -407,7 +407,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.MrfStatusDetail.GetAll()).Returns(SampleMrfDetails);
 
             // Act
-            var result = Controller.GetMrfDetails(id,roleId);
+            var result = Controller.GetMrfDetails(id,roleId, userId);
 
             // Assert
             result.Should().NotBeNull();
@@ -422,7 +422,7 @@ namespace MRF.API.Test.Controllers
 
             int id = -3;
             int roleId = 3;
-
+            int userId = 1;
             // Create a list of sample Mrfinterviewermap for testing
             var SampleMrfDetails = new List<MrfDetailsViewModel>
             {
@@ -435,7 +435,7 @@ namespace MRF.API.Test.Controllers
             fixture.MockUnitOfWork.Setup(uow => uow.MrfStatusDetail.GetAll()).Returns(SampleMrfDetails);
 
             // Act
-            var result = Controller.GetMrfDetails(id,roleId);
+            var result = Controller.GetMrfDetails(id,roleId, userId);
 
             // Assert
             result.Should().NotBeNull();
