@@ -3,27 +3,29 @@ const APIPath="https://localhost:7128/api/";
 export const API_URL = {
 	
 	MRF_STATUS_SUMMARY:
-		APIPath+"Dashboard/GetMrfStatusSummary",
+	`${APIPath}Dashboard/GetMrfStatusSummary`,
 	RESUME_SUMMARY:
-		APIPath+"Dashboard/GetMrfResumeSummary/Count",
+	`${APIPath}Dashboard/GetMrfResumeSummary/Count`,
 	INTERVIEW_SUMMARY:
-		APIPath+"Dashboard/GetMrfInterviewSummary/Count",
+	`${APIPath}Dashboard/GetMrfInterviewSummary/Count`,
 	INTERVIEW_SUMMARY_POPUP:
-		APIPath+"Mrfinterviewermap/GetInterviewDetails/GetInterviewDetails",
+	`${APIPath}Mrfinterviewermap/GetInterviewDetails/GetInterviewDetails`,
 	MRF_STATUS_POPUP:
-		APIPath+"Mrfdetail/GetMrfDetails/GetMrfDetails?",
+	`${APIPath}Mrfdetail/GetMrfDetails/GetMrfDetails?`,
 	MY_REQUISITION:
-		APIPath+"Mrfdetail/GetMrfDetails/GetMrfDetails",
-	RESUME_SUMMARY_POPUP: APIPath+`Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
-	RESUME_SUMMARY_POST: APIPath+`Candidatedetail/Put/`,
-	INTERVIEW_FEEDBACK: APIPath+"CandidateInterviewFeedback", 
-
+	`${APIPath}Mrfdetail/GetMrfDetails/GetMrfDetails`,
+	RESUME_SUMMARY_POPUP: 
+	`${APIPath}Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
+	RESUME_SUMMARY_POST:
+	 `${APIPath}Candidatedetail/Put/`,
+	INTERVIEW_FEEDBACK: 
+	`${APIPath}CandidateInterviewFeedback`,
 };
 
 export const FILE_URL = {
-	RESUME: "https://10.22.11.101:90/Resume/",
-	ASSIGNMENT: "https://10.22.11.101:90/Assignment/",
-	RESUME_UPLOAD:"https10.22.11.101:90/api/Upload?ResumeOrAssign=Resume&FileName="
+	RESUME: `${APIPath}Resume`,
+	ASSIGNMENT: `${APIPath}Assignment`,
+
 };
 
 export const ROUTES = {

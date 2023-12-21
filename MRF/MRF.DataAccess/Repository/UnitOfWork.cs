@@ -46,6 +46,7 @@ namespace MRF.DataAccess.Repository
         public IMrfLastNumberRepository MrfLastNo { get; private set; }
         public IMrfEmailApprovalRepository MrfEmailApproval { get; private set; }
         public ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; private set; }
+        public ImrfDetailsStatusHistory mrfDetailsStatusHistory { get; private set; }
         public UnitOfWork(Data.MRFDBContext db, IUserService userService)
         {
             _db = db;
@@ -87,7 +88,7 @@ namespace MRF.DataAccess.Repository
             MrfLastNo = new MrfLastNumberRepository(_db);
             MrfEmailApproval = new MrfEmailApprovalRepository(_db);
             CandidateInterviewFeedback = new CandidateInterviewFeedbackRepository(_db);
-
+            mrfDetailsStatusHistory=new mrfDetailsStatusHistoryRepository(_db);
         }
         public void Save()
         {

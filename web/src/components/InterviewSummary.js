@@ -56,9 +56,9 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			const data = response.result;
 			let arr = new Array(data.interviewDetails.length).fill(false); // for save bttn
 			setInterviewData(data.interviewDetails);
-			setInterviewStatus(
-				data.interviewstatus.filter((x) => x.candidateorEvalution === "E")
-			);
+			setInterviewStatus(data.interviewstatus);
+				//data.interviewstatus.filter((x) => x.candidateorEvalution === "E")
+			//);
 			setInterviewerData(data.interviewReviewer);
 			setSaveBttn(arr);
 		}
@@ -87,13 +87,13 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			let interviewDataCopy = [...interviewData];
 			let sv = [...saveBttn];
 			sv[options.rowIndex] = true;
-			interviewDataCopy[options.rowIndex].evaluationId = e.target.value;
+			interviewDataCopy[options.rowIndex].evalutionStatusId = e.target.value;
 			setInterviewData(interviewDataCopy);
 			setSaveBttn(sv);
 		};
 
 		if (roleId === ROLES.mrfOwner) {
-			let is = interviewStatus.filter((x) => x.id === interview.evaluationId);
+			let is = interviewStatus.filter((x) => x.id === interview.evalutionStatusId);
 			return <p className="drop-width">{is[0].status}</p>;
 		}
 
@@ -103,7 +103,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 				optionValue="id"
 				className="drop-width"
 				options={interviewStatus}
-				value={interview.evaluationId}
+				value={interview.evalutionStatusId}
 				onChange={handleDropdownChange}
 			/>
 		);
@@ -133,13 +133,14 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 				)}
 				onChange={handleMultiSelectChange}
 				optionLabel="name"
+				placeholder="Select Interviewer"
 				// optionValue="employeeId"
 			/>
 		);
 	};
 
 	const feedbackBodyTemplate = (interview) => {
-		if (interview.evaluationId < 5) return "To be updated";
+		if (interview.evalutionStatusId < 5) return "To be updated";
 		return (
 			<p
 				onClick={() => {
@@ -192,7 +193,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			sortable: true,
 		},
 		{
-			field: "evaluationId",
+			field: "evalutionStatusId",
 			header: "Interview Status",
 			body: statusBodyTemplate,
 			bodyClassName: "drop-col",

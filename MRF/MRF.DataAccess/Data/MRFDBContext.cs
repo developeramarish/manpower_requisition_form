@@ -44,5 +44,6 @@ namespace MRF.DataAccess.Data
         public DbSet<MrfLastNumber> MrfLastNumber { get; set; }
         public DbSet<MrfEmailApproval> MrfEmailApproval { get; set; }
         public DbSet<CandidateInterviewFeedback> CandidateInterviewFeedback { get; set; }
+        public DbSet<mrfDetailsStatusHistory> mrfDetailsStatusHistory { get; set; }
     }
 }

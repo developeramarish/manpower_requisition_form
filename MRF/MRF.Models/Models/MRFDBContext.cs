@@ -71,6 +71,7 @@ public partial class MRFDBContext : DbContext
     public virtual DbSet<MrfStatusRoleMap> MrfStatusRoleMap { get; set; }
     public virtual DbSet<MrfLastNumber> MrfLastNumber { get; set; }
     public virtual DbSet<MrfEmailApproval> MrfEmailApproval { get; set; }
+    public virtual DbSet<mrfDetailsStatusHistory> mrfDetailsStatusHistory { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseMySql("server=localhost;database=mrf;user=root;password=Info@2023", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.15-mysql"));
@@ -320,6 +321,22 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.UpdatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<mrfDetailsStatusHistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("mrfDetailsStatusHistory");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.CreatedByEmployeeId).HasColumnType("int(11)");
+            entity.Property(e => e.CreatedOnUtc)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
+            entity.Property(e => e.MrfId).HasColumnType("int(11)");
+            entity.Property(e => e.mrfStatusId).HasColumnType("int(11)");
+           
         });
 
         modelBuilder.Entity<Grademaster>(entity =>

@@ -46,15 +46,14 @@ const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
         <Column header={headerHeading} colSpan={4} />
       </Row>
       <Row>
-        {value &&
-          value.map((data, index) => {
-            return (
-              <Column
-                key={index}
-                header={data.resultGroups[index].candidatestatus}
-              />
-            );
-          })}
+       
+
+{column.map((col, index) => {
+         if(col.header!="MRF ID"){
+          return <Column key={index} field={col.field}
+          header={col.header}  />;
+         }
+       })}
       </Row>
     </ColumnGroup>
   );
@@ -72,12 +71,11 @@ const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
         header={header}
         headerColumnGroup={headerGroup}
         scrollable
-        scrollHeight="flex"
-      >
+        scrollHeight="flex">
         {column.map((col, index) => {
-          // console.log(col)
+         
           return <Column key={index} field={col.field}
-          header={col.header} body={col.body} />;
+         header={col.header} body={col.body} />;
         })}
       </DataTable>
     </div>

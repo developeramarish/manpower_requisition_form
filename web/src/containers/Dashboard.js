@@ -86,7 +86,7 @@ function Dashboard({roleId,userId}) {
   const resumeSummaryColums = [
     {
       field: "referenceno",
-      header: "Mrf Id",
+      header: "MRF ID",
       body: mrfIdResumeRefernceTemplate,
     },
     {

@@ -307,7 +307,8 @@ const CreateRequisitionBody = ({
   };
 
   const strToArray = (s) => {
-    if (typeof s === "string") {
+    s = s ?? "";
+   if (typeof s === "string") {
       s = s.split(",").map(Number);
     }
     return s;
