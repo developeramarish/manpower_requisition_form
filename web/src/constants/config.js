@@ -16,12 +16,14 @@ export const API_URL = {
 		APIPath+"Mrfdetail/GetMrfDetails/GetMrfDetails",
 	RESUME_SUMMARY_POPUP: APIPath+`Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
 	RESUME_SUMMARY_POST: APIPath+`Candidatedetail/Put/`,
-	INTERVIEW_FEEDBACK: APIPath+"CandidateInterviewFeedback",
+	INTERVIEW_FEEDBACK: APIPath+"CandidateInterviewFeedback", 
+
 };
 
 export const FILE_URL = {
 	RESUME: "https://10.22.11.101:90/Resume/",
 	ASSIGNMENT: "https://10.22.11.101:90/Assignment/",
+	RESUME_UPLOAD:"https10.22.11.101:90/api/Upload?ResumeOrAssign=Resume&FileName="
 };
 
 export const ROUTES = {

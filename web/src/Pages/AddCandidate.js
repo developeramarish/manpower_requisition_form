@@ -1,33 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
-import DashboardHeader from "./Header";
-import LeftPanel from "./LeftPanel";
 import InputTextCp from "./../components/Textbox";
 import ButtonC from "./../components/Button";
 import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
 import { APIPath, removeSpaces } from "./../components/constant";
-// import { useNavigate } from "react-router-dom";
-const AddCandidate = () => {
+import { storageService } from "../constants/storage";
+import { navigateTo } from "../constants/Utils";
+import { API_URL } from "../constants/config";
+import {FILE_URL} from "../constants/config";
+const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  // const navigate = useNavigate();
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
-
   const formSchema = {
     id: 0,
-    mrfId: 2,
+    mrfId: reqId.reqId,
     name: "",
     emailId: "",
     contactNo: "",
     resumePath: "",
-    candidateStatusId: 16,
-    reviewedByEmployeeId: 1,
-    createdByEmployeeId: 1,
-    createdOnUtc: "",
-    updatedByEmployeeId: 1,
-    updatedOnUtc: "",
+    candidateStatusId: 1,
+    createdByEmployeeId: storageService.getData("profile").employeeId,
+    createdOnUtc: new Date().toISOString(),
+    updatedByEmployeeId: storageService.getData("profile").employeeId,
+    updatedOnUtc: new Date().toISOString(),
     reason: "",
   };
 
@@ -39,9 +37,7 @@ const AddCandidate = () => {
     fileUploadData.append("file", selectedFile);
 
     try {
-      const fileUploadResponse = await fetch(
-        APIPath +
-          "Upload?ResumeOrAssign=Resume&FileName=" +
+      const fileUploadResponse = await fetch(FILE_URL.RESUME_UPLOAD +
           removeSpaces(formData.name),
         {
           method: "POST",
@@ -58,17 +54,15 @@ const AddCandidate = () => {
           contactNo: formData.contactNo,
           resumePath: removeSpaces(formData.name) + ".pdf",
           candidateStatusId: 1,
-          // resumePath: "ddd.pdf",
-          reviewedByEmployeeId: 1,
           reviewedByEmployeeIds: "",
-          createdByEmployeeId: 1,
-          createdOnUtc: new Date().toISOString(),
-          updatedByEmployeeId: 1,
-          updatedOnUtc: new Date().toISOString(),
+          createdByEmployeeId:  formData.createdByEmployeeId,
+          createdOnUtc:formData.createdOnUtc,
+          updatedByEmployeeId: formData.updatedByEmployeeId,
+          updatedOnUtc:formData.updatedOnUtc,
           reason: "",
         };
         try {
-          const response = await fetch(APIPath + "Candidatedetail/Post", {
+          const response = await fetch(API_URL.RESUME_SUMMARY_POST, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -82,7 +76,7 @@ const AddCandidate = () => {
 
             toastRef.current.showSuccessMessage("Form submitted successfully!");
             setTimeout(() => {
-              // navigate("/Candidate");
+               navigateTo("my_requisition");
             }, 2000);
           } else {
             console.error("Request failed with status:", response.status);
@@ -107,19 +101,21 @@ const AddCandidate = () => {
   };
 
   //need to change this
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    navigateTo("my_requisition")
+  };
 
   return (
     <div>
-      {/* <DashboardHeader /> */}
       <div className="flex bg-gray-200">
-        {/* <LeftPanel /> */}
         <div className="flex flex-column gap-2 w-full p-3 py-2 h-full ">
           <div
             className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
             style={{ height: "81vh" }}
           >
-            <h3 className="text-xl my-2">Fill the Details</h3>
+            <h3 className="text-xl my-2">Fill the Details
+            <span className="text-red-600"></span>
+            </h3>
             <section
               className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
               style={{ height: "95%" }}

@@ -121,7 +121,7 @@ function App() {
               <div className='content_right_wrapper'>
                 {currentPageKey === 'dashboard' && <Dashboard roleId={profile.roleId} userId={profile.employeeId} />}
                 {currentPageKey === 'my_requisition' && <MyRequisitions  roleId={profile.roleId} userId={profile.employeeId} />}
-                {currentPageKey === 'add_candidate' && <AddCandidate />}
+                {currentPageKey === 'add_candidate' && <AddCandidate reqId={params} />}
                 {(currentPageKey === 'create_requisition' || currentPageKey === 'edit_requisition') && <CreateRequisition reqId={params} reqstatus={statusForTitle} reqRoleId={roleId}  />}
                 
               </div>
