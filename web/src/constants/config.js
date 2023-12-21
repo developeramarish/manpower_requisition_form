@@ -46,16 +46,20 @@ export const ROUTES = {
 
 export const MRF_STATUS = {
 	draft: 1,
-	submToHr: 2,
-	resubReq: 3,
-	hodapproval: 4,
-	cooapproval: 5,
-	open: 6,
-	onHold: 7,
-	rejected: 8,
-	withdrawn: 9,
-	closed: 10,
+  submToHr: 2,
+  resubReq: 3,
+  hodapproval: 4,
+  cooapproval: 5,
+  open: 6,
+  onHold: 7,
+  rejected: 8,
+  withdrawn: 9,
+  closed: 10,
+  awaitHodApproval:11,
+  awaitCooApproval:12,
+  mrfTransferToNew:12,
 };
+
 
 export const ROLES = {
 	superAdmin: 1,

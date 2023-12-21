@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { PAGE_ACTIONS } from "../reducers/Page_r";
 import { navigateTo } from "../constants/Utils";
 import "../css/MrfRefStatus.css";
+import { MRF_STATUS } from "../constants/config";
 
 const MrfLink = ({
   mrfRef,
@@ -18,7 +19,6 @@ const MrfLink = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
-
 
   // console.log(message)
   const handleAClick = (id, status, role) => {
@@ -105,261 +105,137 @@ const ReferenceBodyTemplate = (mrf) => {
   const mrfRef = mrf.referenceNo;
   //   console.log(mrf);
 
-  if (roleId === 3) {
-    switch (mrf.mrfStatusId) {
-      case mrfStatus.draft:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            role={mrf.roleId}
-            status={mrf.mrfStatus}
-          />
-        );
-      case mrfStatus.submToHr:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-            // addButton={true}
-            // message="Do you want to Withdraw it?"
-          />
-        );
-      case mrfStatus.open:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            role={mrf.roleId}
-            status={mrf.mrfStatus}
-            // addButton={true}
-            // message="Do you want to Withdraw it?"
-          />
-        );
-      case mrfStatus.resubReq: //need to add hr note
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-            // message="Note added by HR"
-          />
-        );
-      case mrfStatus.rejected:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-            // message="This MRF is Rejected"
-          />
-        );
-      case mrfStatus.closed:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-                  mrfId={mrf.mrfId}
-                  status={mrf.mrfStatus}
-            role={mrf.roleId}
-            // message="This MRF is Closed"
-          />
-        );
-      case mrfStatus.withdrawn:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
+  switch (mrf.mrfStatusId) {
+    case MRF_STATUS.draft:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          role={mrf.roleId}
+          status={mrf.mrfStatus}
+        />
+      );
+    case MRF_STATUS.submToHr:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+          // addButton={true}
+          // message="Do you want to Withdraw it?"
+        />
+      );
+    case MRF_STATUS.open:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          role={mrf.roleId}
+          status={mrf.mrfStatus}
+          // addButton={true}
+          // message="Do you want to Withdraw it?"
+        />
+      );
+    case MRF_STATUS.resubReq: //need to add hr note
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+          // message="Note added by HR"
+        />
+      );
+    case MRF_STATUS.rejected:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+          // message="This MRF is Rejected"
+        />
+      );
+    case MRF_STATUS.closed:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+          // message="This MRF is Closed"
+        />
+      );
+    case MRF_STATUS.withdrawn:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
 
-            // message="This MRF is Withdrawn"
-          />
-        );
-      case mrfStatus.onHold:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-            // message="This MRF is on Hold"
-          />
-        );
-    }
-    return <MrfLink mrfRef={mrfRef} />;
-  } else if (roleId === 4) {
-    switch (mrf.mrfStatusId) {
-      case mrfStatus.submToHr:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.closed:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.withdrawn:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.onHold:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.resubReq:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.rejected:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.open:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.hodapproval:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.cooapproval:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-    }
-  }else{
-    switch (mrf.mrfStatusId) {
-      case mrfStatus.submToHr:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.closed:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.withdrawn:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.onHold:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.resubReq:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.rejected:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.open:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.hodapproval:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-      case mrfStatus.cooapproval:
-        return (
-          <MrfLink
-            mrfRef={mrfRef}
-            mrfId={mrf.mrfId}
-            status={mrf.mrfStatus}
-            role={mrf.roleId}
-          />
-        );
-    }
+          // message="This MRF is Withdrawn"
+        />
+      );
+    case MRF_STATUS.onHold:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+          // message="This MRF is on Hold"
+        />
+      );
+    case MRF_STATUS.hodapproval:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+        />
+      );
+    case MRF_STATUS.cooapproval:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+        />
+      );
+    case MRF_STATUS.awaitCooApproval:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+        />
+      );
+    case MRF_STATUS.awaitHodApproval:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+        />
+      );
+    case MRF_STATUS.mrfTransferToNew:
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+        />
+      );
   }
+
+  
 };
 
 export default ReferenceBodyTemplate;

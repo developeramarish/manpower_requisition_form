@@ -1398,7 +1398,7 @@ const CreateRequisitionBody = ({
                     <MrfPartialStatus
                       mrfId={getReqId}
                       mrfStatusId={7}
-                      label={"Received HOD approval"}
+                      label={"On Hold"}
                       message={"Do you want to hold on this MRF?"}
                     />
                   </>
