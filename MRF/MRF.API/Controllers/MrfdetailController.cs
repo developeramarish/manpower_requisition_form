@@ -101,7 +101,7 @@ namespace MRF.API.Controllers
                 string ReferenceNo = string.Empty;
                 if (request.ReferenceNo != "")
                 {
-                    Put(request.mrfID, request);
+                    Put(request.mrfID ?? 0, request);
                 }
                 else
                 {
@@ -143,26 +143,26 @@ namespace MRF.API.Controllers
             var mrfDetail = new Mrfdetails
             {
                 ReferenceNo = ReferenceNo,
-                PositionTitle = request.PositionTitle,
+                PositionTitle = request.PositionTitle ?? "",
                 RequisitionType = request.RequisitionType,
-                DepartmentId = request.DepartmentId,
-                SubDepartmentId = request.SubDepartmentId,
-                ProjectId = request.ProjectId,
-                VacancyNo = request.VacancyNo,
-                GenderId = request.GenderId,
+                DepartmentId = request.DepartmentId==0?null: request.DepartmentId,
+                SubDepartmentId = request.SubDepartmentId == 0 ? null : request.SubDepartmentId,
+                ProjectId = request.ProjectId == 0 ? null : request.ProjectId,
+                VacancyNo = request.VacancyNo ,
+                GenderId = request.GenderId == 0 ? null : request.GenderId,
                 RequisitionDateUtc = request.RequisitionDateUtc,
-                ReportsToEmployeeId = request.ReportsToEmployeeId,
-                MinGradeId = request.MinGradeId,
-                MaxGradeId = request.MaxGradeId,
-                EmploymentTypeId = request.EmploymentTypeId,
-                MinExperience = request.MinExperience,
-                MaxExperience = request.MaxExperience,
-                VacancyTypeId = request.VacancyTypeId,
+                ReportsToEmployeeId = request.ReportsToEmployeeId == 0 ? null : request.ReportsToEmployeeId,
+                MinGradeId = request.MinGradeId == 0 ? null : request.MinGradeId,
+                MaxGradeId = request.MaxGradeId == 0 ? null : request.MaxGradeId,
+                EmploymentTypeId = request.EmploymentTypeId == 0 ? null : request.EmploymentTypeId,
+                MinExperience = request.MinExperience == 0 ? null : request.MinExperience,
+                MaxExperience = request.MaxExperience == 0 ? null : request.MaxExperience,
+                VacancyTypeId = request.VacancyTypeId == 0 ? null : request.VacancyTypeId,
                 IsReplacement = request.IsReplacement,
-                MrfStatusId = request.MrfStatusId,
-                JdDocPath = request.JdDocPath,
-                LocationId = request.LocationId,
-                QualificationId = request.QualificationId,
+                MrfStatusId = request.MrfStatusId ,
+                JdDocPath = request.JdDocPath ?? "",
+                LocationId = request.LocationId == 0 ? null : request.LocationId,
+                QualificationId = request.QualificationId == 0 ? null : request.QualificationId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -206,11 +206,11 @@ namespace MRF.API.Controllers
             var freshmrRequest = new FreshmrfdetailRequestModel
             {
                 MrfId = mrfId,
-                Justification = request.Justification,
-                JobDescription = request.JobDescription,
-                Skills = request.Skills,
-                MinTargetSalary = request.MinTargetSalary,
-                MaxTargetSalary = request.MaxTargetSalary,
+                Justification = request.Justification ?? "",
+                JobDescription = request.JobDescription ?? "",
+                Skills = request.Skills ?? "",
+                MinTargetSalary = request.MinTargetSalary ?? 0,
+                MaxTargetSalary = request.MaxTargetSalary ?? 0,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -431,24 +431,24 @@ namespace MRF.API.Controllers
             {
                 existingStatus.ReferenceNo = request.ReferenceNo;
                 existingStatus.PositionTitle = request.PositionTitle;
-                existingStatus.DepartmentId = request.DepartmentId;
-                existingStatus.SubDepartmentId = request.SubDepartmentId;
-                existingStatus.ProjectId = request.ProjectId;
-                existingStatus.VacancyNo = request.VacancyNo;
-                existingStatus.GenderId = request.GenderId;
+                existingStatus.DepartmentId = request.DepartmentId== 0?null: request.DepartmentId;
+                existingStatus.SubDepartmentId = request.SubDepartmentId == 0 ? null : request.SubDepartmentId;
+                existingStatus.ProjectId = request.ProjectId == 0 ? null : request.ProjectId;
+                existingStatus.VacancyNo = request.VacancyNo ;
+                existingStatus.GenderId = request.GenderId == 0 ? null : request.GenderId;
                 existingStatus.RequisitionDateUtc = request.RequisitionDateUtc;
-                existingStatus.ReportsToEmployeeId = request.ReportsToEmployeeId;
-                existingStatus.MinGradeId = request.MinGradeId;
-                existingStatus.MaxGradeId = request.MaxGradeId;
-                existingStatus.EmploymentTypeId = request.EmploymentTypeId;
-                existingStatus.MinExperience = request.MinExperience;
-                existingStatus.MaxExperience = request.MaxExperience;
-                existingStatus.VacancyTypeId = request.VacancyTypeId;
+                existingStatus.ReportsToEmployeeId = request.ReportsToEmployeeId == 0 ? null : request.ReportsToEmployeeId;
+                existingStatus.MinGradeId = request.MinGradeId == 0 ? null : request.MinGradeId;
+                existingStatus.MaxGradeId = request.MaxGradeId == 0 ? null : request.MaxGradeId;
+                existingStatus.EmploymentTypeId = request.EmploymentTypeId == 0 ? null : request.EmploymentTypeId;
+                existingStatus.MinExperience = request.MinExperience == 0 ? null : request.MinExperience;
+                existingStatus.MaxExperience = request.MaxExperience == 0 ? null : request.MaxExperience;
+                existingStatus.VacancyTypeId = request.VacancyTypeId == 0 ? null : request.VacancyTypeId;
                 existingStatus.IsReplacement = request.IsReplacement;
                 existingStatus.MrfStatusId = request.MrfStatusId;
                 existingStatus.JdDocPath = request.JdDocPath;
-                existingStatus.LocationId = request.LocationId;
-                existingStatus.QualificationId = request.QualificationId;
+                existingStatus.LocationId = request.LocationId == 0 ? null : request.LocationId;
+                existingStatus.QualificationId = request.QualificationId == 0 ? null : request.QualificationId;
                 //existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
                //existingStatus.CreatedOnUtc = request.CreatedOnUtc;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
@@ -560,9 +560,9 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetMrfDetails(int statusId,int roleId)
+        public ResponseDTO GetMrfDetails(int statusId,int roleId,int userId)
         {  
-            List<MrfDetailsViewModel> mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(statusId,roleId);
+            List<MrfDetailsViewModel> mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(statusId,roleId, userId);
             if (mrfdetail == null)
             {
                 _logger.LogError($"No result found by this Id:");

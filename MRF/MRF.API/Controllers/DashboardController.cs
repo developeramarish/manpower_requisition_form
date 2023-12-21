@@ -39,10 +39,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetMrfStatusSummary()
+        public ResponseDTO GetMrfStatusSummary(int roleId,int userId)
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
-            List<MrfSummaryViewModel> MrfStatusSummary = _unitOfWork.Dashboard.GroupByMrfStatus().ToList();
+            List<MrfSummaryViewModel> MrfStatusSummary = _unitOfWork.Dashboard.GroupByMrfStatus(roleId, userId).ToList();
             if (MrfStatusSummary == null)
             {
                 _logger.LogError("No record is found");
@@ -61,11 +61,11 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetMrfResumeSummary(int Count)
+        public ResponseDTO GetMrfResumeSummary(int Count, int roleId, int userId)
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
             //List<MrfResumeSummaryViewModel> mrfresumereviewermapList = _unitOfWork.Dashboard.GetCountByMrfIdAndResumeStatus().ToList();
-            List<ResultViewModel> mrfresumereviewermapList = _unitOfWork.Dashboard.GetCountByMrfIdAndResumeStatus(Count).ToList();
+            List<ResultViewModel> mrfresumereviewermapList = _unitOfWork.Dashboard.GetCountByMrfIdAndResumeStatus(Count,roleId,userId).ToList();
 
             if (mrfresumereviewermapList == null)
             {
@@ -85,10 +85,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetMrfInterviewSummary(int Count)
+        public ResponseDTO GetMrfInterviewSummary(int Count, int roleId, int userId)
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
-            List<ResultViewModel> mrfInterviewSummary = _unitOfWork.Dashboard.GroupByMrfInterviewStatus(Count).ToList();
+            List<ResultViewModel> mrfInterviewSummary = _unitOfWork.Dashboard.GroupByMrfInterviewStatus(Count, roleId, userId).ToList();
             if (mrfInterviewSummary == null)
             {
                 _logger.LogError("No record is found");

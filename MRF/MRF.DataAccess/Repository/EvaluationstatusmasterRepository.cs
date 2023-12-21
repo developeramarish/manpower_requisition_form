@@ -33,21 +33,21 @@ namespace MRF.DataAccess.Repository
         })
         .ToList();
 
-            List<Candidatestatusmaster> CStatus = new List<Candidatestatusmaster>();
+        //    List<Candidatestatusmaster> CStatus = new List<Candidatestatusmaster>();
 
-            CStatus = (from s in _db.Candidatestatusmaster
-                       where !s.Status.Contains("resume")
-                       select s).ToList();
+        //    CStatus = (from s in _db.Candidatestatusmaster
+        //               where !s.Status.Contains("resume")
+        //               select s).ToList();
 
-            List<Interviewstatus> interviewList2 = CStatus
-        .Select(CStatus => new Interviewstatus
-        {
-            Id = CStatus.Id,
-            Status = CStatus.Status,
-            CandidateorEvalution = "C",
-        })
-        .ToList();
-            interviewList.AddRange(interviewList2);
+        //    List<Interviewstatus> interviewList2 = CStatus
+        //.Select(CStatus => new Interviewstatus
+        //{
+        //    Id = CStatus.Id,
+        //    Status = CStatus.Status,
+        //    CandidateorEvalution = "C",
+        //})
+        //.ToList();
+         //   interviewList.AddRange(interviewList2);
 
             return interviewList;
 
