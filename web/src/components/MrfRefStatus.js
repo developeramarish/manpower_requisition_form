@@ -122,8 +122,8 @@ const ReferenceBodyTemplate = (mrf) => {
             mrfRef={mrfRef}
             mrfId={mrf.mrfId}
             status={mrf.mrfStatus}
-            // addButton={true}
             role={mrf.roleId}
+            // addButton={true}
             // message="Do you want to Withdraw it?"
           />
         );
@@ -248,6 +248,24 @@ const ReferenceBodyTemplate = (mrf) => {
           />
         );
       case mrfStatus.open:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.hodapproval:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.cooapproval:
         return (
           <MrfLink
             mrfRef={mrfRef}

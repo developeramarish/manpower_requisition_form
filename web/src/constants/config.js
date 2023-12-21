@@ -20,6 +20,11 @@ export const API_URL = {
 	 `${APIPath}Candidatedetail/Put/`,
 	INTERVIEW_FEEDBACK: 
 	`${APIPath}CandidateInterviewFeedback`,
+	MRF_PARTIAL_STATUS_UPDATE:`${APIPath}Mrfdetail/PartialUpdateMRFStatus/`,
+	GET_CREATE_REQUISITION_DEPARTMENT:`${APIPath}Subdepartment/GetInfo/`,
+	GET_CREATE_REQUISITION_DEATILS:`${APIPath}Mrfdetail/GetRequisition/`,
+	GET_CREATE_REQUISITION_DROPDOWN:`${APIPath}Mrfdetail/GetMRFDropdownlist`,
+	
 };
 
 export const FILE_URL = {
