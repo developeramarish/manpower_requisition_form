@@ -36,14 +36,16 @@ export const ROUTES = {
 };
 
 export const MRF_STATUS = {
-	draft: 2,
-	submToHr: 3,
-	resubReq: 4,
-	open: 9,
-	rejected: 11,
-	closed: 13,
-	withdrawn: 12,
-	onHold: 10,
+	draft: 1,
+	submToHr: 2,
+	resubReq: 3,
+	hodapproval: 4,
+	cooapproval: 5,
+	open: 6,
+	onHold: 7,
+	rejected: 8,
+	withdrawn: 9,
+	closed: 10,
 };
 
 export const ROLES = {
