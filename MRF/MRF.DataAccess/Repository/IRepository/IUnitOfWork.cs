@@ -39,6 +39,7 @@
         IMrfLastNumberRepository MrfLastNo { get; }
         IMrfEmailApprovalRepository MrfEmailApproval { get; }
         ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; }
+        IMrfdetailsPDFRepository MrfdetailsPDFRepository { get; }
         void Save();
     }
 }
