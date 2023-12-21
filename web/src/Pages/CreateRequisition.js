@@ -18,9 +18,9 @@ export default function CreateRequisition({reqId,reqRoleId,reqstatus=null}) {
         <div className="flex flex-column gap-2 w-full p-3 py-2 h-full ">
         
   
-        {title ? <SearchHeader title={title} /> :<SearchHeader title="Create Requisition"/>}
+        {title ? <SearchHeader title="MRF Details" /> :<SearchHeader title="Create Requisition"/>}
 
-          <CreateRequisitionBody getReqId={reqId} getReqRoleId={reqRoleId} />
+          <CreateRequisitionBody getReqId={reqId} getReqRoleId={reqRoleId} status={reqstatus}/>
         </div>
       </div>
     </>

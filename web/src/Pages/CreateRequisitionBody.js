@@ -11,6 +11,7 @@ import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
 import { mrfStatus } from "../components/constant";
 import { navigateTo } from "../constants/Utils";
+import { MRF_STATUS } from "../constants/config";
 import {
   minExperienceOptions,
   maxExperienceOptions,
@@ -22,7 +23,11 @@ import { storageService } from "../constants/storage";
 import PopupDemo from "./PopupDemo";
 import { Dialog } from "primereact/dialog";
 
-const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
+const CreateRequisitionBody = ({
+  getReqId = null,
+  getReqRoleId = null,
+  status = null,
+}) => {
   // State to hold all the dropdown data
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
@@ -93,6 +98,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
 
+  
   useEffect(() => {
     // Fetch the data for all the dropdowns
     fetch(APIPath + "Mrfdetail/GetMRFDropdownlist")
@@ -235,7 +241,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
         } else {
           toastRef.current.showSuccessMessage("Form submitted successfully!");
           setTimeout(() => {
-            navigateTo("/MyRequisitions");
+            navigateTo("my_requisition");
           }, 2000);
         }
       } else {
@@ -255,30 +261,30 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
     }
   };
 
-  const handelResubmission = (mrfid) => {
-    console.log(mrfid);
-    return (
-      <div>
-        <Dialog visible={visible} onHide={() => setVisible(false)}>
-          <div>
-            <h3>ihihi</h3>
-          </div>
-        </Dialog>
-      </div>
-    );
-  };
+  // const handelResubmission = (mrfid) => {
+  //   console.log(mrfid);
+  //   return (
+  //     <div>
+  //       <Dialog visible={visible} onHide={() => setVisible(false)}>
+  //         <div>
+  //           <h3>re sub misiion</h3>
+  //         </div>
+  //       </Dialog>
+  //     </div>
+  //   );
+  // };
 
   const handleDialog = () => {
     setVisible(true);
     return (
       <div>
-        <Dialog
+        {/* <Dialog
           visible={visible}
           onHide={() => setVisible(false)}
-          footer={footerContent(4)}
+          footer={footerContent(7)}
         >
           <h4>Do yo want to Hold this mrf</h4>
-        </Dialog>
+        </Dialog> */}
       </div>
     );
   };
@@ -324,6 +330,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
     navigateTo("my_requisition");
   };
 
+  // console.log(formData.note)
   return (
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
@@ -343,10 +350,23 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
             <div className="flex flex-column w-6 gap-2">
               <h4 className="text-xl my-2">
                 Reference Number:{" "}
-                <span className="text-red-600">{formData.referenceNo}</span>
+                <span className="text-red-600">
+                  {formData.referenceNo}
+                  {" - "}
+                  {status}
+                </span>
               </h4>
             </div>
           </div>
+        ) : (
+          ""
+        )}
+
+        {getReqRoleId == 3 && formData.mrfStatusId == 3 ? (
+          <label htmlFor="RequisitionType" className="font-semibold text-base">
+            <span className="font-bold text-red-600 text-lg">Note: </span>
+            {formData.note}
+          </label>
         ) : (
           ""
         )}
@@ -1233,18 +1253,18 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
         {(() => {
           if (getReqRoleId == 3) {
             switch (formData.mrfStatusId) {
-              case mrfStatus.draft:
+              case MRF_STATUS.draft:
                 return (
                   <>
                     <ButtonC
                       label="CANCEL"
-                      className="mr-auto w-2 border-red-600 text-red-600"
+                      className=" w-2 border-red-600 text-red-600"
                       onClick={handleCancel}
                       outlined="true"
                       // disable="true"
                     />
                     <ButtonC
-                      label="SAVE AS A DRAFT"
+                      label="SAVE AS DRAFT"
                       className="w-2 bg-red-600 border-red-600"
                       onClick={() => handleSubmit(1)}
                       // disable="true"
@@ -1257,7 +1277,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
                     />
                   </>
                 );
-              case mrfStatus.submToHr:
+              case MRF_STATUS.submToHr:
                 return (
                   <>
                     <ButtonC
@@ -1267,21 +1287,60 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
                     />
                   </>
                 );
-              case mrfStatus.closed:
+              case MRF_STATUS.closed:
                 return (
                   <>
-                    {/* <Dialog visible={true} onHide={() => setVisible(false)}></Dialog>  */}
+                    <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                   </>
                 );
-              case mrfStatus.withdrawn:
-                return <></>;
-              case mrfStatus.onHold:
-                return <></>;
-              case mrfStatus.resubReq:
-                return <></>;
-              case mrfStatus.rejected:
-                return <></>;
-              case mrfStatus.open:
+              case MRF_STATUS.withdrawn:
+                return <><ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    /></>;
+              case MRF_STATUS.onHold:
+                return <><ButtonC
+                label="CANCEL"
+                className=" w-2 border-red-600 text-red-600"
+                onClick={handleCancel}
+                outlined="true"
+                // disable="true"
+              /></>;
+              case MRF_STATUS.resubReq:
+                return (
+                  <><ButtonC
+                  label="CANCEL"
+                  className=" w-2 border-red-600 text-red-600"
+                  onClick={handleCancel}
+                  outlined="true"
+                  // disable="true"
+                />
+                    <ButtonC
+                      label="SUBMIT"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleSubmit(2)}
+                      // disable="true"
+                    />
+                  </>
+                );
+              case MRF_STATUS.rejected:
+                return <><ButtonC
+                label="CANCEL"
+                className=" w-2 border-red-600 text-red-600"
+                onClick={handleCancel}
+                outlined="true"
+                // disable="true"
+              /></>;
+              case MRF_STATUS.open:
                 return (
                   <>
                     <ButtonC
@@ -1292,7 +1351,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
                     <Dialog
                       visible={visible}
                       onHide={() => setVisible(false)}
-                      footer={footerContent(12)}
+                      footer={footerContent(9)}
                     >
                       <h4>Do yo want to Withdraw this mrf</h4>
                     </Dialog>
@@ -1301,28 +1360,16 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
             }
           } else if (getReqRoleId == 4) {
             switch (formData.mrfStatusId) {
-              case mrfStatus.submToHr:
+              case MRF_STATUS.submToHr:
                 return (
                   <>
                     <ButtonC
                       label="Re-submission Required"
                       className="w-2 bg-red-600 border-red-600"
-                      onClick={() => handelResubmission(getReqId)}
+                      // onClick={() => handelResubmission(getReqId)}
                     />
                     <ButtonC
                       label="Received HOD approval"
-                      className="w-2 bg-red-600 border-red-600"
-                      onClick={() => handleDialog()}
-                    />
-                    <Dialog
-                      visible={visible}
-                      onHide={() => setVisible(false)}
-                      footer={footerContent(4)}
-                    >
-                      <h4>Do yo want to send for HOD Approval</h4>
-                    </Dialog>
-                    <ButtonC
-                      label="On Hold"
                       className="w-2 bg-red-600 border-red-600"
                       onClick={() => handleDialog()}
                     />
@@ -1331,36 +1378,68 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
                       onHide={() => setVisible(false)}
                       footer={footerContent(4)}
                     >
-                      <h4>Do yo want to Hold this mrf</h4>
+                      <h4>Do yo want to send for HOD Approval</h4>
                     </Dialog> */}
+                    <ButtonC
+                      label="On Hold"
+                      className="w-2 bg-red-600 border-red-600"
+                      onClick={() => handleDialog()}
+                    />
+                    <Dialog
+                      visible={visible}
+                      onHide={() => setVisible(false)}
+                      footer={footerContent(4)}
+                    >
+                      <h4>Do yo want to Hold this mrf</h4>
+                    </Dialog>
                   </>
                 );
-              case mrfStatus.closed:
+              case MRF_STATUS.closed:
                 return (
                   <>
                     <ButtonC
                       label="CANCEL"
-                      className="mr-auto w-2 border-red-600 text-red-600"
+                      className=" w-2 border-red-600 text-red-600"
                       onClick={handleCancel}
                       outlined="true"
                       // disable="true"
                     />
                   </>
                 );
-              case mrfStatus.withdrawn:
-                return <></>;
-              case mrfStatus.onHold:
-                return <></>;
-              case mrfStatus.resubReq:
-                return <></>;
-              case mrfStatus.rejected:
-                return <></>;
-              case mrfStatus.open:
+              case MRF_STATUS.withdrawn:
                 return (
                   <>
-                    {" "}
                     <ButtonC
-                      label="Add Candidate"
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
+                  </>
+                );
+              case MRF_STATUS.onHold:
+                return <></>;
+              case MRF_STATUS.resubReq:
+                return <></>;
+              case MRF_STATUS.rejected:
+                return (
+                  <>
+                    <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
+                  </>
+                );
+              case MRF_STATUS.open:
+                return (
+                  <>
+                    
+                    <ButtonC
+                      label="Add Resume"
                       className="w-2 bg-red-600 border-red-600"
                       onClick={() => navigateTo("add_candidate")}
                       // disable="true"
@@ -1373,7 +1452,7 @@ const CreateRequisitionBody = ({ getReqId = null, getReqRoleId = null }) => {
               <>
                 <ButtonC
                   label="CANCEL"
-                  className="mr-auto w-2 border-red-600 text-red-600"
+                  className=" w-2 border-red-600 text-red-600"
                   onClick={handleCancel}
                   outlined="true"
                   // disable="true"

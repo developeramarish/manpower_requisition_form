@@ -155,38 +155,38 @@ const ReferenceBodyTemplate = (mrf) => {
             mrfId={mrf.mrfId}
             status={mrf.mrfStatus}
             role={mrf.roleId}
-            message="This MRF is Rejected"
+            // message="This MRF is Rejected"
           />
         );
       case mrfStatus.closed:
         return (
           <MrfLink
             mrfRef={mrfRef}
-            //       mrfId={mrf.mrfId}
-            //       status={mrf.mrfStatus}
-            // role={mrf.roleId}
-            message="This MRF is Closed"
+                  mrfId={mrf.mrfId}
+                  status={mrf.mrfStatus}
+            role={mrf.roleId}
+            // message="This MRF is Closed"
           />
         );
       case mrfStatus.withdrawn:
         return (
           <MrfLink
             mrfRef={mrfRef}
-            // mrfId={mrf.mrfId}
-            // status={mrf.mrfStatus}
-            // role={mrf.roleId}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
 
-            message="This MRF is Withdrawn"
+            // message="This MRF is Withdrawn"
           />
         );
       case mrfStatus.onHold:
         return (
           <MrfLink
             mrfRef={mrfRef}
-            // mrfId={mrf.mrfId}
-            // status={mrf.mrfStatus}
-            // role={mrf.roleId}
-            message="This MRF is on Hold"
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+            // message="This MRF is on Hold"
           />
         );
     }
