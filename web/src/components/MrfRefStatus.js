@@ -275,6 +275,90 @@ const ReferenceBodyTemplate = (mrf) => {
           />
         );
     }
+  }else{
+    switch (mrf.mrfStatusId) {
+      case mrfStatus.submToHr:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.closed:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.withdrawn:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.onHold:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.resubReq:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.rejected:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.open:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.hodapproval:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+      case mrfStatus.cooapproval:
+        return (
+          <MrfLink
+            mrfRef={mrfRef}
+            mrfId={mrf.mrfId}
+            status={mrf.mrfStatus}
+            role={mrf.roleId}
+          />
+        );
+    }
   }
 };
 
