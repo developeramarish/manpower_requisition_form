@@ -122,15 +122,14 @@ const CreateRequisitionBody = ({
         .catch((error) => {
           console.error("Fetch error:", error);
         });
+    } else {
+      setFormData(formSchema);
     }
   }, []);
 
-  useEffect(() => {
-    setFormData(formSchema);
-  }, [getReqId]);
-
   const fetchSubDepartments = (selectedDepartment) => {
-    const apiUrl = API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment;
+    const apiUrl =
+      API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((responseData) => {
@@ -237,10 +236,13 @@ const CreateRequisitionBody = ({
         if (responseData.statusCode === 409) {
           toastRef.current.showConflictMessage(responseData.message);
         } else {
-          if(mrfStatusId==1)
-          {
-          toastRef.current.showSuccessMessage("The MRF has been saved as Draft!");
-          }else{toastRef.current.showSuccessMessage("Form submitted successfully!");}
+          if (mrfStatusId == 1) {
+            toastRef.current.showSuccessMessage(
+              "The MRF has been saved as Draft!"
+            );
+          } else {
+            toastRef.current.showSuccessMessage("Form submitted successfully!");
+          }
           setTimeout(() => {
             navigateTo("my_requisition");
           }, 2000);
@@ -319,7 +321,7 @@ const CreateRequisitionBody = ({
           ""
         )}
 
-        {getReqRoleId == 3 && formData.mrfStatusId == 3 ? (
+        { formData.mrfStatusId == 3 ? (
           <label htmlFor="RequisitionType" className="font-semibold text-base">
             <span className="font-bold text-red-600 text-lg">Note: </span>
             {formData.note}
