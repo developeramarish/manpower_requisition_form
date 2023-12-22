@@ -117,12 +117,13 @@ function App() {
           <>
             <HeaderBar userFirstName={accounts.length > 0 && accounts[0].name.split(" ")[0]} userLastName={accounts.length > 0 && accounts[0].name.split(" ")[1]} />
             <div className='content'>
-              <Sidebar />
+              <Sidebar roleId={profile.roleId} />
               <div className='content_right_wrapper'>
                 {currentPageKey === 'dashboard' && <Dashboard roleId={profile.roleId} userId={profile.employeeId} />}
                 {currentPageKey === 'my_requisition' && <MyRequisitions  roleId={profile.roleId} userId={profile.employeeId} />}
                 {currentPageKey === 'add_candidate' && <AddCandidate reqId={params} />}
-                {(currentPageKey === 'create_requisition' || currentPageKey === 'edit_requisition') && <CreateRequisition reqId={params} reqstatus={statusForTitle} reqRoleId={roleId}  />}
+                {currentPageKey === 'create_requisition' && <CreateRequisition reqstatus={statusForTitle} reqRoleId={roleId}  />}
+                {currentPageKey === 'edit_requisition' && <CreateRequisition reqId={params} reqstatus={statusForTitle} reqRoleId={roleId}  />}
                 
               </div>
             </div>
