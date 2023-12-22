@@ -90,26 +90,26 @@ function Dashboard({roleId,userId}) {
       body: mrfIdResumeRefernceTemplate,
     },
     {
-      field: "new",
+      field: "New",
       header: "New",
       body: (rowData) => filterSelectedColumn(rowData, "New"),
     },
 
     {
-      field: "shortlisted",
+      field: "Shortlisted",
       header: "Shortlisted",
       body: (rowData) => filterSelectedColumn(rowData, "Shortlisted"),
     },
 
     {
-      field: "rejected",
+      field: "Rejected",
       header: "Rejected",
       body: (rowData) => filterSelectedColumn(rowData, "Rejected"),
     },
     {
-      field: "on Hold",
-      header: "on Hold",
-      body: (rowData) => filterSelectedColumn(rowData, "on Hold"),
+      field: "On Hold",
+      header: "On Hold",
+      body: (rowData) => filterSelectedColumn(rowData, "On Hold"),
     },
   ];
 

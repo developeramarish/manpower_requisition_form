@@ -29,6 +29,7 @@ export const API_URL = {
 	`${APIPath}Mrfdetail/GetRequisition/`,
 	GET_CREATE_REQUISITION_DROPDOWN:
 	`${APIPath}Mrfdetail/GetMRFDropdownlist`,
+	POST_CREATE_REQUISITION : `${APIPath}mrfdetail/POST`,
 	
 };
 

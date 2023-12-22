@@ -31,7 +31,7 @@ namespace MRF.DataAccess.Repository
              (mrfDetails, InterviewGroup) => new InterviewDetailsViewModel
              {
                  MrfId = mrfDetails.Id,
-                 InterviewerEmployeeIds = string.Join(",", InterviewGroup.Select(r => r.InterviewerEmployeeId))
+                 InterviewerEmployeeIds = string.Join(",", InterviewGroup.Select(r => r.InterviewerEmployeeId).Distinct())
              }
          );
 
@@ -51,7 +51,7 @@ namespace MRF.DataAccess.Repository
                     (combined, interviewGroup) => new InterviewDetailsViewModel
                     {
                         CandidateId = combined.candidate.Id,
-                        InterviewerEmployeeIds = string.Join(",", interviewGroup.Select(r => r.InterviewerId.ToString()))
+                        InterviewerEmployeeIds = string.Join(",", interviewGroup.Select(r => r.InterviewerId).Distinct())
                     }
                 );
 

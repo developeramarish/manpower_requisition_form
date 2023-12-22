@@ -34,7 +34,7 @@ namespace MRF.DataAccess.Repository
              (mrfDetails, resumeGroup) => new ResumeDetailsViewModel
              {
                  MrfId = mrfDetails.Id,
-                 ResumeReviewerEmployeeIds = string.Join(",", resumeGroup.Select(r => r.ResumeReviewerEmployeeId))
+                 ResumeReviewerEmployeeIds = string.Join(",", resumeGroup.Select(r => r.ResumeReviewerEmployeeId).Distinct())
              }
          );
 
@@ -50,7 +50,7 @@ namespace MRF.DataAccess.Repository
          on new { MrfId = mrfDetails.Id, IsEmptyReview = candidate.ReviewedByEmployeeIds == "" }
          equals new { resume.MrfId, IsEmptyReview = true } into resumeJoin
     from resume in resumeJoin.DefaultIfEmpty()
-    where mrfDetails.Id == mrfId && status.Status.Contains("resume")
+    where mrfDetails.Id == mrfId 
     select new ResumeDetailsViewModel
     {
         MrfId = mrfDetails.Id,

@@ -223,7 +223,7 @@ const CreateRequisitionBody = ({
     };
     console.log(data);
     try {
-      const response = await fetch(APIPath + "mrfdetail/POST", {
+      const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -237,7 +237,10 @@ const CreateRequisitionBody = ({
         if (responseData.statusCode === 409) {
           toastRef.current.showConflictMessage(responseData.message);
         } else {
-          toastRef.current.showSuccessMessage("Form submitted successfully!");
+          if(mrfStatusId==1)
+          {
+          toastRef.current.showSuccessMessage("The MRF has been saved as Draft!");
+          }else{toastRef.current.showSuccessMessage("Form submitted successfully!");}
           setTimeout(() => {
             navigateTo("my_requisition");
           }, 2000);
