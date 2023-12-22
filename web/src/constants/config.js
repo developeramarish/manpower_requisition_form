@@ -1,6 +1,6 @@
 export const APP_KEY = "MRF_v1.0";
-const APIPath="https://localhost:7128/api/";
-//const APIPath="https://10.22.11.101:90/api/";
+//const APIPath="https://localhost:7128/api/";
+const APIPath="https://10.22.11.101:90/api/";
 export const API_URL = {
 	
 	MRF_STATUS_SUMMARY:
