@@ -12,6 +12,7 @@ import {
 	arrayToObj,
 	objToIntArray,
 	getData,
+	strToArray,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 
@@ -56,10 +57,12 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			const data = response.result;
 			let arr = new Array(data.interviewDetails.length).fill(false); // for save bttn
 			setInterviewData(data.interviewDetails);
+			console.log(data.interviewDetails,data.interviewReviewer);
 			setInterviewStatus(data.interviewstatus);
 				//data.interviewstatus.filter((x) => x.candidateorEvalution === "E")
 			//);
 			setInterviewerData(data.interviewReviewer);
+
 			setSaveBttn(arr);
 		}
 
@@ -128,7 +131,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 				options={interviewerData}
 				value={arrayToObj(
 					interviewerData,
-					interview.interviewerEmployeeId,
+					strToArray(interview.interviewerEmployeeIds),
 					"employeeId"
 				)}
 				onChange={handleMultiSelectChange}
