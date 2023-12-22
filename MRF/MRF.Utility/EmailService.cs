@@ -18,7 +18,7 @@ namespace MRF.Utility
             FromEmail = _configuration["SendGridSettings:FromEmail"];
             SenderName = _configuration["SendGridSettings:SenderName"];
         }
-        public async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
+        public async Task SendEmailAsync(string toEmail, string subject, string htmlContent, string attachmentPath = null)
         {
             try
             {
@@ -35,15 +35,27 @@ namespace MRF.Utility
 
                     msg.AddTo(emailTo[i]);
 
+                    if (attachmentPath != null)
+                    {
+                        byte[] fileBytes = File.ReadAllBytes(attachmentPath);
+                        msg.AddAttachment(Path.GetFileName(attachmentPath), Convert.ToBase64String(fileBytes));
+                    }
+
                     var response = await _sendGridClient.SendEmailAsync(msg);
-                    if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
+                    if (!response.IsSuccessStatusCode)
                     {
                         throw new Exception($"Failed to send email. Status code: {response.StatusCode}");
                     }
                 }
             }
-            catch(Exception e) { }
+            catch (Exception e)
+            {
+                // Log the exception or handle it accordingly
+                Console.WriteLine($"Exception occurred while sending email: {e.Message}");
+                throw; // Re-throw the exception to maintain the flow
+            }
         }
+
 
         public bool IsValidUpdateValue(object value)
         {
