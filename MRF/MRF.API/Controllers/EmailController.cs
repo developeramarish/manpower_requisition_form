@@ -1,12 +1,10 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mail;
-using Document = iTextSharp.text.Document;
+
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 
@@ -78,17 +76,17 @@ namespace MRF.API.Controllers
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
                         // Create a new document
-                        Document doc = new Document();
-                        PdfWriter.GetInstance(doc, memoryStream);
+                        //Document doc = new Document();
+                        //PdfWriter.GetInstance(doc, memoryStream);
 
-                        // Open the document for writing
-                        doc.Open();
+                        //// Open the document for writing
+                        //doc.Open();
 
-                        // Add content to the document
-                        doc.Add(new Paragraph(emailRequest.Content));
+                        //// Add content to the document
+                        //doc.Add(new Paragraph(emailRequest.Content));
 
-                        // Close the document
-                        doc.Close();
+                        //// Close the document
+                        //doc.Close();
 
                         // Convert the MemoryStream to a byte array
                         byte[] pdfData = memoryStream.ToArray();
