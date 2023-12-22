@@ -30,13 +30,14 @@ export const API_URL = {
 	GET_CREATE_REQUISITION_DROPDOWN:
 	`${APIPath}Mrfdetail/GetMRFDropdownlist`,
 	POST_CREATE_REQUISITION : `${APIPath}mrfdetail/POST`,
+	ADD_CANDIDATE :`${APIPath}Candidatedetail/Post`,
 	
 };
 
 export const FILE_URL = {
 	RESUME: `${APIPath}Resume`,
 	ASSIGNMENT: `${APIPath}Assignment`,
-
+	RESUME_UPLOAD: 'https://10.22.11.101:90/api/Upload?ResumeOrAssign=Resume&FileName='
 };
 
 export const ROUTES = {

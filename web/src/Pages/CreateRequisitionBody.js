@@ -21,6 +21,8 @@ import {
 } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import MrfPartialStatus from "../components/MrfPartialStatus";
+import { useDispatch } from "react-redux";
+import { PAGE_ACTIONS } from "../reducers/Page_r";
 
 const CreateRequisitionBody = ({
   getReqId = null,
@@ -34,6 +36,7 @@ const CreateRequisitionBody = ({
   const RedAsterisk = () => <span className="text-red-500">*</span>;
   const [visible, setVisible] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
+  const dispatch = useDispatch()
 
   const toastRef = useRef(null);
   // const navigate = useNavigate();
@@ -122,15 +125,14 @@ const CreateRequisitionBody = ({
         .catch((error) => {
           console.error("Fetch error:", error);
         });
+    } else {
+      setFormData(formSchema);
     }
   }, []);
 
-  useEffect(() => {
-    setFormData(formSchema);
-  }, [getReqId]);
-
   const fetchSubDepartments = (selectedDepartment) => {
-    const apiUrl = API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment;
+    const apiUrl =
+      API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((responseData) => {
@@ -237,10 +239,13 @@ const CreateRequisitionBody = ({
         if (responseData.statusCode === 409) {
           toastRef.current.showConflictMessage(responseData.message);
         } else {
-          if(mrfStatusId==1)
-          {
-          toastRef.current.showSuccessMessage("The MRF has been saved as Draft!");
-          }else{toastRef.current.showSuccessMessage("Form submitted successfully!");}
+          if (mrfStatusId == 1) {
+            toastRef.current.showSuccessMessage(
+              "The MRF has been saved as Draft!"
+            );
+          } else {
+            toastRef.current.showSuccessMessage("Form submitted successfully!");
+          }
           setTimeout(() => {
             navigateTo("my_requisition");
           }, 2000);
@@ -319,7 +324,7 @@ const CreateRequisitionBody = ({
           ""
         )}
 
-        {getReqRoleId == 3 && formData.mrfStatusId == 3 ? (
+        { formData.mrfStatusId == 3 ? (
           <label htmlFor="RequisitionType" className="font-semibold text-base">
             <span className="font-bold text-red-600 text-lg">Note: </span>
             {formData.note}
@@ -1235,13 +1240,21 @@ const CreateRequisitionBody = ({
                   </>
                 );
               case MRF_STATUS.submToHr:
-                return (
+                return (<>
+                  <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                   <MrfPartialStatus
                     mrfId={getReqId}
                     mrfStatusId={9}
                     label={"Withdraw"}
                     message={"Do you want to withdraw"}
                   />
+                  </>
                 );
               case MRF_STATUS.closed:
                 return (
@@ -1314,13 +1327,20 @@ const CreateRequisitionBody = ({
                   </>
                 );
               case MRF_STATUS.open:
-                return (
+                return (<>
+                <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                   <MrfPartialStatus
                     mrfId={getReqId}
                     mrfStatusId={9}
                     label={"Withdraw"}
                     message={"Do you want to withdraw"}
-                  />
+                  /></>
                 );
             }
           } else if (getReqRoleId == 4) {
@@ -1328,6 +1348,13 @@ const CreateRequisitionBody = ({
               case MRF_STATUS.submToHr:
                 return (
                   <>
+                  <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                     <MrfPartialStatus
                       mrfId={getReqId}
                       mrfStatusId={3}
@@ -1338,8 +1365,8 @@ const CreateRequisitionBody = ({
 
                     <MrfPartialStatus
                       mrfId={getReqId}
-                      mrfStatusId={4}
-                      label={"Received HOD approval"}
+                      mrfStatusId={11}
+                      label={"Awaiting HOD approval"}
                       message={"“Do you want to submit it for HOD approval?"}
                     />
 
@@ -1380,6 +1407,13 @@ const CreateRequisitionBody = ({
               case MRF_STATUS.onHold:
                 return (
                   <>
+                  <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                     <MrfPartialStatus
                       mrfId={getReqId}
                       mrfStatusId={4}
@@ -1391,6 +1425,13 @@ const CreateRequisitionBody = ({
               case MRF_STATUS.hodapproval:
                 return (
                   <>
+                  <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                     <MrfPartialStatus
                       mrfId={getReqId}
                       mrfStatusId={5}
@@ -1409,6 +1450,13 @@ const CreateRequisitionBody = ({
               case MRF_STATUS.cooapproval:
                 return (
                   <>
+                  <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                     <MrfPartialStatus
                       mrfId={getReqId}
                       mrfStatusId={6}
@@ -1425,7 +1473,13 @@ const CreateRequisitionBody = ({
                 );
               case MRF_STATUS.resubReq:
                 return (
-                  <>
+                  <><ButtonC
+                  label="CANCEL"
+                  className=" w-2 border-red-600 text-red-600"
+                  onClick={handleCancel}
+                  outlined="true"
+                  // disable="true"
+                />
                     {/* <MrfPartialStatus  mrfId={getReqId} mrfStatusId={4} label={"Received HOD approval"} message={"“Do you want to submit it for HOD approval?"}/> */}
                   </>
                 );
@@ -1442,13 +1496,68 @@ const CreateRequisitionBody = ({
                     />
                   </>
                 );
+              case MRF_STATUS.awaitHodApproval:
+                return (
+                  <>
+                    {/* <MrfPartialStatus popupmessage={"MRF is rejected"} /> */}
+                    <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
+                    <MrfPartialStatus
+                      mrfId={getReqId}
+                      mrfStatusId={12}
+                      label={"Received HOD approval"}
+                      message={"“Do you want to submit it for COO approval?"}
+                    />
+                  </>
+                );
+              case MRF_STATUS.awaitCooApproval:
+                return (
+                  <>
+                    {/* <MrfPartialStatus popupmessage={"MRF is rejected"} /> */}
+                    <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
+                    <MrfPartialStatus
+                      mrfId={getReqId}
+                      mrfStatusId={6}
+                      label={"Open"}
+                      message={"“Do you want to Open this MRF?"}
+                    />
+                  </>
+                );
               case MRF_STATUS.open:
                 return (
                   <>
+                  <ButtonC
+                      label="CANCEL"
+                      className=" w-2 border-red-600 text-red-600"
+                      onClick={handleCancel}
+                      outlined="true"
+                      // disable="true"
+                    />
                     <ButtonC
                       label="Add Resume"
                       className="w-2 bg-red-600 border-red-600"
-                      onClick={() => navigateTo("add_candidate")}
+                      onClick={() => {
+                        dispatch(
+                          PAGE_ACTIONS.setParams({
+                            params: {
+                              mrfId : getReqId,
+                              referenceNo: formData.referenceNo
+                            }                            
+                          })
+                        );
+                        navigateTo("add_candidate");
+                      }}
                       // disable="true"
                     />
                   </>

@@ -4,7 +4,7 @@ import SearchHeader from "./../components/SearchHeader";
 import CreateRequisitionBody from "./CreateRequisitionBody";
 // import { useParams } from "react-router-dom";
 
-export default function CreateRequisition({reqId,reqRoleId,reqstatus=null}) {
+export default function CreateRequisition({reqId=null,reqRoleId,reqstatus=null}) {
   // const { reqId } = useParams();
   // console.log(reqId)
   // console.log(reqstatus)
