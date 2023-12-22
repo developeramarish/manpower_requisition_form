@@ -4,7 +4,7 @@ appendCommitMessageToRunName: false
 
 # Define the trigger for the pipeline to run when changes occur in the 'web_mrf' branch
 trigger:
-- web_mrf
+- main
 
 # Use the latest Ubuntu image as the build agent pool
 pool:
