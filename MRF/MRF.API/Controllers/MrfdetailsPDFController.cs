@@ -1,7 +1,4 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.tool.xml;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
@@ -108,15 +105,15 @@ namespace MRF.API.Controllers
 
                 using (FileStream stream = new FileStream(pdfFilePath, FileMode.Create))
                 {
-                    Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
-                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                    pdfDoc.Open();
+                    //Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                    //PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                    //pdfDoc.Open();
 
-                    // Read HTML content from the file and convert it to PDF
-                    StreamReader srHtml = new StreamReader(htmlFilePath, Encoding.UTF8); // Read from the HTML file
-                    XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, srHtml);
+                    //// Read HTML content from the file and convert it to PDF
+                    //StreamReader srHtml = new StreamReader(htmlFilePath, Encoding.UTF8); // Read from the HTML file
+                    //XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, srHtml);
 
-                    pdfDoc.Close();
+                    //pdfDoc.Close();
                 }
 
                 return mrfdetailpdf;
