@@ -37,7 +37,7 @@ function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
   const dispatch = useDispatch();
-  const { currentPageKey, params, statusForTitle, roleId } = useSelector(
+  const { currentPageKey, params } = useSelector(
     (state) => state.page
   );
   const { currentDevice, touchDevice } = useSelector((state) => state.device);
@@ -162,8 +162,8 @@ function App() {
                 )}
                 {currentPageKey === "create_requisition" && (
                   <CreateRequisition
-                    reqstatus={params.statusForTitle}
-                    reqRoleId={params.roleId}
+                    // reqstatus={params.statusForTitle}
+                    // reqRoleId={params.roleId}
                   />
                 )}
                 {currentPageKey === "edit_requisition" && (
