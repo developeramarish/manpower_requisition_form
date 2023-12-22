@@ -21,6 +21,8 @@ import {
 } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import MrfPartialStatus from "../components/MrfPartialStatus";
+import { useDispatch } from "react-redux";
+import { PAGE_ACTIONS } from "../reducers/Page_r";
 
 const CreateRequisitionBody = ({
   getReqId = null,
@@ -34,6 +36,7 @@ const CreateRequisitionBody = ({
   const RedAsterisk = () => <span className="text-red-500">*</span>;
   const [visible, setVisible] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
+  const dispatch = useDispatch()
 
   const toastRef = useRef(null);
   // const navigate = useNavigate();
@@ -1544,7 +1547,17 @@ const CreateRequisitionBody = ({
                     <ButtonC
                       label="Add Resume"
                       className="w-2 bg-red-600 border-red-600"
-                      onClick={() => navigateTo("add_candidate")}
+                      onClick={() => {
+                        dispatch(
+                          PAGE_ACTIONS.setParams({
+                            params: {
+                              mrfId : getReqId,
+                              referenceNo: formData.referenceNo
+                            }                            
+                          })
+                        );
+                        navigateTo("add_candidate");
+                      }}
                       // disable="true"
                     />
                   </>

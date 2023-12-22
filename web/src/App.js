@@ -155,7 +155,10 @@ function App() {
                   />
                 )}
                 {currentPageKey === "add_candidate" && (
-                  <AddCandidate reqId={params} />
+                  <AddCandidate 
+                  reqId={params.mrfId}
+                  referenceNo={params.referenceNo}
+                   />
                 )}
                 {currentPageKey === "create_requisition" && (
                   <CreateRequisition

@@ -3,7 +3,7 @@ import InputTextCp from "./../components/Textbox";
 import ButtonC from "./../components/Button";
 import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
-import { APIPath, removeSpaces } from "./../components/constant";
+import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import { navigateTo } from "../constants/Utils";
 import { API_URL } from "../constants/config";
@@ -14,6 +14,9 @@ const AddCandidate = (reqId) => {
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
+ // console.log(referenceNo);
+  console.log(reqId);
+  console.log(reqId.referenceNo);
   const formSchema = {
     id: 0,
     mrfId: reqId.reqId,
@@ -62,7 +65,7 @@ const AddCandidate = (reqId) => {
           reason: "",
         };
         try {
-          const response = await fetch(API_URL.RESUME_SUMMARY_POST, {
+          const response = fetch(API_URL.ADD_CANDIDATE, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -113,16 +116,22 @@ const AddCandidate = (reqId) => {
             className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
             style={{ height: "81vh" }}
           >
-            <h3 className="text-xl my-2">Fill the Details
-            <span className="text-red-600"></span>
+            <h3 className="text-xl my-2">Fill the Details : 
+            
             </h3>
             <section
               className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
               style={{ height: "95%" }}
             >
+              <h4 className="text-xl my-2">Reference Number :
+              <span className="text-red-600"> {reqId.referenceNo}</span>
+              </h4>
               <div className="flex justify-content-between gap-5">
+              
                 <div className="flex flex-column w-6 gap-2">
+                
                   <label htmlFor="name" className="font-bold text-sm">
+                 
                     Name
                   </label>
                   <InputTextCp
