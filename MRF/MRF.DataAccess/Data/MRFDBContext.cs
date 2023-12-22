@@ -45,5 +45,7 @@ namespace MRF.DataAccess.Data
         public DbSet<MrfEmailApproval> MrfEmailApproval { get; set; }
         public DbSet<CandidateInterviewFeedback> CandidateInterviewFeedback { get; set; }
         public DbSet<mrfDetailsStatusHistory> mrfDetailsStatusHistory { get; set; }
+        public DbSet<MrfdetailsPDF> MrfdetailsPDF { get; set; }
+
     }
 }
