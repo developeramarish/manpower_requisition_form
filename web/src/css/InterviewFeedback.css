@@ -1,0 +1,37 @@
+.feed-popup {
+	font-weight: 500;
+	color: #0b1016;
+}
+.feed-popup .p-dialog-content {
+	padding: 0;
+}
+
+.feed-popup .p-dialog-title {
+	font-size: 16px;
+}
+
+.no-feed {
+	width: 300px;
+	padding-bottom: 20px;
+	text-align: center;
+}
+
+.feed-popup-content {
+	margin: 0;
+	width: 600px;
+	font-size: 14px;
+	padding: 20px 30px;
+	padding-top: 0;
+}
+
+.feed-li {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.feed-li p:first-child {
+	color: #d32f2e;
+	min-width: 100px;
+}

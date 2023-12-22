@@ -1,0 +1,341 @@
+.dashboard_wrapper {
+  /* width: calc(100% - 100px); */
+  /* height: 95vh; */
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f6f6;
+}
+
+.dashboard_wrapper .dashboard_header {
+  margin-left: 25px;
+  margin-top: 25px;
+}
+
+.dashboard_header h3 {
+  color: #0b1016;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.header h4 {
+  color: #0b1016;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.dashboard_wrapper .dashboard_body {
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard_wrapper .dashboard_body .dashboard_body_left {
+  width: 30%;
+  padding-top: 15px;
+}
+
+.dashboard_wrapper .dashboard_body .dashboard_body_right {
+  width: 70%;
+}
+
+.mrf_status_summary .mrf_table {
+  /* height: 70vh;
+  width: 25vw; */
+  width: 100%;
+}
+
+.mrf_status_summary .table_status {
+  color: #0b1016;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mrf_status_summary .table_count {
+  color: #0b1016;
+  font-weight: 600;
+  font-size: 14px;
+  padding-right: 20px;
+}
+
+.dashboard_body_left .mrf_status_summary {
+  height: 100%;
+  margin: 0px 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+}
+
+.dashboard_wrapper .mrf_status_summary .table_status {
+  padding-left: 26px;
+}
+
+.dashboard_wrapper .mrf_status_summary {
+  & th {
+    text-align: left;
+    /*  height: 7vh; */
+    /*  padding-left: 14px; */
+    
+    border-top: 1px solid rgb(212, 212, 212);
+    border-bottom: 1px solid rgb(212, 212, 212);
+    
+    background-color: #fafbfd;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-right: 20px;
+  }
+  
+  & td {
+    /* margin-left: 40px; 
+    margin-right: 10px;*/
+    padding-left: 26px;
+    
+    font-weight: 500;
+    font-size: 14px;
+    border-top: 1px solid #e3e3e3;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    padding-right: 20px;
+  }
+}
+.dashboard_wrapper .mrf_status_summary .mrf_summary_total_count{
+  padding-left: 0px;
+}
+
+.dashboard_body_right .mrf_interview_summary {
+  & th {
+    align-items: center;
+    /* height: 45px; */
+    padding: 10px 14px;
+    /*  width: 15vw; */
+    border-top: 1px solid rgb(212, 212, 212);
+    border-bottom: 1px solid rgb(212, 212, 212);
+    background-color: #fafbfd;
+  }
+
+  & td {
+    margin-left: 40px;
+    margin-right: 10px;
+    padding: 10px;
+
+    border-bottom: 1px solid black;
+  }
+}
+
+.dashboard_body_right .mrf_resume_summary {
+  & th {
+    align-items: center;
+    /*  width: 15vw;
+    height: 45px; */
+    padding: 10px 14px;
+    border-top: 1px solid rgb(212, 212, 212);
+    border-bottom: 1px solid rgb(212, 212, 212);
+    background-color: #fafbfd;
+  }
+
+  & td {
+    margin-left: 40px;
+    margin-right: 10px;
+    padding: 10px;
+
+    border-bottom: 1px solid black;
+  }
+}
+
+.dashboard_body_right .mrf_interview_summary tbody tr:last-child td,
+.dashboard_body_right .mrf_resume_summary tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.dashboard_body_right .mrf_interview_summary tbody tr td:not(:first-child),
+.dashboard_body_right .mrf_interview_summary thead tr:last-child th,
+.dashboard_body_right .mrf_resume_summary tbody tr td:not(:first-child),
+.dashboard_body_right .mrf_resume_summary thead tr:last-child th {
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.dashboard_wrapper .header {
+  padding: 20px;
+  font-size: larger;
+}
+
+.rejected_row {
+  padding-left: 6px;
+}
+
+.dashboard_body_right .header {
+  padding: 18px;
+}
+
+.dashboard_wrapper .mrf_summary_total_count {
+  color: red;
+  text-decoration: underline;
+}
+
+.dashboard_wrapper .mrf_summary_total_count.count_zero {
+  text-decoration: none;
+}
+
+.mrf_interview_summary {
+   /*width: 62vw; 
+  height: 300px;*/
+  margin: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+
+  & td {
+    /*  width: 35vw; */
+    height: 4vh;
+    background-color: rgb(255, 255, 255);
+  }
+
+  & thead {
+    text-align: left;
+    /* display: block; */
+
+    /* width: 62vw; */
+  }
+
+  & tbody {
+    /* display: block; */
+    text-align: justify;
+
+    /* width: 62vw; */
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+.mrf_interview_summary .mrf_table {
+  background-color: rgb(255, 255, 255);
+  overflow: auto;
+  height: 255px;
+}
+
+.mrf_resume_summary .mrf_table {
+  background-color: rgb(255, 255, 255);
+  overflow: auto;
+  height: 255px;
+}
+
+
+.mrf_resume_summary {
+  /* width: 62vw;
+  height: 300px; */
+  margin: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+
+  & td {
+    /* width: 13vw; */
+    height: 4vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  & thead {
+    /* display: block; */
+
+    text-align: justify;
+    /* width: 62vw; */
+  }
+
+  & tbody {
+    text-align: justify;
+    /* display: block;  */
+    /*  width: 64vw; */
+  }
+}
+
+.mrf_interview_summary tbody {
+  background-color: rgb(255, 255, 255);
+  height: 135px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.mrf_resume_summary tbody {
+  background-color: rgb(255, 255, 255);
+  height: 14vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.btn_mrf_id {
+  color: #d32f2e;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-align: left;
+  background-color: #ffffff;
+}
+
+.mrf_resume_summary .table_heading_Resume {
+  text-align: center;
+  color: #0b1016;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mrf_interview_summary .table_heading_Resume {
+  text-align: center;
+  color: #0b1016;
+  font-weight: 600;
+
+  font-size: 14px;
+}
+
+.mrf_interview_summary .table_heading {
+  color: #0b1016;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mrf_resume_summary .table_heading {
+  color: #0b1016;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mrf_interview_summary .subheading {
+  color: #68696b;
+  /* color: #0b1016; */
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.mrf_resume_summary .subheading {
+  color: #68696b;
+  /* color: #0b1016; */
+  font-weight: 500;
+  font-size: 14px;
+}
+
+
+
+
+/* code for scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #d3d2d8;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8b8b8b;
+}

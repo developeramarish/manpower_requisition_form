@@ -2,9 +2,9 @@
 name: MRF-Front-End-Build-Pipeline
 appendCommitMessageToRunName: false
 
-# Define the trigger for the pipeline to run when changes occur in azure-pipelines branch
+# Define the trigger for the pipeline to run when changes occur in the 'web_mrf' branch
 trigger:
-- main
+- web_mrf
 
 # Use the latest Ubuntu image as the build agent pool
 pool:
@@ -12,32 +12,24 @@ pool:
 
 # Define variables for the source and build directories
 variables:
-  uiSource: 'Frontend'
-  uiBuild: '$(uiSource)/build'
+  uiSource: 'web'               # Source directory name
+  uiBuild: '$(uiSource)/build' # Build output directory path
 
 # Define the sequence of steps to execute in the pipeline
 steps:
-- task: NodeTool@0
+- task: NodeTool@0                 # Use NodeTool task
   inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js' # Displayed name for the step
+    versionSpec: '14.x'           # Specify Node.js version
+  displayName: 'Install Node.js'   # Displayed name for the step
 
 - script: |
-    cd $(uiSource) # Change directory to the specified source
-    npm install    # Install dependencies
-    npm run build  # Build the application
+    cd $(uiSource)  # Change directory to the specified source
+    npm install     # Install project dependencies
+    npm run build   # Build the application using npm script
   displayName: 'npm install and build' # Displayed name for the step
 
-- task: ArchiveFiles@2
+- task: PublishBuildArtifacts@1     # Publish build artifacts task
   inputs:
-    rootFolderOrFile: '$(uiBuild)' # Set the root folder or file to be archived
-    includeRootFolder: false        # Exclude the root folder from the archive
-    archiveType: 'zip'              # Define the archive type as ZIP
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' # Define the archive file path
-    replaceExistingArchive: true    # Replace the existing archive, if any
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' # Set the path to publish artifacts
-    artifactName: 'drop'             # Define the name for the artifact
-    publishLocation: 'Container'     # Publish artifacts to the build container
+    pathtoPublish: '$(uiBuild)'    # Set the path to publish artifacts
+    artifactName: 'drop'           # Define the name for the artifact
+    publishLocation: 'Container'   # Publish artifacts to the build container

@@ -1,0 +1,38 @@
+.sidebar *{
+  margin: 0;
+  padding: 0;
+}
+.sidebar {
+  display: flex;
+  background-color: #d32f2e;
+  width: 100px;
+}
+
+.sidebar a {
+  padding: 15px;
+  text-decoration: none;
+  font-size: 10px;
+  color: #ffffff;
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.sidebar a.active:before {
+  content: "";
+  position: absolute;
+  border: 2px solid #fff;
+  height: 60%;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.sidebar a:hover {
+  background-color: #d55656;
+}
+
+.sidebar a.active {
+  background-color: #060004;
+}

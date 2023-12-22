@@ -1,0 +1,64 @@
+.top_band{
+  height: 75px;
+}
+header{
+  height: 100%;
+  padding: 15px;
+  border-bottom: 1px solid rgb(212, 212, 212);
+ }
+
+ h4{
+  margin-left: 6px;
+  color: 333333;
+  font-family: 'Poppins';
+  font-size: 14px;
+  font-weight:600 ;
+ }
+
+ .acc-name span{
+  color: #979799;
+
+ }
+ 
+.flex-add{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+  .logo {
+    margin-right: auto;
+   }
+   
+ 
+  .logged-in-user{
+    text-transform: uppercase;
+   
+    font-size: 12px;
+
+  }
+  .acc-name p {
+    /* color: #979799; */
+    font-size: 12px;
+    font-weight:500;
+    
+  }
+  
+  
+  .acc-name button{
+    color: #979799;
+    margin: auto 10px;
+    font-size: 12px;
+    font-weight:500;
+    
+  }
+  
+  .acc-name .acc-logo {
+    border: 1px solid gray;
+    text-align: center;
+    border-radius: 50%;
+    padding: 1.2vh;
+    color: black;
+    margin-right: 10px;
+    font-weight:700;
+  }

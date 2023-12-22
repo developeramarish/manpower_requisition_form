@@ -1,0 +1,46 @@
+* {
+ /*  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none; */
+  font-family: "Poppins";
+  /*  overflow: hidden; */
+}
+
+/* Reset button font styles */
+button {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: normal;
+
+  background-color: transparent;
+  box-sizing: border-box;
+  border: none;
+ /*  margin: 0;
+  padding: 0; */
+  cursor: pointer;
+  /* display: flex; */
+}
+
+/* Disable events on any elements within the button element */
+button * {
+  pointer-events: none;
+}
+
+a {
+  cursor: pointer;
+}
+.content {
+  display: flex;
+}
+.App{
+  position: relative;
+	max-width: 1600px;
+	min-height: 100vh;
+    margin: 0 auto;
+	overflow: hidden;
+}
+
+.content_right_wrapper{
+  width: calc(100% - 100px);
+}
