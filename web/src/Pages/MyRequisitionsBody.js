@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-// import { Link } from "react-router-dom";
 import { APIPath } from "./../components/constant";
 import ReferenceBodyTemplate from "./MrfRefStatus";
 import "../styles/layout/MyRequisitionsBody.css";
@@ -11,22 +10,7 @@ function MyRequisitionsBody({roleId}) {
   const [reqData, setReqData] = useState([]);
    
   useEffect(() => {
-    //if we pass id 0 then ge get all the data otherwise we get specific data like id=1
-   
-   /*  fetch(apiUrl)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response)
-        if (Array.isArray(response.result)) {
-          const data = response.result;
-          setReqData(data);
-        } else {
-          console.error("API response result is not an array:", response);
-        }
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      }); */
+    
       getReqData();
   }, []);
 async function getReqData(){
@@ -36,7 +20,7 @@ async function getReqData(){
 }
   const header = <h3 className="req-header">My Requisitions</h3>;
 
-  //underline text-red-600
+  
   const createdOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
   };

@@ -49,41 +49,38 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 	const [showFeed, setShowFeed] = useState(false);
 	const [selectedId, setSelectedId] = useState(null);
 
-	useEffect(() => {
-		async function getIntData() {
-			const apiUrl =
-				API_URL.INTERVIEW_SUMMARY_POPUP + `?id=${mrfId}&DashBoard=true`;
-			let response = await getData(apiUrl);
-			const data = response.result;
-			let arr = new Array(data.interviewDetails.length).fill(false); // for save bttn
-			setInterviewData(data.interviewDetails);
-			console.log(data.interviewDetails,data.interviewReviewer);
-			setInterviewStatus(data.interviewstatus);
-				//data.interviewstatus.filter((x) => x.candidateorEvalution === "E")
-			//);
-			setInterviewerData(data.interviewReviewer);
-
-			setSaveBttn(arr);
-		}
-
+	async function getIntData() {
+		const apiUrl =
+		  API_URL.INTERVIEW_SUMMARY_POPUP + `?id=${mrfId}&DashBoard=true`;
+		let response = await getData(apiUrl);
+		const data = response.result;
+		let arr = new Array(data.interviewDetails.length).fill(false);
+		setInterviewData(data.interviewDetails);
+		setInterviewStatus(data.interviewstatus);
+		setInterviewerData(data.interviewReviewer);
+		setSaveBttn(arr);
+	  }
+	  
+	  useEffect(() => {
 		if (mrfId) {
-			getIntData();
+		  getIntData();
 		}
-	}, [mrfId]);
-
-	if (interviewData[0] == null) {
+	  }, [mrfId]);
+	  
+	  /*if (!interviewData || interviewData.length === 0) {
 		return (
-			<Dialog
-				header="MRF ID (Interview Summary)"
-				visible={visible}
-				onHide={onHide}
-				draggable={false}
-				className="int-card no-res-card"
-			>
-				No Result Found
-			</Dialog>
+		  <Dialog
+			header="MRF ID (Interview Summary)"
+			visible={visible}
+			onHide={onHide}
+			draggable={false}
+			className="int-card no-res-card"
+		  >
+			No Result Found
+		  </Dialog>
 		);
-	}
+	  }*/
+	   
 
 	const statusBodyTemplate = (interview, options) => {
 		const handleDropdownChange = (e) => {
@@ -178,6 +175,12 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			sortable: true,
 		},
 		{
+			field: "positionTitle",
+			header: "Position",
+			body: interviewData.positionTitle,
+			sortable: true,
+		},
+		{
 			field: "createdOnUtc",
 			header: "Uploaded On",
 			body: uploadedOnBodyTemplate,
@@ -245,13 +248,13 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 					/>
 				))}
 			</DataTable>
-			<InterviewFeedbackComponent
-				visible={showFeed}
-				onHide={setShowFeed}
-				cId={selectedId}
-			/>
+			
 		</Dialog>
 	);
 };
-
+/*<InterviewFeedbackComponent
+				visible={showFeed}
+				onHide={setShowFeed}
+				cId={selectedId}
+			/>*/
 export default InterviewSummary;

@@ -64,7 +64,7 @@ namespace MRF.DataAccess.Repository
         ResumePath = candidate.ResumePath,
         CandidateId = candidate.Id,
         Reason = candidate.Reason,
-
+        PositionTitle = mrfDetails.PositionTitle,
 
     };
 
