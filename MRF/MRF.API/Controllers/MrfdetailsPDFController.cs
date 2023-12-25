@@ -37,34 +37,32 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public  MrfdetailsPDFRequestModel GetRequisition(int MrfId)
+        public MrfdetailsPDFRequestModel GetRequisition(int MrfId)
         {
             MrfdetailsPDFRequestModel mrfdetailpdf = _unitOfWork.MrfdetailsPDFRepository.GetRequisition(MrfId);
 
             if (mrfdetailpdf == null)
             {
                 _logger.LogError($"No result found by this Id:{MrfId}");
-                MrfdetailsPDFRequestModel blankData = new MrfdetailsPDFRequestModel();
-                return blankData;
+                return new MrfdetailsPDFRequestModel(); // Return an empty instance directly
             }
-            else
+
+            string pathToFile = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFDetail.html");
+            string pathToOutputPdfFile = Path.Combine(_hostEnvironment.ContentRootPath, "PDFs", $"{mrfdetailpdf.ReferenceNo.Replace("/", "_")}.pdf");
+
+            string htmlBody;
+            using (StreamReader sourceReader = System.IO.File.OpenText(pathToFile))
             {
-                var pathToFile = $"{_hostEnvironment.ContentRootPath}/EmailTemplate/MRFDetail.html";
-                var pathToOutputPdfFile = $"{_hostEnvironment.ContentRootPath}/PDFs/" + mrfdetailpdf.ReferenceNo.Replace("/", "_") + ".pdf";
-                string htmlBody;
-
-                using (var sourceReader = System.IO.File.OpenText(pathToFile))
-                {
-                    var builder = new BodyBuilder();
-                    builder.HtmlBody = sourceReader.ReadToEnd();
-                    htmlBody = GetHtmlMessageBody(builder.HtmlBody, mrfdetailpdf);
-                }
-
-                ConvertHtmlToPdf(htmlBody, pathToOutputPdfFile);
-                
-                return mrfdetailpdf;
+                BodyBuilder builder = new BodyBuilder();
+                builder.HtmlBody = sourceReader.ReadToEnd();
+                htmlBody = GetHtmlMessageBody(builder.HtmlBody, mrfdetailpdf);
             }
+
+            ConvertHtmlToPdf(htmlBody, pathToOutputPdfFile);
+
+            return mrfdetailpdf;
         }
+
 
         static void ConvertHtmlToPdf(string htmlString, string outputFile)
         {
