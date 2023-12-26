@@ -13,6 +13,8 @@ namespace MRF.Models.ViewModels
         public int MrfId { get; set; }
         public string ReferenceNo { get; set; } = null!;
         public  int? PositionTitleId { get; set; }
+        public string PositionTitle { get; set; } = null!;
+        
         public int InterviewerEmployeeId { get; set; }
         public string? InterviewerEmployeeIds { get; set; }
         //public string InterviewerName { get; set; } = null!;
