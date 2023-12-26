@@ -31,7 +31,7 @@ namespace MRF.DataAccess.Repository
              (mrfDetails, InterviewGroup) => new InterviewDetailsViewModel
              {
                  MrfId = mrfDetails.Id,
-                 InterviewerEmployeeIds = string.Join(",", InterviewGroup.Select(r => r.InterviewerEmployeeId))
+                 InterviewerEmployeeIds = string.Join(",", InterviewGroup.Select(r => r.InterviewerEmployeeId).Distinct())
              }
          );
 
@@ -51,7 +51,7 @@ namespace MRF.DataAccess.Repository
                     (combined, interviewGroup) => new InterviewDetailsViewModel
                     {
                         CandidateId = combined.candidate.Id,
-                        InterviewerEmployeeIds = string.Join(",", interviewGroup.Select(r => r.InterviewerId.ToString()))
+                        InterviewerEmployeeIds = string.Join(",", interviewGroup.Select(r => r.InterviewerId).Distinct())
                     }
                 );
 
@@ -77,18 +77,20 @@ namespace MRF.DataAccess.Repository
                                  select new InterviewStatus
                                  {
                                      CandidateId = Candidate.Id,
-                                     CandidateStatusId = Ivaluation.EvalutionStatusId,
+                                     EvalutionStatusId = Ivaluation.EvalutionStatusId,
                                      CandidateStatusChangedOnUtc = Ivaluation.UpdatedOnUtc,
-                                     Candidatestatus = status.Status,
+                                     EvalutionStatus = status.Status,
+                                     InterviewevaluationId= Ivaluation.Id,
                                  };
             var IstatusGrouped = from status in statusGrouped
                                            group status by status.CandidateId into grouped
                                            select new InterviewStatus
                                            {
                                                CandidateId = grouped.Key,
-                                               CandidateStatusId = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().CandidateStatusId,
+                                               EvalutionStatusId = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().EvalutionStatusId,
                                                CandidateStatusChangedOnUtc = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().CandidateStatusChangedOnUtc,
-                                               Candidatestatus = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().Candidatestatus,
+                                               EvalutionStatus = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().EvalutionStatus,
+                                               InterviewevaluationId = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().InterviewevaluationId,
                                            };
 
 
@@ -176,10 +178,10 @@ namespace MRF.DataAccess.Repository
                                                                    CandidateId = q.CandidateId,
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = q.Attachment,
-                                                                   CandidateStatusId = i != null ? i.CandidateStatusId ?? 0 : 0, // Check for null outside the query
-                                                                   Candidatestatus = i != null ? i.Candidatestatus : "",  // Check for null outside the query
+                                                                   EvalutionStatusId = i != null ? i.EvalutionStatusId ?? 0 : 0, // Check for null outside the query
+                                                                   EvalutionStatus = i != null ? i.EvalutionStatus : "",  // Check for null outside the query
                                                                    CandidateStatusChangedOnUtc = i == null ? DateTime.MinValue : i.CandidateStatusChangedOnUtc ?? DateTime.MinValue,
-
+                                                                   InterviewevaluationId = i != null ?  i.InterviewevaluationId ?? 0 : 0,
                                                                };
 
 

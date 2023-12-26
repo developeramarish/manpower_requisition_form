@@ -47,6 +47,7 @@ namespace MRF.DataAccess.Repository
                                                      MaxExperience = mrfDetails.MaxExperience,
                                                      VacancyTypeId = mrfDetails.VacancyTypeId,
                                                      IsReplacement = mrfDetails.IsReplacement,
+                                                     Note=mrfDetails.Note,
                                                      MrfStatusId = mrfDetails.MrfStatusId,
                                                      JdDocPath = mrfDetails.JdDocPath,
                                                      LocationId = mrfDetails.LocationId,

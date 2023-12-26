@@ -1,0 +1,47 @@
+.p-button.p-button-icon-only,
+.p-checkbox .p-checkbox-box.p-highlight {
+  background-color: #d32f2e;
+  border-color: #d32f2e;
+}
+
+.p-dialog-header-icon {
+  background-color: #d32f2e;
+  border-radius: 2px;
+  color: white;
+}
+.p-dialog-header-icon:focus-visible {
+  box-shadow: 0 0 0 0.2rem #d32f2e;
+}
+
+.p-dropdown-label {
+  color: #6d6d6d;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.p-multiselect-label {
+  color: #6d6d6d;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.p-dropdown-item,
+.p-multiselect-item {
+  color: #0b1016;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.p-checkbox-box:hover,
+.p-multiselect:hover,
+.p-dropdown:hover,
+.p-inputtext:hover {
+  border-color: #d32f2e;
+}
+
+.p-focus,
+.p-inputtext:focus,
+.p-button:focus {
+  border-color: #d32f2e;
+  box-shadow: 0 0 0 0.2rem #faa5a5;
+}

@@ -31,9 +31,7 @@ namespace MRF.DataAccess.Repository
         public IEmployeedetailsRepository Employeedetails { get; private set; }
         public IEmployeelogindetailRepository Employeelogindetail { get; private set; }
         public IEmployeerolemapRepository Employeerolemap { get; private set; }
-
         public IFreshmrfdetailRepository Freshmrfdetail { get; private set; }
-
         public ICandidatedetailRepository Candidatedetail { get; private set; }
         public IInterviewevaluationRepository Interviewevaluation { get; private set; }
         public IDashboardRepository Dashboard { get; private set; }
@@ -46,7 +44,9 @@ namespace MRF.DataAccess.Repository
         public IMrfLastNumberRepository MrfLastNo { get; private set; }
         public IMrfEmailApprovalRepository MrfEmailApproval { get; private set; }
         public ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; private set; }
+        public ImrfDetailsStatusHistory mrfDetailsStatusHistory { get; private set; }
         public IMrfdetailsPDFRepository MrfdetailsPDFRepository { get; private set; }
+
         public UnitOfWork(Data.MRFDBContext db, IUserService userService)
         {
             _db = db;
@@ -88,8 +88,8 @@ namespace MRF.DataAccess.Repository
             MrfLastNo = new MrfLastNumberRepository(_db);
             MrfEmailApproval = new MrfEmailApprovalRepository(_db);
             CandidateInterviewFeedback = new CandidateInterviewFeedbackRepository(_db);
+            mrfDetailsStatusHistory=new mrfDetailsStatusHistoryRepository(_db);
             MrfdetailsPDFRepository = new MrfdetailsPDFRepository(_db);
-
         }
         public void Save()
         {

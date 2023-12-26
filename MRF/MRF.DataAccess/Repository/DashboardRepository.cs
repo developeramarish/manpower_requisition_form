@@ -115,12 +115,11 @@ namespace MRF.DataAccess.Repository
             if (resume)
             {
                  CStatus = (from s in _db.Candidatestatusmaster
-                               where s.Status.Contains("resume")
+                               //where s.Status.Contains("resume")
                                select new Candidatestatusmaster
                                {
                                    Id = s.Id,
-                                   Status = s.Status.Replace("Resume", "")
-                                           .Trim(),
+                                   Status = s.Status,
                                }).ToList();
             }
             //else
@@ -228,8 +227,9 @@ namespace MRF.DataAccess.Repository
                          join interview in _db.Interviewevaluation on Candidate.Id equals interview.CandidateId
                          join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id
                                        where (Role != "mrfowner" || (Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId))
-                                       group new { mrfD, Candidate,  interview, status } by new
-                         {
+                                        group new { mrfD, Candidate,  interview, status } by new
+                                       
+                                       {
                              mrfD.Id,
                              mrfD.ReferenceNo,
                              status=status.Id
@@ -238,7 +238,7 @@ namespace MRF.DataAccess.Repository
                          select new MrfInterviewSummaryViewModel
                          {
                              MrfId = grouped.Key.Id,
-                             EvaluationId= grouped.Key.status,
+                             //EvaluationId= grouped.Key.status,
                              ReferenceNo = grouped.Key.ReferenceNo,
                              TotalCount = grouped.Count(),
                          })
