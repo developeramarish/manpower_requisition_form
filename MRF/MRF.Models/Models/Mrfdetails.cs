@@ -7,7 +7,7 @@ public class Mrfdetails
     public string? ReferenceNo { get; set; } = null!;
     public string? RequisitionType { get; set; }
 
-    public string? PositionTitle { get; set; } = null!;
+    public  int? PositionTitleId { get; set; } 
 
     public int? DepartmentId { get; set; }
 

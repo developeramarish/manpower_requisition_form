@@ -47,5 +47,7 @@ namespace MRF.DataAccess.Data
         public DbSet<mrfDetailsStatusHistory> mrfDetailsStatusHistory { get; set; }
         public DbSet<MrfdetailsPDF> MrfdetailsPDF { get; set; }
 
+        public DbSet<PositionTitlemaster> PositionTitlemaster { get; set; }
+
     }
 }
