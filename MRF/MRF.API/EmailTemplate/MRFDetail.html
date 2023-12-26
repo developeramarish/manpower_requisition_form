@@ -4,21 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MRF</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: red;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .card-custom {
+            border-radius: 10px;
+        }
+
+        .table th {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .table td {
+            vertical-align: top;
+        }
+    </style>
 </head>
-<body style="background-color:red;">
+<body>
     <div class="container">
         <div class="row">
-            <div class="border-round-lg bg-white text-black-alpha-90 p-3">
-                <section class="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300" style="height: 95%">
-                    <div class="flex justify-content-between gap-5">
+            <div class="col">
+                <div class="card card-custom">
+                    <div class="card-body">
                         <table class="table">
                             <tbody>
                                 <tr>
                                     <th scope="row">Reference No</th>
-                                    <td colspan="5" style="text-align: left;">
-                                        <label>{ReferenceNo}</label>
-                                    </td>
+                                    <td colspan="3">{ReferenceNo}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Requisition Type</th>
@@ -104,16 +124,10 @@
                                     <th scope="row">Max Target Salary</th>
                                     <td>{MaxTargetSalary}</td>
                                 </tr>
-                                <!--<tr>
-                                    <th scope="row">Resume Reviewer</th>
-                                    <td>{ResumeReviewer}</td>
-                                    <th scope="row">Interviewer/Panel</th>
-                                    <td>{InterviewerPanel}</td>
-                                </tr>-->
                             </tbody>
                         </table>
                     </div>
-                </section>
+                </div>
             </div>
         </div>
     </div>

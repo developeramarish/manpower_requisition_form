@@ -5,8 +5,9 @@ using MRF.Models.DTO;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Text;
-
+using iText.Kernel.Pdf;
+using iText.Html2pdf;
+using MRF.Models.Models;
 
 namespace MRF.API.Controllers
 {
@@ -39,85 +40,83 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfdetailsPDFRequestModel GetRequisition(int MrfId)
         {
-            
-            var pathToFile = _hostEnvironment.ContentRootPath
-                          
-                           + Path.DirectorySeparatorChar.ToString()
-                           + "EmailTemplate"
-                           + Path.DirectorySeparatorChar.ToString()
-                           + "MRFDetail.html";
-            var builder = new BodyBuilder();
-            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-            {
-                builder.HtmlBody = SourceReader.ReadToEnd();
-            }        
+            var mrfdetailpdf = _unitOfWork.MrfdetailsPDFRepository.GetRequisition(MrfId);
 
-            _logger.LogInfo($"Fetching All MRF Details by Id: {MrfId}");
-            MrfdetailsPDFRequestModel mrfdetailpdf = _unitOfWork.MrfdetailsPDFRepository.GetRequisition(MrfId);
-            string messageBody = builder.HtmlBody.Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
-                .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
-                .Replace("{RequisitionType}", mrfdetailpdf.RequisitionType)
-                .Replace("{PositionTitle}", mrfdetailpdf.PositionTitle)
-                .Replace("{Department}", mrfdetailpdf.Department)
-                .Replace("{SubDepartment}", mrfdetailpdf.SubDepartment)
-                .Replace("{Project}", mrfdetailpdf.Project)
-                .Replace("{Location}", mrfdetailpdf.Location)
-                .Replace("{PositionReportingto}", mrfdetailpdf.PositionReportingto)
-                .Replace("{HiringInitiationDate}", Convert.ToString(mrfdetailpdf.HiringInitiationDate))
-                .Replace("{GradeMin}", mrfdetailpdf.GradeMin)
-                .Replace("{GradeMax}", mrfdetailpdf.GradeMax)
-                .Replace("{TypeOfEmployment}", mrfdetailpdf.TypeOfEmployment)
-                .Replace("{ReplacementForThEmployee}", Convert.ToString(mrfdetailpdf.ReplacementForThEmployee))
-                .Replace("{NumberOfVacancies}", Convert.ToString(mrfdetailpdf.NumberOfVacancies))
-                .Replace("{TypeOfVacancy}", Convert.ToString(mrfdetailpdf.TypeOfVacancy))
-                .Replace("{ExperienceMin}", Convert.ToString(mrfdetailpdf.ExperienceMin))
-                .Replace("{ExperienceMax}", Convert.ToString(mrfdetailpdf.ExperienceMax))
-                .Replace("{Gender}", mrfdetailpdf.Gender)
-                .Replace("{Qualification}", mrfdetailpdf.Qualification)
-                .Replace("{JobDescription}", Convert.ToString(mrfdetailpdf.JobDescription))
-                .Replace("{Skills}", mrfdetailpdf.Skills)
-                .Replace("{Justification}", mrfdetailpdf.Justification)
-                .Replace("{MinTargetSalary}", Convert.ToString(mrfdetailpdf.MinTargetSalary))
-                .Replace("{MaxTargetSalary}", Convert.ToString(mrfdetailpdf.MaxTargetSalary));
-                
             if (mrfdetailpdf == null)
             {
                 _logger.LogError($"No result found by this Id:{MrfId}");
-
-                MrfdetailsPDFRequestModel blankData = new MrfdetailsPDFRequestModel();
-                return blankData;
+                return new MrfdetailsPDFRequestModel();
             }
-            else
+
+            var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFDetail.html");
+            var pdfDirectory = Path.Combine(_hostEnvironment.ContentRootPath, "PDFs");
+            var pdfFileName = $"{mrfdetailpdf.ReferenceNo.Replace("/", "_")}.pdf";
+            var pathToOutputPdfFile = Path.Combine(pdfDirectory, pdfFileName);
+
+            if (!Directory.Exists(pdfDirectory))
             {
-                string folderPath = Path.Combine(_hostEnvironment.ContentRootPath, "PDFs");
-                if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(pdfDirectory);
+            }
+
+            string htmlBody;
+            using (var sourceReader = System.IO.File.OpenText(emailTemplatePath))
+            {
+                var builder = new BodyBuilder();
+                builder.HtmlBody = sourceReader.ReadToEnd();
+                htmlBody = GetHtmlMessageBody(builder.HtmlBody, mrfdetailpdf);
+            }
+
+            ConvertHtmlToPdf(htmlBody, pathToOutputPdfFile);
+
+            var emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Awaiting COO Approval");
+            if (emailRequest != null)
+            {
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content, pathToOutputPdfFile);
+            }
+
+            return mrfdetailpdf;
+        }
+        static void ConvertHtmlToPdf(string htmlString, string outputFile)
+        {
+            using (var pdfWriter = new PdfWriter(outputFile))
+            {
+                using (var pdfDocument = new PdfDocument(pdfWriter))
                 {
-                    Directory.CreateDirectory(folderPath);
+                    var converterProperties = new ConverterProperties();
+                    HtmlConverter.ConvertToPdf(htmlString, pdfDocument, converterProperties);
                 }
-
-                // Create a PDF document
-                string pdfFileName = mrfdetailpdf.ReferenceNo.Replace("/", "_"); // Removing '/'
-                string pdfFilePath = Path.Combine(folderPath, $"{pdfFileName}.pdf"); // Set your desired path
-                string htmlFilePath = Path.Combine(folderPath, $"{pdfFileName}.html"); // HTML file path
-
-                // Write HTML content to a file
-                System.IO.File.WriteAllText(htmlFilePath, messageBody, Encoding.UTF8); // Write the messageBody to the file
-
-                using (FileStream stream = new FileStream(pdfFilePath, FileMode.Create))
-                {
-                    //Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
-                    //PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                    //pdfDoc.Open();
-
-                    //// Read HTML content from the file and convert it to PDF
-                    //StreamReader srHtml = new StreamReader(htmlFilePath, Encoding.UTF8); // Read from the HTML file
-                    //XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, srHtml);
-
-                    //pdfDoc.Close();
-                }
-
-                return mrfdetailpdf;
             }
         }
+        private string GetHtmlMessageBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
+        {
+            // Replace placeholders in HTML with data
+            string messageBody = htmlBody
+                .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
+                 .Replace("{RequisitionType}", mrfdetailpdf.RequisitionType)
+                 .Replace("{PositionTitle}", mrfdetailpdf.PositionTitle)
+                 .Replace("{Department}", mrfdetailpdf.Department)
+                 .Replace("{SubDepartment}", mrfdetailpdf.SubDepartment)
+                 .Replace("{Project}", mrfdetailpdf.Project)
+                 .Replace("{Location}", mrfdetailpdf.Location)
+                 .Replace("{PositionReportingto}", mrfdetailpdf.PositionReportingto)
+                 .Replace("{HiringInitiationDate}", Convert.ToString(mrfdetailpdf.HiringInitiationDate))
+                 .Replace("{GradeMin}", mrfdetailpdf.GradeMin)
+                 .Replace("{GradeMax}", mrfdetailpdf.GradeMax)
+                 .Replace("{TypeOfEmployment}", mrfdetailpdf.TypeOfEmployment)
+                 .Replace("{ReplacementForThEmployee}", Convert.ToString(mrfdetailpdf.ReplacementForThEmployee))
+                 .Replace("{NumberOfVacancies}", Convert.ToString(mrfdetailpdf.NumberOfVacancies))
+                 .Replace("{TypeOfVacancy}", Convert.ToString(mrfdetailpdf.TypeOfVacancy))
+                 .Replace("{ExperienceMin}", Convert.ToString(mrfdetailpdf.ExperienceMin))
+                 .Replace("{ExperienceMax}", Convert.ToString(mrfdetailpdf.ExperienceMax))
+                 .Replace("{Gender}", mrfdetailpdf.Gender)
+                 .Replace("{Qualification}", mrfdetailpdf.Qualification)
+                 .Replace("{JobDescription}", Convert.ToString(mrfdetailpdf.JobDescription))
+                 .Replace("{Skills}", mrfdetailpdf.Skills)
+                 .Replace("{Justification}", mrfdetailpdf.Justification)
+                 .Replace("{MinTargetSalary}", Convert.ToString(mrfdetailpdf.MinTargetSalary))
+                 .Replace("{MaxTargetSalary}", Convert.ToString(mrfdetailpdf.MaxTargetSalary));              
+
+            return messageBody;
+        }       
     }
 }
