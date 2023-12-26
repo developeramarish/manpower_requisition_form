@@ -8,6 +8,7 @@ const InputTextareaComponent = ({
   rows = 5,
   cols,
   autoResize = true,
+  disable,
 }) => {
   return (
     <InputTextarea
@@ -16,6 +17,7 @@ const InputTextareaComponent = ({
       value={value}
       onChange={onChange}
       autoResize={autoResize}
+      disabled ={disable}
     />
   );
 };
