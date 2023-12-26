@@ -21,7 +21,7 @@ namespace MRF.Models.ViewModels
         public int CandidateStatusId { get; set; }
         public string ResumePath { get; set; } = null!;
         public string Reason { get; set; } = null!;
-
+        public string? PositionTitle { get; set; }
 
     }
 }

@@ -39,7 +39,7 @@ namespace MRF.API.Controllers
             {
                 MrfId=request.MrfId,
                 EmployeeId=request.EmployeeId,
-                ApprovalDate=request.ApprovalDate,
+                //ApprovalDate=request.ApprovalDate,
                 
             };
 

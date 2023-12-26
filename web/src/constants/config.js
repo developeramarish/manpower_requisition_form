@@ -21,6 +21,8 @@ export const API_URL = {
 	 `${APIPath}Candidatedetail/Put/`,
 	INTERVIEW_FEEDBACK: 
 	`${APIPath}CandidateInterviewFeedback`,
+	INTERVIEW_FEEDBACK_MASTER: 
+	`${APIPath}evaluationfeedbackmaster`,
 	MRF_PARTIAL_STATUS_UPDATE:
 	`${APIPath}Mrfdetail/PartialUpdateMRFStatus/`,
 	GET_CREATE_REQUISITION_DEPARTMENT:
@@ -35,8 +37,8 @@ export const API_URL = {
 };
 
 export const FILE_URL = {
-	RESUME: `${APIPath}Resume`,
-	ASSIGNMENT: `${APIPath}Assignment`,
+	RESUME: `${APIPath}Resume/`,
+	ASSIGNMENT: `${APIPath}Assignment/`,
 	RESUME_UPLOAD: 'https://10.22.11.101:90/api/Upload?ResumeOrAssign=Resume&FileName='
 };
 

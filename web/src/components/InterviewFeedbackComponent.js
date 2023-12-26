@@ -13,18 +13,35 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
 			const data = await getData(apiUrl);
 			setFeedData(data.result);
 		}
-
-		if (cId) {
-			getFeedData();
-		}
+		//feedList();
+		//if (cId) {
+			//getFeedData();
+		//}
 	}, [cId]);
 
-	const feedList = [
-		{ key: "softSkills", label: "Softskills : " },
-		{ key: "hardSkills", label: "Hardskills : " },
-		{ key: "requiredTraining", label: "Required Training : " },
-		{ key: "comments", label: "Comments : " },
-	];
+
+	const feedList = () => {
+		const apiUrl =
+		  API_URL.GET_CREATE_REQUISITION_DEPARTMENT ;
+		fetch(apiUrl)
+		  .then((response) => response.json())
+		  .then((responseData) => {
+			if (Array.isArray(responseData.result)) {
+			  const data = responseData.result;
+	
+			  
+			} else {
+			  console.error("API response result is not an array:", responseData);
+			}
+		  })
+		  .catch((error) => {
+			console.error("Fetch error:", error);
+		  });
+	  };
+	
+
+
+
 
 	return (
 		<Dialog

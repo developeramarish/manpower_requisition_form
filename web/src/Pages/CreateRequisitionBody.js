@@ -90,11 +90,7 @@ const CreateRequisitionBody = ({
     financeHeadEmpId: 0,
     presidentnCOOId: 0,
     presidentnCOOEmpId: 0,
-    pcApprovalDate: new Date().toISOString(),
-    fhApprovalDate: new Date().toISOString(),
-    fiApprovalDate: new Date().toISOString(),
-    spApprovalDate: new Date().toISOString(),
-    hmApprovalDate: new Date().toISOString(),
+
   };
 
   // Initialize the formData state using the form schema
@@ -217,11 +213,7 @@ const CreateRequisitionBody = ({
       financeHeadEmpId: formData.financeHeadEmpId,
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
-      pcApprovalDate: formData.pcApprovalDate,
-      fhApprovalDate: formData.fhApprovalDate,
-      fiApprovalDate: formData.fiApprovalDate,
-      spApprovalDate: formData.fiApprovalDate,
-      hmApprovalDate: formData.hmApprovalDate,
+  
     };
     console.log(data);
     try {
@@ -339,15 +331,15 @@ const CreateRequisitionBody = ({
               <RedAsterisk />
             </label>
             <DropdownComponent
-              optionLabel="name"
-              optionValue="code"
-              type="RequisitionType"
-              options={RequisitionType}
-              value={formData.requisitionType}
-              onChange={(e) => {
-                setFormData({ ...formData, requisitionType: e.target.value });
-              }}
-            />
+  optionLabel="name"
+  optionValue="code"
+  type="RequisitionType"
+  options={RequisitionType}
+  value={formData.requisitionType || (RequisitionType.length > 0 ? RequisitionType[0].code : null)}
+  onChange={(e) => {
+    setFormData({ ...formData, requisitionType: e.target.value });
+  }}
+/>
           </div>
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="position-title" className="font-bold text-sm">
@@ -456,7 +448,7 @@ const CreateRequisitionBody = ({
 
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="initiation-date" className="font-bold text-sm">
-              Hiring Initiation Date
+            Requirement Initiation Date
               <RedAsterisk />
             </label>
             <CalendarComponent
@@ -789,7 +781,9 @@ const CreateRequisitionBody = ({
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="Justification" className="font-bold text-sm">
               Justification
+              <RedAsterisk />
             </label>
+            
             <InputTextareaComponent
               autoResize
               id="Justification"
@@ -941,21 +935,7 @@ const CreateRequisitionBody = ({
           </div>
 
           <div className="flex flex-column gap-2">
-            <label htmlFor="ApprovalDate" className="font-bold text-sm">
-              Approval Date
-            </label>
-            {/* Assuming CalendarComponent renders an input */}
-            <CalendarComponent
-              id="ApprovalDate"
-              inputClassName="bg-gray-100"
-              value={new Date(formData.hmApprovalDate)}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  hmApprovalDate: e.target.value,
-                })
-              }
-            />
+            
           </div>
         </div>
         <div id="second" className="flex justify-content-evenly gap-4">
@@ -1008,18 +988,8 @@ const CreateRequisitionBody = ({
           </div>
 
           <div className="flex flex-column gap-2">
-            {/* Assuming CalendarComponent renders an input */}
-            <CalendarComponent
-              id="fhApprovalDate"
-              inputClassName="bg-gray-100"
-              value={new Date(formData.fhApprovalDate)}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  fhApprovalDate: e.target.value,
-                })
-              }
-            />
+            
+            
           </div>
         </div>
         <div id="third" className="flex justify-content-evenly gap-4">
@@ -1069,18 +1039,7 @@ const CreateRequisitionBody = ({
             />
           </div>
           <div className="flex flex-column gap-2">
-            {/* Assuming CalendarComponent renders an input */}
-            <CalendarComponent
-              id="ApprovalDate"
-              inputClassName="bg-gray-100"
-              value={new Date(formData.spApprovalDate)}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  spApprovalDate: e.target.value,
-                })
-              }
-            />
+            
           </div>{" "}
         </div>
         <div id="forth" className="flex justify-content-evenly gap-4">
@@ -1130,18 +1089,7 @@ const CreateRequisitionBody = ({
             />
           </div>
           <div className="flex flex-column gap-2">
-            {/* Assuming CalendarComponent renders an input */}
-            <CalendarComponent
-              id="ApprovalDate"
-              inputClassName="bg-gray-100"
-              value={new Date(formData.fiApprovalDate)}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  fiApprovalDate: e.target.value,
-                })
-              }
-            />
+            
           </div>{" "}
         </div>
         <div id="fifth" className="flex justify-content-evenly gap-4">
@@ -1195,18 +1143,7 @@ const CreateRequisitionBody = ({
           </div>
 
           <div className="flex flex-column gap-2">
-            {/* Assuming CalendarComponent renders an input */}
-            <CalendarComponent
-              id="pcApprovalDate"
-              inputClassName="bg-gray-100"
-              value={new Date(formData.pcApprovalDate)}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  pcApprovalDate: e.target.value,
-                })
-              }
-            />
+           
           </div>
         </div>
       </section>

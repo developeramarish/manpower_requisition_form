@@ -120,6 +120,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
     const resumePath = data.resumePath;
     const createdByEmployeeId = data.createdByEmployeeId;
     const createdOnUtc = data.createdOnUtc;
+    
 
     const candidateDetailsData = {
       id,
@@ -133,6 +134,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       createdByEmployeeId,
       createdOnUtc,
       reason,
+  
     };
 
     try {
@@ -195,6 +197,13 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       bodyClassName: "resume-ref-col  ",
       sortable: true,
     },
+    {
+			field: "positionTitle",
+			header: "Position",
+			body: data.positionTitle,
+      bodyClassName: "resume-ref-col resume-col",
+			sortable: true,
+		},
     {
       field: "createdOnUtc",
       header: "Uploaded On",

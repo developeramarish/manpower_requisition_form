@@ -108,7 +108,7 @@ namespace MRF.DataAccess.Repository
                                 CreatedName = Emp.Name,
                                 CreatedOnUtc = Candidate.CreatedOnUtc,
                                 CandidateId = Candidate.Id,
-                               
+                                PositionTitle=mrfDetails.PositionTitle,
                             };
 
             IQueryable<InterviewDetailsViewModel> secondmerge = from q in firstlist
@@ -123,6 +123,7 @@ namespace MRF.DataAccess.Repository
                                      CreatedName = q.CreatedName,
                                      CreatedOnUtc = q.CreatedOnUtc,
                                      CandidateId = q.CandidateId,
+                                     PositionTitle = q.PositionTitle,
                                      InterviewerEmployeeIds = i.InterviewerEmployeeIds,
                                      
                                  };
@@ -140,6 +141,7 @@ namespace MRF.DataAccess.Repository
                                   CreatedName = q.CreatedName,
                                   CreatedOnUtc = q.CreatedOnUtc,
                                   CandidateId = q.CandidateId,
+                                  PositionTitle = q.PositionTitle,
                                   InterviewerEmployeeIds = i.InterviewerEmployeeIds==""? q.InterviewerEmployeeIds : i.InterviewerEmployeeIds,
                                   
                               };
@@ -157,6 +159,7 @@ namespace MRF.DataAccess.Repository
                                  CreatedName = q.CreatedName,
                                  CreatedOnUtc = q.CreatedOnUtc,
                                  CandidateId = q.CandidateId,
+                                 PositionTitle = q.PositionTitle,
                                  InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                  Attachment =  i.Attachment==null ? "" : i.Attachment,
                                  
@@ -176,6 +179,7 @@ namespace MRF.DataAccess.Repository
                                                                    CreatedName = q.CreatedName,
                                                                    CreatedOnUtc = q.CreatedOnUtc,
                                                                    CandidateId = q.CandidateId,
+                                                                   PositionTitle = q.PositionTitle,
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = q.Attachment,
                                                                    EvalutionStatusId = i != null ? i.EvalutionStatusId ?? 0 : 0, // Check for null outside the query
