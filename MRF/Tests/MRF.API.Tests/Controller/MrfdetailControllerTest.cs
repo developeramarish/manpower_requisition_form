@@ -39,10 +39,10 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Mrfdetails for testing
             var SampleMrfDetails = new List<Mrfdetails>
             {
-            new Mrfdetails { Id=1, ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
+            new Mrfdetails { Id=1, ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitleId= 1,
              DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
-            new Mrfdetails { Id=2, ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
+            new Mrfdetails { Id=2, ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitleId= 1,
              DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
 
@@ -90,10 +90,10 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Mrfdetails for testing
             var sampleMrfdetails = new List<Mrfdetails>
             {
-            new Mrfdetails  {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
+            new Mrfdetails  {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitleId= 1,
              DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
-            new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
+            new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitleId= 1,
              DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
                 
@@ -122,10 +122,10 @@ namespace MRF.API.Test.Controllers
             // Create a list of sample Mrfdetails for testing
             var sampleMrfdetails = new List<Mrfdetails>
             {
-            new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
+            new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitleId= 1,
              DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
-            new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitle= "software engineer",
+            new Mrfdetails {ReferenceNo ="02/MUM/CFR/AUG/23/007",PositionTitleId= 1,
              DepartmentId= 2,SubDepartmentId= 1,ProjectId= 1,VacancyNo= 2,ReportsToEmployeeId=5,MinGradeId=5,MaxGradeId=6,
              EmploymentTypeId=1,MinExperience=0,MaxExperience=4,VacancyTypeId=3,IsReplacement=false,MrfStatusId=2,},
                 // Add more sample data as needed   
@@ -150,7 +150,7 @@ namespace MRF.API.Test.Controllers
             var requestModel = new MrfdetailRequestModel
             {
                 ReferenceNo = "02/MUM/CFR/AUG/23/007",
-                PositionTitle = "software engineer",
+                PositionTitleId = 1,
                 DepartmentId = 2,
                 SubDepartmentId = 1,
                 ProjectId = 1,
@@ -307,7 +307,7 @@ namespace MRF.API.Test.Controllers
             var requestModel = new MrfdetailRequestModel
             {
                 ReferenceNo = "02/MUM/CFR/AUG/23/007",
-                PositionTitle = "software engineer",
+                PositionTitleId = 1,
                 DepartmentId = 2,
                 SubDepartmentId = 1,
                 ProjectId = 1,
@@ -356,7 +356,7 @@ namespace MRF.API.Test.Controllers
             {
 
                 ReferenceNo = "02/MUM/CFR/AUG/23/007",
-                PositionTitle = "software engineer",
+                PositionTitleId = 1,
                 DepartmentId = 2,
                 SubDepartmentId = 1,
                 ProjectId = 1,
