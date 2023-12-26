@@ -43,7 +43,7 @@ const CreateRequisitionBody = ({
 
   const formSchema = {
     referenceNo: "",
-    positionTitle: "",
+    positionTitleId: "",
     requisitionType: "",
     departmentId: 0,
     subDepartmentId: 0,
@@ -159,8 +159,8 @@ const CreateRequisitionBody = ({
     console.log(formData);
     const data = {
       referenceNo: formData.referenceNo,
-      requisitionType: formData.requisitionType,
-      positionTitle: formData.positionTitle,
+      requisitionType: formData.requisitionType==""?RequisitionType[0].code:"",
+      positionTitleId: formData.positionTitleId,
       departmentId: formData.departmentId,
       subDepartmentId: formData.subDepartmentId,
       projectId: formData.projectId,
@@ -346,14 +346,17 @@ const CreateRequisitionBody = ({
               Position Title
               <RedAsterisk />
             </label>
-            <InputTextCp
-              id="position-title"
-              onChange={(e) =>
-                setFormData({ ...formData, positionTitle: e.target.value })
-              }
-              value={formData.positionTitle}
-              disable={readOnly}
+           <DropdownComponent
+              optionLabel="name"
+              optionValue="id"
+              type="position"
+              options={dropdownData.position}
+              value={formData.positionTitleId}
+              onChange={(e) => {
+                setFormData({ ...formData, positionTitleId: e.target.value });
+              }}
             />
+
           </div>
         </div>
 
