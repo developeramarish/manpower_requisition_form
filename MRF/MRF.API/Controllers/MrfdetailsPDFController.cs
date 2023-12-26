@@ -93,7 +93,7 @@ namespace MRF.API.Controllers
             string messageBody = htmlBody
                 .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
                  .Replace("{RequisitionType}", mrfdetailpdf.RequisitionType)
-                 .Replace("{PositionTitle}", mrfdetailpdf.PositionTitle)
+                 .Replace("{PositionTitleId}", Convert.ToString(mrfdetailpdf.PositionTitleId))
                  .Replace("{Department}", mrfdetailpdf.Department)
                  .Replace("{SubDepartment}", mrfdetailpdf.SubDepartment)
                  .Replace("{Project}", mrfdetailpdf.Project)

@@ -7,7 +7,7 @@ namespace MRF.Models.DTO
         public int Id { get; set; }
         public string? ReferenceNo { get; set; } = null!;
         public string? RequisitionType { get; set; }
-        public string? PositionTitle { get; set; } = null!;
+        public int? PositionTitleId { get; set; }
         public string? Department { get; set; }
         public string? SubDepartment { get; set; }
         public string? Project { get; set; }

@@ -32,7 +32,7 @@ namespace MRF.DataAccess.Repository
                                                      mrfID = mrfDetails.Id,
                                                      ReferenceNo = mrfDetails.ReferenceNo,
                                                      RequisitionType = mrfDetails.RequisitionType,
-                                                     PositionTitle = mrfDetails.PositionTitle,
+                                                     PositionTitleId = mrfDetails.PositionTitleId,
                                                      DepartmentId = mrfDetails.DepartmentId,
                                                      SubDepartmentId = mrfDetails.SubDepartmentId,
                                                      ProjectId = mrfDetails.ProjectId,

@@ -476,7 +476,7 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.MaxExperience).HasColumnType("int(11)");
             entity.Property(e => e.MinExperience).HasColumnType("int(11)");
             entity.Property(e => e.MrfStatusId).HasColumnType("int(11)");
-            entity.Property(e => e.PositionTitle).HasMaxLength(80);
+            entity.Property(e => e.PositionTitleId).HasColumnType("int(11)");
             entity.Property(e => e.RequisitionType).HasMaxLength(80);
             entity.Property(e => e.ProjectId).HasColumnType("int(11)");
             entity.Property(e => e.ReferenceNo).HasMaxLength(80);

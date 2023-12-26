@@ -139,11 +139,11 @@ namespace MRF.API.Controllers
         }
 
         private Mrfdetails Mrfdetail(MrfdetailRequestModel request, string ReferenceNo)
-        {
+        { 
             var mrfDetail = new Mrfdetails
             {
                 ReferenceNo = ReferenceNo,
-                PositionTitle = request.PositionTitle ?? "",
+                PositionTitleId = request.PositionTitleId==0?null : request.PositionTitleId,
                 RequisitionType = request.RequisitionType,
                 DepartmentId = request.DepartmentId==0?null: request.DepartmentId,
                 SubDepartmentId = request.SubDepartmentId == 0 ? null : request.SubDepartmentId,
@@ -444,7 +444,7 @@ namespace MRF.API.Controllers
             if (existingStatus != null)
             {
                 existingStatus.ReferenceNo = request.ReferenceNo;
-                existingStatus.PositionTitle = request.PositionTitle;
+                existingStatus.PositionTitleId = request.PositionTitleId;
                 existingStatus.DepartmentId = request.DepartmentId== 0?null: request.DepartmentId;
                 existingStatus.SubDepartmentId = request.SubDepartmentId == 0 ? null : request.SubDepartmentId;
                 existingStatus.ProjectId = request.ProjectId == 0 ? null : request.ProjectId;
@@ -651,7 +651,7 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching create MRF Dropdown list");
             SwaggerResponseDTO sw = new SwaggerResponseDTO();
-
+            sw.Position=_unitOfWork.PositionTitlemaster.GetAll().ToList();
             sw.Projects = _unitOfWork.Projectmaster.GetAll().ToList();
             sw.Departments = _unitOfWork.Departmentmaster.GetAll().ToList();
             sw.Grades = _unitOfWork.Grademaster.GetAll().ToList();
@@ -673,6 +673,7 @@ namespace MRF.API.Controllers
             }
             var combinedData = new
             {
+                sw.Position,
                 sw.Projects,
                 sw.Departments,
                 sw.Grades,
@@ -700,6 +701,7 @@ namespace MRF.API.Controllers
 
         public class SwaggerResponseDTO
         {
+            public List<PositionTitlemaster> Position { get; set; } = new List<PositionTitlemaster>();
             public List<Projectmaster> Projects { get; set; } = new List<Projectmaster>();
             public List<Departmentmaster> Departments { get; set; } = new List<Departmentmaster>();
             public List<Grademaster> Grades { get; set; } = new List<Grademaster>();

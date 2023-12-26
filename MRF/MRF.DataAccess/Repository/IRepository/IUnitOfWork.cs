@@ -42,6 +42,8 @@
         ImrfDetailsStatusHistory mrfDetailsStatusHistory { get; }
         IMrfdetailsPDFRepository MrfdetailsPDFRepository { get; }
 
+        IPositionTitlemasterRepository PositionTitlemaster { get; }
+
         void Save();
     }
 }
