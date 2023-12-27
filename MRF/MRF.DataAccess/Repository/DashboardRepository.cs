@@ -85,6 +85,7 @@ namespace MRF.DataAccess.Repository
                                                           {
                                                               mrfDetails.Id,
                                                               //Candidate.CandidateStatusId,
+                                                               
                                                               status.Status,
                                                               mrfDetails.ReferenceNo,
 
