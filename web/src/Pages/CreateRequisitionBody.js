@@ -7,24 +7,16 @@ import ButtonC from "./../components/Button";
 import CalendarComponent from "./../components/Calendar";
 import CheckboxComponent from "./../components/Checkbox";
 import InputTextareaComponent from "./../components/InputTextarea";
-import { Editor } from "primereact/editor";
+import { Editor } from 'primereact/editor';
 import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
 import { mrfStatus } from "../components/constant";
 import { navigateTo } from "../constants/Utils";
 import { API_URL, GENDER, MAX_EXPERIENCE_OPTIONS, MIN_EXPERIENCE_OPTIONS, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
-import {
-  minExperienceOptions,
-  maxExperienceOptions,
-  Gender,
-  RequisitionType,
-  APIPath,
-} from "./../components/constant";
 import { storageService } from "../constants/storage";
 import MrfPartialStatus from "../components/MrfPartialStatus";
 import { useDispatch } from "react-redux";
 import { PAGE_ACTIONS } from "../reducers/Page_r";
-import CreateRequisitionButtonHandle from "../components/CreateRequisitionButtonHandle";
 
 const CreateRequisitionBody = ({
   getReqId = null,
@@ -48,7 +40,7 @@ const CreateRequisitionBody = ({
     referenceNo: "",
 
     positionTitleId: "",
-    requisitionType: "",
+    requisitionType: "FR",
 
     departmentId: 0,
     subDepartmentId: 0,
@@ -165,117 +157,6 @@ const CreateRequisitionBody = ({
   }, [formData.departmentId]);
 
 
-  // if(getReqRoleId==4){
-  //   setReadOnly(true);
-  // }
-
-  const handleSubmit = async (mrfStatusId) => {
-    setIsLoading(true);
-
-    console.log(formData);
-    const data = {
-      referenceNo: formData.referenceNo,
-      requisitionType: formData.requisitionType==""?RequisitionType[0].code:"",
-      positionTitleId: formData.positionTitleId,
-      departmentId: formData.departmentId,
-      subDepartmentId: formData.subDepartmentId,
-      projectId: formData.projectId,
-      vacancyNo: Number(formData.vacancyNo),
-      genderId: formData.genderId,
-      qualification: formData.qualification,
-      requisitionDateUtc: new Date().toISOString().slice(0, 10),
-      reportsToEmployeeId: formData.reportsToEmployeeId,
-      minGradeId: formData.minGradeId,
-      maxGradeId: formData.maxGradeId,
-      employmentTypeId: formData.employmentTypeId,
-      minExperience: formData.minExperience,
-      maxExperience: formData.maxExperience,
-      vacancyTypeId: formData.vacancyTypeId,
-      isReplacement: formData.isReplacement,
-      mrfStatusId: mrfStatusId,
-      jdDocPath: "string",
-      locationId: formData.locationId,
-      qualificationId: formData.qualificationId,
-      createdByEmployeeId: storageService.getData("profile").employeeId,
-      createdOnUtc: new Date().toISOString(),
-      updatedByEmployeeId: storageService.getData("profile").employeeId,
-      updatedOnUtc: new Date().toISOString(),
-      justification: formData.justification,
-      jobDescription: formData.jobDescription,
-      skills: formData.skills,
-      minTargetSalary: formData.minTargetSalary,
-      maxTargetSalary: formData.maxTargetSalary,
-      employeeName: formData.employeeName,
-      emailId: formData.emailId,
-      note: formData.note,
-      employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
-      lastWorkingDate: new Date().toISOString().slice(0, 10),
-      annualCtc: formData.annualCtc,
-      annualGross: formData.annualGross,
-      replaceJustification: formData.replaceJustification,
-      resumeReviewerEmployeeIds: strToArray(
-        formData.resumeReviewerEmployeeIds
-      ).toString(),
-      interviewerEmployeeIds: strToArray(
-        formData.interviewerEmployeeIds
-      ).toString(),
-      hiringManagerId: formData.hiringManagerId,
-      hiringManagerEmpId: formData.hiringManagerEmpId,
-      functionHeadId: formData.functionHeadId,
-      functionHeadEmpId: formData.functionHeadEmpId,
-      siteHRSPOCId: formData.siteHRSPOCId,
-      siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
-      financeHeadId: formData.financeHeadId,
-      financeHeadEmpId: formData.financeHeadEmpId,
-      presidentnCOOId: formData.presidentnCOOId,
-      presidentnCOOEmpId: formData.presidentnCOOEmpId,
-  
-    };
-    console.log(data);
-    try {
-      const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("Response Data:", responseData);
-        if (responseData.statusCode === 409) {
-          toastRef.current.showConflictMessage(responseData.message);
-        } else {
-          if (mrfStatusId == 1) {
-            toastRef.current.showSuccessMessage(
-              "The MRF has been saved as Draft!"
-            );
-          } else {
-            toastRef.current.showSuccessMessage("Form submitted successfully!");
-          }
-          setTimeout(() => {
-            navigateTo("my_requisition");
-          }, 2000);
-        }
-      } else {
-        console.error("Request failed with status:", response.status);
-        const errorData = await response.text();
-        console.error("Error Data:", errorData);
-        if (response.status === 400) {
-          toastRef.current.showBadRequestMessage(
-            "Bad request: " + response.url
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-
   const strToArray = (s) => {
     s = s ?? "";
     if (typeof s === "string") {
@@ -298,113 +179,7 @@ const CreateRequisitionBody = ({
 
   const header = renderHeader();
 
-  // const handleSubmit = async (mrfStatusId) => {
-  //   console.log(mrfStatusId);
-  //   console.log("i amam a clickcck");
-
-  //   setIsLoading(true);
-
-  //   console.log(formData);
-  //   const data = {
-  //     referenceNo: formData.referenceNo,
-  //     requisitionType: formData.requisitionType,
-  //     positionTitle: formData.positionTitle,
-  //     departmentId: formData.departmentId,
-  //     subDepartmentId: formData.subDepartmentId,
-  //     projectId: formData.projectId,
-  //     vacancyNo: Number(formData.vacancyNo),
-  //     genderId: formData.genderId,
-  //     qualification: formData.qualification,
-  //     requisitionDateUtc: new Date().toISOString().slice(0, 10),
-  //     reportsToEmployeeId: formData.reportsToEmployeeId,
-  //     minGradeId: formData.minGradeId,
-  //     maxGradeId: formData.maxGradeId,
-  //     employmentTypeId: formData.employmentTypeId,
-  //     minExperience: formData.minExperience,
-  //     maxExperience: formData.maxExperience,
-  //     vacancyTypeId: formData.vacancyTypeId,
-  //     isReplacement: formData.isReplacement,
-  //     mrfStatusId: mrfStatusId,
-  //     jdDocPath: "string",
-  //     locationId: formData.locationId,
-  //     qualificationId: formData.qualificationId,
-  //     createdByEmployeeId: storageService.getData("profile").employeeId,
-  //     createdOnUtc: new Date().toISOString(),
-  //     updatedByEmployeeId: storageService.getData("profile").employeeId,
-  //     updatedOnUtc: new Date().toISOString(),
-  //     justification: formData.justification,
-  //     jobDescription: formData.jobDescription,
-  //     skills: formData.skills,
-  //     minTargetSalary: formData.minTargetSalary,
-  //     maxTargetSalary: formData.maxTargetSalary,
-  //     employeeName: formData.employeeName,
-  //     emailId: formData.emailId,
-  //     note: formData.note,
-  //     employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
-  //     lastWorkingDate: new Date().toISOString().slice(0, 10),
-  //     annualCtc: formData.annualCtc,
-  //     annualGross: formData.annualGross,
-  //     replaceJustification: formData.replaceJustification,
-  //     resumeReviewerEmployeeIds: strToArray(
-  //       formData.resumeReviewerEmployeeIds
-  //     ).toString(),
-  //     interviewerEmployeeIds: strToArray(
-  //       formData.interviewerEmployeeIds
-  //     ).toString(),
-  //     hiringManagerId: formData.hiringManagerId,
-  //     hiringManagerEmpId: formData.hiringManagerEmpId,
-  //     functionHeadId: formData.functionHeadId,
-  //     functionHeadEmpId: formData.functionHeadEmpId,
-  //     siteHRSPOCId: formData.siteHRSPOCId,
-  //     siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
-  //     financeHeadId: formData.financeHeadId,
-  //     financeHeadEmpId: formData.financeHeadEmpId,
-  //     presidentnCOOId: formData.presidentnCOOId,
-  //     presidentnCOOEmpId: formData.presidentnCOOEmpId,
-  //   };
-  //   console.log(data);
-  //   try {
-  //     const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-
-  //     if (response.ok) {
-  //       const responseData = await response.json();
-  //       console.log("Response Data:", responseData);
-  //       if (responseData.statusCode === 409) {
-  //         toastRef.current.showConflictMessage(responseData.message);
-  //       } else {
-  //         if (mrfStatusId == 1) {
-  //           toastRef.current.showSuccessMessage(
-  //             "The MRF has been saved as Draft!"
-  //           );
-  //         } else {
-  //           toastRef.current.showSuccessMessage("Form submitted successfully!");
-  //         }
-  //         setTimeout(() => {
-  //           navigateTo("my_requisition");
-  //         }, 2000);
-  //       }
-  //     } else {
-  //       console.error("Request failed with status:", response.status);
-  //       const errorData = await response.text();
-  //       console.error("Error Data:", errorData);
-  //       if (response.status === 400) {
-  //         toastRef.current.showBadRequestMessage(
-  //           "Bad request: " + response.url
-  //         );
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {

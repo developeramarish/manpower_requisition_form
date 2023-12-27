@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { API_URL, MRF_STATUS } from "../constants/config";
+import { API_URL, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
 import { storageService } from "../constants/storage";
 import { navigateTo } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
@@ -33,7 +33,8 @@ const MrfPartialStatus = ({
   const footerContent = (value) => {
     return (
       <div>
-        {(mrfStatusId == MRF_STATUS.submToHr || mrfStatusId == MRF_STATUS.draft) ? (
+        {mrfStatusId == MRF_STATUS.submToHr ||
+        mrfStatusId == MRF_STATUS.draft ? (
           <ButtonC
             label="Yes"
             className="w-2 bg-red-600 border-red-600 p-2 mr-3"
@@ -64,14 +65,14 @@ const MrfPartialStatus = ({
     );
   };
 
+  // console.log(formData.jobDescription)
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
 
-    console.log(formData.jobDescription)
     const data = {
       referenceNo: formData.referenceNo,
       requisitionType: formData.requisitionType,
-      positionTitle: formData.positionTitle,
+      positionTitleId: formData.positionTitleId,
       departmentId: formData.departmentId,
       subDepartmentId: formData.subDepartmentId,
       projectId: formData.projectId,
@@ -125,7 +126,7 @@ const MrfPartialStatus = ({
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
     };
-   
+    //  console.log(data)
     try {
       const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
         method: "POST",
@@ -209,7 +210,6 @@ const MrfPartialStatus = ({
     }
   };
 
-
   return (
     <>
       {/* {popupmessage &&(
@@ -218,7 +218,8 @@ const MrfPartialStatus = ({
          </>
        )} */}
 
-      {(mrfStatusId == MRF_STATUS.submToHr || mrfStatusId == MRF_STATUS.draft) && (
+      {(mrfStatusId == MRF_STATUS.submToHr ||
+        mrfStatusId == MRF_STATUS.draft) && (
         <Dialog
           className="w-3 "
           visible={visible}
