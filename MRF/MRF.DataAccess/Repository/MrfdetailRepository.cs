@@ -37,21 +37,21 @@ namespace MRF.DataAccess.Repository
                                                      SubDepartmentId = mrfDetails.SubDepartmentId,
                                                      ProjectId = mrfDetails.ProjectId != 0 ? mrfDetails.ProjectId :0,
                                                      VacancyNo = mrfDetails.VacancyNo ,
-                                                     GenderId = mrfDetails.GenderId != 0 ? mrfDetails.GenderId :0,
+                                                     GenderId = mrfDetails.GenderId != null ? mrfDetails.GenderId :0,
                                                      RequisitionDateUtc = mrfDetails.RequisitionDateUtc ,
-                                                     ReportsToEmployeeId = mrfDetails.ReportsToEmployeeId != 0 ? mrfDetails.ReportsToEmployeeId : 0,
-                                                     MinGradeId = mrfDetails.MinGradeId != 0 ? mrfDetails.MinGradeId : 0 ,
-                                                     MaxGradeId = mrfDetails.MaxGradeId != 0 ? mrfDetails.MaxGradeId : 0,
-                                                     EmploymentTypeId = mrfDetails.EmploymentTypeId != 0 ? mrfDetails.EmploymentTypeId : 0,
-                                                     MinExperience = mrfDetails.MinExperience != 0 ? mrfDetails.MinExperience : 0,
-                                                     MaxExperience = mrfDetails.MaxExperience != 0 ? mrfDetails.MaxExperience : 0,
+                                                     ReportsToEmployeeId = mrfDetails.ReportsToEmployeeId != null ? mrfDetails.ReportsToEmployeeId : 0,
+                                                     MinGradeId = mrfDetails.MinGradeId != null ? mrfDetails.MinGradeId : 0 ,
+                                                     MaxGradeId = mrfDetails.MaxGradeId != null ? mrfDetails.MaxGradeId : 0,
+                                                     EmploymentTypeId = mrfDetails.EmploymentTypeId != null ? mrfDetails.EmploymentTypeId : 0,
+                                                     MinExperience = mrfDetails.MinExperience != null ? mrfDetails.MinExperience : 0,
+                                                     MaxExperience = mrfDetails.MaxExperience != null ? mrfDetails.MaxExperience : 0,
                                                      VacancyTypeId = mrfDetails.VacancyTypeId !=0? mrfDetails.VacancyTypeId :0 ,
                                                      IsReplacement = mrfDetails.IsReplacement,
-                                                     Note=mrfDetails.Note != "" ? mrfDetails.Note : "",
+                                                     Note=mrfDetails.Note != null ? mrfDetails.Note : "",
                                                      MrfStatusId = mrfDetails.MrfStatusId != 0 ? mrfDetails.MrfStatusId : 0,
                                                      JdDocPath = mrfDetails.JdDocPath  ,
                                                      LocationId = mrfDetails.LocationId != 0 ? mrfDetails.LocationId : 0,
-                                                     QualificationId=mrfDetails.QualificationId==0?null: mrfDetails.QualificationId,
+                                                     QualificationId=mrfDetails.QualificationId==null? 0: mrfDetails.QualificationId,
                                                      Justification = fr.Justification ?? "",
                                                      JobDescription = fr.JobDescription ?? "",
                                                      Skills = fr.Skills ?? "",
@@ -61,7 +61,7 @@ namespace MRF.DataAccess.Repository
                                                      EmployeeCode = replacement != null ? replacement.EmployeeCode : 0,
                                                      EmailId = replacement != null ? replacement.EmailId : "",
                                                      LastWorkingDate = replacement != null ? replacement.LastWorkingDate : DateOnly.MinValue,
-                                                     ReplaceJustification = replacement.Justification ?? "",
+                                                     ReplaceJustification = replacement.Justification != null ? replacement.Justification:"",
                                                      AnnualCtc = replacement != null ? replacement.AnnualCtc : 0,
                                                      AnnualGross = replacement != null ? replacement.AnnualGross : 0,
                                                  }).ToList();
@@ -77,8 +77,8 @@ namespace MRF.DataAccess.Repository
     .GroupBy(mrfDetail => mrfDetail.mrfID)
     .Select(grouping => new MrfdetailRequestModel
     {
-        mrfID = grouping.Key,
-        InterviewerEmployeeIds = string.Join(",", grouping.Select(mrfDetail => mrfDetail.InterviewerEmployeeId))
+        mrfID = grouping.Key, 
+        InterviewerEmployeeIds = string.Join(",", grouping.Select(mrfDetail => mrfDetail.InterviewerEmployeeId))  
     })
     ).ToList();
 
@@ -120,10 +120,10 @@ namespace MRF.DataAccess.Repository
             foreach (var r in query)
             {
                 if (interviewR.Count() > 0)
-                    r.InterviewerEmployeeIds =  interviewR.First().InterviewerEmployeeIds ;
+                    r.InterviewerEmployeeIds =   interviewR.First().InterviewerEmployeeIds ?? "";
 
                 if (resumeR.Count() > 0)
-                    r.ResumeReviewerEmployeeIds =  resumeR.First().ResumeReviewerEmployeeIds ;
+                    r.ResumeReviewerEmployeeIds =  resumeR.First().ResumeReviewerEmployeeIds ?? "" ;
 
 
                 if(emploeeyemailId.Count>0)
