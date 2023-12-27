@@ -40,7 +40,7 @@ const CreateRequisitionBody = ({
     referenceNo: "",
 
     positionTitleId: "",
-    requisitionType: "FR",
+    requisitionType: "",
 
     departmentId: 0,
     subDepartmentId: 0,

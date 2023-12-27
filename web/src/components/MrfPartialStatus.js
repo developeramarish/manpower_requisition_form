@@ -65,13 +65,11 @@ const MrfPartialStatus = ({
     );
   };
 
-  // console.log(formData.jobDescription)
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
-
     const data = {
       referenceNo: formData.referenceNo,
-      requisitionType: formData.requisitionType,
+      requisitionType: formData.requisitionType==""?REQUISITION_TYPE[0].code:formData.requisitionType,
       positionTitleId: formData.positionTitleId,
       departmentId: formData.departmentId,
       subDepartmentId: formData.subDepartmentId,
@@ -126,7 +124,6 @@ const MrfPartialStatus = ({
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
     };
-    //  console.log(data)
     try {
       const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
         method: "POST",
