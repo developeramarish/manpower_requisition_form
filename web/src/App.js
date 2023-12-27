@@ -171,6 +171,7 @@ function App() {
                     reqId={params.id}
                     reqstatus={params.statusForTitle}
                     reqRoleId={params.roleId}
+                    reqstatusId={params.mrfstatusId}
                   />
                 )}
               </div>
