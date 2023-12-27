@@ -38,10 +38,8 @@ const CreateRequisitionBody = ({
 
   const formSchema = {
     referenceNo: "",
-
     positionTitleId: "",
     requisitionType: "",
-
     departmentId: 0,
     subDepartmentId: 0,
     projectId: 0,
