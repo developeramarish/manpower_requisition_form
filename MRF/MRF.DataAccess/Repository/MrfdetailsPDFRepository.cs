@@ -35,7 +35,7 @@ namespace MRF.DataAccess.Repository
                                                          Id = MD.Id,
                                                          ReferenceNo = MD.ReferenceNo,
                                                          RequisitionType = MD.RequisitionType,
-                                                         PositionTitle = MD.PositionTitle,
+                                                         PositionTitleId = MD.PositionTitleId,
                                                          Department = DEPT.Name,
                                                          SubDepartment = SUBDEPT.Name,
                                                          Project = PM.Name,

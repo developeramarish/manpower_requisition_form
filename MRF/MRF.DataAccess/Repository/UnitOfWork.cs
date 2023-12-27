@@ -47,6 +47,8 @@ namespace MRF.DataAccess.Repository
         public ImrfDetailsStatusHistory mrfDetailsStatusHistory { get; private set; }
         public IMrfdetailsPDFRepository MrfdetailsPDFRepository { get; private set; }
 
+        public IPositionTitlemasterRepository PositionTitlemaster { get; private set; }
+
         public UnitOfWork(Data.MRFDBContext db, IUserService userService)
         {
             _db = db;
@@ -90,6 +92,7 @@ namespace MRF.DataAccess.Repository
             CandidateInterviewFeedback = new CandidateInterviewFeedbackRepository(_db);
             mrfDetailsStatusHistory=new mrfDetailsStatusHistoryRepository(_db);
             MrfdetailsPDFRepository = new MrfdetailsPDFRepository(_db);
+            PositionTitlemaster = new PositionTitleRepository(_db);
         }
         public void Save()
         {

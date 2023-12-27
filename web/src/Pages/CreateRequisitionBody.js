@@ -46,8 +46,10 @@ const CreateRequisitionBody = ({
 
   const formSchema = {
     referenceNo: "",
-    positionTitle: "",
-    requisitionType: "FR",
+
+    positionTitleId: "",
+    requisitionType: "",
+
     departmentId: 0,
     subDepartmentId: 0,
     projectId: 0,
@@ -161,6 +163,118 @@ const CreateRequisitionBody = ({
   useEffect(() => {
     fetchSubDepartments(formData.departmentId);
   }, [formData.departmentId]);
+
+
+  // if(getReqRoleId==4){
+  //   setReadOnly(true);
+  // }
+
+  const handleSubmit = async (mrfStatusId) => {
+    setIsLoading(true);
+
+    console.log(formData);
+    const data = {
+      referenceNo: formData.referenceNo,
+      requisitionType: formData.requisitionType==""?RequisitionType[0].code:"",
+      positionTitleId: formData.positionTitleId,
+      departmentId: formData.departmentId,
+      subDepartmentId: formData.subDepartmentId,
+      projectId: formData.projectId,
+      vacancyNo: Number(formData.vacancyNo),
+      genderId: formData.genderId,
+      qualification: formData.qualification,
+      requisitionDateUtc: new Date().toISOString().slice(0, 10),
+      reportsToEmployeeId: formData.reportsToEmployeeId,
+      minGradeId: formData.minGradeId,
+      maxGradeId: formData.maxGradeId,
+      employmentTypeId: formData.employmentTypeId,
+      minExperience: formData.minExperience,
+      maxExperience: formData.maxExperience,
+      vacancyTypeId: formData.vacancyTypeId,
+      isReplacement: formData.isReplacement,
+      mrfStatusId: mrfStatusId,
+      jdDocPath: "string",
+      locationId: formData.locationId,
+      qualificationId: formData.qualificationId,
+      createdByEmployeeId: storageService.getData("profile").employeeId,
+      createdOnUtc: new Date().toISOString(),
+      updatedByEmployeeId: storageService.getData("profile").employeeId,
+      updatedOnUtc: new Date().toISOString(),
+      justification: formData.justification,
+      jobDescription: formData.jobDescription,
+      skills: formData.skills,
+      minTargetSalary: formData.minTargetSalary,
+      maxTargetSalary: formData.maxTargetSalary,
+      employeeName: formData.employeeName,
+      emailId: formData.emailId,
+      note: formData.note,
+      employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
+      lastWorkingDate: new Date().toISOString().slice(0, 10),
+      annualCtc: formData.annualCtc,
+      annualGross: formData.annualGross,
+      replaceJustification: formData.replaceJustification,
+      resumeReviewerEmployeeIds: strToArray(
+        formData.resumeReviewerEmployeeIds
+      ).toString(),
+      interviewerEmployeeIds: strToArray(
+        formData.interviewerEmployeeIds
+      ).toString(),
+      hiringManagerId: formData.hiringManagerId,
+      hiringManagerEmpId: formData.hiringManagerEmpId,
+      functionHeadId: formData.functionHeadId,
+      functionHeadEmpId: formData.functionHeadEmpId,
+      siteHRSPOCId: formData.siteHRSPOCId,
+      siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
+      financeHeadId: formData.financeHeadId,
+      financeHeadEmpId: formData.financeHeadEmpId,
+      presidentnCOOId: formData.presidentnCOOId,
+      presidentnCOOEmpId: formData.presidentnCOOEmpId,
+  
+    };
+    console.log(data);
+    try {
+      const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Response Data:", responseData);
+        if (responseData.statusCode === 409) {
+          toastRef.current.showConflictMessage(responseData.message);
+        } else {
+          if (mrfStatusId == 1) {
+            toastRef.current.showSuccessMessage(
+              "The MRF has been saved as Draft!"
+            );
+          } else {
+            toastRef.current.showSuccessMessage("Form submitted successfully!");
+          }
+          setTimeout(() => {
+            navigateTo("my_requisition");
+          }, 2000);
+        }
+      } else {
+        console.error("Request failed with status:", response.status);
+        const errorData = await response.text();
+        console.error("Error Data:", errorData);
+        if (response.status === 400) {
+          toastRef.current.showBadRequestMessage(
+            "Bad request: " + response.url
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   const strToArray = (s) => {
     s = s ?? "";
@@ -375,14 +489,17 @@ const CreateRequisitionBody = ({
               Position Title
               <RedAsterisk />
             </label>
-            <InputTextCp
-              id="position-title"
-              onChange={(e) =>
-                setFormData({ ...formData, positionTitle: e.target.value })
-              }
-              value={formData.positionTitle}
-              disable={readOnly}
+           <DropdownComponent
+              optionLabel="name"
+              optionValue="id"
+              type="position"
+              options={dropdownData.position}
+              value={formData.positionTitleId}
+              onChange={(e) => {
+                setFormData({ ...formData, positionTitleId: e.target.value });
+              }}
             />
+
           </div>
         </div>
 
