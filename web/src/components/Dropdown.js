@@ -9,6 +9,7 @@ const DropdownComponent = ({
   className,
   onChange,
   value = null,
+  disable
 }) => {
   return (
     <Dropdown
@@ -19,6 +20,7 @@ const DropdownComponent = ({
       onChange={onChange}
       placeholder={placeholder}
       className={className}
+      disabled ={disable}
     />
   );
 };

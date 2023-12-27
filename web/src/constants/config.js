@@ -79,3 +79,27 @@ export const ROLES = {
 	interviewer: 6,
 	hiringManager: 7,
 };
+
+
+export const REQUISITION_TYPE = [
+	{ name: "FR", code: "FR" },
+	{ name: "RP", code: "RP" },
+  
+	// Add more options as needed
+  ];
+
+
+  export const GENDER = [
+	{ label: "Male", id: 1 },
+	{ label: "Female", id: 2 },
+	{ label: "Other", id: 3 },
+  ];
+
+  export const MIN_EXPERIENCE_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
+	label: i.toString(),
+	value: i,
+  }));
+  export const MAX_EXPERIENCE_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
+	label: i.toString(),
+	value: i,
+  }));
