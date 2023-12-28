@@ -29,6 +29,8 @@ namespace MRF.DataAccess.Repository
                                                      join CBED in _db.Employeedetails on MD.CreatedByEmployeeId equals CBED.Id
                                                      join UBED in _db.Employeedetails on MD.UpdatedByEmployeeId equals UBED.Id
                                                      join FMRF in _db.Freshmrfdetails on MD.Id equals FMRF.MrfId
+                                                     join CBY in _db.Employeedetails on MD.CreatedByEmployeeId equals CBY.Id
+                                                     join PNAME in _db.PositionTitlemaster on MD.PositionTitleId equals PNAME.Id
                                                      where MD.Id == MrfId
                                                      select new MrfdetailsPDFRequestModel
                                                      {
@@ -36,6 +38,7 @@ namespace MRF.DataAccess.Repository
                                                          ReferenceNo = MD.ReferenceNo,
                                                          RequisitionType = MD.RequisitionType,
                                                          PositionTitleId = MD.PositionTitleId,
+                                                         PositionName = PNAME.Name,
                                                          Department = DEPT.Name,
                                                          SubDepartment = SUBDEPT.Name,
                                                          Project = PM.Name,
@@ -55,7 +58,8 @@ namespace MRF.DataAccess.Repository
                                                          JobDescription = FMRF.JobDescription,
                                                          Skills = FMRF.Skills,
                                                          MinTargetSalary = FMRF.MinTargetSalary,
-                                                         MaxTargetSalary = FMRF.MaxTargetSalary
+                                                         MaxTargetSalary = FMRF.MaxTargetSalary,
+                                                         MRFRaisedBy=CBY.Name
                                                      }).ToList();
             return query.FirstOrDefault();
 
