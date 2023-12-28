@@ -48,7 +48,8 @@ namespace MRF.API.Controllers
                 return new MrfdetailsPDFRequestModel();
             }
 
-            var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFDetail.html");
+            //var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFDetail.html");
+            var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFEmailTemplate.html");
             var pdfDirectory = Path.Combine(_hostEnvironment.ContentRootPath, "PDFs");
             var pdfFileName = $"{mrfdetailpdf.ReferenceNo.Replace("/", "_")}.pdf";
             var pathToOutputPdfFile = Path.Combine(pdfDirectory, pdfFileName);
@@ -63,7 +64,9 @@ namespace MRF.API.Controllers
             {
                 var builder = new BodyBuilder();
                 builder.HtmlBody = sourceReader.ReadToEnd();
-                htmlBody = GetHtmlMessageBody(builder.HtmlBody, mrfdetailpdf);
+                //htmlBody = GetHtmlMessageBody(builder.HtmlBody, mrfdetailpdf);
+                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetailpdf);
+                
             }
 
             ConvertHtmlToPdf(htmlBody, pathToOutputPdfFile);
@@ -117,6 +120,25 @@ namespace MRF.API.Controllers
                  .Replace("{MaxTargetSalary}", Convert.ToString(mrfdetailpdf.MaxTargetSalary));              
 
             return messageBody;
-        }       
+        }
+        private string GetHtmlTemplateBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
+        {
+            // Replace placeholders in HTML with data
+            string messageBody = htmlBody
+              .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
+              .Replace("{NumberOfVacancies}", Convert.ToString(mrfdetailpdf.NumberOfVacancies))
+              .Replace("{MaxTargetSalary}", Convert.ToString((mrfdetailpdf.MaxTargetSalary) / 100000))
+              .Replace("{TotalTargetSalary}", Convert.ToString((mrfdetailpdf.MaxTargetSalary * mrfdetailpdf.NumberOfVacancies) / 100000))
+              .Replace("{GradeMin}", mrfdetailpdf.GradeMin)
+              .Replace("{GradeMax}", mrfdetailpdf.GradeMax)
+              .Replace("{PositionName}", mrfdetailpdf.PositionName)
+              .Replace("{Department}", mrfdetailpdf.Department)
+              .Replace("{SubDepartment}", mrfdetailpdf.SubDepartment)
+              .Replace("{Project}", mrfdetailpdf.Project)
+              .Replace("{Justification}", mrfdetailpdf.Justification)
+              .Replace("{MRFRaisedBy}", Convert.ToString(mrfdetailpdf.MRFRaisedBy));
+
+            return messageBody;
+        }
     }
 }

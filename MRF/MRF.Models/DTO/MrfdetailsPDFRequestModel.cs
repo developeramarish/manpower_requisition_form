@@ -8,6 +8,7 @@ namespace MRF.Models.DTO
         public string? ReferenceNo { get; set; } = null!;
         public string? RequisitionType { get; set; }
         public int? PositionTitleId { get; set; }
+        public string? PositionName { get; set; }
         public string? Department { get; set; }
         public string? SubDepartment { get; set; }
         public string? Project { get; set; }
@@ -29,6 +30,7 @@ namespace MRF.Models.DTO
         public string? Justification { get; set; }
         public int? MinTargetSalary { get; set; }
         public int? MaxTargetSalary { get; set; }
+        public string? MRFRaisedBy { get; set; }
     }
 
     public class MrfdetailsPDFResponseModel
