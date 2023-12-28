@@ -98,6 +98,11 @@ const CreateRequisitionBody = ({
     // console.log(formData);
     setFormData({ ...formData, jobDescription: val });
   };
+
+  const onTextChangedSkill = (val) => {
+    setFormData({ ...formData, skills: val });
+  };
+
   const fetchSubDepartments = (selectedDepartment) => {
     const apiUrl =
       API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment;
@@ -742,7 +747,13 @@ const CreateRequisitionBody = ({
                   Skills
                   <RedAsterisk />
                 </label>
-                <InputTextareaComponent
+                <EditorComponent
+                  value={formData.skills}
+                  headerTemplate={header}
+                  onTextChanged={onTextChangedSkill}
+                  disable={readOnly}
+                />
+                {/* <InputTextareaComponent
                   autoResize
                   id="skills"
                   className="bg-gray-100"
@@ -753,7 +764,7 @@ const CreateRequisitionBody = ({
                   onChange={(e) =>
                     setFormData({ ...formData, skills: e.target.value })
                   }
-                />
+                /> */}
               </div>
             </div>
             <div className="flex justify-content-between gap-5 ">
@@ -1194,7 +1205,7 @@ const CreateRequisitionBody = ({
                           mrfStatusId={2}
                           label={"SUBMIT"}
                           message={
-                            "After submitting you won't be able to edit the mrf details"
+                            "After submitting you won't be able to edit the MRF details"
                           }
                           formData={formData}
                         />
@@ -1270,7 +1281,7 @@ const CreateRequisitionBody = ({
                           mrfStatusId={2}
                           label={"SUBMIT"}
                           message={
-                            "After submitting you won't be able to edit the mrf details"
+                            "After submitting you won't be able to edit the MRF details"
                           }
                           formData={formData}
                         />
@@ -1551,7 +1562,7 @@ const CreateRequisitionBody = ({
                       mrfStatusId={2}
                       label={"SUBMIT"}
                       message={
-                        "After submitting you won't be able to edit the mrf details"
+                        "After submitting you won't be able to edit the MRF details"
                       }
                       formData={formData}
                     />

@@ -140,7 +140,7 @@ function App() {
               }
             />
             <div className="content">
-              <Sidebar roleId={profile.roleId} />
+              <Sidebar roleId={profile.roleId} sPageKey = {currentPageKey}/>
               <div className="content_right_wrapper">
                 {currentPageKey === "dashboard" && (
                   <Dashboard
@@ -162,8 +162,7 @@ function App() {
                 )}
                 {currentPageKey === "create_requisition" && (
                   <CreateRequisition
-                    // reqstatus={params.statusForTitle}
-                    // reqRoleId={params.roleId}
+                    
                   />
                 )}
                 {currentPageKey === "edit_requisition" && (
