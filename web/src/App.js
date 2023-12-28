@@ -4,7 +4,7 @@ import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
-import "./styles/layout/InputComponents.css";
+import "./css/InputComponent.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import {

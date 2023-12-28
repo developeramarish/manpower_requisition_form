@@ -124,6 +124,7 @@ const MrfPartialStatus = ({
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
     };
+    
     try {
       const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
         method: "POST",
@@ -148,7 +149,7 @@ const MrfPartialStatus = ({
           }
           setTimeout(() => {
             navigateTo("my_requisition");
-          }, 2000);
+          }, 1000);
         }
       } else {
         console.error("Request failed with status:", response.status);
