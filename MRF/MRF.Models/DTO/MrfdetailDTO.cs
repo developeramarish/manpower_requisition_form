@@ -52,8 +52,8 @@ namespace MRF.Models.DTO
 
         public int ResumeReviewerEmployeeId { get; set; }
         public int InterviewerEmployeeId { get; set; }
-        public string? ResumeReviewerEmployeeIds { get; set; }
-        public string? InterviewerEmployeeIds { get; set; }
+        public string? ResumeReviewerEmployeeIds { get; set; } = string.Empty;
+        public string? InterviewerEmployeeIds { get; set; } = string.Empty;
 
         public int  HiringManagerId { get; set; }
         public int HiringManagerEmpId { get; set; }

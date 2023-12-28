@@ -30,4 +30,6 @@ public class Candidatedetails
 
     public DateTime UpdatedOnUtc { get; set; }
     public string Reason { get; set; } = "";
+
+    public int?  SourceId { get; set; }
 }

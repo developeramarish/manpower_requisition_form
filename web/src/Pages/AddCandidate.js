@@ -8,6 +8,7 @@ import { storageService } from "../constants/storage";
 import { navigateTo } from "../constants/Utils";
 import { API_URL } from "../constants/config";
 import {FILE_URL} from "../constants/config";
+import DropdownComponent from "../components/Dropdown";
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,8 +16,6 @@ const AddCandidate = (reqId) => {
     setSelectedFile(event);
   };
  // console.log(referenceNo);
-  console.log(reqId);
-  console.log(reqId.referenceNo);
   const formSchema = {
     id: 0,
     mrfId: reqId.reqId,
@@ -30,10 +29,29 @@ const AddCandidate = (reqId) => {
     updatedByEmployeeId: storageService.getData("profile").employeeId,
     updatedOnUtc: new Date().toISOString(),
     reason: "",
+    sourceId: 0,
   };
 
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
+  const[dropdowns,setDropdownData]=useState();
+  useEffect(() => {
+    // Fetch the data for all the dropdowns
+    fetch(API_URL.ADD_SOURCE_NAME)
+      .then((response) => response.json())
+      .then((data) => {
+        
+          console.log(data.result);
+        // Store the dropdown data in localStorage using your storageService
+        // storageService.set("dropdownData", dropdown);
+        // Update the state with the new dropdown data
+       setDropdownData(data.result);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    }, []);
+    
 
   const handleSubmit = async () => {
     const fileUploadData = new FormData();
@@ -63,28 +81,25 @@ const AddCandidate = (reqId) => {
           updatedByEmployeeId: formData.updatedByEmployeeId,
           updatedOnUtc:formData.updatedOnUtc,
           reason: "",
+          sourceId:formData.sourceId,
         };
         try {
-          const response = fetch(API_URL.ADD_CANDIDATE, {
+          const response = await fetch(API_URL.ADD_CANDIDATE, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
           });
-
           if (response.ok) {
             const responseData = await response.json();
             console.log("Response Data:", responseData);
-
             toastRef.current.showSuccessMessage("Form submitted successfully!");
             setTimeout(() => {
                navigateTo("my_requisition");
             }, 2000);
           } else {
             console.error("Request failed with status:", response.status);
-            const errorData = await response.text();
-            console.error("Error Data:", errorData);
             if (response.status === 400) {
               toastRef.current.showBadRequestMessage(
                 "Bad request: " + response.url
@@ -93,10 +108,12 @@ const AddCandidate = (reqId) => {
           }
         } catch (error) {
           console.error("Error:", error);
-        } finally {
-        }
+        }  
       } else {
-        // Handle error
+        if (fileUploadResponse.status === 400) {
+          toastRef.current.showBadRequestMessage("you have to upload Resume!");
+        }
+        console.error("Request failed with status:", fileUploadResponse.status);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -170,12 +187,30 @@ const AddCandidate = (reqId) => {
                   />
                 </div>
                 <div className="flex flex-column w-6 gap-2">
+                  <label htmlFor="contact" className="font-bold text-sm">
+                     Source Name
+                  </label>
+                  <DropdownComponent
+              optionLabel="name"
+              optionValue="id"
+              type="source"
+              options={dropdowns}
+              value={formData.sourceId}
+              onChange={(e) => {
+                setFormData({ ...formData, sourceId: e.target.value });
+              }}
+            />
+                </div>
+                </div>
+          
+                <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="resume" className="font-bold text-sm">
                     Resume
                   </label>
                   <SingleFileUpload onChange={handleFileChange} />
                 </div>
-              </div>
+               
+              
             </section>
 
             <div className="flex flex-wrap justify-content-end gap-5 mt-3">
