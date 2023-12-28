@@ -101,21 +101,21 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 
-// If you want to serve files from a specific directory, you can use:
-//var staticFilesPath = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Resume");
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(staticFilesPath),
-//    RequestPath = "/Resume"
-//});
+/*If you want to serve files from a specific directory, you can use:*/
+var staticFilesPath = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Resume");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath),
+    RequestPath = "/Resume"
+});
 
-//// If you want to serve files from a specific directory, you can use:
-//var staticFilesPath1 = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Assignment");
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(staticFilesPath1),
-//    RequestPath = "/Assignment"
-//});
+// If you want to serve files from a specific directory, you can use:
+var staticFilesPath1 = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Assignment");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(staticFilesPath1),
+    RequestPath = "/Assignment"
+});
 
 //var staticFilesPath2 = Path.Combine(builder.Configuration["FileUploadSettings:FallbackPath"], "Feedback");
 //app.UseStaticFiles(new StaticFileOptions
