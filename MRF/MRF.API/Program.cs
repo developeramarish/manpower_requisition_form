@@ -27,6 +27,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<ILoggerService, LoggerService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<AzureADService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
