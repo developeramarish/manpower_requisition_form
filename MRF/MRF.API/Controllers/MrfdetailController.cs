@@ -594,6 +594,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfdetailRequestModel GetRequisition(int MrfId)
+        
         {
             _logger.LogInfo($"Fetching All MRF Details by Id: {MrfId}");
             MrfdetailRequestModel mrfdetail = _unitOfWork.Mrfdetail.GetRequisition(MrfId);

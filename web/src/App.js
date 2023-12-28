@@ -4,7 +4,7 @@ import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
-import "./styles/layout/InputComponents.css";
+import "./css/InputComponent.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import {
@@ -140,7 +140,7 @@ function App() {
               }
             />
             <div className="content">
-              <Sidebar roleId={profile.roleId} />
+              <Sidebar roleId={profile.roleId} sPageKey = {currentPageKey}/>
               <div className="content_right_wrapper">
                 {currentPageKey === "dashboard" && (
                   <Dashboard
@@ -162,8 +162,7 @@ function App() {
                 )}
                 {currentPageKey === "create_requisition" && (
                   <CreateRequisition
-                    // reqstatus={params.statusForTitle}
-                    // reqRoleId={params.roleId}
+                    
                   />
                 )}
                 {currentPageKey === "edit_requisition" && (

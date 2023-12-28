@@ -49,5 +49,7 @@ namespace MRF.DataAccess.Data
 
         public DbSet<PositionTitlemaster> PositionTitlemaster { get; set; }
 
+        public DbSet<Sourcemaster> Sourcemaster { get; set; }
+
     }
 }
