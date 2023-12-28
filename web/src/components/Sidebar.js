@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect,useState } from 'react'
 import './../css/Sidebar.css'
 import { navigateTo } from '../constants/Utils';
 import { ROLES } from '../constants/config';
 
-const Sidebar = ({roleId}) => {
+const Sidebar = ({roleId,sPageKey}) => {
     const [active, setActive] = useState("dashboard");
     const onLinkClicked = (e)=>{
         e.preventDefault();
@@ -14,7 +14,9 @@ const Sidebar = ({roleId}) => {
         setActive(sPageKey);
         navigateTo(sPageKey)
     }
-    
+    useEffect(()=>{
+        setActive(sPageKey);
+    },[sPageKey])
     return (
         <div className='sidebar'>
         <ul>
