@@ -58,7 +58,7 @@ const AddCandidate = (reqId) => {
     fileUploadData.append("file", selectedFile);
 
     try {
-      const fileUploadResponse = await fetch(FILE_URL.RESUME_UPLOAD +
+      const fileUploadResponse = await fetch(API_URL.RESUME_UPLOAD +
           removeSpaces(formData.name),
         {
           method: "POST",
