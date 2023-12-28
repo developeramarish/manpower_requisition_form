@@ -40,12 +40,7 @@ export const ROUTES = {
   create_requisition: "create_requisition",
   edit_requisition: "edit_requisition",
   add_candidate: "add_candidate",
-	dashboard: "dashboard",
-	my_requisition: "my_requisition",
-	create_requisition: "create_requisition",
-	edit_requisition: "edit_requisition",
-	add_candidate: "add_candidate",
-	view_candidate: "view_candidate",
+ 
 };
 
 export const MRF_STATUS = {
