@@ -48,7 +48,6 @@ namespace MRF.API.Controllers
                 return new MrfdetailsPDFRequestModel();
             }
 
-            //var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFDetail.html");
             var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFEmailTemplate.html");
             var pdfDirectory = Path.Combine(_hostEnvironment.ContentRootPath, "PDFs");
             var pdfFileName = $"{mrfdetailpdf.ReferenceNo.Replace("/", "_")}.pdf";
@@ -64,9 +63,7 @@ namespace MRF.API.Controllers
             {
                 var builder = new BodyBuilder();
                 builder.HtmlBody = sourceReader.ReadToEnd();
-                //htmlBody = GetHtmlMessageBody(builder.HtmlBody, mrfdetailpdf);
                 htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetailpdf);
-                
             }
 
             ConvertHtmlToPdf(htmlBody, pathToOutputPdfFile);
@@ -74,7 +71,7 @@ namespace MRF.API.Controllers
             var emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Awaiting COO Approval");
             if (emailRequest != null)
             {
-                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content, pathToOutputPdfFile);
+                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, htmlBody);
             }
 
             return mrfdetailpdf;
@@ -89,38 +86,7 @@ namespace MRF.API.Controllers
                     HtmlConverter.ConvertToPdf(htmlString, pdfDocument, converterProperties);
                 }
             }
-        }
-        private string GetHtmlMessageBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
-        {
-            // Replace placeholders in HTML with data
-            string messageBody = htmlBody
-                .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
-                 .Replace("{RequisitionType}", mrfdetailpdf.RequisitionType)
-                 .Replace("{PositionTitleId}", Convert.ToString(mrfdetailpdf.PositionTitleId))
-                 .Replace("{Department}", mrfdetailpdf.Department)
-                 .Replace("{SubDepartment}", mrfdetailpdf.SubDepartment)
-                 .Replace("{Project}", mrfdetailpdf.Project)
-                 .Replace("{Location}", mrfdetailpdf.Location)
-                 .Replace("{PositionReportingto}", mrfdetailpdf.PositionReportingto)
-                 .Replace("{HiringInitiationDate}", Convert.ToString(mrfdetailpdf.HiringInitiationDate))
-                 .Replace("{GradeMin}", mrfdetailpdf.GradeMin)
-                 .Replace("{GradeMax}", mrfdetailpdf.GradeMax)
-                 .Replace("{TypeOfEmployment}", mrfdetailpdf.TypeOfEmployment)
-                 .Replace("{ReplacementForThEmployee}", Convert.ToString(mrfdetailpdf.ReplacementForThEmployee))
-                 .Replace("{NumberOfVacancies}", Convert.ToString(mrfdetailpdf.NumberOfVacancies))
-                 .Replace("{TypeOfVacancy}", Convert.ToString(mrfdetailpdf.TypeOfVacancy))
-                 .Replace("{ExperienceMin}", Convert.ToString(mrfdetailpdf.ExperienceMin))
-                 .Replace("{ExperienceMax}", Convert.ToString(mrfdetailpdf.ExperienceMax))
-                 .Replace("{Gender}", mrfdetailpdf.Gender)
-                 .Replace("{Qualification}", mrfdetailpdf.Qualification)
-                 .Replace("{JobDescription}", Convert.ToString(mrfdetailpdf.JobDescription))
-                 .Replace("{Skills}", mrfdetailpdf.Skills)
-                 .Replace("{Justification}", mrfdetailpdf.Justification)
-                 .Replace("{MinTargetSalary}", Convert.ToString(mrfdetailpdf.MinTargetSalary))
-                 .Replace("{MaxTargetSalary}", Convert.ToString(mrfdetailpdf.MaxTargetSalary));              
-
-            return messageBody;
-        }
+        }      
         private string GetHtmlTemplateBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
         {
             // Replace placeholders in HTML with data
