@@ -520,15 +520,15 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
-                //if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-                //{
-                //    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
-                //    if (emailRequest != null)
-                //    {
-                //        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                //    }
-                //}
-                    _responseModel.Id = existingStatus.Id;
+               /* if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+                   emailmaster  emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                }*/
+                _responseModel.Id = existingStatus.Id;
             }
             else
             {

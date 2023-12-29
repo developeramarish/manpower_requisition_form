@@ -66,6 +66,7 @@ namespace MRF.DataAccess.Repository
         CandidateId = candidate.Id,
         Reason = candidate.Reason,
         PositionTitle = pos.Name,
+        CandidateName = candidate.Name,
 
     };
 

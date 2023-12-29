@@ -23,5 +23,7 @@ namespace MRF.Models.ViewModels
         public string Reason { get; set; } = null!;
         public string PositionTitle { get; set; } = null!;
 
+        public string CandidateName { get; set; }
+
     }
 }
