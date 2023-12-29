@@ -4,15 +4,12 @@ import { Column } from "primereact/column";
 
 import { APIPath } from "./../components/constant";
 import "../styles/layout/Candidate.css";
-import ButtonC from "./../components/Button"; 
-import AddCandidate from "./AddCandidate";
-// import { useNavigate } from 'react-router-dom';
+import "../css/MyRequisitions.css";
+import { API_URL } from "../constants/config";
 function ViewCandidate() {
   const [reqData, setReqData] = useState([]);
-  // const navigate= useNavigate();
   useEffect(() => {
-   
-    const apiUrl = APIPath + "Candidatedetail/Get";
+   const apiUrl = API_URL.GET_CANDIDATE_DETAILS;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((response) => {
@@ -28,90 +25,77 @@ function ViewCandidate() {
       });
   }, []);
 
-  const header = <h3 className="req-header">View Candidate</h3>;
-  const headerTemplate = (
-    <div>
-       <ButtonC
-          label="Add Candidate"
-          className="w-2 bg-red-600 border-red-600"
-          onClick={() => {/* navigate("/AddCandidate") */}}
-        />
-     <div>
-        <br></br>
-      <h3 className="req-header">View Candidate</h3>
-      </div>
-    </div>
-  );
-
- 
-  const columnHeaderTemplate = (title) => {
-    return <h3 className="req-table-header">{title}</h3>;
-  };
-
   const createdOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
   };
   const updatedOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
   };
-
+  const columns = [
+		{
+			field: "refranceNo",
+			header: "MRF ID",
+			//bodyClassName: "ref-col",
+		},
+		{
+			field: "positiontitle",
+			header: "Position",
+			sortable: true,
+		},
+    {
+			field: "name",
+			header: "Name",
+			sortable: true,
+		},
+    {
+			field: "emailId",
+			header: "Email",
+			sortable: true,
+		},
+    {
+			field: "resumePath",
+			header: "Resume",
+			sortable: true,
+		},
+		{
+			field: "createdOnUtc",
+			header: "Created On",
+			body: createdOnBodyTemplate,
+			sortable: true,
+		},	 
+		{
+			field: "contactNo",
+			header: "Contact",
+			sortable: true,
+		},
+	];
   return (
-    <div className="req-card">
+    <div className="my-req">
+      <h3 className="my-req-title">View Candidate</h3>
+      <div className="req-table"> 
       <DataTable
+        header=""
         value={reqData}
-        paginator
+        paginator={reqData.length > 10}
         removableSort
-        rows={6}
+        rows={10}
         scrollable
-        header={headerTemplate}
         scrollHeight="62vh"
       >
-        <Column
-          field="id"
-          header={columnHeaderTemplate("Candidate ID")}
-          sortable          
-          bodyClassName="req-col ref-col"
-        ></Column>
-        <Column
-          field="name"
-          header={columnHeaderTemplate("Candidate Name")}
-          bodyClassName="req-col"
-          sortable
-        ></Column>
-        <Column
-          field="resumePath"
-          header={columnHeaderTemplate("ResumePath")}
-          bodyClassName="req-col"
-          sortable
-        ></Column>
-        <Column
-          field="createdOnUtc"
-          header={columnHeaderTemplate("Created On")}
-          body={createdOnBodyTemplate}
-          bodyClassName="req-col"
-          sortable
-        ></Column>
-        <Column
-          field="updatedOnUtc"
-          header={columnHeaderTemplate("Last Updated")}
-          body={updatedOnBodyTemplate}
-          bodyClassName="req-col"
-          sortable
-        ></Column>
-        <Column
-          field="emailId"
-          header={columnHeaderTemplate("EmailId")}
-          bodyClassName="req-col"
-          sortable
-        ></Column>
-        <Column
-          field="contactNo"
-          header={columnHeaderTemplate("Contact No")}
-          bodyClassName="req-col"
-          sortable
-        ></Column>
+        {columns.map((col,index) => (
+						<Column
+						key={index}
+							field={col.field}
+							header={col.header}
+							body={col.body}
+							bodyClassName={"req-col " + col.bodyClassName}
+							sortable={col.sortable}
+						/>
+					))}
+        
        
       </DataTable>
+    </div>
     </div>
   );
 }

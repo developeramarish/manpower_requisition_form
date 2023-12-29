@@ -278,6 +278,28 @@ namespace MRF.API.Controllers
             //_logger.LogInfo($"Total MRF Dropdown list  count: {Count}");
             return _response;
         }
+        [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<CandidatedetailRequestModel>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetRefrancenoAndPositiontitle()
+        {
+            _logger.LogInfo("Fetching All Candidate detail");
+            List<CandidatedetailRequestModel> obj = _unitOfWork.Candidatedetail.GetRefrancenoAndPositiontitle();
+
+            if (obj.Count == 0)
+            {
+                _logger.LogError("No record is found");
+            }
+            _response.Result = obj;
+            _response.Count = obj.Count;
+            _logger.LogInfo($"Total Candidate detail count: {_response.Count}");
+            return _response;
+        }
 
         public class CanditeResponseDTO
         {
