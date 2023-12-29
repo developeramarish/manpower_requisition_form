@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-// import { useNavigate } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 import "../css/InputComponent.css";
 import DropdownComponent from "./../components/Dropdown";
 import InputTextCp from "./../components/Textbox";
@@ -28,6 +28,7 @@ import { useDispatch } from "react-redux";
 import { PAGE_ACTIONS } from "../reducers/Page_r";
 import EditorComponent from "../components/EditorComponent";
 import InputNumberComponent from "../components/InputNumberComponent";
+import DropdownAddNew from "./../components/DropDownAddNew";
 
 const CreateRequisitionBody = ({
   getReqId = null,
@@ -42,7 +43,7 @@ const CreateRequisitionBody = ({
   const RedAsterisk = () => <span className="text-red-500">*</span>;
   const [visible, setVisible] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
-
+  //const history = useHistory();
   const dispatch = useDispatch();
 
   const toastRef = useRef(null);
@@ -238,6 +239,9 @@ if (PosORPr === 1) {
     setDropdownData({});
     setSubDepartments([]);
     navigateTo("my_requisition");
+    //const currentHash = window.location.hash;
+    //navigateTo(currentHash);
+    //history.goBack();
   };
 
   return (
@@ -315,7 +319,7 @@ if (PosORPr === 1) {
                   Position Title
                   <RedAsterisk />
                 </label>
-                <DropdownComponent
+                <DropdownAddNew
                   optionLabel="name"
                   optionValue="id"
                   type="position"
@@ -351,6 +355,7 @@ if (PosORPr === 1) {
                   onChange={(e) => {
                     setFormData({ ...formData, departmentId: e.target.value });
                   }}
+                  
                 />
               </div>
               <div className="flex flex-column w-6 gap-2">
@@ -380,7 +385,7 @@ if (PosORPr === 1) {
                   Project
                   <RedAsterisk />
                 </label>
-                <DropdownComponent
+                <DropdownAddNew
                   optionLabel="name"
                   optionValue="id"
                   type="project"
