@@ -22,7 +22,9 @@ export const API_URL = {
   POST_CREATE_REQUISITION: `${APIPath}mrfdetail/POST`,
   ADD_CANDIDATE: `${APIPath}Candidatedetail/Post`,
   ADD_SOURCE_NAME : `${APIPath}Source`,
-	RESUME_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Resume&FileName=`
+  RESUME_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Resume&FileName=`,
+  ADD_POSITIONTITLE: `${APIPath}PositionTitle`,
+  ADD_PROJECT: `${APIPath}Project`
 };
 
 export const FILE_URL = {

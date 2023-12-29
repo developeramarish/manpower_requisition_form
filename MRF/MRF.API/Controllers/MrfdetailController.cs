@@ -231,7 +231,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.HiringManagerId,
-                    //ApprovalDate = request.HMApprovalDate
+                    ApprovalDate = request.HMApprovalDate
                 };
                 
                     postMrfEmail(MrfdetailRequestModelRequest);
@@ -244,7 +244,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.FunctionHeadId,
-                    //ApprovalDate = request.FHApprovalDate
+                    ApprovalDate = request.FHApprovalDate
                 };
                
                     postMrfEmail(MrfdetailRequestModelRequest);
@@ -256,7 +256,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.SiteHRSPOCId,
-                    //ApprovalDate = request.SPApprovalDate
+                    ApprovalDate = request.SPApprovalDate
                 };
                 
                     postMrfEmail(MrfdetailRequestModelRequest);
@@ -268,7 +268,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.FinanceHeadId,
-                    //ApprovalDate = request.FIApprovalDate
+                    ApprovalDate = request.FIApprovalDate
                 };
                 
                     postMrfEmail(MrfdetailRequestModelRequest);
@@ -280,7 +280,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.PresidentnCOOId,
-                    //ApprovalDate = request.PCApprovalDate
+                    ApprovalDate = request.PCApprovalDate
                 };
                 
                     postMrfEmail(MrfdetailRequestModelRequest);
@@ -652,8 +652,11 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching create MRF Dropdown list");
             SwaggerResponseDTO sw = new SwaggerResponseDTO();
-            sw.Position=_unitOfWork.PositionTitlemaster.GetAll().ToList();
-            sw.Projects = _unitOfWork.Projectmaster.GetAll().ToList();
+            sw.Position=_unitOfWork.PositionTitlemaster.GetAll().OrderByDescending(Position => Position.CreatedOnUtc)
+                    .ToList(); ;
+            sw.Projects = _unitOfWork.Projectmaster.GetAll()
+                    .OrderByDescending(project => project.CreatedOnUtc)
+                    .ToList(); 
             sw.Departments = _unitOfWork.Departmentmaster.GetAll().ToList();
             sw.Grades = _unitOfWork.Grademaster.GetAll().ToList();
             sw.Vaccancies = _unitOfWork.Vacancytypemaster.GetAll().ToList();

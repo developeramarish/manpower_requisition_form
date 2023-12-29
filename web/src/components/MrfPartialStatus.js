@@ -24,7 +24,7 @@ const MrfPartialStatus = ({
 
   const strToArray = (s) => {
     s = s ?? "";
-    if (typeof s === "string") {
+    if (s!=="" && typeof s === "string") {
       s = s.split(",").map(Number);
     }
     return s;

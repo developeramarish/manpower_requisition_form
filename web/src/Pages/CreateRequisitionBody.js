@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+
 // import { useNavigate } from "react-router-dom";
 import "../css/InputComponent.css";
 import DropdownComponent from "./../components/Dropdown";
@@ -49,25 +50,30 @@ const CreateRequisitionBody = ({
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState();
 
+  const OnLoad=()=>
+  { fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = data.result;
+      // Store the dropdown data in localStorage using your storageService
+      // storageService.set("dropdownData", dropdown);
+      // Update the state with the new dropdown data
+      setDropdownData(dropdown);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+
+ 
+
+  }
   useEffect(() => {
     setFormData(FORM_SCHEMA_CR);
   }, []);
 
   useEffect(() => {
     // Fetch the data for all the dropdowns
-    fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
-      .then((response) => response.json())
-      .then((data) => {
-        const dropdown = data.result;
-        // Store the dropdown data in localStorage using your storageService
-        // storageService.set("dropdownData", dropdown);
-        // Update the state with the new dropdown data
-        setDropdownData(dropdown);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-
+    OnLoad();
     if (getReqId) {
       const apiUrl = API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId;
       fetch(apiUrl)
@@ -81,7 +87,7 @@ const CreateRequisitionBody = ({
     } else {
       setFormData(FORM_SCHEMA_CR);
     }
-
+  
     if (getReqRoleId == 4) {
       setReadOnly(true);
     } else if (
@@ -92,6 +98,8 @@ const CreateRequisitionBody = ({
     } else if (getReqRoleId == 3) {
       setReadOnly(true);
     }
+  
+  
   }, []);
 
   const onTextChanged = (val) => {
@@ -121,6 +129,47 @@ const CreateRequisitionBody = ({
         console.error("Fetch error:", error);
       });
   };
+
+  const AddInDropdwon =async (Name,PosORPr) => {
+    let apiUrl = '';
+if (PosORPr === 1) {
+  apiUrl = API_URL.ADD_POSITIONTITLE;
+} else {
+  alert(API_URL.ADD_PROJECT);
+  apiUrl = API_URL.ADD_PROJECT;
+}
+     
+     try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          
+          body: JSON.stringify({
+            name: Name,
+            isActive: true,
+            
+            createdByEmployeeId: storageService.getData("profile").employeeId,
+            createdOnUtc: new Date().toISOString(),
+            updatedByEmployeeId: storageService.getData("profile").employeeId,
+            updatedOnUtc: new Date().toISOString(),
+          }),
+        });
+  
+        if (response.ok) {
+          OnLoad();
+          console.log("Item added successfully");
+          toastRef.current.showSuccessMessage("Item added successfully!");
+        } else {
+          console.error("Failed to add item");
+          toastRef.current.showConflictMessage("Failed to add item");
+        }
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
+    };
+ 
 
   useEffect(() => {
     if (!formData || formData.departmentId === 0) {
@@ -275,11 +324,13 @@ const CreateRequisitionBody = ({
                   disable={readOnly}
 
                   onChange={(e) => {
-                    setFormData({
-                      ...formData,
-                      positionTitleId: e.target.value,
-                    });
+                    setFormData({ ...formData, positionTitleId: e.target.value });
                   }}
+                  onAddItem={(newItem) => {
+
+                     AddInDropdwon(newItem,1);
+                  }}
+                 
                 />
               </div>
             </div>
@@ -336,9 +387,13 @@ const CreateRequisitionBody = ({
                   options={dropdownData.projects}
                   disable={readOnly}
                   value={formData.projectId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, projectId: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, projectId: e.target.value });
+                  }}
+                  onAddItem={(newItem) => {
+
+                    AddInDropdwon (newItem,2);
+                  }}
                 />
               </div>
               <div className="flex flex-column w-6 gap-2">
@@ -526,6 +581,7 @@ const CreateRequisitionBody = ({
                         minExperience: e.target.value,
                       })
                     }
+                    className="custom-width" 
                   />
 
                   <label className="font-bold text-sm label-with-padding-left label-with-padding-right">
@@ -543,6 +599,7 @@ const CreateRequisitionBody = ({
                         maxExperience: e.target.value,
                       })
                     }
+                    className="custom-width" 
                   />
                 </div>
               </div>
