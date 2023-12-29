@@ -30,6 +30,10 @@
         public string Reason { get; set; } = "";
 
         public int? SourceId { get; set; }
+
+        public string referenceNo { get; set; }
+
+        public string Positiontitle { get; set; }
     }
 
     public class CandidatedetailResponseModel

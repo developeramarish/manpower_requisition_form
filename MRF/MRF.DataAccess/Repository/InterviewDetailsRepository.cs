@@ -64,6 +64,7 @@ namespace MRF.DataAccess.Repository
                                                                 select new InterviewDetailsViewModel
                                                                 {
                                                                     CandidateId = Candidate.Id,
+                                                      
                                                                     EvaluationId = Attachment.InterviewEvaluationId,
                                                                     Attachment = Attachment.FilePath,
                                                                 };
@@ -77,6 +78,7 @@ namespace MRF.DataAccess.Repository
                                 select new InterviewStatus
                                 {
                                     CandidateId = Candidate.Id,
+                                    
                                     EvalutionStatusId = Ivaluation.EvalutionStatusId,
                                     CandidateStatusChangedOnUtc = Ivaluation.UpdatedOnUtc,
                                     EvalutionStatus = status.Status,
@@ -110,6 +112,7 @@ namespace MRF.DataAccess.Repository
                                                                   CreatedOnUtc = Candidate.CreatedOnUtc,
                                                                   CandidateId = Candidate.Id,
                                                                   PositionTitle = pos.Name,
+                                                                  CandidateName = Candidate.Name,
                                                               };
 
             IQueryable<InterviewDetailsViewModel> secondmerge = from q in firstlist
@@ -126,6 +129,7 @@ namespace MRF.DataAccess.Repository
                                                                     CandidateId = q.CandidateId,
                                                                     PositionTitle = q.PositionTitle,
                                                                     InterviewerEmployeeIds = i.InterviewerEmployeeIds,
+                                                                    CandidateName=q.CandidateName,
 
                                                                 };
 
@@ -143,6 +147,7 @@ namespace MRF.DataAccess.Repository
                                                                    CreatedOnUtc = q.CreatedOnUtc,
                                                                    CandidateId = q.CandidateId,
                                                                    PositionTitle = q.PositionTitle,
+                                                                   CandidateName= q.CandidateName,
                                                                    InterviewerEmployeeIds = i.InterviewerEmployeeIds == "" ? q.InterviewerEmployeeIds : i.InterviewerEmployeeIds,
 
                                                                };
@@ -161,6 +166,7 @@ namespace MRF.DataAccess.Repository
                                                                    CreatedOnUtc = q.CreatedOnUtc,
                                                                    CandidateId = q.CandidateId,
                                                                    PositionTitle = q.PositionTitle,
+                                                                   CandidateName=q.CandidateName,   
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = i.Attachment == null ? "" : i.Attachment,
 
@@ -181,12 +187,14 @@ namespace MRF.DataAccess.Repository
                                                                    CreatedOnUtc = q.CreatedOnUtc,
                                                                    CandidateId = q.CandidateId,
                                                                    PositionTitle = q.PositionTitle,
+                                                                   CandidateName =  q.CandidateName,
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = q.Attachment,
                                                                    EvalutionStatusId = i != null ? i.EvalutionStatusId ?? 0 : 0, // Check for null outside the query
                                                                    EvalutionStatus = i != null ? i.EvalutionStatus : "",  // Check for null outside the query
                                                                    CandidateStatusChangedOnUtc = i == null ? DateTime.MinValue : i.CandidateStatusChangedOnUtc ?? DateTime.MinValue,
                                                                    InterviewevaluationId = i != null ? i.InterviewevaluationId ?? 0 : 0,
+
                                                                };
 
 
