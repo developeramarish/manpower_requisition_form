@@ -31,6 +31,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
           setResumeReviewer(data.result.employeeRoleMap);
           let array = new Array(data.result.resumeDetails.length).fill(false);
           setSaveBttn(array);
+          
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -39,7 +40,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       console.error("Error fetching data:", error);
     }
   };
-
+   
   if (data.length < 1) {
     return (
       <Dialog
@@ -120,7 +121,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
     const resumePath = data.resumePath;
     const createdByEmployeeId = data.createdByEmployeeId;
     const createdOnUtc = data.createdOnUtc;
-    
+    const candidateName=data.candidateName;
 
     const candidateDetailsData = {
       id,
@@ -134,7 +135,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       createdByEmployeeId,
       createdOnUtc,
       reason,
-  
+      candidateName,
     };
 
     try {
@@ -182,7 +183,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       </a>
     );
   };
-
+   
   const columns = [
     {
       header: "Sr.No",
@@ -191,19 +192,18 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       sortable: true,
     },
     {
+			field: "candidateName",
+			header: "Name",
+      bodyClassName: "resume-ref-col resume-col",
+			sortable: true,
+		},
+    {
       field: "resumePath",
       header: "Resume",
       body: resumeBodyTemplate,
       bodyClassName: "resume-ref-col  ",
       sortable: true,
     },
-    {
-			field: "positionTitle",
-			header: "Position",
-			body: data.positionTitle,
-      bodyClassName: "resume-ref-col resume-col",
-			sortable: true,
-		},
     {
       field: "createdOnUtc",
       header: "Uploaded On",
@@ -237,11 +237,21 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       sortable: true,
     },
   ];
-
   return (
     <div>
       <Dialog
-        header="MRF ID (Resume Summary)"
+       header={
+        <div>
+           Resume Summary- MRF ID:{"\u00A0\u00A0"}
+          <span  style={{ fontWeight: 'bold', color: '#d9362b' }}>
+            {data[0].referenceNo}
+          </span>{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+          Position Title:{"\u00A0\u00A0"}
+          <span style={{ fontWeight: 'bold', color: '#d9362b' }}>
+          {data[0].positionTitle}</span>
+        </div>
+      }
+      // header={"Resume Summary- MRF ID:  "+data[0].referenceNo+"  "+" "+" Position Title: "+data[0].positionTitle+" "}
         visible={visible}
         className="resume-card"
         onHide={onHide}
