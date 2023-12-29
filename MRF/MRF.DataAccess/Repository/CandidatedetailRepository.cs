@@ -50,7 +50,7 @@ namespace MRF.DataAccess.Repository
 
         }
 
-        public List<CandidatedetailRequestModel> GetRefrancenoAndPositiontitle()
+        public List<CandidatedetailRequestModel> GetReferenceNoAndPositiontitle()
         {
             IQueryable<CandidatedetailRequestModel> query = from candidatedetails in _db.Candidatedetails join mrfdetails in _db.Mrfdetails on 
                                                  candidatedetails.MrfId equals mrfdetails.Id join position in _db.PositionTitlemaster on mrfdetails.PositionTitleId
@@ -66,7 +66,7 @@ namespace MRF.DataAccess.Repository
                                                      CreatedOnUtc = candidatedetails.CreatedOnUtc,
                                                      UpdatedOnUtc = candidatedetails.UpdatedOnUtc,
                                                      SourceId= candidatedetails.SourceId,
-                                                     RefranceNo=mrfdetails.ReferenceNo,
+                                                     referenceNo = mrfdetails.ReferenceNo,
                                                      Positiontitle= position.Name,
                 
             };

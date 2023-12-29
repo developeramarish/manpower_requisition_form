@@ -286,10 +286,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetRefrancenoAndPositiontitle()
+        public ResponseDTO GetReferenceNoAndPositiontitle()
         {
             _logger.LogInfo("Fetching All Candidate detail");
-            List<CandidatedetailRequestModel> obj = _unitOfWork.Candidatedetail.GetRefrancenoAndPositiontitle();
+            List<CandidatedetailRequestModel> obj = _unitOfWork.Candidatedetail.GetReferenceNoAndPositiontitle();
 
             if (obj.Count == 0)
             {

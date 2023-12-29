@@ -33,7 +33,7 @@ function ViewCandidate() {
   };
   const columns = [
 		{
-			field: "refranceNo",
+			field: "referenceNo",
 			header: "MRF ID",
 			//bodyClassName: "ref-col",
 		},

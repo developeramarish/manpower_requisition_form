@@ -11,6 +11,6 @@ namespace MRF.DataAccess.Repository.IRepository
 
         public List<Candidatedetails> GetForwardedTodata();
 
-        public List<CandidatedetailRequestModel> GetRefrancenoAndPositiontitle();
+        public List<CandidatedetailRequestModel> GetReferenceNoAndPositiontitle();
     }
 }
