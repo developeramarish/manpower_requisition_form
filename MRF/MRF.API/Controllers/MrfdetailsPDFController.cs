@@ -5,9 +5,6 @@ using MRF.Models.DTO;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
-using iText.Kernel.Pdf;
-using iText.Html2pdf;
-using MRF.Models.Models;
 
 namespace MRF.API.Controllers
 {
@@ -20,14 +17,16 @@ namespace MRF.API.Controllers
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
+        private readonly IHTMLtoPDF _hTMLtoPDF;
         
-        public MrfdetailsPDFController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
+        public MrfdetailsPDFController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
+            _hTMLtoPDF= hTMLtoPDF;
         }
 
         [HttpGet("{MrfId}")]
@@ -41,7 +40,6 @@ namespace MRF.API.Controllers
         public MrfdetailsPDFRequestModel GetRequisition(int MrfId)
         {
             var mrfdetailpdf = _unitOfWork.MrfdetailsPDFRepository.GetRequisition(MrfId);
-
             if (mrfdetailpdf == null)
             {
                 _logger.LogError($"No result found by this Id:{MrfId}");
@@ -49,15 +47,7 @@ namespace MRF.API.Controllers
             }
 
             var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFEmailTemplate.html");
-            var pdfDirectory = Path.Combine(_hostEnvironment.ContentRootPath, "PDFs");
             var pdfFileName = $"{mrfdetailpdf.ReferenceNo.Replace("/", "_")}.pdf";
-            var pathToOutputPdfFile = Path.Combine(pdfDirectory, pdfFileName);
-
-            if (!Directory.Exists(pdfDirectory))
-            {
-                Directory.CreateDirectory(pdfDirectory);
-            }
-
             string htmlBody;
             using (var sourceReader = System.IO.File.OpenText(emailTemplatePath))
             {
@@ -66,26 +56,15 @@ namespace MRF.API.Controllers
                 htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetailpdf);
             }
 
-            ConvertHtmlToPdf(htmlBody, pathToOutputPdfFile);
+            //Commented code to convert html to pdf
+            //_hTMLtoPDF.CovertHtmlToPDF(htmlBody, pdfFileName);
 
             var emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Awaiting COO Approval");
             if (emailRequest != null)
             {
                 _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, htmlBody);
             }
-
             return mrfdetailpdf;
-        }
-        static void ConvertHtmlToPdf(string htmlString, string outputFile)
-        {
-            using (var pdfWriter = new PdfWriter(outputFile))
-            {
-                using (var pdfDocument = new PdfDocument(pdfWriter))
-                {
-                    var converterProperties = new ConverterProperties();
-                    HtmlConverter.ConvertToPdf(htmlString, pdfDocument, converterProperties);
-                }
-            }
         }      
         private string GetHtmlTemplateBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
         {
