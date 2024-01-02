@@ -129,7 +129,7 @@ namespace MRF.DataAccess.Repository
                 if(emploeeyemailId.Count>0)
                 {
                     
-                        var e = emploeeyemailId.FirstOrDefault(e => e.roleId == 7);
+                        var e = emploeeyemailId.FirstOrDefault(e => e.roleId == 3);
                         if (e != null)
                          { r.HiringManagerEmpId = e.HiringManagerEmpId; r.HiringManagerId = e.HiringManagerId; r.HMApprovalDate = e.HMApprovalDate; }
                     
