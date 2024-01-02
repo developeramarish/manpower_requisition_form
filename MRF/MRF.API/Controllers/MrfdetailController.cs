@@ -9,6 +9,7 @@ using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics;
 using System.Net;
@@ -235,56 +236,152 @@ namespace MRF.API.Controllers
         }
 
 
-        private void CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update)
-        {
-
-
+        private void CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update) 
+        { 
             if (request.FunctionHeadId != 0)
             {
-                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.FunctionHeadId);
+                if (MrfEmailApproval != null)
                 {
-                    MrfId = mrfId,
-                    EmployeeId = request.FunctionHeadId,
-                    ApprovalDate = request.FHApprovalDate
-                };
+                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FunctionHeadId,
+                        ApprovalDate = request.FHApprovalDate
+                    };
+                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
 
-                postMrfEmail(MrfdetailRequestModelRequest);
+                }
+                else
+                {
+
+                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FunctionHeadId,
+                        ApprovalDate = request.FHApprovalDate
+                    };
+
+                    postMrfEmail(MrfdetailRequestModelRequest);
+                }
+
+
+            }
+            if (request.HiringManagerEmpId != 0)
+            {
+                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.HiringManagerEmpId);
+                if (MrfEmailApproval != null)
+                {
+                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FunctionHeadId,
+                        ApprovalDate = request.FHApprovalDate
+                    };
+                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
+
+                }
+                else
+                {
+
+                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FunctionHeadId,
+                        ApprovalDate = request.FHApprovalDate
+                    };
+
+                    postMrfEmail(MrfdetailRequestModelRequest);
+                }
+
 
             }
             if (request.SiteHRSPOCId != 0)
             {
-                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.SiteHRSPOCId);
+                if (MrfEmailApproval != null)
                 {
-                    MrfId = mrfId,
-                    EmployeeId = request.SiteHRSPOCId,
-                    ApprovalDate = request.SPApprovalDate
-                };
+                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FunctionHeadId,
+                        ApprovalDate = request.FHApprovalDate
+                    };
+                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
 
-                postMrfEmail(MrfdetailRequestModelRequest);
+                }
+                else
+                {
+                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.SiteHRSPOCId,
+                        ApprovalDate = request.SPApprovalDate
+                    };
+
+                    postMrfEmail(MrfdetailRequestModelRequest);
+
+                }
+               
 
             }
             if (request.FinanceHeadId != 0)
             {
-                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.FinanceHeadId);
+                if (MrfEmailApproval != null)
                 {
-                    MrfId = mrfId,
-                    EmployeeId = request.FinanceHeadId,
-                    ApprovalDate = request.FIApprovalDate
-                };
+                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FunctionHeadId,
+                        ApprovalDate = request.FHApprovalDate
+                    };
+                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
 
-                postMrfEmail(MrfdetailRequestModelRequest);
+                }
+                else {
+                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FinanceHeadId,
+                        ApprovalDate = request.FIApprovalDate
+                    };
+
+                    postMrfEmail(MrfdetailRequestModelRequest);
+                }
+               
 
             }
             if (request.PresidentnCOOId != 0)
             {
-                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.PresidentnCOOId);
+                if (MrfEmailApproval != null)
                 {
-                    MrfId = mrfId,
-                    EmployeeId = request.PresidentnCOOId,
-                    ApprovalDate = request.PCApprovalDate
-                };
+                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.FunctionHeadId,
+                        ApprovalDate = request.FHApprovalDate
+                    };
+                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
 
-                postMrfEmail(MrfdetailRequestModelRequest);
+                } else
+                {
+                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                    {
+                        MrfId = mrfId,
+                        EmployeeId = request.PresidentnCOOId,
+                        ApprovalDate = request.PCApprovalDate
+                    };
+
+                    postMrfEmail(MrfdetailRequestModelRequest);
+                }
+                
 
             }
         }
@@ -546,14 +643,15 @@ namespace MRF.API.Controllers
                 CallEmailApprovalController(request, id, false);
                 CallMrfHistory(request, id, false);
 
-                /* if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-                 {
-                    emailmaster  emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
-                     if (emailRequest != null)
-                     {
-                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                     }
-                 }*/
+              /*  if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+                    
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                }*/
             }
             else
             {
