@@ -4,10 +4,7 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Org.BouncyCastle.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Collections.Generic;
 
 namespace MRF.API.Controllers
 {

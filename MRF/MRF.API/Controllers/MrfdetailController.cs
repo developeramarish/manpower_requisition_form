@@ -9,7 +9,6 @@ using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics;
 using System.Net;
