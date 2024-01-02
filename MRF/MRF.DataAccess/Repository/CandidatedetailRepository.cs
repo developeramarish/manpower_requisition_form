@@ -14,6 +14,7 @@ namespace MRF.DataAccess.Repository
         {
             _db.Candidatedetails.Update(candidatedetail);
         }
+        
         public List<Candidatedetails> GetForwardedTodata()
         {
             IQueryable<Candidatedetails> query = from candidatedetails in _db.Candidatedetails
@@ -41,6 +42,35 @@ namespace MRF.DataAccess.Repository
                 }
             }
 
+
+
+            return query.ToList();
+
+
+
+        }
+
+        public List<CandidatedetailRequestModel> GetReferenceNoAndPositiontitle()
+        {
+            IQueryable<CandidatedetailRequestModel> query = from candidatedetails in _db.Candidatedetails join mrfdetails in _db.Mrfdetails on 
+                                                 candidatedetails.MrfId equals mrfdetails.Id join position in _db.PositionTitlemaster on mrfdetails.PositionTitleId
+                                                equals position.Id
+                                                 select new  CandidatedetailRequestModel{
+                                                     Id = candidatedetails.Id,  
+                                                     Name = candidatedetails.Name,
+                                                     EmailId= candidatedetails.EmailId,
+                                                     ContactNo = candidatedetails.ContactNo,
+                                                     Reason= candidatedetails.Reason,
+                                                     ResumePath= candidatedetails.ResumePath,
+                                                     CandidateStatusId= candidatedetails.CandidateStatusId,
+                                                     CreatedOnUtc = candidatedetails.CreatedOnUtc,
+                                                     UpdatedOnUtc = candidatedetails.UpdatedOnUtc,
+                                                     SourceId= candidatedetails.SourceId,
+                                                     referenceNo = mrfdetails.ReferenceNo,
+                                                     Positiontitle= position.Name,
+                
+            };
+            
 
 
             return query.ToList();

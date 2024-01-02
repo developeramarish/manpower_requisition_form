@@ -24,7 +24,8 @@ export const API_URL = {
   ADD_SOURCE_NAME : `${APIPath}Source`,
   RESUME_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Resume&FileName=`,
   ADD_POSITIONTITLE: `${APIPath}PositionTitle`,
-  ADD_PROJECT: `${APIPath}Project`
+  ADD_PROJECT: `${APIPath}Project`,
+  GET_CANDIDATE_DETAILS:`${APIPath}Candidatedetail/GetReferenceNoAndPositiontitle`
 };
 
 export const FILE_URL = {
@@ -42,7 +43,7 @@ export const ROUTES = {
   create_requisition: "create_requisition",
   edit_requisition: "edit_requisition",
   add_candidate: "add_candidate",
- 
+  view_candidate: "view_candidate",
 };
 
 export const MRF_STATUS = {

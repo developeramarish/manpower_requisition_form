@@ -189,19 +189,7 @@ namespace MRF.API.Controllers
 
             if (freshmrResponse.Id != 0)
             {
-                
-                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.CreatedByEmployeeId,
-                        ApprovalDate = request.HMApprovalDate
-                    };
-
-                    postMrfEmail(MrfdetailRequestModelRequest);
-
-
-                
-                //CallEmailApprovalController(request, mrfId, Update);
+                CallEmailApprovalController(request, mrfId, Update);
                 CallReplacementController(request, mrfId, Update);
                 CallreviewerController(request, mrfId, Update);
 
@@ -233,11 +221,23 @@ namespace MRF.API.Controllers
 
         }
 
-
         private void CallEmailApprovalController(MrfdetailRequestModel request, int mrfId,bool Update)
         {
             
-            
+            if (request.HiringManagerId != 0)
+            {
+                putMrfEmail(mrfId);
+                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                {
+                    MrfId = mrfId,
+                    EmployeeId = request.HiringManagerId,
+                    ApprovalDate = request.HMApprovalDate
+                };
+                
+                    postMrfEmail(MrfdetailRequestModelRequest);
+                
+
+            }
             if (request.FunctionHeadId != 0)
             {
                 var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
@@ -247,7 +247,7 @@ namespace MRF.API.Controllers
                     ApprovalDate = request.FHApprovalDate
                 };
                
-                postMrfEmail(MrfdetailRequestModelRequest);
+                    postMrfEmail(MrfdetailRequestModelRequest);
                 
             }
             if (request.SiteHRSPOCId != 0)
@@ -300,26 +300,8 @@ namespace MRF.API.Controllers
             MrfEmailApprovalController.Delete(MrfId);
         }
 
-        private void postMrfHistory(mrfDetailsStatusHistoryRequestModel MrfdetailRequestModelRequest)
-        {
-            mrfDetailsStatusHistoryController mrfDetailsStatusHistoryController = new mrfDetailsStatusHistoryController(_unitOfWork, _logger);
-            var mrfDetailsStatusHistoryResponse = mrfDetailsStatusHistoryController.Post(MrfdetailRequestModelRequest);
-        }
 
-        private void CallMrfHistory(MrfdetailRequestModel request, int mrfId, bool Update)
-        {
-            var mrfDetailsStatusHistory = new mrfDetailsStatusHistoryRequestModel
-            {
-                MrfId = mrfId,
-                mrfStatusId = request.MrfStatusId,
-                CreatedByEmployeeId = request.UpdatedByEmployeeId,
-                CreatedOnUtc = request.UpdatedOnUtc,
-
-            };
-          
-            postMrfHistory(mrfDetailsStatusHistory);
-        }
-            private void CallReplacementController(MrfdetailRequestModel request, int mrfId, bool Update)
+        private void CallReplacementController(MrfdetailRequestModel request, int mrfId, bool Update)
         {
             if (request.IsReplacement)
             {
@@ -538,21 +520,15 @@ namespace MRF.API.Controllers
 
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
-               
-                    _responseModel.Id = existingStatus.Id;
-
-
-                CallEmailApprovalController(request,id,false);
-                CallMrfHistory(request, id, false);
-
-                //if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-                //{
-                //    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
-                //    if (emailRequest != null)
-                //    {
-                //        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                //    }
-                //}
+               /* if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+                   emailmaster  emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                }*/
+                _responseModel.Id = existingStatus.Id;
             }
             else
             {
@@ -656,7 +632,7 @@ namespace MRF.API.Controllers
             string Year= request.CreatedOnUtc.ToString("yy");
             string RequisitionType = request.RequisitionType;
 
-            Reference = request.VacancyNo.ToString("D2") + "/" + locationmaster.ShortCode  + "/" +RequisitionType+"/" + month + "/" + Year + "/" 
+            Reference = request.VacancyNo.ToString("D2") + "/ " + locationmaster.ShortCode  + "/ " +RequisitionType+"/ " + month + "/ " + Year + "/ " 
                 + (Number.LastNumber++).ToString("D3");
             
             return (Reference, Number);
@@ -690,7 +666,7 @@ namespace MRF.API.Controllers
             sw.ReportingTo = _unitOfWork.Employeedetails.GetAll().ToList();
             sw.Resumereviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(5);
             sw.InterviewReviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(6);
-            sw.HiringManager= _unitOfWork.Employeerolemap.GetEmployeebyRole(3); // by default MRF owner
+            sw.HiringManager= _unitOfWork.Employeerolemap.GetEmployeebyRole(7);
             sw.FunctionHead = _unitOfWork.Employeerolemap.GetEmployeebyRole(8);
             sw.SiteHRSPOC = _unitOfWork.Employeerolemap.GetEmployeebyRole(9);
             sw.FinanceHead= _unitOfWork.Employeerolemap.GetEmployeebyRole(10);

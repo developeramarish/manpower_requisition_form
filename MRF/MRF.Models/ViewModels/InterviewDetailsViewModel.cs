@@ -36,6 +36,9 @@ namespace MRF.Models.ViewModels
         public string? Attachment { get; set; }
         public int? InterviewevaluationId { get; set; }
         public int? EvalutionStatusId { get; set; }
+
+        public string  CandidateName { get; set; } = null!;
+
     }
 
 

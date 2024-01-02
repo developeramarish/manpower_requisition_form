@@ -1,43 +1,86 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MRF</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Moved table styling to a class */
+        .custom-table {
+            border-collapse: collapse;
+            border: 2px solid black;
+            width: 100%;
+        }
+        /* Combined repeated styles */
+        th, td {
+            font-family: Arial;
+            font-size: small;
+            text-align: center;
+        }
 
+        th {
+            font-weight: bold;
+            background-color: lightseagreen;
+        }
+            /* Styled the header row */
+            th:first-child {
+                border-top-left-radius: 5px;
+            }
+
+            th:last-child {
+                border-top-right-radius: 5px;
+            }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        /* Styled the header cell */
+        th, td {
+            padding: 8px;
+            border: 2px solid black;
+        }
+        /* Styling the title cell */
+        .title-cell {
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            font-size: large;
+            font-family: Calibri;
+            background-color: darkblue;
+        }
+    </style>
 </head>
 <body>
-    <table style="border:initial" class="table">
-        <tr style="border:initial">
-            <td style="font-weight:bold;color:white; text-align: center; background-color:darkblue" colspan="11">FRESH MRF DETAILS </td>
+    <table class="custom-table">
+        <tr>
+            <td class="title-cell" colspan="11">FRESH MRF DETAILS</td>
         </tr>
         <tr>
-            <td style="background-color:lightseagreen; text-align:center">MRF No.</td>
-            <td style="background-color: lightseagreen; text-align: center">No. of Positions</td>
-            <td style="background-color: lightseagreen; text-align: center">CTC in LPA</td>
-            <td style="background-color: lightseagreen; text-align: center">Total MRF CTC</td>
-            <td style="background-color: lightseagreen; text-align: center">Grade</td>
-            <td style="background-color: lightseagreen; text-align: center">Designation</td>
-            <td style="background-color: lightseagreen; text-align: center">Department</td>
-            <td style="background-color: lightseagreen; text-align: center">Sub-department</td>
-            <td style="background-color: lightseagreen; text-align: center">Project</td>
-            <td style="background-color: lightseagreen; text-align: center">Justification</td>
-            <td style="background-color: lightseagreen; text-align: center">MRF Raised By</td>
+            <th>MRF No.</th>
+            <th>No. of Positions</th>
+            <th>CTC in LPA</th>
+            <th>Total MRF CTC</th>
+            <th>Grade</th>
+            <th>Designation</th>
+            <th>Department</th>
+            <th>Sub-department</th>
+            <th>Project</th>
+            <th>Justification</th>
+            <th>MRF Raised By</th>
         </tr>
         <tr>
-            <td style="text-align:center">{ReferenceNo}</td>
-            <td style="text-align:center">{NumberOfVacancies}</td>
-            <td style="text-align:center">{MaxTargetSalary}</td>
-            <td style="text-align:center">{TotalTargetSalary}</td>
-            <td style="text-align:center">{GradeMin}-{GradeMax}</td>
-            <td style="text-align:center">{PositionName}</td>
-            <td style="text-align:center">{Department}</td>
-            <td style="text-align:center">{SubDepartment}</td>
-            <td style="text-align:center">{Project}</td>
-            <td style="text-align:center">{Justification}</td>
-            <td style="text-align:center">{MRFRaisedBy}</td>
+            <td>{ReferenceNo}</td>
+            <td>{NumberOfVacancies}</td>
+            <td>{MaxTargetSalary}</td>
+            <td>{TotalTargetSalary}</td>
+            <td>{GradeMin}-{GradeMax}</td>
+            <td>{PositionName}</td>
+            <td>{Department}</td>
+            <td>{SubDepartment}</td>
+            <td>{Project}</td>
+            <td>{Justification}</td>
+            <td>{MRFRaisedBy}</td>
         </tr>
     </table>
 </body>
