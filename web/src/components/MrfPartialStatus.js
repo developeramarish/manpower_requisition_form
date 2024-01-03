@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { API_URL, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
 import { storageService } from "../constants/storage";
-import { navigateTo } from "../constants/Utils";
+import { formatDateToYYYYMMDD, navigateTo } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
 import InputTextCp from "./Textbox";
@@ -67,6 +67,7 @@ const MrfPartialStatus = ({
 
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
+    // console.log(formData);
     const data = {
       referenceNo: formData.referenceNo,
       requisitionType: formData.requisitionType==""?REQUISITION_TYPE[0].code:formData.requisitionType,
@@ -77,7 +78,8 @@ const MrfPartialStatus = ({
       vacancyNo: Number(formData.vacancyNo),
       genderId: formData.genderId,
       qualification: formData.qualification,
-      requisitionDateUtc: new Date().toISOString().slice(0, 10),
+      // requisitionDateUtc: formData.requisitionDateUtc.toISOString().slice(0,10),
+      requisitionDateUtc:  formatDateToYYYYMMDD(formData.requisitionDateUtc),
       reportsToEmployeeId: formData.reportsToEmployeeId,
       minGradeId: formData.minGradeId,
       maxGradeId: formData.maxGradeId,
@@ -103,7 +105,8 @@ const MrfPartialStatus = ({
       emailId: formData.emailId,
       note: formData.note,
       employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
-      lastWorkingDate: new Date().toISOString().slice(0, 10),
+      lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
+      // lastWorkingDate:formData.lastWorkingDate !="" ?  formatDateToYYYYMMDD(formData.lastWorkingDate): new Date().toISOString().slice(0,10),
       annualCtc: formData.annualCtc,
       annualGross: formData.annualGross,
       replaceJustification: formData.replaceJustification,
@@ -123,8 +126,14 @@ const MrfPartialStatus = ({
       financeHeadEmpId: formData.financeHeadEmpId,
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
+      // pcApprovalDate: formData.pcApprovalDate !="" ? formData.pcApprovalDate.toISOString().slice(0, 10) : new Date(),
+      // pcApprovalDate: formData.pcApprovalDate.toISOString().slice(0,10),
+      // fhApprovalDate: formData.fhApprovalDate.toISOString().slice(0,10),
+      // fiApprovalDate: formData.fiApprovalDate.toISOString().slice(0,10),
+      // spApprovalDate: formData.spApprovalDate.toISOString().slice(0,10),
+      // hmApprovalDate: formData.hmApprovalDate.toISOString().slice(0,10),
     };
-    
+    console.log(data);
     try {
       const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
         method: "POST",
@@ -168,13 +177,47 @@ const MrfPartialStatus = ({
     }
   };
 
+const handleActiondetail=(formData)=>{
+  console.log("callled")
+if(formData.functionHeadId !=0){
+  console.log("saving datat for function heda ")
+  console.log(formData.functionHeadId )
+}
+
+
+}
+
+
+
+
   const submitPartial = async () => {
+
+    handleActiondetail(formData)
+    console.log(formData);
     const partialStatus = {
       mrfStatusId: mrfStatusId,
       note: note || null,
       updatedByEmployeeId: storageService.getData("profile").employeeId,
       updatedOnUtc: new Date().toISOString(),
+      hiringManagerId: formData.hiringManagerId,
+      hiringManagerEmpId: formData.hiringManagerEmpId,
+      functionHeadId: formData.functionHeadId,
+      functionHeadEmpId: formData.functionHeadEmpId,
+      siteHRSPOCId: formData.siteHRSPOCId,
+      siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
+      financeHeadId: formData.financeHeadId,
+      financeHeadEmpId: formData.financeHeadEmpId,
+      presidentnCOOId: formData.presidentnCOOId,
+      presidentnCOOEmpId: formData.presidentnCOOEmpId,
+      // pcApprovalDate:  formatDateToYYYYMMDD(formData.pcApprovalDate),
+      // fhApprovalDate: formatDateToYYYYMMDD(formData.fhApprovalDate),
+      // fiApprovalDate: formatDateToYYYYMMDD(formData.fiApprovalDate),
+      // spApprovalDate: formatDateToYYYYMMDD(formData.spApprovalDate),
+      // hmApprovalDate: formatDateToYYYYMMDD(formData.hmApprovalDate),
+    
     };
+
+    console.log(partialStatus)
 
     try {
       const response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {

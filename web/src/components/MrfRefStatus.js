@@ -43,7 +43,7 @@ const ReferenceBodyTemplate = (mrf) => {
   // const roleId = storageService.getData("profile").roleId;
   // const roleId = mrf.roleId;
   const mrfRef = mrf.referenceNo;
-
+// console.log(mrf)
   switch (mrf.mrfStatusId) {
     case MRF_STATUS.draft:
       return (
@@ -125,26 +125,26 @@ const ReferenceBodyTemplate = (mrf) => {
           statusId={mrf.mrfStatusId}
         />
       );
-    case MRF_STATUS.hodapproval:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.cooapproval:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
+    // case MRF_STATUS.hodapproval:
+    //   return (
+    //     <MrfLink
+    //       mrfRef={mrfRef}
+    //       mrfId={mrf.mrfId}
+    //       status={mrf.mrfStatus}
+    //       role={mrf.roleId}
+    //       statusId={mrf.mrfStatusId}
+    //     />
+    //   );
+    // case MRF_STATUS.cooapproval:
+    //   return (
+    //     <MrfLink
+    //       mrfRef={mrfRef}
+    //       mrfId={mrf.mrfId}
+    //       status={mrf.mrfStatus}
+    //       role={mrf.roleId}
+    //       statusId={mrf.mrfStatusId}
+    //     />
+    //   );
     case MRF_STATUS.awaitCooApproval:
       return (
         <MrfLink
@@ -165,7 +165,19 @@ const ReferenceBodyTemplate = (mrf) => {
           statusId={mrf.mrfStatusId}
         />
       );
-    case MRF_STATUS.mrfTransferToNew:
+    case MRF_STATUS.awaitfinanceHeadApproval:
+    
+      return (
+        <MrfLink
+          mrfRef={mrfRef}
+          mrfId={mrf.mrfId}
+          status={mrf.mrfStatus}
+          role={mrf.roleId}
+          statusId={mrf.mrfStatusId}
+        />
+      );
+   
+    case MRF_STATUS.recivedfinanceHeadApproval:
       return (
         <MrfLink
           mrfRef={mrfRef}

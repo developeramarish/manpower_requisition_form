@@ -4,11 +4,12 @@ import SearchHeader from "./../components/SearchHeader";
 import CreateRequisitionBody from "./CreateRequisitionBody";
 // import { useParams } from "react-router-dom";
 
-export default function CreateRequisition({reqId=null,reqRoleId,reqstatus=null,reqstatusId=null}) {
+export default function CreateRequisition({reqId=null,reqRoleId,reqstatus=null,roleId=null,reqstatusId=null}) {
   // const { reqId } = useParams();
-  // console.log(reqId)
-  // console.log(reqstatus)
-  // console.log(reqRoleId)
+  console.log(reqId)
+  console.log(reqstatus)
+  console.log(reqRoleId)
+  console.log(roleId)
   const title=reqstatus;
   return (
     <>
@@ -20,7 +21,7 @@ export default function CreateRequisition({reqId=null,reqRoleId,reqstatus=null,r
   
         {title ? <SearchHeader title="MRF Details" /> :<SearchHeader title="Create Requisition"/>}
 
-          <CreateRequisitionBody getReqId={reqId} getReqRoleId={reqRoleId} status={reqstatus} mrfStatusId={reqstatusId}/>
+          <CreateRequisitionBody getReqId={reqId} getReqRoleId={reqRoleId} roleId={roleId} status={reqstatus} mrfStatusId={reqstatusId}/>
         </div>
       </div>
     </>

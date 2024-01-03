@@ -31,6 +31,8 @@
 .dashboard_wrapper .dashboard_body .dashboard_body_left {
   width: 30%;
   padding-top: 15px;
+  /* background-color: aqua; */
+  margin-bottom: 1%;
 }
 
 .dashboard_wrapper .dashboard_body .dashboard_body_right {

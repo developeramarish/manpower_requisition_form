@@ -33,7 +33,7 @@ import MyRequisitions from "./containers/MyRequisitions";
 import CreateRequisition from "./Pages/CreateRequisition";
 import AddCandidate from "./Pages/AddCandidate";
 import ViewCandidate from "./Pages/ViewCandidate";
-
+import Footer from "./components/Footer";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
@@ -163,7 +163,7 @@ function App() {
                 )}
                 {currentPageKey === "create_requisition" && (
                   <CreateRequisition
-                    
+                  roleId={profile.roleId}
                   />
                 )}
                 {currentPageKey === "view_candidate" && (
@@ -179,6 +179,7 @@ function App() {
                     reqstatusId={params.mrfstatusId}
                   />
                 )}
+                <Footer/>
               </div>
             </div>
           </>
