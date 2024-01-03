@@ -24,7 +24,7 @@ const HeaderBar = ({ userFirstName, userLastName }) => {
             
           </button>
          <span>|</span> 
-         <button onClick={(e) => {
+         <button className='logoutId' onClick={(e) => {
             /*  const logoutRequest = {
                account: instance.getAccountByHomeId(homeAccountId),
                postLogoutRedirectUri: "your_app_logout_redirect_uri",

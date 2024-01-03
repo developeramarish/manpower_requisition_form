@@ -183,6 +183,17 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       </a>
     );
   };
+
+
+       
+      const reasonTemplate=(resume)=>{
+console.log(resume.reason)
+if(!resume.reason ) return "To be Updated";
+
+return(
+  <p className="resume-reason-col">{resume.reason}</p>
+)
+      }
    
   const columns = [
     {
@@ -227,6 +238,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
     {
       field: "reason",
       header: "Reason",
+      body: reasonTemplate,
       bodyClassName: "resume-reason-col",
       sortable: true,
     },

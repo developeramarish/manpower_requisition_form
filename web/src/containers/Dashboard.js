@@ -11,6 +11,7 @@ import {
   filterSelectedColumn,
   filterResultGroupByCandidatestatus,
 } from "../constants/Utils";
+import HrResumeSummary from "../components/HrResumeSummary";
 
 function Dashboard({roleId,userId}) {
   const [mrfStatus, setMrfStatus] = useState([]);
@@ -218,6 +219,15 @@ function Dashboard({roleId,userId}) {
             onHide={() => setResumePopup(false)}
             mrfId={resumePopupId}
           />
+{/* <DashBoardDataTable
+            value={resumeSummary}
+            column={resumeSummaryColums}
+            headerHeading={"Resume Status"}
+            table_title={"Resume Summary"}
+          />
+          <HrResumeSummary  visible={false}
+            onHide={() => setResumePopup(false)}
+            mrfId={resumePopupId}/> */}
         </div>
       </div>
     </div>

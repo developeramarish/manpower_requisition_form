@@ -24,7 +24,7 @@ const MyRequisitions = ({roleId,userId}) => {
 	const [reqData, setReqData] = useState([]);
 	useEffect(() => {
 		async function getReqData() {   
-			const apiUrl = API_URL.MY_REQUISITION + "?statusId=0&roleId=" + roleId+"&userId="+userId;
+			const apiUrl = API_URL.MY_REQUISITION + "?statusId=0&roleId=" + 4+"&userId="+userId;
 			const data = await getData(apiUrl);
 			setReqData(data.result);
 		}

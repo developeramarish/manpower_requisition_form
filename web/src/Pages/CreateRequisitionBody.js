@@ -50,6 +50,9 @@ const CreateRequisitionBody = ({
   const [financeHead, setFinanceHeadApproval] = useState(false);
   const [siteHRSPOCApproval, setSiteHRSPOCApproval] = useState(false);
   const [hiringManager, setHiringManager] = useState(false);
+  const [awatingFiance, setAwatingFiance] = useState(false);
+  const [recievedFiancse, setRecievedFiancse] = useState(false);
+
   //const history = useHistory();
   const dispatch = useDispatch();
 
@@ -83,6 +86,8 @@ const CreateRequisitionBody = ({
     // Fetch the data for all the dropdowns
     OnLoad();
     if (getReqId) {
+      // localStorage.setItem('id', getReqId);
+      // const getReqIds = localStorage.getItem('id');
       const apiUrl = API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId;
       fetch(apiUrl)
         .then((response) => response.json())
@@ -96,6 +101,7 @@ const CreateRequisitionBody = ({
       setFormData(FORM_SCHEMA_CR);
     }
   
+    
 
     if (getReqRoleId == 4 && mrfStatusId == MRF_STATUS.submToHr) {
       setReadOnly(true);
@@ -103,32 +109,35 @@ const CreateRequisitionBody = ({
       setSiteHRSPOCApproval(false)
       setHodapproval(false)
       setCooapproval(true)
+      setAwatingFiance(true)
       setFinanceHeadApproval(true)
       
     } 
     else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitHodApproval){
       setReadOnly(true);
-      setHiringManager(true);
-      setSiteHRSPOCApproval(true)
+      setHiringManager(false);
+      setSiteHRSPOCApproval(false)
       setHodapproval(true)
       setCooapproval(false)
       setFinanceHeadApproval(true)
+      setAwatingFiance(true)
     }
     else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitCooApproval){
       setReadOnly(true);
-      setHiringManager(true);
-      setSiteHRSPOCApproval(true)
+      setHiringManager(false);
+      setSiteHRSPOCApproval(false)
       setHodapproval(true)
       setCooapproval(true)
+      setAwatingFiance(true)
       setFinanceHeadApproval(false)
     }
     else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitfinanceHeadApproval){
       setReadOnly(true);
-      setHiringManager(true);
-      setSiteHRSPOCApproval(true)
+      setHiringManager(false);
+      setSiteHRSPOCApproval(false)
       setHodapproval(true)
       setCooapproval(true)
-      setFinanceHeadApproval(false)
+      setFinanceHeadApproval(true)
     }
     
     
@@ -139,6 +148,7 @@ const CreateRequisitionBody = ({
       setHodapproval(true)
       setCooapproval(true)
       setFinanceHeadApproval(true)
+      setAwatingFiance(true)
       // setEmailApprovalReadOnly(true);
     } else if (
       (getReqRoleId == 3 && mrfStatusId == MRF_STATUS.draft) ||
@@ -149,6 +159,7 @@ const CreateRequisitionBody = ({
       setSiteHRSPOCApproval(true)
       setHodapproval(true)
       setCooapproval(true)
+      setAwatingFiance(true)
       setFinanceHeadApproval(true)
     } else if (getReqRoleId == 3) {
       setReadOnly(true);
@@ -156,12 +167,14 @@ const CreateRequisitionBody = ({
       setSiteHRSPOCApproval(true)
       setHodapproval(true)
       setCooapproval(true)
+      setAwatingFiance(true)
       setFinanceHeadApproval(true)
     } else if (roleId == 3) {
       setHiringManager(true);
       setSiteHRSPOCApproval(true)
       setHodapproval(true)
       setCooapproval(true)
+      setAwatingFiance(true)
       setFinanceHeadApproval(true)
     }
   }, []);
@@ -169,6 +182,7 @@ const CreateRequisitionBody = ({
     // console.log(formData);
     setFormData({ ...formData, jobDescription: val });
   };
+
 
   const onTextChangedSkill = (val) => {
     setFormData({ ...formData, skills: val });
@@ -186,8 +200,6 @@ const CreateRequisitionBody = ({
     setFormData({ ...formData, minTargetSalary: minSalary });
   };
 
-const data="2024-01-17T18:30:00.000Z"
-  console.log(new Date(data))
   const handleMaxSalaryChange = (e) => {
     const maxSalary = e.target.value;
     if (maxSalary < formData.minTargetSalary) {
@@ -330,6 +342,9 @@ if (PosORPr === 1) {
     //navigateTo(currentHash);
     //history.goBack();
   };
+
+  
+
 
   return (
     <>
@@ -1120,76 +1135,7 @@ if (PosORPr === 1) {
                   }
                 />
               </div>
-            </div>
-            <div id="second" className="flex justify-content-evenly gap-4">
-              <div className="flex flex-column gap-2">
-                <InputTextCp
-                  type="text"
-                  id="Position"
-                  className="p-disabled"
-                  disable={emailapprovalreadOnly}
-                  onChange={(e) => setFormData({ ...formData, Position: 8 })}
-                  value="Function Head"
-                />
-              </div>
-
-              <div className="flex flex-column gap-2 w-3">
-                {/* Assuming DropdownComponent renders an input */}
-                <DropdownComponent
-                  optionLabel="name"
-                  optionValue="employeeId"
-                  type="functionHead"
-                  options={dropdownData.functionHead}
-                  value={formData.functionHeadId}
-                  disable={hodapproval}
-                  onChange={(e) => {
-                    const selectedfunctionHeadId = e.target.value;
-                    const selectedfunctionHead = dropdownData.functionHead.find(
-                      (manager) => manager.employeeId === selectedfunctionHeadId
-                    );
-
-                    if (selectedfunctionHead) {
-                      setFormData({
-                        ...formData,
-                        functionHeadId: selectedfunctionHeadId,
-                        functionHeadEmpId: selectedfunctionHead.employeeCode,
-                      });
-                    }
-                  }}
-                />
-              </div>
-
-              <div className="flex flex-column gap-2">
-                <InputTextCp
-                  id="functionHeadEmpId"
-                  className="p-disabled"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      functionHeadEmpId: e.target.value,
-                    })
-                  }
-                  value={formData.functionHeadEmpId}
-                  disable={hodapproval}
-                />
-              </div>
-
-              <div className="flex flex-column gap-2">
-                <CalendarComponent
-                  id="fhApprovalDate"
-                  inputClassName="bg-gray-100"
-                  value={new Date(formData.fhApprovalDate)}
-                  disable={hodapproval}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      fhApprovalDate: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-            <div id="third" className="flex justify-content-evenly gap-4">
+            </div> <div id="third" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
                 <InputTextCp
                   type="text"
@@ -1258,6 +1204,75 @@ if (PosORPr === 1) {
                 />
               </div>
             </div>
+            <div id="second" className="flex justify-content-evenly gap-4">
+              <div className="flex flex-column gap-2">
+                <InputTextCp
+                  type="text"
+                  id="Position"
+                  className="p-disabled"
+                  disable={emailapprovalreadOnly}
+                  onChange={(e) => setFormData({ ...formData, Position: 8 })}
+                  value="Function Head"
+                />
+              </div>
+
+              <div className="flex flex-column gap-2 w-3">
+                {/* Assuming DropdownComponent renders an input */}
+                <DropdownComponent
+                  optionLabel="name"
+                  optionValue="employeeId"
+                  type="functionHead"
+                  options={dropdownData.functionHead}
+                  value={formData.functionHeadId}
+                  disable={hodapproval}
+                  onChange={(e) => {
+                    const selectedfunctionHeadId = e.target.value;
+                    const selectedfunctionHead = dropdownData.functionHead.find(
+                      (manager) => manager.employeeId === selectedfunctionHeadId
+                    );
+
+                    if (selectedfunctionHead) {
+                      setFormData({
+                        ...formData,
+                        functionHeadId: selectedfunctionHeadId,
+                        functionHeadEmpId: selectedfunctionHead.employeeCode,
+                      });
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="flex flex-column gap-2">
+                <InputTextCp
+                  id="functionHeadEmpId"
+                  className="p-disabled"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      functionHeadEmpId: e.target.value,
+                    })
+                  }
+                  value={formData.functionHeadEmpId}
+                  disable={hodapproval}
+                />
+              </div>
+
+              <div className="flex flex-column gap-2">
+                <CalendarComponent
+                  id="fhApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.fhApprovalDate)}
+                  disable={cooapproval}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      fhApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+           
             <div id="forth" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
                 <InputTextCp
@@ -1316,7 +1331,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.fiApprovalDate)}
                   minDate={new Date()}
-                  disable={financeHead}
+                  disable={awatingFiance}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1387,7 +1402,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.pcApprovalDate)}
                   minDate={new Date()}
-                  disable={cooapproval}
+                  disable={financeHead}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1414,7 +1429,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1425,6 +1440,7 @@ if (PosORPr === 1) {
                           label={"SAVE AS DRAFT"}
                           message={"Do you want to Submit this MRF as Draft?"}
                           formData={formData}
+                          roleID={getReqRoleId }
                         />
 
                         <MrfPartialStatus
@@ -1435,6 +1451,7 @@ if (PosORPr === 1) {
                             "After submitting you won't be able to edit the MRF details"
                           }
                           formData={formData}
+                          roleID={getReqRoleId }
                         />
                       </>
                     );
@@ -1443,7 +1460,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1461,7 +1478,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1473,7 +1490,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1485,7 +1502,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1497,7 +1514,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1519,7 +1536,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1531,7 +1548,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1552,19 +1569,20 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
                         />
-                         {/* <MrfPartialStatus
+                         <MrfPartialStatus
                           mrfId={getReqId}
-                          // mrfStatusId={3}
-                          // header={"Resubmission"}
+                          mrfStatusId={mrfStatusId}
                           label={"Update"}
-                          message={"Are you sure?"}
-                          // textbox={true}
-                        /> */}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
+                        />
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={3}
@@ -1578,6 +1596,7 @@ if (PosORPr === 1) {
                           mrfStatusId={11}
                           label={"Send for HOD approval"}
                           formData={formData}
+                          disabled={(formData.functionHeadId != 0)? false:true}
                           message={
                             "“Do you want to submit it for HOD approval?"
                           }
@@ -1596,7 +1615,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1608,7 +1627,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1620,7 +1639,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1640,7 +1659,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1666,7 +1685,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1690,7 +1709,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1702,7 +1721,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1714,16 +1733,26 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2  surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
+                        />
+                         <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={12}
                           formData={formData}
                           label={"Received HOD approval"}
+                          disabled={(formData.presidentnCOOId != 0)? false:true}
                           message={
                             "“Do you want to submit it for COO approval?"
                           }
@@ -1735,10 +1764,19 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
+                        />
+                        <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
@@ -1754,12 +1792,20 @@ if (PosORPr === 1) {
                         <>
                           <ButtonC
                             label="CANCEL"
-                            className=" w-2 border-red-600 text-red-600"
+                            className=" w-2 surface-hover border-red-600 text-red-600"
                             onClick={handleCancel}
                             formData={formData}
                             outlined="true"
                             // disable="true"
                           />
+                        {/* <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          message={"Are you sure you want to update?"}
+                          
+                        /> */}
                           <MrfPartialStatus
                             mrfId={getReqId}
                             mrfStatusId={6}
@@ -1773,15 +1819,26 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
+                        />
+                        <MrfPartialStatus
+                          mrfId={getReqId}
                           mrfStatusId={13}
                           formData={formData}
+                          disabled={(formData.financeHeadId != 0)? false:true}
+
                           label={"Received COO approval"}
                           message={"“Do you want to submit it for Finance Head approval?"}
                         />
@@ -1792,7 +1849,7 @@ if (PosORPr === 1) {
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1821,7 +1878,7 @@ if (PosORPr === 1) {
                   <>
                     <ButtonC
                       label="CANCEL"
-                      className=" w-2 border-red-600 text-red-600"
+                      className=" w-2  surface-hover border-red-600 text-red-600"
                       onClick={handleCancel}
                       outlined="true"
                       // disable="true"
@@ -1832,6 +1889,8 @@ if (PosORPr === 1) {
                       label={"SAVE AS DRAFT"}
                       message={"Do you want to Submit this MRF as Draft?"}
                       formData={formData}
+                      roleID={getReqRoleId }
+                      
                     />
 
                     <MrfPartialStatus
@@ -1842,6 +1901,7 @@ if (PosORPr === 1) {
                         "After submitting you won't be able to edit the MRF details"
                       }
                       formData={formData}
+                      roleID={roleId }
                     />
                   </>
                 );

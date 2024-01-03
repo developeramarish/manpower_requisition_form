@@ -4,7 +4,6 @@ import { storageService } from "../constants/storage";
 import { formatDateToYYYYMMDD, navigateTo } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
-import InputTextCp from "./Textbox";
 import InputTextareaComponent from "./InputTextarea";
 import ToastMessages from "./ToastMessages";
 
@@ -16,6 +15,9 @@ const MrfPartialStatus = ({
   textbox = false,
   header = null,
   formData = {},
+  disabled=null,
+  updatedClick=null,
+  roleID=null,
 }) => {
   const [visible, setVisible] = useState(false);
   const [note, setNote] = useState("");
@@ -30,10 +32,11 @@ const MrfPartialStatus = ({
     return s;
   };
 
+
   const footerContent = (value) => {
     return (
       <div>
-        {mrfStatusId == MRF_STATUS.submToHr ||
+        { roleID==3 && mrfStatusId == MRF_STATUS.submToHr ||
         mrfStatusId == MRF_STATUS.draft ? (
           <ButtonC
             label="Yes"
@@ -67,7 +70,6 @@ const MrfPartialStatus = ({
 
   const handleSubmit = async (mrfStatusId) => {
     setIsLoading(true);
-    // console.log(formData);
     const data = {
       referenceNo: formData.referenceNo,
       requisitionType: formData.requisitionType==""?REQUISITION_TYPE[0].code:formData.requisitionType,
@@ -177,54 +179,59 @@ const MrfPartialStatus = ({
     }
   };
 
-const handleActiondetail=(formData)=>{
-  console.log("callled")
-if(formData.functionHeadId !=0){
-  console.log("saving datat for function heda ")
-  console.log(formData.functionHeadId )
-}
-
-
-}
-
-
 
 
   const submitPartial = async () => {
 
-    handleActiondetail(formData)
-    console.log(formData);
-    const partialStatus = {
-      mrfStatusId: mrfStatusId,
+const updattingHiringMangerandSiteHR={
+       mrfStatusId: mrfStatusId,
       note: note || null,
       updatedByEmployeeId: storageService.getData("profile").employeeId,
       updatedOnUtc: new Date().toISOString(),
       hiringManagerId: formData.hiringManagerId,
       hiringManagerEmpId: formData.hiringManagerEmpId,
-      functionHeadId: formData.functionHeadId,
-      functionHeadEmpId: formData.functionHeadEmpId,
       siteHRSPOCId: formData.siteHRSPOCId,
       siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
+      hmApprovalDate: formatDateToYYYYMMDD(formData.hmApprovalDate),
+      spApprovalDate: formatDateToYYYYMMDD(formData.spApprovalDate),
+    }
+
+
+    const partialStatus = {
+      mrfStatusId: mrfStatusId,
+      note: note || null,
+      updatedByEmployeeId: storageService.getData("profile").employeeId,
+      updatedOnUtc: new Date().toISOString(),
+
+      functionHeadId: formData.functionHeadId,
+      functionHeadEmpId: formData.functionHeadEmpId,
       financeHeadId: formData.financeHeadId,
       financeHeadEmpId: formData.financeHeadEmpId,
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
-      // pcApprovalDate:  formatDateToYYYYMMDD(formData.pcApprovalDate),
-      // fhApprovalDate: formatDateToYYYYMMDD(formData.fhApprovalDate),
-      // fiApprovalDate: formatDateToYYYYMMDD(formData.fiApprovalDate),
-      // spApprovalDate: formatDateToYYYYMMDD(formData.spApprovalDate),
-      // hmApprovalDate: formatDateToYYYYMMDD(formData.hmApprovalDate),
+      pcApprovalDate:  formatDateToYYYYMMDD(formData.pcApprovalDate),
+      fhApprovalDate: formatDateToYYYYMMDD(formData.fhApprovalDate),
+      fiApprovalDate: formatDateToYYYYMMDD(formData.fiApprovalDate),
     
     };
 
     console.log(partialStatus)
 
     try {
-      const response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
+      let response;
+if(updatedClick){
+  response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
         method: "Put",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(partialStatus),
+        body: JSON.stringify(updattingHiringMangerandSiteHR),
       });
+}else{
+   response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
+    method: "Put",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(partialStatus),
+  });
+}
 
       if (response.ok) {
         const responseData = await response.json();
@@ -232,9 +239,14 @@ if(formData.functionHeadId !=0){
           toastRef.current.showConflictMessage(responseData.message);
         } else {
           toastRef.current.showSuccessMessage("Action Submitted");
-          setTimeout(() => {
+
+if(updatedClick){
+  // window.location.reload();
+}else{
+  setTimeout(() => {
             navigateTo("my_requisition");
           }, 1000);
+}
         }
       } else {
         console.error("Request failed with status:", response.status);
@@ -251,6 +263,7 @@ if(formData.functionHeadId !=0){
     }
   };
 
+  // console.log(formData)
   return (
     <>
       {/* {popupmessage &&(
@@ -259,7 +272,7 @@ if(formData.functionHeadId !=0){
          </>
        )} */}
 
-      {(mrfStatusId == MRF_STATUS.submToHr ||
+      {  ( roleID==3 && mrfStatusId == MRF_STATUS.submToHr ||
         mrfStatusId == MRF_STATUS.draft) && (
         <Dialog
           className="w-3 "
@@ -279,6 +292,7 @@ if(formData.functionHeadId !=0){
             label={label}
             className="w-2 bg-red-600 border-red-600"
             onClick={() => setVisible(true)}
+            disable={disabled}
           ></ButtonC>
 
           <Dialog
