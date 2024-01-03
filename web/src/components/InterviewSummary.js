@@ -111,6 +111,13 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 	};
 
 	const interviewerBodyTemplate = (interview, options) => {
+		if (roleId === ROLES.hr)
+		{return (
+        <div>
+          {interview.interviewerName}
+        </div>);
+		}
+		else{
 		const handleMultiSelectChange = (e) => {
 			let interviewDataCopy = [...interviewData];
 			let sv = [...saveBttn];
@@ -138,6 +145,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 				// optionValue="employeeId"
 			/>
 		);
+				}
 	};
 
 	const feedbackBodyTemplate = (interview) => {

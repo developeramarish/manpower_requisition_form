@@ -7,8 +7,9 @@ import ToastMessages from "./ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "./multiselectDropdown";
-import { API_URL, FILE_URL } from "../constants/config";
+import { API_URL, FILE_URL,ROLES } from "../constants/config";
 import { changeDateFormat, strToArray } from "../constants/Utils";
+
 
 const ResumeSummary = ({ roleId=null,visible, onHide, mrfId = null, dashboard = true }) => {
   const [data, setdata] = useState([]);
@@ -60,6 +61,15 @@ console.log(roleId)
 
 
   const MultiSelectDrop = (rowData, options) => {
+    if (roleId === ROLES.hr) {
+      // Return a simple date or any other content for this role
+      return (
+        <div>
+          {rowData.resumeReviewerName}
+        </div>
+      );
+    } else 
+    {
     return (
       <div>
         <MultiSelectDropdown
@@ -85,7 +95,8 @@ console.log(roleId)
         />
       </div>
     );
-  };
+  }
+};
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -200,7 +211,7 @@ return(
 )
       }
    
-  const columns = [
+  let columns = [
     {
       header: "Sr.No",
       body: (data, options) => options.rowIndex + 1,
@@ -254,6 +265,9 @@ return(
       sortable: true,
     },
   ];
+  if (roleId === ROLES.hr) {
+    columns = columns.filter(column => column.header !== "Action");
+   };
   return (
     <div>
       <Dialog
