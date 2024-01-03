@@ -30,5 +30,14 @@ namespace MRF.DataAccess.Repository
                                                        
             return query.ToList();
         }
+        public MrfEmailApproval GetListBymrfIdandEmployeeId(int mrfId,int empId)
+        {
+
+            IQueryable<MrfEmailApproval> query = from mrfDetails in _db.MrfEmailApproval
+                                                 where mrfDetails.MrfId == mrfId && mrfDetails.EmployeeId == empId
+                                                 select mrfDetails;
+ 
+            return query.FirstOrDefault(); ;
+        }
     }
 }
