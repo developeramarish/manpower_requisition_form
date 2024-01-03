@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
-//import { useHistory } from "react-router-dom";
+import { commonSettings, applySettingsBasedOnRoleAndStatus } from './commonSettings';
 import "../css/InputComponent.css";
 import DropdownComponent from "./../components/Dropdown";
 import InputTextCp from "./../components/Textbox";
@@ -43,13 +42,13 @@ const CreateRequisitionBody = ({
   const [isLoading, setIsLoading] = useState(false);
   const RedAsterisk = () => <span className="text-red-500">*</span>;
   const [visible, setVisible] = useState(false);
-  const [readOnly, setReadOnly] = useState(false);
+  //const [commonSettings.setReadOnly, setReadOnly] = useState(false);
   const [emailapprovalreadOnly, setEmailApprovalReadOnly] = useState(false);
-  const [hodapproval, setHodapproval] = useState(false);
-  const [cooapproval, setCooapproval] = useState(false);
-  const [financeHead, setFinanceHeadApproval] = useState(false);
-  const [siteHRSPOCApproval, setSiteHRSPOCApproval] = useState(false);
-  const [hiringManager, setHiringManager] = useState(false);
+  //const [commonSettings.setHodapproval, setHodapproval] = useState(false);
+  //const [commonSettings.setCooapproval, setCooapproval] = useState(false);
+  //const [financeHead, setFinanceHeadApproval] = useState(false);
+  //const [siteHRSPOCApproval, setSiteHRSPOCApproval] = useState(false);
+  //const [hiringManager, setHiringManager] = useState(false);
   const [awatingFiance, setAwatingFiance] = useState(false);
   const [recievedFiancse, setRecievedFiancse] = useState(false);
 
@@ -101,82 +100,8 @@ const CreateRequisitionBody = ({
       setFormData(FORM_SCHEMA_CR);
     }
   
+    applySettingsBasedOnRoleAndStatus(getReqRoleId, mrfStatusId, roleId, commonSettings);
     
-
-    if (getReqRoleId == 4 && mrfStatusId == MRF_STATUS.submToHr) {
-      setReadOnly(true);
-      setHiringManager(false);
-      setSiteHRSPOCApproval(false)
-      setHodapproval(false)
-      setCooapproval(true)
-      setAwatingFiance(true)
-      setFinanceHeadApproval(true)
-      
-    } 
-    else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitHodApproval){
-      setReadOnly(true);
-      setHiringManager(false);
-      setSiteHRSPOCApproval(false)
-      setHodapproval(true)
-      setCooapproval(false)
-      setFinanceHeadApproval(true)
-      setAwatingFiance(true)
-    }
-    else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitCooApproval){
-      setReadOnly(true);
-      setHiringManager(false);
-      setSiteHRSPOCApproval(false)
-      setHodapproval(true)
-      setCooapproval(true)
-      setAwatingFiance(true)
-      setFinanceHeadApproval(false)
-    }
-    else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitfinanceHeadApproval){
-      setReadOnly(true);
-      setHiringManager(false);
-      setSiteHRSPOCApproval(false)
-      setHodapproval(true)
-      setCooapproval(true)
-      setFinanceHeadApproval(true)
-    }
-    
-    
-    else if (getReqRoleId == 4) {
-      setReadOnly(true);
-      setHiringManager(true);
-      setSiteHRSPOCApproval(true)
-      setHodapproval(true)
-      setCooapproval(true)
-      setFinanceHeadApproval(true)
-      setAwatingFiance(true)
-      // setEmailApprovalReadOnly(true);
-    } else if (
-      (getReqRoleId == 3 && mrfStatusId == MRF_STATUS.draft) ||
-      mrfStatusId == MRF_STATUS.resubReq
-    ) {
-      setReadOnly(false);
-      setHiringManager(true);
-      setSiteHRSPOCApproval(true)
-      setHodapproval(true)
-      setCooapproval(true)
-      setAwatingFiance(true)
-      setFinanceHeadApproval(true)
-    } else if (getReqRoleId == 3) {
-      setReadOnly(true);
-      setHiringManager(true);
-      setSiteHRSPOCApproval(true)
-      setHodapproval(true)
-      setCooapproval(true)
-      setAwatingFiance(true)
-      setFinanceHeadApproval(true)
-    } else if (roleId == 3) {
-      setHiringManager(true);
-      setSiteHRSPOCApproval(true)
-      setHodapproval(true)
-      setCooapproval(true)
-      setAwatingFiance(true)
-      setFinanceHeadApproval(true)
-    }
   }, []);
   const onTextChanged = (val) => {
     // console.log(formData);
@@ -401,7 +326,7 @@ if (PosORPr === 1) {
                   optionValue="code"
                   type="RequisitionType"
                   options={REQUISITION_TYPE}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={
                     formData.requisitionType ||
                     (REQUISITION_TYPE.length > 0
@@ -427,7 +352,7 @@ if (PosORPr === 1) {
                   type="position"
                   options={dropdownData.position}
                   value={formData.positionTitleId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
 
                   onChange={(e) => {
                     setFormData({ ...formData, positionTitleId: e.target.value });
@@ -453,7 +378,7 @@ if (PosORPr === 1) {
                   type="Department"
                   options={dropdownData.departments}
                   value={formData.departmentId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) => {
                     setFormData({ ...formData, departmentId: e.target.value });
                   }}
@@ -470,7 +395,7 @@ if (PosORPr === 1) {
                   optionValue="id"
                   type="subDepartmentId"
                   options={subDepartments}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={formData.subDepartmentId}
                   onChange={(e) =>
                     setFormData({
@@ -492,7 +417,7 @@ if (PosORPr === 1) {
                   optionValue="id"
                   type="project"
                   options={dropdownData.projects}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={formData.projectId}
                   onChange={(e) => {
                     setFormData({ ...formData, projectId: e.target.value });
@@ -514,7 +439,7 @@ if (PosORPr === 1) {
                   type="location"
                   options={dropdownData.location}
                   value={formData.locationId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({ ...formData, locationId: e.target.value })
                   }
@@ -536,7 +461,7 @@ if (PosORPr === 1) {
                   type="reportingTo"
                   options={dropdownData.reportingTo}
                   value={formData.reportsToEmployeeId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -555,7 +480,7 @@ if (PosORPr === 1) {
                   id="initiation-date"
                   inputClassName="bg-gray-100"
                   value={new Date(formData.requisitionDateUtc)}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   minDate={new Date()}
                   onChange={(e) =>
                     setFormData({
@@ -581,7 +506,7 @@ if (PosORPr === 1) {
                   type="employmenttypes"
                   options={dropdownData.employmentTypes}
                   value={formData.employmentTypeId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -607,7 +532,7 @@ if (PosORPr === 1) {
                     optionLabel="name"
                     optionValue="id"
                     placeholder="Min"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({ ...formData, minGradeId: e.target.value })
                     }
@@ -622,7 +547,7 @@ if (PosORPr === 1) {
                     optionLabel="name"
                     optionValue="id"
                     placeholder="Max"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({ ...formData, maxGradeId: e.target.value })
                     }
@@ -645,7 +570,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.vacancyNo}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
               </div>
 
@@ -660,7 +585,7 @@ if (PosORPr === 1) {
                   type="vaccancy"
                   options={dropdownData.vaccancies}
                   value={formData.vacancyTypeId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({ ...formData, vacancyTypeId: e.target.value })
                   }
@@ -682,7 +607,7 @@ if (PosORPr === 1) {
                     options={MIN_EXPERIENCE_OPTIONS}
                     optionLabel="label"
                     placeholder="Min"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -700,7 +625,7 @@ if (PosORPr === 1) {
                     options={MAX_EXPERIENCE_OPTIONS}
                     optionLabel="label"
                     placeholder="Max"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -721,7 +646,7 @@ if (PosORPr === 1) {
                   optionValue="id"
                   type="Gender"
                   options={GENDER}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={formData.genderId}
                   onChange={(e) =>
                     setFormData({ ...formData, genderId: e.target.value })
@@ -739,7 +664,7 @@ if (PosORPr === 1) {
                   type="Qualification"
                   options={dropdownData.qualification}
                   value={formData.qualificationId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -754,7 +679,7 @@ if (PosORPr === 1) {
                 <CheckboxComponent
                   inputId="replacement"
                   checked={formData.isReplacement}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({ ...formData, isReplacement: e.checked })
                   }
@@ -780,7 +705,7 @@ if (PosORPr === 1) {
                         })
                       }
                       value={formData.employeeName}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
 
@@ -795,7 +720,7 @@ if (PosORPr === 1) {
                       id="lastworkingDate"
                       inputClassName="bg-gray-100"
                       value={new Date(formData.lastWorkingDate)}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -819,7 +744,7 @@ if (PosORPr === 1) {
                         setFormData({ ...formData, emailId: e.target.value })
                       }
                       value={formData.emailId}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
 
@@ -836,7 +761,7 @@ if (PosORPr === 1) {
                         })
                       }
                       value={formData.employeeCode}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
                 </div>
@@ -851,7 +776,7 @@ if (PosORPr === 1) {
                         setFormData({ ...formData, annualCtc: e.target.value })
                       }
                       value={formData.annualCtc}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
                       Annual Gross
@@ -865,7 +790,7 @@ if (PosORPr === 1) {
                         })
                       }
                       value={formData.annualGross}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
 
@@ -881,7 +806,7 @@ if (PosORPr === 1) {
                       id="ReplaceJustification"
                       className="bg-gray-100"
                       value={formData.replaceJustification}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -903,7 +828,7 @@ if (PosORPr === 1) {
                   value={formData.jobDescription}
                   headerTemplate={header}
                   onTextChanged={onTextChanged}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
               </div>
 
@@ -916,7 +841,7 @@ if (PosORPr === 1) {
                   value={formData.skills}
                   headerTemplate={header}
                   onTextChanged={onTextChangedSkill}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
                 {/* <InputTextareaComponent
                   autoResize
@@ -925,7 +850,7 @@ if (PosORPr === 1) {
                   rows={9}
                   cols={10}
                   value={formData.skills}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({ ...formData, skills: e.target.value })
                   }
@@ -949,7 +874,7 @@ if (PosORPr === 1) {
                   onChange={(e) =>
                     setFormData({ ...formData, justification: e.target.value })
                   }
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
               </div>
               <div className="flex flex-column gap-4 w-6">
@@ -971,7 +896,7 @@ if (PosORPr === 1) {
                     //   })
                     // }
                     value={formData.minTargetSalary}
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                   />
                 </div>
                 <div className="flex flex-column gap-2">
@@ -992,7 +917,7 @@ if (PosORPr === 1) {
                     // }
                     onChange={handleMaxSalaryChange}
                     value={formData.maxTargetSalary}
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                   />
                 </div>
               </div>
@@ -1017,7 +942,7 @@ if (PosORPr === 1) {
                     })
                   }
                   optionLabel="name"
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
 
                   // optionValue="employeeId"
                 />
@@ -1040,7 +965,7 @@ if (PosORPr === 1) {
                       interviewerEmployeeIds: objToArray(e.value),
                     })
                   }
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   optionLabel="name"
                   // optionValue="employeeId"
                 />
@@ -1078,7 +1003,7 @@ if (PosORPr === 1) {
                   type="hiringManager"
                   options={dropdownData.hiringManager}
                   value={formData.hiringManagerId}
-                  disable={hiringManager}
+                  disable={commonSettings.setHiringManager}
                   onChange={(e) => {
                     const selectedHiringManagerId = e.target.value;
                     const selectedHiringManager =
@@ -1112,7 +1037,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.hiringManagerEmpId}
-                  disable={hiringManager}
+                  disable={commonSettings.setHiringManager}
                 />
               </div>
 
@@ -1126,7 +1051,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.hmApprovalDate)}
                   minDate={new Date()}
-                  disable={hiringManager}
+                  disable={commonSettings.setHiringManager}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1154,7 +1079,7 @@ if (PosORPr === 1) {
                   type="siteHRSPOCId"
                   options={dropdownData.siteHRSPOC}
                   value={formData.siteHRSPOCId}
-                  disable={siteHRSPOCApproval}
+                  disable={commonSettings.setSiteHRSPOCApproval}
                   onChange={(e) => {
                     const selectedsiteHRSPOCId = e.target.value;
                     const selectedsiteHRSPOCEmpId =
@@ -1183,7 +1108,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.siteHRSPOCEmpId}
-                  disable={siteHRSPOCApproval}
+                  disable={commonSettings.setSiteHRSPOCApproval}
                 />
               </div>
               <div className="flex flex-column gap-2">
@@ -1193,7 +1118,7 @@ if (PosORPr === 1) {
                   id="ApprovalDate"
                   inputClassName="bg-gray-100"
                   value={new Date(formData.spApprovalDate)}
-                  disable={siteHRSPOCApproval}
+                  disable={commonSettings.setSiteHRSPOCApproval}
                   minDate={new Date()}
                   onChange={(e) =>
                     setFormData({
@@ -1224,7 +1149,7 @@ if (PosORPr === 1) {
                   type="functionHead"
                   options={dropdownData.functionHead}
                   value={formData.functionHeadId}
-                  disable={hodapproval}
+                  disable={commonSettings.setHodapproval}
                   onChange={(e) => {
                     const selectedfunctionHeadId = e.target.value;
                     const selectedfunctionHead = dropdownData.functionHead.find(
@@ -1253,7 +1178,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.functionHeadEmpId}
-                  disable={hodapproval}
+                  disable={commonSettings.setHodapproval}
                 />
               </div>
 
@@ -1262,7 +1187,7 @@ if (PosORPr === 1) {
                   id="fhApprovalDate"
                   inputClassName="bg-gray-100"
                   value={new Date(formData.fhApprovalDate)}
-                  disable={cooapproval}
+                  disable={commonSettings.setCooapproval}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1292,7 +1217,7 @@ if (PosORPr === 1) {
                   type="financeHead"
                   options={dropdownData.financeHead}
                   value={formData.financeHeadId}
-                  disable={financeHead}
+                  disable={commonSettings.setFinanceHeadApproval}
                   onChange={(e) => {
                     const selectedfinanceHeadId = e.target.value;
                     const selectedfinanceHeadEmpId =
@@ -1322,7 +1247,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.financeHeadEmpId}
-                  disable={financeHead}
+                  disable={commonSettings.setFinanceHeadApproval}
                 />
               </div>
               <div className="flex flex-column gap-2">
@@ -1349,7 +1274,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 11 })}
                   value="President & COO"
-                  disable={cooapproval}
+                  disable={commonSettings.setCooapproval}
                 />
               </div>
 
@@ -1361,7 +1286,7 @@ if (PosORPr === 1) {
                   type="presidentnCOO"
                   options={dropdownData.presidentnCOO}
                   value={formData.presidentnCOOId}
-                  disable={cooapproval}
+                  disable={commonSettings.setCooapproval}
                   onChange={(e) => {
                     const selectedpresidentnCOOId = e.target.value;
                     const selectedpresidentnCOOEmpId =
@@ -1402,7 +1327,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.pcApprovalDate)}
                   minDate={new Date()}
-                  disable={financeHead}
+                  disable={commonSettings.setFinanceHeadApproval}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
