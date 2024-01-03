@@ -10,7 +10,7 @@ import MultiSelectDropdown from "./multiselectDropdown";
 import { API_URL, FILE_URL } from "../constants/config";
 import { changeDateFormat, strToArray } from "../constants/Utils";
 
-const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
+const ResumeSummary = ({ roleId=null,visible, onHide, mrfId = null, dashboard = true }) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
@@ -54,6 +54,11 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       </Dialog>
     );
   }
+
+
+console.log(roleId)
+
+
   const MultiSelectDrop = (rowData, options) => {
     return (
       <div>
