@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-
-import { APIPath } from "./../components/constant";
 import "../styles/layout/Candidate.css";
 import "../css/MyRequisitions.css";
-import { API_URL } from "../constants/config";
+import { API_URL, FILE_URL } from "../constants/config";
 function ViewCandidate() {
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
@@ -28,8 +26,13 @@ function ViewCandidate() {
   const createdOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
   };
-  const updatedOnBodyTemplate = (mrf) => {
-    return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
+  const resumeBodyTemplate = (mrf) => {
+    let resumeLink = FILE_URL.RESUME + mrf.resumePath;
+    return (
+      <a href={resumeLink} target="_blank" className="int-link-cell">
+        {mrf.resumePath}
+      </a>
+    );
   };
   const columns = [
 		{
@@ -55,6 +58,7 @@ function ViewCandidate() {
     {
 			field: "resumePath",
 			header: "Resume",
+      body: resumeBodyTemplate,
 			sortable: true,
 		},
 		{

@@ -79,6 +79,53 @@ namespace MRF.API.Controllers
             }
 
         }
+        [HttpGet("GetListBymrfIdandEmployeeId")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(List<MrfEmailApproval>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public MrfEmailApproval GetListBymrfIdandEmployeeId(int mrfId, int empId)
+        {
+            _logger.LogInfo($"Fetching All MRF Details by Id: {mrfId}");
+             MrfEmailApproval  MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, empId);
+            if (MrfEmailApproval == null)
+            {
+                _logger.LogError($"No result found by this Id:{mrfId}");
+            }
+            _response.Result = MrfEmailApproval;
+            return MrfEmailApproval;
+        }
+
+        [HttpPut("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Item updated successfully", Type = typeof(MrfEmailApprovalResponseModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful update)")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public MrfEmailApprovalResponseModel Put(int id, [FromBody] MrfEmailApprovalRequestModel request) {
+            var existingStatus = _unitOfWork.MrfEmailApproval.Get(u => u.Id == id);
+            if (existingStatus != null)
+            {
+                existingStatus.ApprovalDate = request.ApprovalDate;
+                    _unitOfWork.MrfEmailApproval.Update(existingStatus);
+                    _unitOfWork.Save();
+                _responseModel.Id = existingStatus.Id;
+            }
+            else
+            {
+                _logger.LogError($"No result found by this Id: {id}");
+                _responseModel.Id = 0;
+            }
+            return _responseModel;
+        }
 
     }
 }
