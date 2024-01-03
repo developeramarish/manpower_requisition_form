@@ -1,13 +1,11 @@
 export const APP_KEY = "MRF_v1.0";
-//const APIPath="https://localhost:7128/api/";
-const APIPath="https://10.22.11.101:90/api/";
+ const APP = "https://10.22.11.101:90";
+//const APP="https://localhost:7128";
+const APIPath=`${APP}/api/`;
 export const API_URL = {
-  MRF_STATUS_SUMMARY: 
-  `${APIPath}Dashboard/GetMrfStatusSummary`,
-  RESUME_SUMMARY:
-  `${APIPath}Dashboard/GetMrfResumeSummary/Count`,
-  INTERVIEW_SUMMARY:
-  `${APIPath}Dashboard/GetMrfInterviewSummary/Count`,
+  MRF_STATUS_SUMMARY: `${APIPath}Dashboard/GetMrfStatusSummary`,
+  RESUME_SUMMARY: `${APIPath}Dashboard/GetMrfResumeSummary/Count`,
+  INTERVIEW_SUMMARY: `${APIPath}Dashboard/GetMrfInterviewSummary/Count`,
   INTERVIEW_SUMMARY_POPUP: `${APIPath}Mrfinterviewermap/GetInterviewDetails/GetInterviewDetails`,
   MRF_STATUS_POPUP: `${APIPath}Mrfdetail/GetMrfDetails/GetMrfDetails?`,
   MY_REQUISITION: `${APIPath}Mrfdetail/GetMrfDetails/GetMrfDetails`,
@@ -21,17 +19,16 @@ export const API_URL = {
   GET_CREATE_REQUISITION_DROPDOWN: `${APIPath}Mrfdetail/GetMRFDropdownlist`,
   POST_CREATE_REQUISITION: `${APIPath}mrfdetail/POST`,
   ADD_CANDIDATE: `${APIPath}Candidatedetail/Post`,
-  ADD_SOURCE_NAME : `${APIPath}Source`,
+  ADD_SOURCE_NAME: `${APIPath}Source`,
   RESUME_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Resume&FileName=`,
   ADD_POSITIONTITLE: `${APIPath}PositionTitle`,
   ADD_PROJECT: `${APIPath}Project`,
-  GET_CANDIDATE_DETAILS:`${APIPath}Candidatedetail/GetReferenceNoAndPositiontitle`
+  GET_CANDIDATE_DETAILS: `${APIPath}Candidatedetail/GetReferenceNoAndPositiontitle`,
 };
 
 export const FILE_URL = {
-	RESUME: `${APIPath}Resume/`,
-	ASSIGNMENT: `${APIPath}Assignment/`,
-	
+  RESUME: `${APP}/Resume/`,
+  ASSIGNMENT: `${APP}/Assignment/`,
 };
 
 export const ROUTES = {
@@ -59,8 +56,18 @@ export const MRF_STATUS = {
   closed: 10,
   awaitHodApproval: 11,
   awaitCooApproval: 12,
-  mrfTransferToNew: 13,
+  awaitfinanceHeadApproval: 13,
+  recivedfinanceHeadApproval: 14,
+  mrfTransferToNew: 15,
 };
+
+
+// const [hodapproval, setHodapproval] = useState(false);
+//   const [cooapproval, setCooapproval] = useState(false);
+//   const [financeHead, setFinanceHeadApproval] = useState(false);
+//   const [siteHRSPOCApproval, setSiteHRSPOCApproval] = useState(false);
+//   const [hiringManager, setHiringManager] = useState(false);
+
 
 export const ROLES = {
   superAdmin: 1,
@@ -104,7 +111,7 @@ export const FORM_SCHEMA_CR = {
   vacancyNo: 0,
   genderId: 0,
   qualification: "",
-  requisitionDateUtc: "",
+  requisitionDateUtc: new Date(),
   reportsToEmployeeId: 0,
   minGradeId: 0,
   maxGradeId: 0,
@@ -125,7 +132,7 @@ export const FORM_SCHEMA_CR = {
   employeeName: "",
   emailId: "",
   employeeCode: "",
-  lastWorkingDate: "",
+  lastWorkingDate: new Date(),
   annualCtc: 0,
   annualGross: 0,
   replaceJustification: "",
@@ -143,5 +150,9 @@ export const FORM_SCHEMA_CR = {
   financeHeadEmpId: 0,
   presidentnCOOId: 0,
   presidentnCOOEmpId: 0,
+  fiApprovalDate:new Date(),
+  pcApprovalDate:new Date(),
+  spApprovalDate:new Date(),
+  fhApprovalDate:new Date(),
+  hmApprovalDate:new Date(),
 };
-

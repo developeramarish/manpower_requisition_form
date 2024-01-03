@@ -35,6 +35,7 @@ const CreateRequisitionBody = ({
   getReqRoleId = null,
   status = null,
   mrfStatusId = null,
+  roleId = null,   // if we are directly coming to this page for creating mrf
 }) => {
   // State to hold all the dropdown data
   const [dropdownData, setDropdownData] = useState({});
@@ -43,6 +44,12 @@ const CreateRequisitionBody = ({
   const RedAsterisk = () => <span className="text-red-500">*</span>;
   const [visible, setVisible] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
+  const [emailapprovalreadOnly, setEmailApprovalReadOnly] = useState(false);
+  const [hodapproval, setHodapproval] = useState(false);
+  const [cooapproval, setCooapproval] = useState(false);
+  const [financeHead, setFinanceHeadApproval] = useState(false);
+  const [siteHRSPOCApproval, setSiteHRSPOCApproval] = useState(false);
+  const [hiringManager, setHiringManager] = useState(false);
   //const history = useHistory();
   const dispatch = useDispatch();
 
@@ -89,20 +96,75 @@ const CreateRequisitionBody = ({
       setFormData(FORM_SCHEMA_CR);
     }
   
-    if (getReqRoleId == 4) {
+
+    if (getReqRoleId == 4 && mrfStatusId == MRF_STATUS.submToHr) {
       setReadOnly(true);
+      setHiringManager(false);
+      setSiteHRSPOCApproval(false)
+      setHodapproval(false)
+      setCooapproval(true)
+      setFinanceHeadApproval(true)
+      
+    } 
+    else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitHodApproval){
+      setReadOnly(true);
+      setHiringManager(true);
+      setSiteHRSPOCApproval(true)
+      setHodapproval(true)
+      setCooapproval(false)
+      setFinanceHeadApproval(true)
+    }
+    else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitCooApproval){
+      setReadOnly(true);
+      setHiringManager(true);
+      setSiteHRSPOCApproval(true)
+      setHodapproval(true)
+      setCooapproval(true)
+      setFinanceHeadApproval(false)
+    }
+    else if(getReqRoleId == 4 && mrfStatusId == MRF_STATUS.awaitfinanceHeadApproval){
+      setReadOnly(true);
+      setHiringManager(true);
+      setSiteHRSPOCApproval(true)
+      setHodapproval(true)
+      setCooapproval(true)
+      setFinanceHeadApproval(false)
+    }
+    
+    
+    else if (getReqRoleId == 4) {
+      setReadOnly(true);
+      setHiringManager(true);
+      setSiteHRSPOCApproval(true)
+      setHodapproval(true)
+      setCooapproval(true)
+      setFinanceHeadApproval(true)
+      // setEmailApprovalReadOnly(true);
     } else if (
-      mrfStatusId == MRF_STATUS.draft ||
+      (getReqRoleId == 3 && mrfStatusId == MRF_STATUS.draft) ||
       mrfStatusId == MRF_STATUS.resubReq
     ) {
       setReadOnly(false);
+      setHiringManager(true);
+      setSiteHRSPOCApproval(true)
+      setHodapproval(true)
+      setCooapproval(true)
+      setFinanceHeadApproval(true)
     } else if (getReqRoleId == 3) {
       setReadOnly(true);
+      setHiringManager(true);
+      setSiteHRSPOCApproval(true)
+      setHodapproval(true)
+      setCooapproval(true)
+      setFinanceHeadApproval(true)
+    } else if (roleId == 3) {
+      setHiringManager(true);
+      setSiteHRSPOCApproval(true)
+      setHodapproval(true)
+      setCooapproval(true)
+      setFinanceHeadApproval(true)
     }
-  
-  
   }, []);
-
   const onTextChanged = (val) => {
     // console.log(formData);
     setFormData({ ...formData, jobDescription: val });
@@ -110,6 +172,31 @@ const CreateRequisitionBody = ({
 
   const onTextChangedSkill = (val) => {
     setFormData({ ...formData, skills: val });
+  };
+  const handleMinSalaryChange = (e) => {
+    const minSalary = e.target.value;
+    if (formData.maxTargetSalary !== 0) {
+      if (minSalary > formData.maxTargetSalary) {
+        toastRef.current.showWarrningMessage(
+          "Min Target Salary is Greater than Max Target salary"
+        );
+        return;
+      }
+    }
+    setFormData({ ...formData, minTargetSalary: minSalary });
+  };
+
+const data="2024-01-17T18:30:00.000Z"
+  console.log(new Date(data))
+  const handleMaxSalaryChange = (e) => {
+    const maxSalary = e.target.value;
+    if (maxSalary < formData.minTargetSalary) {
+      toastRef.current.showWarrningMessage(
+        "Max Target Salary is Less than Min Target salary"
+      );
+      return;
+    }
+    setFormData({ ...formData, maxTargetSalary: maxSalary });
   };
 
   const fetchSubDepartments = (selectedDepartment) => {
@@ -454,6 +541,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.requisitionDateUtc)}
                   disable={readOnly}
+                  minDate={new Date()}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -860,12 +948,13 @@ if (PosORPr === 1) {
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        minTargetSalary: e.target.value,
-                      })
-                    }
+                    onChange={handleMinSalaryChange}
+                    // onChange={(e) =>
+                    //   setFormData({
+                    //     ...formData,
+                    //     minTargetSalary: e.target.value,
+                    //   })
+                    // }
                     value={formData.minTargetSalary}
                     disable={readOnly}
                   />
@@ -880,12 +969,13 @@ if (PosORPr === 1) {
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        maxTargetSalary: e.target.value,
-                      })
-                    }
+                     // onChange={(e) =>
+                    //   setFormData({
+                    //     ...formData,
+                    //     maxTargetSalary: e.target.value,
+                    //   })
+                    // }
+                    onChange={handleMaxSalaryChange}
                     value={formData.maxTargetSalary}
                     disable={readOnly}
                   />
@@ -942,9 +1032,9 @@ if (PosORPr === 1) {
               </div>
             </div>
             <div className="flex justify-content-between">
-              <h1 className="my-2 mx-3">
-                EMAIL APPROVAL/SIGNATURE DATES:
-                <RedAsterisk />
+              <h1 className="my-2 ">
+                EMAIL APPROVAL/SIGNATURE DATES
+                <RedAsterisk />:
               </h1>
             </div>
             <div id="first" className="flex justify-content-evenly gap-4">
@@ -973,7 +1063,7 @@ if (PosORPr === 1) {
                   type="hiringManager"
                   options={dropdownData.hiringManager}
                   value={formData.hiringManagerId}
-                  disable={readOnly}
+                  disable={hiringManager}
                   onChange={(e) => {
                     const selectedHiringManagerId = e.target.value;
                     const selectedHiringManager =
@@ -1007,11 +1097,29 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.hiringManagerEmpId}
-                  disable={readOnly}
+                  disable={hiringManager}
                 />
               </div>
 
-              <div className="flex flex-column gap-2"></div>
+              <div className="flex flex-column gap-2">
+                <label htmlFor="ApprovalDate" className="font-bold text-sm">
+                  Approval Date
+                </label>
+                {/* Assuming CalendarComponent renders an input */}
+                <CalendarComponent
+                  id="ApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.hmApprovalDate)}
+                  minDate={new Date()}
+                  disable={hiringManager}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      hmApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
             <div id="second" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
@@ -1019,7 +1127,7 @@ if (PosORPr === 1) {
                   type="text"
                   id="Position"
                   className="p-disabled"
-                  disable={readOnly}
+                  disable={emailapprovalreadOnly}
                   onChange={(e) => setFormData({ ...formData, Position: 8 })}
                   value="Function Head"
                 />
@@ -1033,7 +1141,7 @@ if (PosORPr === 1) {
                   type="functionHead"
                   options={dropdownData.functionHead}
                   value={formData.functionHeadId}
-                  disable={readOnly}
+                  disable={hodapproval}
                   onChange={(e) => {
                     const selectedfunctionHeadId = e.target.value;
                     const selectedfunctionHead = dropdownData.functionHead.find(
@@ -1062,11 +1170,24 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.functionHeadEmpId}
-                  disable={readOnly}
+                  disable={hodapproval}
                 />
               </div>
 
-              <div className="flex flex-column gap-2"></div>
+              <div className="flex flex-column gap-2">
+                <CalendarComponent
+                  id="fhApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.fhApprovalDate)}
+                  disable={hodapproval}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      fhApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
             <div id="third" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
@@ -1076,7 +1197,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 9 })}
                   value="Site HR SPOC"
-                  disable={readOnly}
+                  disable={emailapprovalreadOnly}
                 />
               </div>
               <div className="flex flex-column gap-2 w-3">
@@ -1087,7 +1208,7 @@ if (PosORPr === 1) {
                   type="siteHRSPOCId"
                   options={dropdownData.siteHRSPOC}
                   value={formData.siteHRSPOCId}
-                  disable={readOnly}
+                  disable={siteHRSPOCApproval}
                   onChange={(e) => {
                     const selectedsiteHRSPOCId = e.target.value;
                     const selectedsiteHRSPOCEmpId =
@@ -1116,10 +1237,26 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.siteHRSPOCEmpId}
-                  disable={readOnly}
+                  disable={siteHRSPOCApproval}
                 />
               </div>
-              <div className="flex flex-column gap-2"></div>{" "}
+              <div className="flex flex-column gap-2">
+                {" "}
+                {/* Assuming CalendarComponent renders an input */}
+                <CalendarComponent
+                  id="ApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.spApprovalDate)}
+                  disable={siteHRSPOCApproval}
+                  minDate={new Date()}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      spApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
             <div id="forth" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
@@ -1129,7 +1266,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 10 })}
                   value="Finance Head"
-                  disable={readOnly}
+                  disable={emailapprovalreadOnly}
                 />
               </div>
               <div className="flex flex-column gap-2 w-3">
@@ -1140,7 +1277,7 @@ if (PosORPr === 1) {
                   type="financeHead"
                   options={dropdownData.financeHead}
                   value={formData.financeHeadId}
-                  disable={readOnly}
+                  disable={financeHead}
                   onChange={(e) => {
                     const selectedfinanceHeadId = e.target.value;
                     const selectedfinanceHeadEmpId =
@@ -1170,10 +1307,24 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.financeHeadEmpId}
-                  disable={readOnly}
+                  disable={financeHead}
                 />
               </div>
-              <div className="flex flex-column gap-2"></div>{" "}
+              <div className="flex flex-column gap-2">
+                <CalendarComponent
+                  id="ApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.fiApprovalDate)}
+                  minDate={new Date()}
+                  disable={financeHead}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      fiApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>{" "}
             </div>
             <div id="fifth" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
@@ -1183,7 +1334,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 11 })}
                   value="President & COO"
-                  disable={readOnly}
+                  disable={cooapproval}
                 />
               </div>
 
@@ -1195,7 +1346,7 @@ if (PosORPr === 1) {
                   type="presidentnCOO"
                   options={dropdownData.presidentnCOO}
                   value={formData.presidentnCOOId}
-                  disable={readOnly}
+                  disable={cooapproval}
                   onChange={(e) => {
                     const selectedpresidentnCOOId = e.target.value;
                     const selectedpresidentnCOOEmpId =
@@ -1230,7 +1381,21 @@ if (PosORPr === 1) {
                 />
               </div>
 
-              <div className="flex flex-column gap-2"></div>
+              <div className="flex flex-column gap-2">
+                <CalendarComponent
+                  id="pcApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.pcApprovalDate)}
+                  minDate={new Date()}
+                  disable={cooapproval}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      pcApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
           </section>
 
@@ -1392,6 +1557,14 @@ if (PosORPr === 1) {
                           outlined="true"
                           // disable="true"
                         />
+                         {/* <MrfPartialStatus
+                          mrfId={getReqId}
+                          // mrfStatusId={3}
+                          // header={"Resubmission"}
+                          label={"Update"}
+                          message={"Are you sure?"}
+                          // textbox={true}
+                        /> */}
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={3}
@@ -1404,6 +1577,7 @@ if (PosORPr === 1) {
                           mrfId={getReqId}
                           mrfStatusId={11}
                           label={"Send for HOD approval"}
+                          formData={formData}
                           message={
                             "“Do you want to submit it for HOD approval?"
                           }
@@ -1475,6 +1649,7 @@ if (PosORPr === 1) {
                           mrfId={getReqId}
                           mrfStatusId={5}
                           label={"Received COO approval"}
+                          formData={formData}
                           message={"Do you want to submit it for COO approval?"}
                         />
 
@@ -1547,6 +1722,7 @@ if (PosORPr === 1) {
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={12}
+                          formData={formData}
                           label={"Received HOD approval"}
                           message={
                             "“Do you want to submit it for COO approval?"
@@ -1554,6 +1730,44 @@ if (PosORPr === 1) {
                         />
                       </>
                     );
+                  case MRF_STATUS.awaitfinanceHeadApproval:
+                    return (
+                      <>
+                        <ButtonC
+                          label="CANCEL"
+                          className=" w-2 border-red-600 text-red-600"
+                          onClick={handleCancel}
+                          outlined="true"
+                          // disable="true"
+                        />
+                        <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={14}
+                          formData={formData}
+                          label={"Received Finance Approval"}
+                          message={"Are you Sure"}
+                        />
+                      </>
+                    );
+                    case MRF_STATUS.recivedfinanceHeadApproval:
+                      return (
+                        <>
+                          <ButtonC
+                            label="CANCEL"
+                            className=" w-2 border-red-600 text-red-600"
+                            onClick={handleCancel}
+                            formData={formData}
+                            outlined="true"
+                            // disable="true"
+                          />
+                          <MrfPartialStatus
+                            mrfId={getReqId}
+                            mrfStatusId={6}
+                            label={"Open"}
+                            message={"Do you want to open this MRF "}
+                          />
+                        </>
+                      );
                   case MRF_STATUS.awaitCooApproval:
                     return (
                       <>
@@ -1566,9 +1780,10 @@ if (PosORPr === 1) {
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
-                          mrfStatusId={6}
-                          label={"Open"}
-                          message={"“Do you want to Open this MRF?"}
+                          mrfStatusId={13}
+                          formData={formData}
+                          label={"Received COO approval"}
+                          message={"“Do you want to submit it for Finance Head approval?"}
                         />
                       </>
                     );

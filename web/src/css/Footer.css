@@ -1,0 +1,14 @@
+.footer{
+/* background-color: #d32f2e; */
+background-color: #ffffff;
+height: 5%;
+text-align: center;
+font-size: medium;
+font-weight: 500;
+padding: 15px;
+color: red;
+text-align: right;
+/* margin: 2px; */
+border-top: 1px solid rgb(221, 221, 221);
+/* background-color: rgba(0, 0, 0, 0.2); */
+}
