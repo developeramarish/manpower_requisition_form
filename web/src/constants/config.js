@@ -1,6 +1,7 @@
 export const APP_KEY = "MRF_v1.0";
-//const APIPath="https://localhost:7128/api/";
-const APIPath="https://10.22.11.101:90/api/";
+ const APP = "https://10.22.11.101:90";
+//const APP="https://localhost:7128";
+const APIPath=`${APP}/api/`;
 export const API_URL = {
   MRF_STATUS_SUMMARY: `${APIPath}Dashboard/GetMrfStatusSummary`,
   RESUME_SUMMARY: `${APIPath}Dashboard/GetMrfResumeSummary/Count`,
@@ -26,8 +27,8 @@ export const API_URL = {
 };
 
 export const FILE_URL = {
-  RESUME: `${APIPath}Resume/`,
-  ASSIGNMENT: `${APIPath}Assignment/`,
+  RESUME: `${APP}/Resume/`,
+  ASSIGNMENT: `${APP}/Assignment/`,
 };
 
 export const ROUTES = {
