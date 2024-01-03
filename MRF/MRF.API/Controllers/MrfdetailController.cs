@@ -195,8 +195,8 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.CreatedByEmployeeId,
-                    ApprovalDate = request.HMApprovalDate
-                };
+                    ApprovalDate = (request.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : request.HMApprovalDate,
+            };
 
                 postMrfEmail(MrfdetailRequestModelRequest);
 
@@ -245,7 +245,8 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.FunctionHeadId,
-                    ApprovalDate = request.FHApprovalDate
+                    ApprovalDate = 
+                    (request.FHApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : request.FHApprovalDate,
                 };
 
                 postMrfEmail(MrfdetailRequestModelRequest);
@@ -257,7 +258,8 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.SiteHRSPOCId,
-                    ApprovalDate = request.SPApprovalDate
+                    ApprovalDate = 
+                    (request.SPApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : request.SPApprovalDate,
                 };
 
                 postMrfEmail(MrfdetailRequestModelRequest);
@@ -269,7 +271,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.FinanceHeadId,
-                    ApprovalDate = request.FIApprovalDate
+                    ApprovalDate = (request.FIApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : request.FIApprovalDate
                 };
 
                 postMrfEmail(MrfdetailRequestModelRequest);
@@ -281,7 +283,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = request.PresidentnCOOId,
-                    ApprovalDate = request.PCApprovalDate
+                    ApprovalDate = (request.PCApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : request.PCApprovalDate
                 };
 
                 postMrfEmail(MrfdetailRequestModelRequest);
