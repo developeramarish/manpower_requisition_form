@@ -28,6 +28,7 @@ import { PAGE_ACTIONS } from "../reducers/Page_r";
 import EditorComponent from "../components/EditorComponent";
 import InputNumberComponent from "../components/InputNumberComponent";
 import DropdownAddNew from "./../components/DropDownAddNew";
+import { Message } from "primereact/message";
 
 const CreateRequisitionBody = ({
   getReqId = null,
@@ -41,16 +42,6 @@ const CreateRequisitionBody = ({
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const RedAsterisk = () => <span className="text-red-500">*</span>;
-  const [visible, setVisible] = useState(false);
-  //const [commonSettings.setReadOnly, setReadOnly] = useState(false);
-  const [emailapprovalreadOnly, setEmailApprovalReadOnly] = useState(false);
-  //const [commonSettings.setHodapproval, setHodapproval] = useState(false);
-  //const [commonSettings.setCooapproval, setCooapproval] = useState(false);
-  //const [financeHead, setFinanceHeadApproval] = useState(false);
-  //const [siteHRSPOCApproval, setSiteHRSPOCApproval] = useState(false);
-  //const [hiringManager, setHiringManager] = useState(false);
-  const [awatingFiance, setAwatingFiance] = useState(false);
-  const [recievedFiancse, setRecievedFiancse] = useState(false);
 
   //const history = useHistory();
   const dispatch = useDispatch();
@@ -85,8 +76,6 @@ const CreateRequisitionBody = ({
     // Fetch the data for all the dropdowns
     OnLoad();
     if (getReqId) {
-      // localStorage.setItem('id', getReqId);
-      // const getReqIds = localStorage.getItem('id');
       const apiUrl = API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId;
       fetch(apiUrl)
         .then((response) => response.json())
@@ -104,10 +93,8 @@ const CreateRequisitionBody = ({
     
   }, []);
   const onTextChanged = (val) => {
-    // console.log(formData);
     setFormData({ ...formData, jobDescription: val });
   };
-
 
   const onTextChangedSkill = (val) => {
     setFormData({ ...formData, skills: val });
@@ -245,8 +232,8 @@ if (PosORPr === 1) {
       </span>
     );
   };
-
   const header = renderHeader();
+
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -286,7 +273,6 @@ if (PosORPr === 1) {
         py-3 px-1 overflow-y-scroll"
             style={{ height: "95%" }}
           >
-            {/* border-y-2 border-white-300  */}
             {getReqId ? (
               <div className="flex justify-content-between gap-5">
                 <div className="flex flex-column w-6 gap-2">
@@ -303,7 +289,13 @@ if (PosORPr === 1) {
             ) : (
               ""
             )}
-
+ {formData.mrfStatusId == 3 && getReqRoleId == 4 ? (
+              <span className="font-bold  ">
+                <Message text={`MRF is yet to be ReSubmit`} />{" "}
+              </span>
+            ) : (
+              ""
+            )}
             {formData.mrfStatusId == 3 ? (
               <label
                 htmlFor="RequisitionType"
@@ -315,6 +307,7 @@ if (PosORPr === 1) {
             ) : (
               ""
             )}
+           
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="RequisitionType" className="font-bold text-sm">
@@ -843,18 +836,6 @@ if (PosORPr === 1) {
                   onTextChanged={onTextChangedSkill}
                   disable={commonSettings.setReadOnly}
                 />
-                {/* <InputTextareaComponent
-                  autoResize
-                  id="skills"
-                  className="bg-gray-100"
-                  rows={9}
-                  cols={10}
-                  value={formData.skills}
-                  disable={commonSettings.setReadOnly}
-                  onChange={(e) =>
-                    setFormData({ ...formData, skills: e.target.value })
-                  }
-                /> */}
               </div>
             </div>
             <div className="flex justify-content-between gap-5 ">
@@ -889,12 +870,6 @@ if (PosORPr === 1) {
                   <InputNumberComponent
                     id="MaxTargetSalary"
                     onChange={handleMinSalaryChange}
-                    // onChange={(e) =>
-                    //   setFormData({
-                    //     ...formData,
-                    //     minTargetSalary: e.target.value,
-                    //   })
-                    // }
                     value={formData.minTargetSalary}
                     disable={commonSettings.setReadOnly}
                   />
@@ -909,12 +884,6 @@ if (PosORPr === 1) {
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
-                     // onChange={(e) =>
-                    //   setFormData({
-                    //     ...formData,
-                    //     maxTargetSalary: e.target.value,
-                    //   })
-                    // }
                     onChange={handleMaxSalaryChange}
                     value={formData.maxTargetSalary}
                     disable={commonSettings.setReadOnly}
@@ -944,7 +913,6 @@ if (PosORPr === 1) {
                   optionLabel="name"
                   disable={commonSettings.setReadOnly}
 
-                  // optionValue="employeeId"
                 />
               </div>
               <div className="flex flex-column w-6 gap-2">
@@ -1068,7 +1036,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 9 })}
                   value="Site HR SPOC"
-                  disable={emailapprovalreadOnly}
+                  
                 />
               </div>
               <div className="flex flex-column gap-2 w-3">
@@ -1135,7 +1103,7 @@ if (PosORPr === 1) {
                   type="text"
                   id="Position"
                   className="p-disabled"
-                  disable={emailapprovalreadOnly}
+                  
                   onChange={(e) => setFormData({ ...formData, Position: 8 })}
                   value="Function Head"
                 />
@@ -1206,7 +1174,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 10 })}
                   value="Finance Head"
-                  disable={emailapprovalreadOnly}
+                  
                 />
               </div>
               <div className="flex flex-column gap-2 w-3">
@@ -1394,6 +1362,8 @@ if (PosORPr === 1) {
                           mrfId={getReqId}
                           mrfStatusId={9}
                           label={"Withdraw"}
+                          formData={formData}
+
                           message={"Do you want to withdraw this MRF"}
                         />
                       </>
@@ -1442,10 +1412,9 @@ if (PosORPr === 1) {
                           className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
-                          // disable="true"
+                          
                         />
-
-                        <MrfPartialStatus
+<MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={2}
                           label={"SUBMIT"}
@@ -1453,7 +1422,9 @@ if (PosORPr === 1) {
                             "After submitting you won't be able to edit the MRF details"
                           }
                           formData={formData}
+                          roleID={getReqRoleId }
                         />
+                        
                       </>
                     );
                   case MRF_STATUS.rejected:
@@ -1482,6 +1453,7 @@ if (PosORPr === 1) {
                           mrfId={getReqId}
                           mrfStatusId={9}
                           label={"Withdraw"}
+                          formData={formData}
                           message={"Do you want to withdraw this MRF"}
                         />
                       </>
@@ -1733,14 +1705,7 @@ if (PosORPr === 1) {
                             outlined="true"
                             // disable="true"
                           />
-                        {/* <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={mrfStatusId}
-                          label={"Update"}
-                          formData={formData}
-                          message={"Are you sure you want to update?"}
-                          
-                        /> */}
+                        
                           <MrfPartialStatus
                             mrfId={getReqId}
                             mrfStatusId={6}

@@ -52,7 +52,7 @@ export function applySettingsBasedOnRoleAndStatus(
           awatingFinance: true,
           recievedFinance: true,
         });
-      }else if(mrfStatusId == MRF_STATUS.awaitHodApproval){
+      } else if (mrfStatusId == MRF_STATUS.awaitHodApproval) {
         applyCommonSettings({
           setReadOnly: true,
           setHodapproval: true,
@@ -63,7 +63,7 @@ export function applySettingsBasedOnRoleAndStatus(
           awatingFinance: true,
           recievedFinance: true,
         });
-      }else if( mrfStatusId == MRF_STATUS.awaitCooApproval){
+      } else if (mrfStatusId == MRF_STATUS.awaitCooApproval) {
         applyCommonSettings({
           setReadOnly: true,
           setHodapproval: true,
@@ -74,8 +74,7 @@ export function applySettingsBasedOnRoleAndStatus(
           awatingFinance: true,
           recievedFinance: true,
         });
-
-      }else if( mrfStatusId == MRF_STATUS.awaitfinanceHeadApproval){
+      } else if (mrfStatusId == MRF_STATUS.awaitfinanceHeadApproval) {
         applyCommonSettings({
           setReadOnly: true,
           setHodapproval: true,
@@ -86,7 +85,7 @@ export function applySettingsBasedOnRoleAndStatus(
           awatingFinance: false,
           recievedFinance: true,
         });
-      }else{
+      } else {
         applyCommonSettings({
           setReadOnly: true,
           setHodapproval: true,
@@ -97,10 +96,7 @@ export function applySettingsBasedOnRoleAndStatus(
           awatingFinance: true,
           recievedFinance: true,
         });
-
       }
-
-   
 
     default:
       if (roleId === 3) {
@@ -123,4 +119,3 @@ export function applySettingsBasedOnRoleAndStatus(
 function applyCommonSettings(settings) {
   Object.assign(commonSettings, settings);
 }
-
