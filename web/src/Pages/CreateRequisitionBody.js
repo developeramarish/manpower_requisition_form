@@ -249,10 +249,7 @@ if (PosORPr === 1) {
     setFormData(FORM_SCHEMA_CR);
     setDropdownData({});
     setSubDepartments([]);
-    navigateTo("my_requisition");
-    //const currentHash = window.location.hash;
-    //navigateTo(currentHash);
-    //history.goBack();
+    window.history.back();
   };
 
   
