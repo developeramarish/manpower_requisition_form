@@ -16,7 +16,7 @@ import {
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 
-const roleId = 3;
+ //const roleId = 3;
 
 const uploadedOnBodyTemplate = (interview) => {
 	return changeDateFormat(interview.createdOnUtc);
@@ -41,7 +41,9 @@ const attachmentBodyTemplate = (interview) => {
 };
 
 //summary component
+
 const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
+
 	const [interviewData, setInterviewData] = useState([]);
 	const [interviewStatus, setInterviewStatus] = useState([]);
 	const [interviewerData, setInterviewerData] = useState([]);

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./../css/Dashboard.css";
 import { getData } from "../constants/Utils";
-import { API_URL } from "../constants/config";
+import { API_URL, ROLES } from "../constants/config";
 import { storageService } from "../constants/storage";
 import InterviewSummary from "../components/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
 import ResumeSummary from "../components/ResumeSummary";
 import DashBoardDataTable from "../components/DashBoardDataTable";
+
 import {
   filterSelectedColumn,
   filterResultGroupByCandidatestatus,
@@ -31,8 +32,8 @@ function Dashboard({roleId,userId}) {
     async function getSummaryData() {
     const mrfStatusData = await getData(API_URL.MRF_STATUS_SUMMARY+"?roleId="+roleId+"&userId="+userId);
     // const mrfStatusData = API_URL.MRF_STATUS_SUMMARY;
-    const resumeSummaryData = await getData(API_URL.RESUME_SUMMARY+"?Count=0&roleId="+roleId+"&userId="+userId);
-    const interviewSummaryData = await getData(API_URL.INTERVIEW_SUMMARY+"?Count=0&roleId="+roleId+"&userId="+userId);
+    const resumeSummaryData = await getData(API_URL.RESUME_SUMMARY+"?Count=0&roleId="+ roleId+"&userId="+userId);
+    const interviewSummaryData = await getData(API_URL.INTERVIEW_SUMMARY+"?Count=0&roleId="+ roleId+"&userId="+userId);
     setMrfStatus(mrfStatusData.result);
     setResumeSummary(resumeSummaryData.result);
     setInterviewSummary(interviewSummaryData.result);
@@ -148,7 +149,9 @@ function Dashboard({roleId,userId}) {
       <div className="dashboard_header">
         <h3>My Dashboard</h3>
       </div>
+      
       <div className="dashboard_body">
+      {(roleId === ROLES.hr || roleId === ROLES.mrfOwner) && (
         <div className="dashboard_body_left">
           <div className="mrf_status_summary">
             <div className="header">
@@ -195,6 +198,7 @@ function Dashboard({roleId,userId}) {
             </table>
           </div>
         </div>
+  )}
         <div className="dashboard_body_right">
           <DashBoardDataTable
             value={interviewSummaryTableData}
@@ -232,6 +236,9 @@ function Dashboard({roleId,userId}) {
             onHide={() => setResumePopup(false)}
             mrfId={resumePopupId}/> */}
         </div>
+ 
+       
+          
       </div>
     </div>
   );
