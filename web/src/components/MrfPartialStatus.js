@@ -15,9 +15,9 @@ const MrfPartialStatus = ({
   textbox = false,
   header = null,
   formData = {},
-  disabled=null,
-  updatedClick=null,
-  roleID=null,
+  disabled = null,
+  updatedClick = null,
+  roleID = null,
 }) => {
   const [visible, setVisible] = useState(false);
   const [note, setNote] = useState("");
@@ -26,17 +26,16 @@ const MrfPartialStatus = ({
 
   const strToArray = (s) => {
     s = s ?? "";
-    if (s!=="" && typeof s === "string") {
+    if (s !== "" && typeof s === "string") {
       s = s.split(",").map(Number);
     }
     return s;
   };
 
-
   const footerContent = (value) => {
     return (
       <div>
-        { roleID==3 && mrfStatusId == MRF_STATUS.submToHr ||
+        {(roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
         mrfStatusId == MRF_STATUS.draft ? (
           <ButtonC
             label="Yes"
@@ -72,7 +71,10 @@ const MrfPartialStatus = ({
     setIsLoading(true);
     const data = {
       referenceNo: formData.referenceNo,
-      requisitionType: formData.requisitionType==""?REQUISITION_TYPE[0].code:formData.requisitionType,
+      requisitionType:
+        formData.requisitionType == ""
+          ? REQUISITION_TYPE[0].code
+          : formData.requisitionType,
       positionTitleId: formData.positionTitleId,
       departmentId: formData.departmentId,
       subDepartmentId: formData.subDepartmentId,
@@ -81,7 +83,7 @@ const MrfPartialStatus = ({
       genderId: formData.genderId,
       qualification: formData.qualification,
       // requisitionDateUtc: formData.requisitionDateUtc.toISOString().slice(0,10),
-      requisitionDateUtc:  formatDateToYYYYMMDD(formData.requisitionDateUtc),
+      requisitionDateUtc: formatDateToYYYYMMDD(formData.requisitionDateUtc),
       reportsToEmployeeId: formData.reportsToEmployeeId,
       minGradeId: formData.minGradeId,
       maxGradeId: formData.maxGradeId,
@@ -128,12 +130,6 @@ const MrfPartialStatus = ({
       financeHeadEmpId: formData.financeHeadEmpId,
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
-      // pcApprovalDate: formData.pcApprovalDate !="" ? formData.pcApprovalDate.toISOString().slice(0, 10) : new Date(),
-      // pcApprovalDate: formData.pcApprovalDate.toISOString().slice(0,10),
-      // fhApprovalDate: formData.fhApprovalDate.toISOString().slice(0,10),
-      // fiApprovalDate: formData.fiApprovalDate.toISOString().slice(0,10),
-      // spApprovalDate: formData.spApprovalDate.toISOString().slice(0,10),
-      // hmApprovalDate: formData.hmApprovalDate.toISOString().slice(0,10),
     };
     console.log(data);
     try {
@@ -179,12 +175,9 @@ const MrfPartialStatus = ({
     }
   };
 
-
-
   const submitPartial = async () => {
-
-const updattingHiringMangerandSiteHR={
-       mrfStatusId: mrfStatusId,
+    const updattingHiringMangerandSiteHR = {
+      mrfStatusId: mrfStatusId,
       note: note || null,
       updatedByEmployeeId: storageService.getData("profile").employeeId,
       updatedOnUtc: new Date().toISOString(),
@@ -194,42 +187,39 @@ const updattingHiringMangerandSiteHR={
       siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
       hmApprovalDate: formatDateToYYYYMMDD(formData.hmApprovalDate),
       spApprovalDate: formatDateToYYYYMMDD(formData.spApprovalDate),
-    }
-
+    };
 
     const partialStatus = {
       mrfStatusId: mrfStatusId,
       note: note || null,
       updatedByEmployeeId: storageService.getData("profile").employeeId,
       updatedOnUtc: new Date().toISOString(),
-
       functionHeadId: formData.functionHeadId,
       functionHeadEmpId: formData.functionHeadEmpId,
       financeHeadId: formData.financeHeadId,
       financeHeadEmpId: formData.financeHeadEmpId,
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
-      pcApprovalDate:  formatDateToYYYYMMDD(formData.pcApprovalDate),
+      pcApprovalDate: formatDateToYYYYMMDD(formData.pcApprovalDate),
       fhApprovalDate: formatDateToYYYYMMDD(formData.fhApprovalDate),
       fiApprovalDate: formatDateToYYYYMMDD(formData.fiApprovalDate),
-    
     };
 
     try {
       let response;
-if(updatedClick){
-  response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
-        method: "Put",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(updattingHiringMangerandSiteHR),
-      });
-}else{
-   response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
-    method: "Put",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(partialStatus),
-  });
-}
+      if (updatedClick) {
+        response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
+          method: "Put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(updattingHiringMangerandSiteHR),
+        });
+      } else {
+        response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
+          method: "Put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(partialStatus),
+        });
+      }
 
       if (response.ok) {
         const responseData = await response.json();
@@ -238,13 +228,13 @@ if(updatedClick){
         } else {
           toastRef.current.showSuccessMessage("Action Submitted");
 
-if(updatedClick){
-  // window.location.reload();
-}else{
-  setTimeout(() => {
-            navigateTo("my_requisition");
-          }, 1000);
-}
+          if (updatedClick) {
+            // window.location.reload();
+          } else {
+            setTimeout(() => {
+              navigateTo("my_requisition");
+            }, 1000);
+          }
         }
       } else {
         console.error("Request failed with status:", response.status);
@@ -261,7 +251,6 @@ if(updatedClick){
     }
   };
 
-  // console.log(formData)
   return (
     <>
       {/* {popupmessage &&(
@@ -270,7 +259,7 @@ if(updatedClick){
          </>
        )} */}
 
-      {  ( roleID==3 && mrfStatusId == MRF_STATUS.submToHr ||
+      {((roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
         mrfStatusId == MRF_STATUS.draft) && (
         <Dialog
           className="w-3 "
