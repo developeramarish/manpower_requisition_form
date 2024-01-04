@@ -7,10 +7,11 @@ import ToastMessages from "./ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "./multiselectDropdown";
-import { API_URL, FILE_URL } from "../constants/config";
+import { API_URL, FILE_URL,ROLES } from "../constants/config";
 import { changeDateFormat, strToArray } from "../constants/Utils";
 
-const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
+
+const ResumeSummary = ({ roleId=null,visible, onHide, mrfId = null, dashboard = true }) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
@@ -31,6 +32,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
           setResumeReviewer(data.result.employeeRoleMap);
           let array = new Array(data.result.resumeDetails.length).fill(false);
           setSaveBttn(array);
+          
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -39,7 +41,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       console.error("Error fetching data:", error);
     }
   };
-
+   
   if (data.length < 1) {
     return (
       <Dialog
@@ -53,7 +55,21 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       </Dialog>
     );
   }
+
+
+console.log(roleId)
+
+
   const MultiSelectDrop = (rowData, options) => {
+    if (roleId === ROLES.hr) {
+      // Return a simple date or any other content for this role
+      return (
+        <div>
+          {rowData.resumeReviewerName}
+        </div>
+      );
+    } else 
+    {
     return (
       <div>
         <MultiSelectDropdown
@@ -79,7 +95,8 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
         />
       </div>
     );
-  };
+  }
+};
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -120,7 +137,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
     const resumePath = data.resumePath;
     const createdByEmployeeId = data.createdByEmployeeId;
     const createdOnUtc = data.createdOnUtc;
-    
+    const candidateName=data.candidateName;
 
     const candidateDetailsData = {
       id,
@@ -134,7 +151,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       createdByEmployeeId,
       createdOnUtc,
       reason,
-  
+      candidateName,
     };
 
     try {
@@ -183,7 +200,18 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
     );
   };
 
-  const columns = [
+
+       
+      const reasonTemplate=(resume)=>{
+console.log(resume.reason)
+if(!resume.reason ) return "To be Updated";
+
+return(
+  <p className="resume-reason-col">{resume.reason}</p>
+)
+      }
+   
+  let columns = [
     {
       header: "Sr.No",
       body: (data, options) => options.rowIndex + 1,
@@ -191,19 +219,18 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       sortable: true,
     },
     {
+			field: "candidateName",
+			header: "Name",
+      bodyClassName: "resume-ref-col resume-col",
+			sortable: true,
+		},
+    {
       field: "resumePath",
       header: "Resume",
       body: resumeBodyTemplate,
       bodyClassName: "resume-ref-col  ",
       sortable: true,
     },
-    {
-			field: "positionTitle",
-			header: "Position",
-			body: data.positionTitle,
-      bodyClassName: "resume-ref-col resume-col",
-			sortable: true,
-		},
     {
       field: "createdOnUtc",
       header: "Uploaded On",
@@ -227,6 +254,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
     {
       field: "reason",
       header: "Reason",
+      body: reasonTemplate,
       bodyClassName: "resume-reason-col",
       sortable: true,
     },
@@ -237,11 +265,24 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       sortable: true,
     },
   ];
-
+  if (roleId === ROLES.hr) {
+    columns = columns.filter(column => column.header !== "Action");
+   };
   return (
     <div>
       <Dialog
-        header="MRF ID (Resume Summary)"
+       header={
+        <div>
+           Resume Summary- MRF ID:{"\u00A0\u00A0"}
+          <span  style={{ fontWeight: 'bold', color: '#d9362b' }}>
+            {data[0].referenceNo}
+          </span>{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+          Position Title:{"\u00A0\u00A0"}
+          <span style={{ fontWeight: 'bold', color: '#d9362b' }}>
+          {data[0].positionTitle}</span>
+        </div>
+      }
+      // header={"Resume Summary- MRF ID:  "+data[0].referenceNo+"  "+" "+" Position Title: "+data[0].positionTitle+" "}
         visible={visible}
         className="resume-card"
         onHide={onHide}

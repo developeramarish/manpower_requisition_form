@@ -107,3 +107,20 @@ export const filterResultGroupByCandidatestatus = (data, targetColumn) => {
 
   return filteredData;
 };
+
+
+export const formatDateToYYYYMMDD= (date) => {
+ 
+  // Check if the date is already in "YYYY-MM-DD" format
+  if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return date; // Return the input date as it is
+  }
+ 
+  const localDate = new Date(date.toISOString());
+ 
+  const year = localDate.getFullYear();
+  const month = String(localDate.getMonth() + 1).padStart(2, '0');
+  const day = String(localDate.getDate()).padStart(2, '0');
+ 
+  return `${year}-${month}-${day}`;
+}

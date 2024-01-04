@@ -70,11 +70,11 @@ namespace MRF.API.Controllers
 
         // POST api/<PositionTitleController>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status201Created, Description = "Item created successfully", Type = typeof(PositionTitlemasterResponseModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(PositionTitlemasterResponseModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
-        [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public PositionTitlemasterResponseModel Post([FromBody] PositionTitlemasterRequestModel request)

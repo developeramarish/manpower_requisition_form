@@ -751,8 +751,8 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.EmployeeId).HasColumnType("int(11)");
             entity.Property(e => e.MrfId).HasColumnType("int(11)");
             entity.Property(e => e.ApprovalDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime");
+                .HasDefaultValueSql("CURRENT_DATE()")
+                .HasColumnType("date");
         });
 
         OnModelCreatingPartial(modelBuilder);

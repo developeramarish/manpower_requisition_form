@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { API_URL, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
 import { storageService } from "../constants/storage";
-import { navigateTo } from "../constants/Utils";
+import { formatDateToYYYYMMDD, navigateTo } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
-import InputTextCp from "./Textbox";
 import InputTextareaComponent from "./InputTextarea";
 import ToastMessages from "./ToastMessages";
 
@@ -16,6 +15,9 @@ const MrfPartialStatus = ({
   textbox = false,
   header = null,
   formData = {},
+  disabled = null,
+  updatedClick = null,
+  roleID = null,
 }) => {
   const [visible, setVisible] = useState(false);
   const [note, setNote] = useState("");
@@ -24,7 +26,7 @@ const MrfPartialStatus = ({
 
   const strToArray = (s) => {
     s = s ?? "";
-    if (typeof s === "string") {
+    if (s !== "" && typeof s === "string") {
       s = s.split(",").map(Number);
     }
     return s;
@@ -33,7 +35,7 @@ const MrfPartialStatus = ({
   const footerContent = (value) => {
     return (
       <div>
-        {mrfStatusId == MRF_STATUS.submToHr ||
+        {(roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
         mrfStatusId == MRF_STATUS.draft ? (
           <ButtonC
             label="Yes"
@@ -69,7 +71,10 @@ const MrfPartialStatus = ({
     setIsLoading(true);
     const data = {
       referenceNo: formData.referenceNo,
-      requisitionType: formData.requisitionType==""?REQUISITION_TYPE[0].code:formData.requisitionType,
+      requisitionType:
+        formData.requisitionType == ""
+          ? REQUISITION_TYPE[0].code
+          : formData.requisitionType,
       positionTitleId: formData.positionTitleId,
       departmentId: formData.departmentId,
       subDepartmentId: formData.subDepartmentId,
@@ -77,7 +82,8 @@ const MrfPartialStatus = ({
       vacancyNo: Number(formData.vacancyNo),
       genderId: formData.genderId,
       qualification: formData.qualification,
-      requisitionDateUtc: new Date().toISOString().slice(0, 10),
+      // requisitionDateUtc: formData.requisitionDateUtc.toISOString().slice(0,10),
+      requisitionDateUtc: formatDateToYYYYMMDD(formData.requisitionDateUtc),
       reportsToEmployeeId: formData.reportsToEmployeeId,
       minGradeId: formData.minGradeId,
       maxGradeId: formData.maxGradeId,
@@ -103,7 +109,8 @@ const MrfPartialStatus = ({
       emailId: formData.emailId,
       note: formData.note,
       employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
-      lastWorkingDate: new Date().toISOString().slice(0, 10),
+      lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
+      // lastWorkingDate:formData.lastWorkingDate !="" ?  formatDateToYYYYMMDD(formData.lastWorkingDate): new Date().toISOString().slice(0,10),
       annualCtc: formData.annualCtc,
       annualGross: formData.annualGross,
       replaceJustification: formData.replaceJustification,
@@ -124,7 +131,7 @@ const MrfPartialStatus = ({
       presidentnCOOId: formData.presidentnCOOId,
       presidentnCOOEmpId: formData.presidentnCOOEmpId,
     };
-    
+    console.log(data);
     try {
       const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
         method: "POST",
@@ -169,19 +176,50 @@ const MrfPartialStatus = ({
   };
 
   const submitPartial = async () => {
+    const updattingHiringMangerandSiteHR = {
+      mrfStatusId: mrfStatusId,
+      note: note || null,
+      updatedByEmployeeId: storageService.getData("profile").employeeId,
+      updatedOnUtc: new Date().toISOString(),
+      hiringManagerId: formData.hiringManagerId,
+      hiringManagerEmpId: formData.hiringManagerEmpId,
+      siteHRSPOCId: formData.siteHRSPOCId,
+      siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
+      hmApprovalDate: formatDateToYYYYMMDD(formData.hmApprovalDate),
+      spApprovalDate: formatDateToYYYYMMDD(formData.spApprovalDate),
+    };
+
     const partialStatus = {
       mrfStatusId: mrfStatusId,
       note: note || null,
       updatedByEmployeeId: storageService.getData("profile").employeeId,
       updatedOnUtc: new Date().toISOString(),
+      functionHeadId: formData.functionHeadId,
+      functionHeadEmpId: formData.functionHeadEmpId,
+      financeHeadId: formData.financeHeadId,
+      financeHeadEmpId: formData.financeHeadEmpId,
+      presidentnCOOId: formData.presidentnCOOId,
+      presidentnCOOEmpId: formData.presidentnCOOEmpId,
+      pcApprovalDate: formatDateToYYYYMMDD(formData.pcApprovalDate),
+      fhApprovalDate: formatDateToYYYYMMDD(formData.fhApprovalDate),
+      fiApprovalDate: formatDateToYYYYMMDD(formData.fiApprovalDate),
     };
 
     try {
-      const response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
-        method: "Put",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(partialStatus),
-      });
+      let response;
+      if (updatedClick) {
+        response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
+          method: "Put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(updattingHiringMangerandSiteHR),
+        });
+      } else {
+        response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
+          method: "Put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(partialStatus),
+        });
+      }
 
       if (response.ok) {
         const responseData = await response.json();
@@ -189,9 +227,14 @@ const MrfPartialStatus = ({
           toastRef.current.showConflictMessage(responseData.message);
         } else {
           toastRef.current.showSuccessMessage("Action Submitted");
-          setTimeout(() => {
-            navigateTo("my_requisition");
-          }, 1000);
+
+          if (updatedClick) {
+            // window.location.reload();
+          } else {
+            setTimeout(() => {
+              navigateTo("my_requisition");
+            }, 1000);
+          }
         }
       } else {
         console.error("Request failed with status:", response.status);
@@ -216,7 +259,7 @@ const MrfPartialStatus = ({
          </>
        )} */}
 
-      {(mrfStatusId == MRF_STATUS.submToHr ||
+      {((roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
         mrfStatusId == MRF_STATUS.draft) && (
         <Dialog
           className="w-3 "
@@ -236,6 +279,7 @@ const MrfPartialStatus = ({
             label={label}
             className="w-2 bg-red-600 border-red-600"
             onClick={() => setVisible(true)}
+            disable={disabled}
           ></ButtonC>
 
           <Dialog

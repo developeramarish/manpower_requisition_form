@@ -41,7 +41,7 @@ const attachmentBodyTemplate = (interview) => {
 };
 
 //summary component
-const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
+const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 	const [interviewData, setInterviewData] = useState([]);
 	const [interviewStatus, setInterviewStatus] = useState([]);
 	const [interviewerData, setInterviewerData] = useState([]);
@@ -67,20 +67,21 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 		}
 	  }, [mrfId]);
 	  
-	  /*if (!interviewData || interviewData.length === 0) {
-		return (
-		  <Dialog
-			header="MRF ID (Interview Summary)"
-			visible={visible}
-			onHide={onHide}
-			draggable={false}
-			className="int-card no-res-card"
-		  >
-			No Result Found
-		  </Dialog>
-		);
-	  }*/
-	   
+	//   if (!interviewData || interviewData.length === 0) {
+	// 	return (
+	// 	  <Dialog
+	// 		header="MRF ID (Interview Summary)"
+	// 		visible={visible}
+	// 		onHide={onHide}
+	// 		draggable={false}
+	// 		className="int-card no-res-card"
+	// 	  >
+	// 		No Result Found
+	// 	  </Dialog>
+	// 	);
+	//   }
+	
+	// console.log(roleId)
 
 	const statusBodyTemplate = (interview, options) => {
 		const handleDropdownChange = (e) => {
@@ -110,6 +111,13 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 	};
 
 	const interviewerBodyTemplate = (interview, options) => {
+		if (roleId === ROLES.hr)
+		{return (
+        <div>
+          {interview.interviewerName}
+        </div>);
+		}
+		else{
 		const handleMultiSelectChange = (e) => {
 			let interviewDataCopy = [...interviewData];
 			let sv = [...saveBttn];
@@ -137,6 +145,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 				// optionValue="employeeId"
 			/>
 		);
+				}
 	};
 
 	const feedbackBodyTemplate = (interview) => {
@@ -169,15 +178,14 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			bodyClassName: "int-edit-col",
 		},
 		{
-			field: "resumePath",
-			header: "Resume",
-			body: resumeBodyTemplate,
+			field: "candidateName",
+			header: "Name",
 			sortable: true,
 		},
 		{
-			field: "positionTitle",
-			header: "Position",
-			body: interviewData.positionTitle,
+			field: "resumePath",
+			header: "Resume",
+			body: resumeBodyTemplate,
 			sortable: true,
 		},
 		{
@@ -221,10 +229,20 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 			bodyClassName: "int-edit-col",
 		},
 	];
-
 	return (
 		<Dialog
-			header="MRF ID (Interview Summary)"
+			//header={"Interview Summary- MRF ID:   " +interviewData[0]?.referenceNo +" Position Title: "+interviewData[0]?.positionTitle}
+			header={
+				<div>
+				   Interview Summary- MRF ID:{"\u00A0\u00A0"}
+				  <span style={{ fontWeight: 'bold', color: '#d9362b' }}>
+					{interviewData[0]?.referenceNo}
+				  </span>{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+				  Position Title:{"\u00A0\u00A0"}
+				  <span style={{ fontWeight: 'bold', color: '#d9362b' }}>
+				  {interviewData[0]?.positionTitle}</span>
+				</div>
+			  }
 			visible={visible}
 			onHide={onHide}
 			draggable={false}

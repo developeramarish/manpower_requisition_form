@@ -11,6 +11,7 @@ import {
   filterSelectedColumn,
   filterResultGroupByCandidatestatus,
 } from "../constants/Utils";
+// import HrResumeSummary from "../components/HrResumeSummary";
 
 function Dashboard({roleId,userId}) {
   const [mrfStatus, setMrfStatus] = useState([]);
@@ -57,7 +58,7 @@ function Dashboard({roleId,userId}) {
     setResumePopup(true);
   };
 
-
+// console.log(roleId)
   const mrfIdInterviewRefernceTemplate = (rowData) => {
     return (
       <div>
@@ -200,11 +201,13 @@ function Dashboard({roleId,userId}) {
             column={interviewSummaryColums}
             headerHeading={"Interview Status"}
             table_title={"Interview Summary"}
+            
           />
           <InterviewSummary
             visible={interviewPopup}
             onHide={() => setInterviewPopup(false)}
             mrfId={interviewPopupId}
+            roleId={roleId}
           />
 
           <DashBoardDataTable
@@ -217,7 +220,17 @@ function Dashboard({roleId,userId}) {
             visible={resumePopup}
             onHide={() => setResumePopup(false)}
             mrfId={resumePopupId}
+            roleId={roleId}
           />
+{/* <DashBoardDataTable
+            value={resumeSummary}
+            column={resumeSummaryColums}
+            headerHeading={"Resume Status"}
+            table_title={"Resume Summary"}
+          />
+          <HrResumeSummary  visible={false}
+            onHide={() => setResumePopup(false)}
+            mrfId={resumePopupId}/> */}
         </div>
       </div>
     </div>

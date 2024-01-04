@@ -10,5 +10,7 @@ namespace MRF.DataAccess.Repository.IRepository
         public void Update(Candidatedetails candidatedetail);
 
         public List<Candidatedetails> GetForwardedTodata();
+
+        public List<CandidatedetailRequestModel> GetReferenceNoAndPositiontitle();
     }
 }

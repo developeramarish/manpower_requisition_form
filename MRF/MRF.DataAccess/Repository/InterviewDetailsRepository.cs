@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MRF.DataAccess.Repository
 {
@@ -64,6 +65,7 @@ namespace MRF.DataAccess.Repository
                                                                 select new InterviewDetailsViewModel
                                                                 {
                                                                     CandidateId = Candidate.Id,
+                                                      
                                                                     EvaluationId = Attachment.InterviewEvaluationId,
                                                                     Attachment = Attachment.FilePath,
                                                                 };
@@ -77,6 +79,7 @@ namespace MRF.DataAccess.Repository
                                 select new InterviewStatus
                                 {
                                     CandidateId = Candidate.Id,
+                                    
                                     EvalutionStatusId = Ivaluation.EvalutionStatusId,
                                     CandidateStatusChangedOnUtc = Ivaluation.UpdatedOnUtc,
                                     EvalutionStatus = status.Status,
@@ -110,6 +113,7 @@ namespace MRF.DataAccess.Repository
                                                                   CreatedOnUtc = Candidate.CreatedOnUtc,
                                                                   CandidateId = Candidate.Id,
                                                                   PositionTitle = pos.Name,
+                                                                  CandidateName = Candidate.Name,
                                                               };
 
             IQueryable<InterviewDetailsViewModel> secondmerge = from q in firstlist
@@ -126,6 +130,7 @@ namespace MRF.DataAccess.Repository
                                                                     CandidateId = q.CandidateId,
                                                                     PositionTitle = q.PositionTitle,
                                                                     InterviewerEmployeeIds = i.InterviewerEmployeeIds,
+                                                                    CandidateName=q.CandidateName,
 
                                                                 };
 
@@ -143,6 +148,7 @@ namespace MRF.DataAccess.Repository
                                                                    CreatedOnUtc = q.CreatedOnUtc,
                                                                    CandidateId = q.CandidateId,
                                                                    PositionTitle = q.PositionTitle,
+                                                                   CandidateName= q.CandidateName,
                                                                    InterviewerEmployeeIds = i.InterviewerEmployeeIds == "" ? q.InterviewerEmployeeIds : i.InterviewerEmployeeIds,
 
                                                                };
@@ -161,6 +167,7 @@ namespace MRF.DataAccess.Repository
                                                                    CreatedOnUtc = q.CreatedOnUtc,
                                                                    CandidateId = q.CandidateId,
                                                                    PositionTitle = q.PositionTitle,
+                                                                   CandidateName=q.CandidateName,   
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = i.Attachment == null ? "" : i.Attachment,
 
@@ -181,6 +188,7 @@ namespace MRF.DataAccess.Repository
                                                                    CreatedOnUtc = q.CreatedOnUtc,
                                                                    CandidateId = q.CandidateId,
                                                                    PositionTitle = q.PositionTitle,
+                                                                   CandidateName =  q.CandidateName,
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = q.Attachment,
                                                                    EvalutionStatusId = i != null ? i.EvalutionStatusId ?? 0 : 0, // Check for null outside the query
@@ -189,8 +197,58 @@ namespace MRF.DataAccess.Repository
                                                                    InterviewevaluationId = i != null ? i.InterviewevaluationId ?? 0 : 0,
                                                                };
 
+            List<InterviewDetailsViewModel> queryResults = finalmerge.ToList();
+            if (queryResults.Count > 0)
+            {
+                List<Employeerolemap> res = GetEmployeebyRole(6);
+                foreach (var q in queryResults)
+                {
+                    q.InterviewerName = GetEmployeeNames(res, q.InterviewerEmployeeIds);
 
-            return finalmerge.ToList();
+                }
+            }
+
+
+            return queryResults;
+
+        }
+
+
+        private string GetEmployeeNames(List<Employeerolemap> res, string employeeIds)
+        {
+            if (string.IsNullOrEmpty(employeeIds))
+            { return string.Empty; }
+            var names = new List<string>();
+
+            foreach (var employeeId in employeeIds.Split(','))
+            {
+                if (int.TryParse(employeeId, out int empId))
+                {
+                    var employee = res.FirstOrDefault(emp => emp.EmployeeId == empId);
+                    if (employee != null)
+                    {
+                        names.Add(employee.name);
+                    }
+                }
+            }
+
+            return string.Join(", ", names);
+        }
+
+        private List<Employeerolemap> GetEmployeebyRole(int roleId)
+        {
+            IQueryable<Employeerolemap> query = from emprole in _db.Employeerolemap
+                                                join empdetails in _db.Employeedetails on emprole.EmployeeId equals empdetails.Id
+                                                where emprole.RoleId == roleId
+                                                select new Employeerolemap
+                                                {
+                                                    EmployeeId = emprole.EmployeeId,
+                                                    name = empdetails.Name,
+                                                    RoleId = emprole.RoleId,
+                                                    EmployeeCode = empdetails.EmployeeCode,
+                                                };
+
+            return query.ToList();
 
         }
     }

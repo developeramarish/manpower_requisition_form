@@ -17,7 +17,7 @@ namespace MRF.Models.ViewModels
 
         public int InterviewerEmployeeId { get; set; }
         public string? InterviewerEmployeeIds { get; set; }
-        //public string InterviewerName { get; set; } = null!;
+        public string? InterviewerName { get; set; } 
         public int CreatedByEmployeeId { get; set; }
         public string CreatedName { get; set; } = null!;
         public DateTime CreatedOnUtc { get; set; }
@@ -36,6 +36,9 @@ namespace MRF.Models.ViewModels
         public string? Attachment { get; set; }
         public int? InterviewevaluationId { get; set; }
         public int? EvalutionStatusId { get; set; }
+
+        public string  CandidateName { get; set; } = null!;
+
     }
 
 

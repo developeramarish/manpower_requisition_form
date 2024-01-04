@@ -27,6 +27,20 @@ const ToastMessages = (props, ref) => {
         detail: message,
       });
     },
+    showInfoMessage: (message) => {
+      toast.current.show({
+        severity: "info",
+        summary: "Info Message",
+        detail: message,
+      });
+    },
+    showWarrningMessage: (message) => {
+      toast.current.show({
+        severity: "warn",
+        summary: "Warning Message",
+        detail: message,
+      });
+    },
   
   }));
 

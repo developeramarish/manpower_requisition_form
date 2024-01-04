@@ -57,19 +57,19 @@ namespace MRF.Models.DTO
 
         public int  HiringManagerId { get; set; }
         public int HiringManagerEmpId { get; set; }
-        public DateTime HMApprovalDate { get; set; }
+        public DateOnly HMApprovalDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public int FunctionHeadId { get; set; }
         public int FunctionHeadEmpId { get; set; }
-        public DateTime FHApprovalDate { get; set; }
+        public DateOnly FHApprovalDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public int  SiteHRSPOCId { get; set; }
         public int SiteHRSPOCEmpId { get; set; }
-        public DateTime SPApprovalDate { get; set; }
+        public DateOnly SPApprovalDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public int FinanceHeadId { get; set; }
         public int FinanceHeadEmpId { get; set; }
-        public DateTime FIApprovalDate { get; set; }
+        public DateOnly FIApprovalDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public int PresidentnCOOId { get; set; }
         public int PresidentnCOOEmpId { get; set; }
-        public DateTime PCApprovalDate { get; set; }
+        public DateOnly PCApprovalDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public int roleId { get; set; }
 
         public string? Note { get; set; }

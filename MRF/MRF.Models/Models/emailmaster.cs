@@ -17,5 +17,9 @@ namespace MRF.Models.Models
         public string Content { get; set; } = null!;
         public string status { get; set; } = null!;
         public string Subject { get; set; } = null!;
+
+        public int statusId { get; set; } 
+
+        public string roleId { get; set; }
     }
 }

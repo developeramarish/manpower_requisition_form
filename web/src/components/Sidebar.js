@@ -39,6 +39,13 @@ const Sidebar = ({roleId,sPageKey}) => {
                             <img src="./images/my_requisition_normal.png" alt="my_requisition" /><br />My Requisition
                         </a>
                     </li>
+                    {roleId !== ROLES.mrfOwner && (
+                    <li>
+                        <a className={active === 'view_candidate' ? 'active' : ''} href="view_candidate" onClick={(e) => onLinkClicked(e)}>
+                            <img src="./images/my_requisition_normal.png" alt="my_requisition" /><br />View Candidate
+                        </a>
+                    </li>
+                     )}
                 </>
             )}
         </ul>

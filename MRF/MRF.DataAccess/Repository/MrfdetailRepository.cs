@@ -60,7 +60,7 @@ namespace MRF.DataAccess.Repository
                                                      EmployeeName = replacement.EmployeeName ?? "",
                                                      EmployeeCode = replacement != null ? replacement.EmployeeCode : 0,
                                                      EmailId = replacement != null ? replacement.EmailId : "",
-                                                     LastWorkingDate = replacement != null ? replacement.LastWorkingDate : DateOnly.MinValue,
+                                                     LastWorkingDate = replacement != null ? replacement.LastWorkingDate : DateOnly.FromDateTime(DateTime.Now),
                                                      ReplaceJustification = replacement.Justification != null ? replacement.Justification:"",
                                                      AnnualCtc = replacement != null ? replacement.AnnualCtc : 0,
                                                      AnnualGross = replacement != null ? replacement.AnnualGross : 0,
@@ -110,7 +110,8 @@ namespace MRF.DataAccess.Repository
                                                                HiringManagerEmpId = employee.EmployeeCode,
                                                                HiringManagerId = employee.Id,
                                                                roleId = role.RoleId,
-                                                               HMApprovalDate = mail.ApprovalDate,
+                                                               HMApprovalDate =
+                                                               (mail.ApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : mail.ApprovalDate,
                                                            }
                                                             ).ToList();
 
@@ -129,25 +130,31 @@ namespace MRF.DataAccess.Repository
                 if(emploeeyemailId.Count>0)
                 {
                     
-                        var e = emploeeyemailId.FirstOrDefault(e => e.roleId == 7);
+                        var e = emploeeyemailId.FirstOrDefault(e => e.roleId == 3);
                         if (e != null)
-                         { r.HiringManagerEmpId = e.HiringManagerEmpId; r.HiringManagerId = e.HiringManagerId; r.HMApprovalDate = e.HMApprovalDate; }
+                         { r.HiringManagerEmpId = e.HiringManagerEmpId; r.HiringManagerId = e.HiringManagerId;
+                        r.HMApprovalDate = (e.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : e.HMApprovalDate;
+                    }
                     
                     e = emploeeyemailId.FirstOrDefault(e => e.roleId == 8);
                     if (e != null)
-                    { r.FunctionHeadEmpId = e.HiringManagerEmpId; r.FunctionHeadId = e.HiringManagerId; r.FHApprovalDate = e.HMApprovalDate; }
+                    { r.FunctionHeadEmpId = e.HiringManagerEmpId; r.FunctionHeadId = e.HiringManagerId;
+                        r.FHApprovalDate = (e.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : e.HMApprovalDate; }
                     
                     e = emploeeyemailId.FirstOrDefault(e => e.roleId == 9);
                     if (e != null)
-                    { r.SiteHRSPOCEmpId = e.HiringManagerEmpId; r.SiteHRSPOCId = e.HiringManagerId; r.SPApprovalDate = e.HMApprovalDate; }
+                    { r.SiteHRSPOCEmpId = e.HiringManagerEmpId; r.SiteHRSPOCId = e.HiringManagerId;
+                        r.SPApprovalDate = (e.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : e.HMApprovalDate; }
                     
                     e = emploeeyemailId.FirstOrDefault(e => e.roleId == 10);
                     if (e != null)
-                    { r.FinanceHeadEmpId = e.HiringManagerEmpId; r.FinanceHeadId = e.HiringManagerId; r.FIApprovalDate = e.HMApprovalDate; }
+                    { r.FinanceHeadEmpId = e.HiringManagerEmpId; r.FinanceHeadId = e.HiringManagerId;
+                        r.FIApprovalDate = (e.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : e.HMApprovalDate; }
                    
                     e = emploeeyemailId.FirstOrDefault(e => e.roleId == 11);
                     if (e != null)
-                    { r.PresidentnCOOEmpId = e.HiringManagerEmpId; r.PresidentnCOOId = e.HiringManagerId; r.PCApprovalDate = e.HMApprovalDate; }
+                    { r.PresidentnCOOEmpId = e.HiringManagerEmpId; r.PresidentnCOOId = e.HiringManagerId;
+                        r.PCApprovalDate = (e.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : e.HMApprovalDate; }
 
                     
                 }

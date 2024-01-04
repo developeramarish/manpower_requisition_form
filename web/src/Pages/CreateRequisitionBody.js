@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-// import { useNavigate } from "react-router-dom";
+import { commonSettings, applySettingsBasedOnRoleAndStatus } from './commonSettings';
 import "../css/InputComponent.css";
 import DropdownComponent from "./../components/Dropdown";
 import InputTextCp from "./../components/Textbox";
@@ -27,21 +27,23 @@ import { useDispatch } from "react-redux";
 import { PAGE_ACTIONS } from "../reducers/Page_r";
 import EditorComponent from "../components/EditorComponent";
 import InputNumberComponent from "../components/InputNumberComponent";
+import DropdownAddNew from "./../components/DropDownAddNew";
+import { Message } from "primereact/message";
 
 const CreateRequisitionBody = ({
   getReqId = null,
   getReqRoleId = null,
   status = null,
   mrfStatusId = null,
+  roleId = null,   // if we are directly coming to this page for creating mrf
 }) => {
   // State to hold all the dropdown data
   const [dropdownData, setDropdownData] = useState({});
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const RedAsterisk = () => <span className="text-red-500">*</span>;
-  const [visible, setVisible] = useState(false);
-  const [readOnly, setReadOnly] = useState(false);
 
+  //const history = useHistory();
   const dispatch = useDispatch();
 
   const toastRef = useRef(null);
@@ -49,25 +51,30 @@ const CreateRequisitionBody = ({
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState();
 
+  const OnLoad=()=>
+  { fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = data.result;
+      // Store the dropdown data in localStorage using your storageService
+      // storageService.set("dropdownData", dropdown);
+      // Update the state with the new dropdown data
+      setDropdownData(dropdown);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+
+ 
+
+  }
   useEffect(() => {
     setFormData(FORM_SCHEMA_CR);
   }, []);
 
   useEffect(() => {
     // Fetch the data for all the dropdowns
-    fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
-      .then((response) => response.json())
-      .then((data) => {
-        const dropdown = data.result;
-        // Store the dropdown data in localStorage using your storageService
-        // storageService.set("dropdownData", dropdown);
-        // Update the state with the new dropdown data
-        setDropdownData(dropdown);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-
+    OnLoad();
     if (getReqId) {
       const apiUrl = API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId;
       fetch(apiUrl)
@@ -81,26 +88,39 @@ const CreateRequisitionBody = ({
     } else {
       setFormData(FORM_SCHEMA_CR);
     }
-
-    if (getReqRoleId == 4) {
-      setReadOnly(true);
-    } else if (
-      mrfStatusId == MRF_STATUS.draft ||
-      mrfStatusId == MRF_STATUS.resubReq
-    ) {
-      setReadOnly(false);
-    } else if (getReqRoleId == 3) {
-      setReadOnly(true);
-    }
+  
+    applySettingsBasedOnRoleAndStatus(getReqRoleId, mrfStatusId, roleId, commonSettings);
+    
   }, []);
-
   const onTextChanged = (val) => {
-    // console.log(formData);
     setFormData({ ...formData, jobDescription: val });
   };
 
   const onTextChangedSkill = (val) => {
     setFormData({ ...formData, skills: val });
+  };
+  const handleMinSalaryChange = (e) => {
+    const minSalary = e.target.value;
+    if (formData.maxTargetSalary !== 0) {
+      if (minSalary > formData.maxTargetSalary) {
+        toastRef.current.showWarrningMessage(
+          "Min Target Salary is Greater than Max Target salary"
+        );
+        return;
+      }
+    }
+    setFormData({ ...formData, minTargetSalary: minSalary });
+  };
+
+  const handleMaxSalaryChange = (e) => {
+    const maxSalary = e.target.value;
+    if (maxSalary < formData.minTargetSalary) {
+      toastRef.current.showWarrningMessage(
+        "Max Target Salary is Less than Min Target salary"
+      );
+      return;
+    }
+    setFormData({ ...formData, maxTargetSalary: maxSalary });
   };
 
   const fetchSubDepartments = (selectedDepartment) => {
@@ -121,6 +141,47 @@ const CreateRequisitionBody = ({
         console.error("Fetch error:", error);
       });
   };
+
+  const AddInDropdwon =async (Name,PosORPr) => {
+    let apiUrl = '';
+if (PosORPr === 1) {
+  apiUrl = API_URL.ADD_POSITIONTITLE;
+} else {
+  alert(API_URL.ADD_PROJECT);
+  apiUrl = API_URL.ADD_PROJECT;
+}
+     
+     try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          
+          body: JSON.stringify({
+            name: Name,
+            isActive: true,
+            
+            createdByEmployeeId: storageService.getData("profile").employeeId,
+            createdOnUtc: new Date().toISOString(),
+            updatedByEmployeeId: storageService.getData("profile").employeeId,
+            updatedOnUtc: new Date().toISOString(),
+          }),
+        });
+  
+        if (response.ok) {
+          OnLoad();
+          console.log("Item added successfully");
+          toastRef.current.showSuccessMessage("Item added successfully!");
+        } else {
+          console.error("Failed to add item");
+          toastRef.current.showConflictMessage("Failed to add item");
+        }
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
+    };
+ 
 
   useEffect(() => {
     if (!formData || formData.departmentId === 0) {
@@ -171,8 +232,8 @@ const CreateRequisitionBody = ({
       </span>
     );
   };
-
   const header = renderHeader();
+
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -189,7 +250,13 @@ const CreateRequisitionBody = ({
     setDropdownData({});
     setSubDepartments([]);
     navigateTo("my_requisition");
+    //const currentHash = window.location.hash;
+    //navigateTo(currentHash);
+    //history.goBack();
   };
+
+  
+
 
   return (
     <>
@@ -206,7 +273,6 @@ const CreateRequisitionBody = ({
         py-3 px-1 overflow-y-scroll"
             style={{ height: "95%" }}
           >
-            {/* border-y-2 border-white-300  */}
             {getReqId ? (
               <div className="flex justify-content-between gap-5">
                 <div className="flex flex-column w-6 gap-2">
@@ -223,7 +289,13 @@ const CreateRequisitionBody = ({
             ) : (
               ""
             )}
-
+ {formData.mrfStatusId == 3 && getReqRoleId == 4 ? (
+              <span className="font-bold  ">
+                <Message text={`MRF is yet to be ReSubmit`} />{" "}
+              </span>
+            ) : (
+              ""
+            )}
             {formData.mrfStatusId == 3 ? (
               <label
                 htmlFor="RequisitionType"
@@ -235,6 +307,7 @@ const CreateRequisitionBody = ({
             ) : (
               ""
             )}
+           
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="RequisitionType" className="font-bold text-sm">
@@ -246,7 +319,7 @@ const CreateRequisitionBody = ({
                   optionValue="code"
                   type="RequisitionType"
                   options={REQUISITION_TYPE}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={
                     formData.requisitionType ||
                     (REQUISITION_TYPE.length > 0
@@ -266,20 +339,22 @@ const CreateRequisitionBody = ({
                   Position Title
                   <RedAsterisk />
                 </label>
-                <DropdownComponent
+                <DropdownAddNew
                   optionLabel="name"
                   optionValue="id"
                   type="position"
                   options={dropdownData.position}
                   value={formData.positionTitleId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
 
                   onChange={(e) => {
-                    setFormData({
-                      ...formData,
-                      positionTitleId: e.target.value,
-                    });
+                    setFormData({ ...formData, positionTitleId: e.target.value });
                   }}
+                  onAddItem={(newItem) => {
+
+                     AddInDropdwon(newItem,1);
+                  }}
+                 
                 />
               </div>
             </div>
@@ -296,10 +371,11 @@ const CreateRequisitionBody = ({
                   type="Department"
                   options={dropdownData.departments}
                   value={formData.departmentId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) => {
                     setFormData({ ...formData, departmentId: e.target.value });
                   }}
+                  
                 />
               </div>
               <div className="flex flex-column w-6 gap-2">
@@ -312,7 +388,7 @@ const CreateRequisitionBody = ({
                   optionValue="id"
                   type="subDepartmentId"
                   options={subDepartments}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={formData.subDepartmentId}
                   onChange={(e) =>
                     setFormData({
@@ -329,16 +405,20 @@ const CreateRequisitionBody = ({
                   Project
                   <RedAsterisk />
                 </label>
-                <DropdownComponent
+                <DropdownAddNew
                   optionLabel="name"
                   optionValue="id"
                   type="project"
                   options={dropdownData.projects}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={formData.projectId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, projectId: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, projectId: e.target.value });
+                  }}
+                  onAddItem={(newItem) => {
+
+                    AddInDropdwon (newItem,2);
+                  }}
                 />
               </div>
               <div className="flex flex-column w-6 gap-2">
@@ -352,7 +432,7 @@ const CreateRequisitionBody = ({
                   type="location"
                   options={dropdownData.location}
                   value={formData.locationId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({ ...formData, locationId: e.target.value })
                   }
@@ -374,7 +454,7 @@ const CreateRequisitionBody = ({
                   type="reportingTo"
                   options={dropdownData.reportingTo}
                   value={formData.reportsToEmployeeId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -393,7 +473,8 @@ const CreateRequisitionBody = ({
                   id="initiation-date"
                   inputClassName="bg-gray-100"
                   value={new Date(formData.requisitionDateUtc)}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
+                  minDate={new Date()}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -418,7 +499,7 @@ const CreateRequisitionBody = ({
                   type="employmenttypes"
                   options={dropdownData.employmentTypes}
                   value={formData.employmentTypeId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -444,7 +525,7 @@ const CreateRequisitionBody = ({
                     optionLabel="name"
                     optionValue="id"
                     placeholder="Min"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({ ...formData, minGradeId: e.target.value })
                     }
@@ -459,7 +540,7 @@ const CreateRequisitionBody = ({
                     optionLabel="name"
                     optionValue="id"
                     placeholder="Max"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({ ...formData, maxGradeId: e.target.value })
                     }
@@ -482,7 +563,7 @@ const CreateRequisitionBody = ({
                     })
                   }
                   value={formData.vacancyNo}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
               </div>
 
@@ -497,7 +578,7 @@ const CreateRequisitionBody = ({
                   type="vaccancy"
                   options={dropdownData.vaccancies}
                   value={formData.vacancyTypeId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({ ...formData, vacancyTypeId: e.target.value })
                   }
@@ -519,13 +600,14 @@ const CreateRequisitionBody = ({
                     options={MIN_EXPERIENCE_OPTIONS}
                     optionLabel="label"
                     placeholder="Min"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
                         minExperience: e.target.value,
                       })
                     }
+                    className="custom-width" 
                   />
 
                   <label className="font-bold text-sm label-with-padding-left label-with-padding-right">
@@ -536,13 +618,14 @@ const CreateRequisitionBody = ({
                     options={MAX_EXPERIENCE_OPTIONS}
                     optionLabel="label"
                     placeholder="Max"
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
                         maxExperience: e.target.value,
                       })
                     }
+                    className="custom-width" 
                   />
                 </div>
               </div>
@@ -556,7 +639,7 @@ const CreateRequisitionBody = ({
                   optionValue="id"
                   type="Gender"
                   options={GENDER}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   value={formData.genderId}
                   onChange={(e) =>
                     setFormData({ ...formData, genderId: e.target.value })
@@ -574,7 +657,7 @@ const CreateRequisitionBody = ({
                   type="Qualification"
                   options={dropdownData.qualification}
                   value={formData.qualificationId}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -589,7 +672,7 @@ const CreateRequisitionBody = ({
                 <CheckboxComponent
                   inputId="replacement"
                   checked={formData.isReplacement}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   onChange={(e) =>
                     setFormData({ ...formData, isReplacement: e.checked })
                   }
@@ -615,7 +698,7 @@ const CreateRequisitionBody = ({
                         })
                       }
                       value={formData.employeeName}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
 
@@ -630,7 +713,7 @@ const CreateRequisitionBody = ({
                       id="lastworkingDate"
                       inputClassName="bg-gray-100"
                       value={new Date(formData.lastWorkingDate)}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -654,7 +737,7 @@ const CreateRequisitionBody = ({
                         setFormData({ ...formData, emailId: e.target.value })
                       }
                       value={formData.emailId}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
 
@@ -671,7 +754,7 @@ const CreateRequisitionBody = ({
                         })
                       }
                       value={formData.employeeCode}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
                 </div>
@@ -686,7 +769,7 @@ const CreateRequisitionBody = ({
                         setFormData({ ...formData, annualCtc: e.target.value })
                       }
                       value={formData.annualCtc}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
                       Annual Gross
@@ -700,7 +783,7 @@ const CreateRequisitionBody = ({
                         })
                       }
                       value={formData.annualGross}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                     />
                   </div>
 
@@ -716,7 +799,7 @@ const CreateRequisitionBody = ({
                       id="ReplaceJustification"
                       className="bg-gray-100"
                       value={formData.replaceJustification}
-                      disable={readOnly}
+                      disable={commonSettings.setReadOnly}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -738,7 +821,7 @@ const CreateRequisitionBody = ({
                   value={formData.jobDescription}
                   headerTemplate={header}
                   onTextChanged={onTextChanged}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
               </div>
 
@@ -751,20 +834,8 @@ const CreateRequisitionBody = ({
                   value={formData.skills}
                   headerTemplate={header}
                   onTextChanged={onTextChangedSkill}
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
-                {/* <InputTextareaComponent
-                  autoResize
-                  id="skills"
-                  className="bg-gray-100"
-                  rows={9}
-                  cols={10}
-                  value={formData.skills}
-                  disable={readOnly}
-                  onChange={(e) =>
-                    setFormData({ ...formData, skills: e.target.value })
-                  }
-                /> */}
               </div>
             </div>
             <div className="flex justify-content-between gap-5 ">
@@ -784,7 +855,7 @@ const CreateRequisitionBody = ({
                   onChange={(e) =>
                     setFormData({ ...formData, justification: e.target.value })
                   }
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                 />
               </div>
               <div className="flex flex-column gap-4 w-6">
@@ -798,14 +869,9 @@ const CreateRequisitionBody = ({
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        minTargetSalary: e.target.value,
-                      })
-                    }
+                    onChange={handleMinSalaryChange}
                     value={formData.minTargetSalary}
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                   />
                 </div>
                 <div className="flex flex-column gap-2">
@@ -818,14 +884,9 @@ const CreateRequisitionBody = ({
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        maxTargetSalary: e.target.value,
-                      })
-                    }
+                    onChange={handleMaxSalaryChange}
                     value={formData.maxTargetSalary}
-                    disable={readOnly}
+                    disable={commonSettings.setReadOnly}
                   />
                 </div>
               </div>
@@ -850,9 +911,8 @@ const CreateRequisitionBody = ({
                     })
                   }
                   optionLabel="name"
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
 
-                  // optionValue="employeeId"
                 />
               </div>
               <div className="flex flex-column w-6 gap-2">
@@ -873,16 +933,16 @@ const CreateRequisitionBody = ({
                       interviewerEmployeeIds: objToArray(e.value),
                     })
                   }
-                  disable={readOnly}
+                  disable={commonSettings.setReadOnly}
                   optionLabel="name"
                   // optionValue="employeeId"
                 />
               </div>
             </div>
             <div className="flex justify-content-between">
-              <h1 className="my-2 mx-3">
-                EMAIL APPROVAL/SIGNATURE DATES:
-                <RedAsterisk />
+              <h1 className="my-2 ">
+                EMAIL APPROVAL/SIGNATURE DATES
+                <RedAsterisk />:
               </h1>
             </div>
             <div id="first" className="flex justify-content-evenly gap-4">
@@ -911,7 +971,7 @@ const CreateRequisitionBody = ({
                   type="hiringManager"
                   options={dropdownData.hiringManager}
                   value={formData.hiringManagerId}
-                  disable={readOnly}
+                  disable={commonSettings.setHiringManager}
                   onChange={(e) => {
                     const selectedHiringManagerId = e.target.value;
                     const selectedHiringManager =
@@ -945,68 +1005,30 @@ const CreateRequisitionBody = ({
                     })
                   }
                   value={formData.hiringManagerEmpId}
-                  disable={readOnly}
-                />
-              </div>
-
-              <div className="flex flex-column gap-2"></div>
-            </div>
-            <div id="second" className="flex justify-content-evenly gap-4">
-              <div className="flex flex-column gap-2">
-                <InputTextCp
-                  type="text"
-                  id="Position"
-                  className="p-disabled"
-                  disable={readOnly}
-                  onChange={(e) => setFormData({ ...formData, Position: 8 })}
-                  value="Function Head"
-                />
-              </div>
-
-              <div className="flex flex-column gap-2 w-3">
-                {/* Assuming DropdownComponent renders an input */}
-                <DropdownComponent
-                  optionLabel="name"
-                  optionValue="employeeId"
-                  type="functionHead"
-                  options={dropdownData.functionHead}
-                  value={formData.functionHeadId}
-                  disable={readOnly}
-                  onChange={(e) => {
-                    const selectedfunctionHeadId = e.target.value;
-                    const selectedfunctionHead = dropdownData.functionHead.find(
-                      (manager) => manager.employeeId === selectedfunctionHeadId
-                    );
-
-                    if (selectedfunctionHead) {
-                      setFormData({
-                        ...formData,
-                        functionHeadId: selectedfunctionHeadId,
-                        functionHeadEmpId: selectedfunctionHead.employeeCode,
-                      });
-                    }
-                  }}
+                  disable={commonSettings.setHiringManager}
                 />
               </div>
 
               <div className="flex flex-column gap-2">
-                <InputTextCp
-                  id="functionHeadEmpId"
-                  className="p-disabled"
+                <label htmlFor="ApprovalDate" className="font-bold text-sm">
+                  Approval Date
+                </label>
+                {/* Assuming CalendarComponent renders an input */}
+                <CalendarComponent
+                  id="ApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.hmApprovalDate)}
+                  minDate={new Date()}
+                  disable={commonSettings.setHiringManager}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      functionHeadEmpId: e.target.value,
+                      hmApprovalDate: e.target.value,
                     })
                   }
-                  value={formData.functionHeadEmpId}
-                  disable={readOnly}
                 />
               </div>
-
-              <div className="flex flex-column gap-2"></div>
-            </div>
-            <div id="third" className="flex justify-content-evenly gap-4">
+            </div> <div id="third" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
                 <InputTextCp
                   type="text"
@@ -1014,7 +1036,7 @@ const CreateRequisitionBody = ({
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 9 })}
                   value="Site HR SPOC"
-                  disable={readOnly}
+                  
                 />
               </div>
               <div className="flex flex-column gap-2 w-3">
@@ -1025,7 +1047,7 @@ const CreateRequisitionBody = ({
                   type="siteHRSPOCId"
                   options={dropdownData.siteHRSPOC}
                   value={formData.siteHRSPOCId}
-                  disable={readOnly}
+                  disable={commonSettings.setSiteHRSPOCApproval}
                   onChange={(e) => {
                     const selectedsiteHRSPOCId = e.target.value;
                     const selectedsiteHRSPOCEmpId =
@@ -1054,11 +1076,96 @@ const CreateRequisitionBody = ({
                     })
                   }
                   value={formData.siteHRSPOCEmpId}
-                  disable={readOnly}
+                  disable={commonSettings.setSiteHRSPOCApproval}
                 />
               </div>
-              <div className="flex flex-column gap-2"></div>{" "}
+              <div className="flex flex-column gap-2">
+                {" "}
+                {/* Assuming CalendarComponent renders an input */}
+                <CalendarComponent
+                  id="ApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.spApprovalDate)}
+                  disable={commonSettings.setSiteHRSPOCApproval}
+                  minDate={new Date()}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      spApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
+            <div id="second" className="flex justify-content-evenly gap-4">
+              <div className="flex flex-column gap-2">
+                <InputTextCp
+                  type="text"
+                  id="Position"
+                  className="p-disabled"
+                  
+                  onChange={(e) => setFormData({ ...formData, Position: 8 })}
+                  value="Function Head"
+                />
+              </div>
+
+              <div className="flex flex-column gap-2 w-3">
+                {/* Assuming DropdownComponent renders an input */}
+                <DropdownComponent
+                  optionLabel="name"
+                  optionValue="employeeId"
+                  type="functionHead"
+                  options={dropdownData.functionHead}
+                  value={formData.functionHeadId}
+                  disable={commonSettings.setHodapproval}
+                  onChange={(e) => {
+                    const selectedfunctionHeadId = e.target.value;
+                    const selectedfunctionHead = dropdownData.functionHead.find(
+                      (manager) => manager.employeeId === selectedfunctionHeadId
+                    );
+
+                    if (selectedfunctionHead) {
+                      setFormData({
+                        ...formData,
+                        functionHeadId: selectedfunctionHeadId,
+                        functionHeadEmpId: selectedfunctionHead.employeeCode,
+                      });
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="flex flex-column gap-2">
+                <InputTextCp
+                  id="functionHeadEmpId"
+                  className="p-disabled"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      functionHeadEmpId: e.target.value,
+                    })
+                  }
+                  value={formData.functionHeadEmpId}
+                  disable={commonSettings.setHodapproval}
+                />
+              </div>
+
+              <div className="flex flex-column gap-2">
+                <CalendarComponent
+                  id="fhApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.fhApprovalDate)}
+                  disable={commonSettings.setCooapproval}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      fhApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+           
             <div id="forth" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
                 <InputTextCp
@@ -1067,7 +1174,7 @@ const CreateRequisitionBody = ({
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 10 })}
                   value="Finance Head"
-                  disable={readOnly}
+                  
                 />
               </div>
               <div className="flex flex-column gap-2 w-3">
@@ -1078,7 +1185,7 @@ const CreateRequisitionBody = ({
                   type="financeHead"
                   options={dropdownData.financeHead}
                   value={formData.financeHeadId}
-                  disable={readOnly}
+                  disable={commonSettings.setFinanceHeadApproval}
                   onChange={(e) => {
                     const selectedfinanceHeadId = e.target.value;
                     const selectedfinanceHeadEmpId =
@@ -1108,10 +1215,24 @@ const CreateRequisitionBody = ({
                     })
                   }
                   value={formData.financeHeadEmpId}
-                  disable={readOnly}
+                  disable={commonSettings.setFinanceHeadApproval}
                 />
               </div>
-              <div className="flex flex-column gap-2"></div>{" "}
+              <div className="flex flex-column gap-2">
+                <CalendarComponent
+                  id="ApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.fiApprovalDate)}
+                  minDate={new Date()}
+                  disable={commonSettings.awatingFinance}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      fiApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>{" "}
             </div>
             <div id="fifth" className="flex justify-content-evenly gap-4">
               <div className="flex flex-column gap-2">
@@ -1121,7 +1242,7 @@ const CreateRequisitionBody = ({
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 11 })}
                   value="President & COO"
-                  disable={readOnly}
+                  disable={commonSettings.setCooapproval}
                 />
               </div>
 
@@ -1133,7 +1254,7 @@ const CreateRequisitionBody = ({
                   type="presidentnCOO"
                   options={dropdownData.presidentnCOO}
                   value={formData.presidentnCOOId}
-                  disable={readOnly}
+                  disable={commonSettings.setCooapproval}
                   onChange={(e) => {
                     const selectedpresidentnCOOId = e.target.value;
                     const selectedpresidentnCOOEmpId =
@@ -1168,7 +1289,21 @@ const CreateRequisitionBody = ({
                 />
               </div>
 
-              <div className="flex flex-column gap-2"></div>
+              <div className="flex flex-column gap-2">
+                <CalendarComponent
+                  id="pcApprovalDate"
+                  inputClassName="bg-gray-100"
+                  value={new Date(formData.pcApprovalDate)}
+                  minDate={new Date()}
+                  disable={commonSettings.setFinanceHeadApproval}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      pcApprovalDate: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
           </section>
 
@@ -1187,7 +1322,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1198,6 +1333,7 @@ const CreateRequisitionBody = ({
                           label={"SAVE AS DRAFT"}
                           message={"Do you want to Submit this MRF as Draft?"}
                           formData={formData}
+                          roleID={getReqRoleId }
                         />
 
                         <MrfPartialStatus
@@ -1208,6 +1344,7 @@ const CreateRequisitionBody = ({
                             "After submitting you won't be able to edit the MRF details"
                           }
                           formData={formData}
+                          roleID={getReqRoleId }
                         />
                       </>
                     );
@@ -1216,7 +1353,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1225,6 +1362,8 @@ const CreateRequisitionBody = ({
                           mrfId={getReqId}
                           mrfStatusId={9}
                           label={"Withdraw"}
+                          formData={formData}
+
                           message={"Do you want to withdraw this MRF"}
                         />
                       </>
@@ -1234,7 +1373,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1246,7 +1385,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1258,7 +1397,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1270,13 +1409,12 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
-                          // disable="true"
+                          
                         />
-
-                        <MrfPartialStatus
+<MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={2}
                           label={"SUBMIT"}
@@ -1284,7 +1422,9 @@ const CreateRequisitionBody = ({
                             "After submitting you won't be able to edit the MRF details"
                           }
                           formData={formData}
+                          roleID={getReqRoleId }
                         />
+                        
                       </>
                     );
                   case MRF_STATUS.rejected:
@@ -1292,7 +1432,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1304,7 +1444,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1313,6 +1453,7 @@ const CreateRequisitionBody = ({
                           mrfId={getReqId}
                           mrfStatusId={9}
                           label={"Withdraw"}
+                          formData={formData}
                           message={"Do you want to withdraw this MRF"}
                         />
                       </>
@@ -1325,10 +1466,19 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
+                        />
+                         <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
@@ -1336,12 +1486,16 @@ const CreateRequisitionBody = ({
                           header={"Resubmission"}
                           label={"Resubmission Required"}
                           textbox={true}
+                          formData={formData}
+
                         />
 
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={11}
                           label={"Send for HOD approval"}
+                          formData={formData}
+                          disabled={(formData.functionHeadId != 0)? false:true}
                           message={
                             "“Do you want to submit it for HOD approval?"
                           }
@@ -1351,6 +1505,8 @@ const CreateRequisitionBody = ({
                           mrfId={getReqId}
                           mrfStatusId={7}
                           label={"On Hold"}
+                          formData={formData}
+
                           message={"Do you want to hold on this MRF?"}
                         />
                       </>
@@ -1360,9 +1516,11 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
+                          formData={formData}
+
                           // disable="true"
                         />
                       </>
@@ -1372,9 +1530,11 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
+                          formData={formData}
+
                           // disable="true"
                         />
                       </>
@@ -1384,14 +1544,16 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
-                          mrfStatusId={4}
+                          mrfStatusId={11}
+                          formData={formData}
+
                           label={"Received HOD approval"}
                           message={
                             "“Do you want to submit it for HOD approval?"
@@ -1404,7 +1566,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1413,6 +1575,7 @@ const CreateRequisitionBody = ({
                           mrfId={getReqId}
                           mrfStatusId={5}
                           label={"Received COO approval"}
+                          formData={formData}
                           message={"Do you want to submit it for COO approval?"}
                         />
 
@@ -1429,7 +1592,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1453,7 +1616,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1465,7 +1628,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1477,36 +1640,109 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2  surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
                         />
+                         <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
+                        />
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={12}
+                          formData={formData}
                           label={"Received HOD approval"}
+                          disabled={(formData.presidentnCOOId != 0)? false:true}
                           message={
                             "“Do you want to submit it for COO approval?"
                           }
                         />
                       </>
                     );
-                  case MRF_STATUS.awaitCooApproval:
+                  case MRF_STATUS.awaitfinanceHeadApproval:
                     return (
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
-                          mrfStatusId={6}
-                          label={"Open"}
-                          message={"“Do you want to Open this MRF?"}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
+                        />
+                        <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={14}
+                          formData={formData}
+                          label={"Received Finance Approval"}
+                          message={"Are you Sure"}
+                        />
+                      </>
+                    );
+                    case MRF_STATUS.recivedfinanceHeadApproval:
+                      return (
+                        <>
+                          <ButtonC
+                            label="CANCEL"
+                            className=" w-2 surface-hover border-red-600 text-red-600"
+                            onClick={handleCancel}
+                            formData={formData}
+                            outlined="true"
+                            // disable="true"
+                          />
+                        
+                          <MrfPartialStatus
+                            mrfId={getReqId}
+                            mrfStatusId={6}
+                            label={"Open"}
+                            formData={formData}
+
+                            message={"Do you want to open this MRF "}
+                          />
+                        </>
+                      );
+                  case MRF_STATUS.awaitCooApproval:
+                    return (
+                      <>
+                        <ButtonC
+                          label="CANCEL"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
+                          onClick={handleCancel}
+                          outlined="true"
+                          // disable="true"
+                        />
+                        <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
+                          formData={formData}
+                          updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
+                        />
+                        <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={13}
+                          formData={formData}
+                          disabled={(formData.financeHeadId != 0)? false:true}
+
+                          label={"Received COO approval"}
+                          message={"“Do you want to submit it for Finance Head approval?"}
                         />
                       </>
                     );
@@ -1515,7 +1751,7 @@ const CreateRequisitionBody = ({
                       <>
                         <ButtonC
                           label="CANCEL"
-                          className=" w-2 border-red-600 text-red-600"
+                          className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
                           // disable="true"
@@ -1544,7 +1780,7 @@ const CreateRequisitionBody = ({
                   <>
                     <ButtonC
                       label="CANCEL"
-                      className=" w-2 border-red-600 text-red-600"
+                      className=" w-2  surface-hover border-red-600 text-red-600"
                       onClick={handleCancel}
                       outlined="true"
                       // disable="true"
@@ -1555,6 +1791,8 @@ const CreateRequisitionBody = ({
                       label={"SAVE AS DRAFT"}
                       message={"Do you want to Submit this MRF as Draft?"}
                       formData={formData}
+                      roleID={getReqRoleId }
+                      
                     />
 
                     <MrfPartialStatus
@@ -1565,6 +1803,7 @@ const CreateRequisitionBody = ({
                         "After submitting you won't be able to edit the MRF details"
                       }
                       formData={formData}
+                      roleID={roleId }
                     />
                   </>
                 );
