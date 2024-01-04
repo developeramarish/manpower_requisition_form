@@ -1256,7 +1256,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.fiApprovalDate)}
                   minDate={new Date()}
-                  disable={awatingFiance}
+                  disable={commonSettings.awatingFinance}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1514,6 +1514,8 @@ if (PosORPr === 1) {
                           header={"Resubmission"}
                           label={"Resubmission Required"}
                           textbox={true}
+                          formData={formData}
+
                         />
 
                         <MrfPartialStatus
@@ -1531,6 +1533,8 @@ if (PosORPr === 1) {
                           mrfId={getReqId}
                           mrfStatusId={7}
                           label={"On Hold"}
+                          formData={formData}
+
                           message={"Do you want to hold on this MRF?"}
                         />
                       </>
@@ -1543,6 +1547,8 @@ if (PosORPr === 1) {
                           className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
+                          formData={formData}
+
                           // disable="true"
                         />
                       </>
@@ -1555,6 +1561,8 @@ if (PosORPr === 1) {
                           className=" w-2 surface-hover border-red-600 text-red-600"
                           onClick={handleCancel}
                           outlined="true"
+                          formData={formData}
+
                           // disable="true"
                         />
                       </>
@@ -1571,7 +1579,9 @@ if (PosORPr === 1) {
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
-                          mrfStatusId={4}
+                          mrfStatusId={11}
+                          formData={formData}
+
                           label={"Received HOD approval"}
                           message={
                             "“Do you want to submit it for HOD approval?"
@@ -1735,6 +1745,8 @@ if (PosORPr === 1) {
                             mrfId={getReqId}
                             mrfStatusId={6}
                             label={"Open"}
+                            formData={formData}
+
                             message={"Do you want to open this MRF "}
                           />
                         </>
