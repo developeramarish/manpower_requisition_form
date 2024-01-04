@@ -6,10 +6,10 @@ import CreateRequisitionBody from "./CreateRequisitionBody";
 
 export default function CreateRequisition({reqId=null,reqRoleId,reqstatus=null,roleId=null,reqstatusId=null}) {
   // const { reqId } = useParams();
-  console.log(reqId)
-  console.log(reqstatus)
-  console.log(reqRoleId)
-  console.log(roleId)
+  // console.log(reqId)
+  // console.log(reqstatus)
+  // console.log(reqRoleId)
+  // console.log(roleId)
   const title=reqstatus;
   return (
     <>

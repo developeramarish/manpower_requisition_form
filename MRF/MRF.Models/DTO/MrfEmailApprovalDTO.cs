@@ -12,7 +12,7 @@ namespace MRF.Models.DTO
         public int Id { get; set; }
         public int MrfId { get; set; }
         public int EmployeeId { get; set; }
-        public DateTime ApprovalDate { get; set; }
+        public DateOnly ApprovalDate { get; set; }
     }
 
     public class MrfEmailApprovalResponseModel

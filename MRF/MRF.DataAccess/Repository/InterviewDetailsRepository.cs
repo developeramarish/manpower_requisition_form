@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MRF.DataAccess.Repository
 {
@@ -194,11 +195,60 @@ namespace MRF.DataAccess.Repository
                                                                    EvalutionStatus = i != null ? i.EvalutionStatus : "",  // Check for null outside the query
                                                                    CandidateStatusChangedOnUtc = i == null ? DateTime.MinValue : i.CandidateStatusChangedOnUtc ?? DateTime.MinValue,
                                                                    InterviewevaluationId = i != null ? i.InterviewevaluationId ?? 0 : 0,
-
                                                                };
 
+            List<InterviewDetailsViewModel> queryResults = finalmerge.ToList();
+            if (queryResults.Count > 0)
+            {
+                List<Employeerolemap> res = GetEmployeebyRole(6);
+                foreach (var q in queryResults)
+                {
+                    q.InterviewerName = GetEmployeeNames(res, q.InterviewerEmployeeIds);
 
-            return finalmerge.ToList();
+                }
+            }
+
+
+            return queryResults;
+
+        }
+
+
+        private string GetEmployeeNames(List<Employeerolemap> res, string employeeIds)
+        {
+            if (string.IsNullOrEmpty(employeeIds))
+            { return string.Empty; }
+            var names = new List<string>();
+
+            foreach (var employeeId in employeeIds.Split(','))
+            {
+                if (int.TryParse(employeeId, out int empId))
+                {
+                    var employee = res.FirstOrDefault(emp => emp.EmployeeId == empId);
+                    if (employee != null)
+                    {
+                        names.Add(employee.name);
+                    }
+                }
+            }
+
+            return string.Join(", ", names);
+        }
+
+        private List<Employeerolemap> GetEmployeebyRole(int roleId)
+        {
+            IQueryable<Employeerolemap> query = from emprole in _db.Employeerolemap
+                                                join empdetails in _db.Employeedetails on emprole.EmployeeId equals empdetails.Id
+                                                where emprole.RoleId == roleId
+                                                select new Employeerolemap
+                                                {
+                                                    EmployeeId = emprole.EmployeeId,
+                                                    name = empdetails.Name,
+                                                    RoleId = emprole.RoleId,
+                                                    EmployeeCode = empdetails.EmployeeCode,
+                                                };
+
+            return query.ToList();
 
         }
     }

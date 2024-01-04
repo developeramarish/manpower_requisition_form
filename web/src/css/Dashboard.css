@@ -7,14 +7,17 @@
 }
 
 .dashboard_wrapper .dashboard_header {
-  margin-left: 25px;
-  margin-top: 25px;
+  margin-left: 15px;
+  margin-top: 5px;
+  
+	
 }
 
 .dashboard_header h3 {
   color: #0b1016;
   font-size: 22px;
   font-weight: 600;
+  	margin-bottom: 4px;
 }
 
 .header h4 {

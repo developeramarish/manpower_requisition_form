@@ -7,10 +7,11 @@ import ToastMessages from "./ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "./multiselectDropdown";
-import { API_URL, FILE_URL } from "../constants/config";
+import { API_URL, FILE_URL,ROLES } from "../constants/config";
 import { changeDateFormat, strToArray } from "../constants/Utils";
 
-const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
+
+const ResumeSummary = ({ roleId=null,visible, onHide, mrfId = null, dashboard = true }) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
@@ -54,7 +55,21 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       </Dialog>
     );
   }
+
+
+console.log(roleId)
+
+
   const MultiSelectDrop = (rowData, options) => {
+    if (roleId === ROLES.hr) {
+      // Return a simple date or any other content for this role
+      return (
+        <div>
+          {rowData.resumeReviewerName}
+        </div>
+      );
+    } else 
+    {
     return (
       <div>
         <MultiSelectDropdown
@@ -80,7 +95,8 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
         />
       </div>
     );
-  };
+  }
+};
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -183,8 +199,19 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       </a>
     );
   };
+
+
+       
+      const reasonTemplate=(resume)=>{
+console.log(resume.reason)
+if(!resume.reason ) return "To be Updated";
+
+return(
+  <p className="resume-reason-col">{resume.reason}</p>
+)
+      }
    
-  const columns = [
+  let columns = [
     {
       header: "Sr.No",
       body: (data, options) => options.rowIndex + 1,
@@ -227,6 +254,7 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
     {
       field: "reason",
       header: "Reason",
+      body: reasonTemplate,
       bodyClassName: "resume-reason-col",
       sortable: true,
     },
@@ -237,6 +265,9 @@ const ResumeSummary = ({ visible, onHide, mrfId = null, dashboard = true }) => {
       sortable: true,
     },
   ];
+  if (roleId === ROLES.hr) {
+    columns = columns.filter(column => column.header !== "Action");
+   };
   return (
     <div>
       <Dialog

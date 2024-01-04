@@ -62,3 +62,13 @@ header{
     margin-right: 10px;
     font-weight:700;
   }
+
+  .top_band .logoutId{
+    background-color: rgb(196, 196, 196);
+    width: 90px;
+    height: 30px;
+    border-radius: 5px;
+    margin: 21px;
+    padding: 1px;
+    color: black;
+  }

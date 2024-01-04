@@ -41,7 +41,7 @@ const attachmentBodyTemplate = (interview) => {
 };
 
 //summary component
-const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
+const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 	const [interviewData, setInterviewData] = useState([]);
 	const [interviewStatus, setInterviewStatus] = useState([]);
 	const [interviewerData, setInterviewerData] = useState([]);
@@ -80,7 +80,8 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 	// 	  </Dialog>
 	// 	);
 	//   }
-	   
+	
+	// console.log(roleId)
 
 	const statusBodyTemplate = (interview, options) => {
 		const handleDropdownChange = (e) => {
@@ -110,6 +111,13 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 	};
 
 	const interviewerBodyTemplate = (interview, options) => {
+		if (roleId === ROLES.hr)
+		{return (
+        <div>
+          {interview.interviewerName}
+        </div>);
+		}
+		else{
 		const handleMultiSelectChange = (e) => {
 			let interviewDataCopy = [...interviewData];
 			let sv = [...saveBttn];
@@ -137,6 +145,7 @@ const InterviewSummary = ({ visible, onHide, mrfId = null }) => {
 				// optionValue="employeeId"
 			/>
 		);
+				}
 	};
 
 	const feedbackBodyTemplate = (interview) => {
