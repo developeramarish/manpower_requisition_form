@@ -215,8 +215,6 @@ const updattingHiringMangerandSiteHR={
     
     };
 
-    console.log(partialStatus)
-
     try {
       let response;
 if(updatedClick){
