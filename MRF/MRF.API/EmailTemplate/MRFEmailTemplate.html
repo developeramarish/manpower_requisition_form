@@ -6,24 +6,26 @@
     <title>MRF</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Moved table styling to a class */
+        /* Use classes for styles to improve readability and reusability */
         .custom-table {
             border-collapse: collapse;
             border: 2px solid black;
             width: 100%;
         }
-        /* Combined repeated styles */
+
         th, td {
             font-family: Arial;
             font-size: small;
             text-align: center;
+            padding: 8px;
+            border: 2px solid black;
         }
 
         th {
             font-weight: bold;
             background-color: lightseagreen;
         }
-            /* Styled the header row */
+
             th:first-child {
                 border-top-left-radius: 5px;
             }
@@ -35,12 +37,7 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        /* Styled the header cell */
-        th, td {
-            padding: 8px;
-            border: 2px solid black;
-        }
-        /* Styling the title cell */
+
         .title-cell {
             font-weight: bold;
             color: white;
@@ -49,6 +46,24 @@
             font-family: Calibri;
             background-color: darkblue;
         }
+
+
+        /* Improve responsiveness by using flexbox */
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+            .actions strong {
+                margin: 0 10px;
+            }
+
+            .actions a {
+                color: inherit;
+                text-decoration: none;
+                font-weight: bold;
+            }
     </style>
 </head>
 <body>
@@ -82,6 +97,12 @@
             <td>{Justification}</td>
             <td>{MRFRaisedBy}</td>
         </tr>
+
     </table>
+    <!-- Simplify the actions section -->
+    <div class="actions">
+        <strong><a href='{approvalLink}' style="color: green; font-weight:bold;">Approve</a></strong>
+        <strong><a href='{rejectLink}' style="color: red; font-weight:bold;">Reject</a></strong>
+    </div>
 </body>
 </html>
