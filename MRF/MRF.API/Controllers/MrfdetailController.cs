@@ -28,9 +28,9 @@ namespace MRF.API.Controllers
         private MrfdetaiResponseModel _responseModel;
         private FreshmrfdetailResponseModel _responseModelf;
         private readonly ILoggerService _logger;
-        private readonly IEmailService _emailService;
+        private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();

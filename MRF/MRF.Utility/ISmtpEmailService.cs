@@ -3,5 +3,6 @@
     public interface ISmtpEmailService
     {
         void SendEmail(string receiverEmail, string subject, string body, string? attachmentPath = null);
+        public bool IsValidUpdateValue(object value);
     }
 }
