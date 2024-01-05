@@ -69,20 +69,22 @@ const MrfPartialStatus = ({
   };
 
   
-
+  const formatAndShowErrorMessage = (emptyFields) => {
+    const formattedEmptyFields = emptyFields.map(field => field.replace(/Id$/, ''));
+    const errorMessage = `Some required fields are empty: ${formattedEmptyFields.join(', ')}`;
+    toastRef.current.showBadRequestMessage(errorMessage);
+  };
 
   const handleSubmit = async (mrfStatusId) => {
     if (mrfStatusId==2 && isFormDataEmptyForSubmit(formData).length > 0) {
-      //const emptyFields = isFormDataEmptyForSubmit(formData);
-      //console.log("Empty Fields:", emptyFields);
-      toastRef.current.showBadRequestMessage(
-        "Some required fields are empty"
-      );
+      const emptyFields = isFormDataEmptyForSubmit(formData);
+      formatAndShowErrorMessage(emptyFields);
+      
       
     } else if(mrfStatusId==1 && isFormDataEmptyForSaveasDraft(formData).length > 0){
-      toastRef.current.showBadRequestMessage(
-        "Some required fields are empty"
-      );
+      const emptyFields = isFormDataEmptyForSaveasDraft(formData);
+      formatAndShowErrorMessage(emptyFields);
+      
     }
     
     else {

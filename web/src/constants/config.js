@@ -157,15 +157,16 @@ export const FORM_SCHEMA_CR = {
 };
 
 
- export const isFormDataEmptyForSubmit = (formData) => {
+  export const isFormDataEmptyForSubmit = (formData) => {
     if (formData === undefined) {
       return true; // Treat it as empty if undefined
     }
-      
+  
     return Object.keys(formData).filter((key) => {
       const value = formData[key];
+  
       // Check specific condition for certain fields, and general check for others
-      return (
+      if (
         (value === "" || value === 0 || value === null) &&
         [
           "positionTitleId", "departmentId", 
@@ -176,11 +177,25 @@ export const FORM_SCHEMA_CR = {
            "jobDescription",
           "skills"
         ].includes(key)
-      );
+      ) {
+        return true;
+      }
+  
+      // Additional check for fields related to replacements
+      if (formData.isReplacement) {
+        if (
+          ["replaceJustification", "employeeName","emailId","employeeCode","lastWorkingDate",
+          "annualCtc","annualGross"].includes(key) &&
+          value === ""
+        ) {
+          return true;
+        }
+      }
+  
+      return false;
     });
-    
   };
-
+  
 
   export const isFormDataEmptyForSaveasDraft = (formData) => {
     if (formData === undefined) {
