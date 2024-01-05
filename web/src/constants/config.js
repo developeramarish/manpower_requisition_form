@@ -168,11 +168,11 @@ export const FORM_SCHEMA_CR = {
       return (
         (value === "" || value === 0 || value === null) &&
         [
-          "positionTitleId", "departmentId", "subDepartmentId",
+          "positionTitleId", "departmentId", 
           "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
           "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId",
           "locationId", "qualificationId", "justification",
-          "minTargetSalary", "maxTargetSalary",
+          "minTargetSalary", "maxTargetSalary","vacancyTypeId",
            "jobDescription",
           "skills"
         ].includes(key)
@@ -193,8 +193,10 @@ export const FORM_SCHEMA_CR = {
       return (
         (value === "" || value === 0 || value === null) &&
         [
-          "positionTitleId", "departmentId", "subDepartmentId",
-          "projectId", "vacancyNo",  "locationId"
+          "positionTitleId", "departmentId", 
+          "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
+          "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId","vacancyTypeId",
+          "locationId"
         ].includes(key)
       );
     });
