@@ -62,12 +62,14 @@ namespace MRF.API.Controllers
             var emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Awaiting COO Approval");
             if (emailRequest != null)
             {
-                _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, htmlBody);
+               _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, htmlBody);
             }
             return mrfdetailpdf;
-        }      
+        }
         private string GetHtmlTemplateBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
         {
+            string approvalLink = Request.Host + "/api/";
+
             // Replace placeholders in HTML with data
             string messageBody = htmlBody
               .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
@@ -81,7 +83,9 @@ namespace MRF.API.Controllers
               .Replace("{SubDepartment}", mrfdetailpdf.SubDepartment)
               .Replace("{Project}", mrfdetailpdf.Project)
               .Replace("{Justification}", mrfdetailpdf.Justification)
-              .Replace("{MRFRaisedBy}", Convert.ToString(mrfdetailpdf.MRFRaisedBy));
+              .Replace("{MRFRaisedBy}", Convert.ToString(mrfdetailpdf.MRFRaisedBy))
+              .Replace("{approvalLink}", approvalLink)
+              .Replace("{rejectLink}", approvalLink);
 
             return messageBody;
         }
