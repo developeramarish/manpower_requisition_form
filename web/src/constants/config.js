@@ -58,7 +58,8 @@ export const MRF_STATUS = {
   awaitCooApproval: 12,
   awaitfinanceHeadApproval: 13,
   recivedfinanceHeadApproval: 14,
-  mrfTransferToNew: 15,
+  bypassFinanceHeadApproval:15,
+  mrfTransferToNew: 156,
 };
 
 

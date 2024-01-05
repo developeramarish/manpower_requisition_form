@@ -249,10 +249,7 @@ if (PosORPr === 1) {
     setFormData(FORM_SCHEMA_CR);
     setDropdownData({});
     setSubDepartments([]);
-    navigateTo("my_requisition");
-    //const currentHash = window.location.hash;
-    //navigateTo(currentHash);
-    //history.goBack();
+    window.history.back();
   };
 
   
@@ -466,7 +463,7 @@ if (PosORPr === 1) {
 
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="initiation-date" className="font-bold text-sm">
-                  Requirement Initiation Date
+                  Requirement Date
                   <RedAsterisk />
                 </label>
                 <CalendarComponent
@@ -589,7 +586,7 @@ if (PosORPr === 1) {
               <div className="flex flex-column w-5 gap-2">
                 <label htmlFor="experience" className="font-bold text-sm">
                   Experience
-                  <RedAsterisk />
+                  
                 </label>
                 <div className="p-col-7">
                   <label className="font-bold text-sm label-with-padding-right">
@@ -632,7 +629,7 @@ if (PosORPr === 1) {
               <div className="flex flex-column w-6 row-gap-2">
                 <label htmlFor="gender" className="font-bold text-sm">
                   Gender
-                  <RedAsterisk />
+                 
                 </label>
                 <DropdownComponent
                   optionLabel="label"
@@ -649,7 +646,7 @@ if (PosORPr === 1) {
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="qualification" className="font-bold text-sm">
                   Qualification
-                  <RedAsterisk />
+                  
                 </label>
                 <DropdownComponent
                   optionLabel="type"
@@ -828,7 +825,7 @@ if (PosORPr === 1) {
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="skills" className="font-bold text-sm">
                   Skills
-                  <RedAsterisk />
+                 
                 </label>
                 <EditorComponent
                   value={formData.skills}
@@ -842,7 +839,7 @@ if (PosORPr === 1) {
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="Justification" className="font-bold text-sm">
                   Justification
-                  <RedAsterisk />
+                  
                 </label>
 
                 <InputTextareaComponent
@@ -865,7 +862,7 @@ if (PosORPr === 1) {
                     className="font-bold text-sm"
                   >
                     Min Target Salary
-                    <RedAsterisk />
+                    
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
@@ -880,7 +877,7 @@ if (PosORPr === 1) {
                     className="font-bold text-sm"
                   >
                     Max Target Salary
-                    <RedAsterisk />
+                   
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
@@ -1076,7 +1073,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.siteHRSPOCEmpId}
-                  disable={commonSettings.setSiteHRSPOCApproval}
+                  // disable={commonSettings.setSiteHRSPOCApproval}
                 />
               </div>
               <div className="flex flex-column gap-2">
@@ -1105,7 +1102,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   
                   onChange={(e) => setFormData({ ...formData, Position: 8 })}
-                  value="Function Head"
+                  value="HOD"
                 />
               </div>
 
@@ -1117,7 +1114,7 @@ if (PosORPr === 1) {
                   type="functionHead"
                   options={dropdownData.functionHead}
                   value={formData.functionHeadId}
-                  disable={commonSettings.setHodapproval}
+                  disable={commonSettings.setHodapprovalName}
                   onChange={(e) => {
                     const selectedfunctionHeadId = e.target.value;
                     const selectedfunctionHead = dropdownData.functionHead.find(
@@ -1146,7 +1143,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.functionHeadEmpId}
-                  disable={commonSettings.setHodapproval}
+                  // disable={commonSettings.setHodapproval}
                 />
               </div>
 
@@ -1155,7 +1152,7 @@ if (PosORPr === 1) {
                   id="fhApprovalDate"
                   inputClassName="bg-gray-100"
                   value={new Date(formData.fhApprovalDate)}
-                  disable={commonSettings.setCooapproval}
+                  disable={commonSettings.setHodapprovalDate}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1185,7 +1182,7 @@ if (PosORPr === 1) {
                   type="financeHead"
                   options={dropdownData.financeHead}
                   value={formData.financeHeadId}
-                  disable={commonSettings.setFinanceHeadApproval}
+                  disable={commonSettings.setFinanceHeadApprovalName}
                   onChange={(e) => {
                     const selectedfinanceHeadId = e.target.value;
                     const selectedfinanceHeadEmpId =
@@ -1215,7 +1212,7 @@ if (PosORPr === 1) {
                     })
                   }
                   value={formData.financeHeadEmpId}
-                  disable={commonSettings.setFinanceHeadApproval}
+                  // disable={commonSettings.setFinanceHeadApproval}
                 />
               </div>
               <div className="flex flex-column gap-2">
@@ -1224,7 +1221,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.fiApprovalDate)}
                   minDate={new Date()}
-                  disable={commonSettings.awatingFinance}
+                  disable={commonSettings.setFinanceHeadApprovalDate}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1242,7 +1239,7 @@ if (PosORPr === 1) {
                   className="p-disabled"
                   onChange={(e) => setFormData({ ...formData, Position: 11 })}
                   value="President & COO"
-                  disable={commonSettings.setCooapproval}
+                  // disable={commonSettings.setCooapproval}
                 />
               </div>
 
@@ -1254,7 +1251,7 @@ if (PosORPr === 1) {
                   type="presidentnCOO"
                   options={dropdownData.presidentnCOO}
                   value={formData.presidentnCOOId}
-                  disable={commonSettings.setCooapproval}
+                  disable={commonSettings.setCooapprovalName}
                   onChange={(e) => {
                     const selectedpresidentnCOOId = e.target.value;
                     const selectedpresidentnCOOEmpId =
@@ -1295,7 +1292,7 @@ if (PosORPr === 1) {
                   inputClassName="bg-gray-100"
                   value={new Date(formData.pcApprovalDate)}
                   minDate={new Date()}
-                  disable={commonSettings.setFinanceHeadApproval}
+                  disable={commonSettings.setCooapprovalDate}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1364,7 +1361,7 @@ if (PosORPr === 1) {
                           label={"Withdraw"}
                           formData={formData}
 
-                          message={"Do you want to withdraw this MRF"}
+                          message={"Do you want to withdraw this MRF?"}
                         />
                       </>
                     );
@@ -1454,7 +1451,7 @@ if (PosORPr === 1) {
                           mrfStatusId={9}
                           label={"Withdraw"}
                           formData={formData}
-                          message={"Do you want to withdraw this MRF"}
+                          message={"Do you want to withdraw this MRF?"}
                         />
                       </>
                     );
@@ -1489,17 +1486,17 @@ if (PosORPr === 1) {
                           formData={formData}
 
                         />
-
-                        <MrfPartialStatus
+  <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={11}
                           label={"Send for HOD approval"}
                           formData={formData}
                           disabled={(formData.functionHeadId != 0)? false:true}
                           message={
-                            "“Do you want to submit it for HOD approval?"
+                            "Do you want to submit it for HOD approval?"
                           }
                         />
+                        
 
                         <MrfPartialStatus
                           mrfId={getReqId}
@@ -1554,9 +1551,9 @@ if (PosORPr === 1) {
                           mrfStatusId={11}
                           formData={formData}
 
-                          label={"Received HOD approval"}
+                          label={"Send to HOD approval"}
                           message={
-                            "“Do you want to submit it for HOD approval?"
+                            "Do you want to submit it for HOD approval?"
                           }
                         />
                       </>
@@ -1573,16 +1570,30 @@ if (PosORPr === 1) {
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
-                          mrfStatusId={5}
-                          label={"Received COO approval"}
+                          mrfStatusId={mrfStatusId}
+                          label={"Update"}
                           formData={formData}
-                          message={"Do you want to submit it for COO approval?"}
+                          // updatedClick={true}
+                          message={"Are you sure you want to update?"}
+                          
                         />
-
+                        <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={13}
+                          formData={formData}
+                          label={"Send to Finance Head approval"}
+                          disabled={(formData.financeHeadId != 0)? false:true}
+                          // financeHeadClick={true}
+                          message={
+                            "Do you want to submit it for Finance Head approval?"
+                          }
+                        />
+                      
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={7}
                           label={"On Hold"}
+                          formData={formData}
                           message={"Do you want to hold on this MRF?"}
                         />
                       </>
@@ -1597,18 +1608,16 @@ if (PosORPr === 1) {
                           outlined="true"
                           // disable="true"
                         />
-                        <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={6}
-                          label={"Open"}
-                          message={"Do you want to change the status to Open?"}
-                        />
-                        <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={7}
-                          label={"On Hold"}
-                          message={"Do you want to hold on this MRF?"}
-                        />
+                      
+                         <MrfPartialStatus
+                            mrfId={getReqId}
+                            mrfStatusId={6}
+                            label={"Open"}
+                            formData={formData}
+
+                            message={"Do you want to open this MRF?"}
+                          /> 
+                       
                       </>
                     );
                   case MRF_STATUS.resubReq:
@@ -1656,14 +1665,15 @@ if (PosORPr === 1) {
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
-                          mrfStatusId={12}
+                          mrfStatusId={4}
                           formData={formData}
                           label={"Received HOD approval"}
-                          disabled={(formData.presidentnCOOId != 0)? false:true}
+                          // disabled={(formData.presidentnCOOId != 0)? false:true}
                           message={
-                            "“Do you want to submit it for COO approval?"
+                            "Do you want to submit it as Received HOD Approval?"
                           }
                         />
+                        
                       </>
                     );
                   case MRF_STATUS.awaitfinanceHeadApproval:
@@ -1687,11 +1697,22 @@ if (PosORPr === 1) {
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
+                          mrfStatusId={15}
+                          formData={formData}
+                          label={"By Pass"}
+                          message={"Do you want to ByPass MRF?"}
+                        />
+                         <MrfPartialStatus
+                          mrfId={getReqId}
                           mrfStatusId={14}
                           formData={formData}
-                          label={"Received Finance Approval"}
-                          message={"Are you Sure"}
+                          label={"Received Finance Head approval"}
+                          // disabled={(formData.presidentnCOOId != 0)? false:true}
+                          message={
+                            "Do you want to submit it as Received Finance Head approval?"
+                          }
                         />
+                        
                       </>
                     );
                     case MRF_STATUS.recivedfinanceHeadApproval:
@@ -1705,15 +1726,44 @@ if (PosORPr === 1) {
                             outlined="true"
                             // disable="true"
                           />
+                           <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={12}
+                          formData={formData}
+                          label={"Send to COO approval"}
+                          cooClick={true}
+                          disabled={(formData.presidentnCOOId != 0)? false:true}
+                          message={
+                            "Do you want to submit it for COO approval?"
+                          }
+                        /> 
                         
-                          <MrfPartialStatus
-                            mrfId={getReqId}
-                            mrfStatusId={6}
-                            label={"Open"}
+                          
+                        </>
+                      );
+                      case MRF_STATUS.bypassFinanceHeadApproval:
+                      return (
+                        <>
+                          <ButtonC
+                            label="CANCEL"
+                            className=" w-2 surface-hover border-red-600 text-red-600"
+                            onClick={handleCancel}
                             formData={formData}
-
-                            message={"Do you want to open this MRF "}
+                            outlined="true"
+                            // disable="true"
                           />
+                        <MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={12}
+                          formData={formData}
+                          label={"Send to COO approval"}
+                          // cooClick={true}
+                          disabled={(formData.presidentnCOOId != 0)? false:true}
+                          message={
+                            "Do you want to submit it for COO approval?"
+                          }
+                        />
+                    
                         </>
                       );
                   case MRF_STATUS.awaitCooApproval:
@@ -1737,12 +1787,12 @@ if (PosORPr === 1) {
                         />
                         <MrfPartialStatus
                           mrfId={getReqId}
-                          mrfStatusId={13}
+                          mrfStatusId={5}
                           formData={formData}
-                          disabled={(formData.financeHeadId != 0)? false:true}
+                          // disabled={(formData.financeHeadId != 0)? false:true}
 
                           label={"Received COO approval"}
-                          message={"“Do you want to submit it for Finance Head approval?"}
+                          message={"Do you want to submit it as Received COO Approval?"}
                         />
                       </>
                     );
@@ -1756,6 +1806,7 @@ if (PosORPr === 1) {
                           outlined="true"
                           // disable="true"
                         />
+                        
                         <ButtonC
                           label="Add Resume"
                           className="w-2 bg-red-600 border-red-600"
