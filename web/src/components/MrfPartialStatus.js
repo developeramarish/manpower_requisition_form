@@ -175,7 +175,26 @@ const MrfPartialStatus = ({
     }
   };
 
+
+// const financeHead=()=>{
+//   console.log("from finanace head functon")
+//   formData.presidentnCOOId=0;
+//   formData.presidentnCOOEmpId=0;
+// }
+// const coo=()=>{
+//   console.log("from coo functon")
+//   formData.financeHeadId=0;
+//   formData.financeHeadEmpId=0;
+// }
+
+
   const submitPartial = async () => {
+
+
+// {financeHeadClick && (financeHead())}
+// {cooClick && (coo())}
+
+console.log(formData)
     const updattingHiringMangerandSiteHR = {
       mrfStatusId: mrfStatusId,
       note: note || null,
