@@ -70,7 +70,7 @@ namespace MRF.API.Controllers
                             var mailAttr = entry.Attributes["mail"];
                             var description = entry.Attributes["description"];
                             if (sAMAccountNameAttr != null && sAMAccountNameAttr.Count > 0
-                                && mailAttr != null && mailAttr.Count > 0)
+                                && mailAttr != null && mailAttr.Count > 0 && description != null && description.Count > 0)
                             {
                                 ldapEmployees.Add(new LdapEmployeeDTO
                                 {
