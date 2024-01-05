@@ -45,11 +45,30 @@ namespace MRF.Utility
             }
             catch (SmtpException ex)
             {
-                _logger.LogError($"Failed to send email. SMTP Error message: {ex.Message}");
+                _logger.LogError("SMTP ERROR START");
+                _logger.LogError($"message: {ex.Message}");
+                _logger.LogError($"StatusCode: {ex.StatusCode}");
+                _logger.LogError($"Source: {ex.Source}");
+                _logger.LogError($"Data: {ex.Data}");
+                _logger.LogError($"InnerException: {ex.InnerException}");
+                _logger.LogError($"StackTrace: {ex.StackTrace}");                
+                _logger.LogError($"HResult: {ex.HResult}");
+                _logger.LogError($"TargetSite: {ex.TargetSite}");
+                _logger.LogError("SMTP ERROR END");
             }
             catch (Exception ex)
             {
+                _logger.LogError("EMAIL ERROR START");
+                _logger.LogError($"message: {ex.Message}");                
+                _logger.LogError($"Source: {ex.Source}");
+                _logger.LogError($"Data: {ex.Data}");
+                _logger.LogError($"InnerException: {ex.InnerException}");
+                _logger.LogError($"StackTrace: {ex.StackTrace}");
+                _logger.LogError($"HResult: {ex.HResult}");
+                _logger.LogError($"TargetSite: {ex.TargetSite}");
+                _logger.LogError("SMTP ERROR END");
                 _logger.LogError($"Failed to send email. Error message: {ex.Message}");
+                _logger.LogError("EMAIL ERROR END");
             }
         }
 
