@@ -35,14 +35,14 @@ const attachmentBodyTemplate = (interview) => {
 	let attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
 	return (
 		<a href={attachmentLink} target="_blank" className="int-link-cell">
-			Assignment
+			 
 		</a>
 	);
 };
 
 //summary component
 
-const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
+const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=null }) => {
 
 	const [interviewData, setInterviewData] = useState([]);
 	const [interviewStatus, setInterviewStatus] = useState([]);
@@ -53,7 +53,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 
 	async function getIntData() {
 		const apiUrl =
-		  API_URL.INTERVIEW_SUMMARY_POPUP + `?id=${mrfId}&DashBoard=true`;
+		  API_URL.INTERVIEW_SUMMARY_POPUP + `?id=${mrfId}&DashBoard=true&roleId=${roleId}&userId=${userId}`;
 		let response = await getData(apiUrl);
 		const data = response.result;
 		let arr = new Array(data.interviewDetails.length).fill(false);
@@ -114,11 +114,11 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 
 	const interviewerBodyTemplate = (interview, options) => {
 		if (roleId === ROLES.hr)
-		{return (
+		{
+			return (
         <div>
           {interview.interviewerName}
-        </div>);
-		}
+        </div>);}
 		else{
 		const handleMultiSelectChange = (e) => {
 			let interviewDataCopy = [...interviewData];
@@ -131,7 +131,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 			setInterviewData(interviewDataCopy);
 			setSaveBttn(sv);
 		};
-
+		 
 		return (
 			<MultiSelectDropdown
 				className="drop-width"
@@ -148,7 +148,9 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 			/>
 		);
 				}
-	};
+			};
+
+	
 
 	const feedbackBodyTemplate = (interview) => {
 		if (interview.evalutionStatusId < 5) return "To be updated";
@@ -202,7 +204,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null }) => {
 			sortable: true,
 		},
 		{
-			field: "interviewerName",
+			field: "interviewerEmployeeIds",
 			header: "Interviewer/ Panel",
 			body: interviewerBodyTemplate,
 			bodyClassName: "drop-col",

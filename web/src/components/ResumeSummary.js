@@ -11,7 +11,7 @@ import { API_URL, FILE_URL,ROLES } from "../constants/config";
 import { changeDateFormat, strToArray } from "../constants/Utils";
 
 
-const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard = true}) => {
+const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard = true,userId=null}) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
@@ -25,7 +25,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 
   const fetchData = () => {
     try {
-      fetch(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}`)
+      fetch(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`)
         .then((response) => response.json())
         .then((data) => {
           setdata(data.result.resumeDetails);
@@ -56,6 +56,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
     );
   }
   const MultiSelectDrop = (rowData, options) => {
+    console.log(rowData);
     if (roleId === ROLES.hr || roleId === ROLES.interviewer) {
       // Return a simple date or any other content for this role
       return (
