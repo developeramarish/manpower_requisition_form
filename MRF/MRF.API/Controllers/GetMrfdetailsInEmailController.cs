@@ -10,7 +10,7 @@ namespace MRF.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MrfdetailsPDFController : ControllerBase
+    public class GetMrfdetailsInEmailController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
@@ -19,7 +19,7 @@ namespace MRF.API.Controllers
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IHTMLtoPDF _hTMLtoPDF;
         
-        public MrfdetailsPDFController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF)
+        public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
