@@ -91,9 +91,9 @@ export function applySettingsBasedOnRoleAndStatus(
           setSiteHRSPOCApproval: false,
           setHodapprovalName: true,
           setHodapprovalDate: true,
-          setCooapprovalName: false,
+          setCooapprovalName: true,
           setCooapprovalDate: true,
-          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalName: false,
           setFinanceHeadApprovalDate: true,
           awatingFinance: true,
           recievedFinance: true,
@@ -115,13 +115,13 @@ export function applySettingsBasedOnRoleAndStatus(
       } else if (mrfStatusId == MRF_STATUS.cooapproval) {
         applyCommonSettings({
           setReadOnly: true,
-          setHiringManager: false,
-          setSiteHRSPOCApproval: false,
+          setHiringManager: true,
+          setSiteHRSPOCApproval: true,
           setHodapprovalName: true,
           setHodapprovalDate: true,
           setCooapprovalName: true,
           setCooapprovalDate: true,
-          setFinanceHeadApprovalName: false,
+          setFinanceHeadApprovalName: true,
           setFinanceHeadApprovalDate: true,
           awatingFinance: true,
           recievedFinance: true,
@@ -138,7 +138,31 @@ export function applySettingsBasedOnRoleAndStatus(
           setFinanceHeadApprovalName: true,
           setFinanceHeadApprovalDate: false,
         });
-      } else {
+      } else if (mrfStatusId == MRF_STATUS.recivedfinanceHeadApproval) {
+        applyCommonSettings({
+          setReadOnly: true,
+          setHiringManager: false,
+          setSiteHRSPOCApproval: false,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: false,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
+        });
+      }else if (mrfStatusId == MRF_STATUS.bypassFinanceHeadApproval) {
+        applyCommonSettings({
+          setReadOnly: true,
+          setHiringManager: false,
+          setSiteHRSPOCApproval: false,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: false,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
+        });
+      }else {
         applyCommonSettings(commonSettings);
       }
 
