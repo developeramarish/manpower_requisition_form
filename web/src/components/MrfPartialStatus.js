@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { API_URL, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
+import { API_URL, MRF_STATUS, REQUISITION_TYPE,isFormDataEmptyForSaveasDraft,
+isFormDataEmptyForSubmit } from "../constants/config";
 import { storageService } from "../constants/storage";
 import { formatDateToYYYYMMDD, navigateTo } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
@@ -67,7 +68,28 @@ const MrfPartialStatus = ({
     );
   };
 
+  
+  const formatAndShowErrorMessage = (emptyFields) => {
+    const formattedEmptyFields = emptyFields.map(field => field.replace(/Id$/, ''));
+    const errorMessage = `Some required fields are empty: ${formattedEmptyFields.join(', ')}`;
+    toastRef.current.showBadRequestMessage(errorMessage);
+  };
+
   const handleSubmit = async (mrfStatusId) => {
+    if (mrfStatusId==2 && isFormDataEmptyForSubmit(formData).length > 0) {
+      const emptyFields = isFormDataEmptyForSubmit(formData);
+      formatAndShowErrorMessage(emptyFields);
+      
+      
+    } else if(mrfStatusId==1 && isFormDataEmptyForSaveasDraft(formData).length > 0){
+      const emptyFields = isFormDataEmptyForSaveasDraft(formData);
+      formatAndShowErrorMessage(emptyFields);
+      
+    }
+    
+    else {
+      console.log("Form data is valid. Submitting...");
+      
     setIsLoading(true);
     const data = {
       referenceNo: formData.referenceNo,
@@ -173,6 +195,7 @@ const MrfPartialStatus = ({
     } finally {
       setIsLoading(false);
     }
+  }
   };
 
 
