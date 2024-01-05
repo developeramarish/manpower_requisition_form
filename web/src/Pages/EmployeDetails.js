@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import DashboardHeader from "./Header";
-import LeftPanel from "./LeftPanel";
-import DataTableComponents from "./../components/DataTableComponent";
-import SearchText from "./SearchText";
 import ButtonC from "./../components/Button";
+import "../styles/layout/MyRequisitionsBody.css";
 import { Toolbar } from "primereact/toolbar";
-// import { useNavigate } from "react-router-dom";
 import EmployeeDtailsEdit from "./EmployeeDtailsEdit";
-import "../styles/layout/MyRequisitions.css";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import { API_URL } from "../constants/config";
+
 export default function EmployeDetails() {
   const [data, setData] = useState([{}]);
   const [editMode, setEditMode] = useState(false);
   const [editData, setEditData] = useState();
-  // const navigate = useNavigate();
+   
   //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means
   React.useEffect(() => {
-    const url = "https://localhost:7128/api/Employeedetails/GetEmployee/0";
+    const url = API_URL.GET_EMPLOYEE_DETAILS+"/0";
     fetch(url)
       .then((response) => {
         return response.json();
@@ -27,26 +26,20 @@ export default function EmployeDetails() {
       .catch((error) => console.log(error));
   }, []);
 
-  const columns = [
-    { columnName: "Sr No.", field: "id" },
-    { columnName: "Name", field: "name" },
-    { columnName: "Email", field: "email" },
-    { columnName: "contactNo", field: "contactNo" },
-    { columnName: "Role", field: "roleName" },
-  ];
-  const leftToolbarTemplate = () => {
-    return (
-      <div className="flex flex-wrap gap-2">
-        <ButtonC
-          label="New"
-          icon="pi pi-plus"
-          severity="success"
-          onClick={() => {
-            /* navigate("/EmployeDetailsCreate") */}}
-        />
-      </div>
-    );
-  };
+ 
+  // const leftToolbarTemplate = () => {
+  //   return (
+  //     <div className="flex flex-wrap gap-2">
+  //       <ButtonC
+  //         label="New"
+  //         icon="pi pi-plus"
+  //         severity="success"
+  //         onClick={() => {
+  //           /* navigate("/EmployeDetailsCreate") */}}
+  //       />
+  //     </div>
+  //   );
+  // };
   const [isDeleted] = useState(true);
 
   const Removefunction = (
@@ -75,7 +68,7 @@ export default function EmployeDetails() {
     };
 
     if (window.confirm("Do you want to remove?")) {
-      fetch("https://localhost:7128/api/Employeedetails/Put/" + id, {
+      fetch(API_URL.UPDATE_EMPLOYEE + id, {
         method: "Put",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(empdata),
@@ -100,6 +93,7 @@ export default function EmployeDetails() {
     setEditMode(true);
   };
   const actionBodyTemplate = (rowData) => {
+    console.log(rowData);
     return (
       <React.Fragment>
         <ButtonC
@@ -135,63 +129,73 @@ export default function EmployeDetails() {
       </React.Fragment>
     );
   };
-
+  const columns = [
+		{
+			field: "id",
+			header: "Sr No.",
+			bodyClassName: "ref-col",
+		},
+		{
+			field: "name",
+			header: "Name",
+			sortable: true,
+		},
+		{
+			field: "email",
+			header: "Email",
+			sortable: true,
+		},
+		{
+			field: "contactNo",
+			header: "contactNo",
+			sortable: true,
+		},
+		{
+			field: "roleName",
+			header: "Role",
+			sortable: true,
+		},
+    {
+      header: "Action",
+      body:actionBodyTemplate,
+			sortable: true,
+		},
+	];
   return (
-    <div>
-      <div>
-        <DashboardHeader />
-      </div>
-      <div style={{ display: "flex" }}>
-        <div className=" ">
-          <LeftPanel />
-        </div>
-        <div className="MyResume">
-          {!editMode && (
-            <div >
-              <div >
-                <h3 className="text-black-alpha-90  text-2xl font-bold  m-4">
-                  Employee Details
-                </h3>
-                {/* <label class="box" >Employee Details</label> */}
-                {/* <div class="SearchText"><SearchText/></div> */}
-              </div>
-              <Toolbar className="m-4" left={leftToolbarTemplate}></Toolbar>
-              <div className="m-4">
-                <DataTableComponents
-                  data={data}
-                  scrollable            
-                 columns={columns}
-                  body={actionBodyTemplate}
-                  rows={10}
-                />
-              </div>
-            </div>
-          )}
-          {editMode && (
+    
+		<div className="my-req">
+    {(!editMode) && (
+      <>
+			<h3 className="my-req-title">Employee Details</h3>
+			<div className="req-table">
+				<DataTable
+					header=""
+					value={data}
+					paginator={data.length > 10}
+					removableSort
+					rows={10}
+					scrollable
+					scrollHeight="flex"
+				>
+					{columns.map((col,index) => (
+						<Column
+						key={index}
+							field={col.field}
+							header={col.header}
+							body={col.body}
+							bodyClassName={"req-col " + col.bodyClassName}
+							sortable={col.sortable}
+						/>
+					))}
+          
+				</DataTable>
+			</div>
+      </>
+      )}
+      {(editMode)  && (
             <EmployeeDtailsEdit id={editData} updateData={updateData} />
           )}
-        </div>
-      </div>
-
-      {/* <DashboardHeader />
-      <div style={{ display: 'flex' }}>
-        <LeftPanel />
-       {!editMode && 
-        <div className = "bar">
-          <div className="containerH">
-              <label class="box" >Employee Details</label>
-              <div class="SearchText"><SearchText/></div>
-          </div>
-        <Toolbar className="mb-4" left={leftToolbarTemplate} ></Toolbar>         
-          <div className = "bar"><DataTableComponents data= {data}  columns={columns} body={actionBodyTemplate} rows={5} />
-    
-         </div>
-      </div>  
-      }
-      {editMode && <EmployeeDtailsEdit id={editData} updateData = {updateData}/>
-
-      }
-    </div> */}
-    </div>
-  );
+		</div>
+	);
+   
 }

@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import DropdownComponent from './../components/Dropdown';
 import InputTextCp from "./../components/Textbox";
-import ButtonC from "./../components/Button";
-// import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button } from 'primereact/button';
+import ButtonC from "./../components/Button"
+import { API_URL } from '../constants/config';
+
+
 const EmployeeDtailsEdit = ({id, updateData}) => {
-  // const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
 useEffect(() => {
-  console.log("id   ",id)
-  fetch("https://localhost:7128/api/Employeedetails/GetEmployee/" + id).then((res) => {
+  fetch(API_URL.GET_EMPLOYEE_DETAILS + id).then((res) => {
     console.log("resut for res  ", res)
       return res.json();
   }).then((result) => {
      namechange(result.result[0].name);
-    emailchange(result.result[0].email);
+     emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
       employeeChange(result.result[0].employeeCode);
       setRole(result.result[0].roleId);
@@ -40,7 +39,7 @@ const [isAllowed] = useState(true);
 const [updatedOnUtc] = useState(new Date().toISOString());
 const [roleOptions, roleOptionchange] = useState([]);
   const fetchData = () => {
-    const apiUrl = `https://localhost:7128/api/Role`;
+    const apiUrl = API_URL.GET_ROLE;
     fetch(apiUrl)
       .then(response => response.json())
       .then(responseData => {
@@ -66,7 +65,7 @@ const [roleOptions, roleOptionchange] = useState([]);
       createdOnUtc,updatedByEmployeeId,updatedOnUtc};
 
 
-    fetch("https://localhost:7128/api/Employeedetails/Put/"+id, {
+    fetch(API_URL.UPDATE_EMPLOYEE +id, {
       method: "Put",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(empdata)
@@ -86,12 +85,12 @@ const [roleOptions, roleOptionchange] = useState([]);
       {/* <LeftPanel /> */}
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
-      style={{ width: "210vw"} }
+      style={{ width: "190vw"} }
     >
       <h3 className="text-xl my-2">Fill the Details</h3>
+      
       <section
-        className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
-        style={{ height: "90%" }}
+
       >
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
@@ -135,13 +134,13 @@ const [roleOptions, roleOptionchange] = useState([]);
             <DropdownComponent
               optionLabel="name"
               optionValue="value"
-              value={roleId}
+              value={console.log('roleId>>',roleId) || roleId.length && roleId}
               type="roleId"
               options={roleOptions}
               //placeholder={}
               onChange={e => {
-                console.log(e.target)
-                setRole(e.target )
+                console.log('e.target.value>>', e.target)
+                setRole(e.target)
               }
               }
             />
@@ -149,12 +148,14 @@ const [roleOptions, roleOptionchange] = useState([]);
          </div>
          
         </div>
-      <div className="flex justify-content gap-5">
+        <div style={{    display: 'flex', flexDirection:'row',width: '50%',
+    justifyContent: 'center',
+    marginTop: '15px'}}>
         <ButtonC  severity="danger" label="CANCEL" onClick={() => updateEditmode(false)}></ButtonC>
-        <Button label="SUBMIT" severity="primary" onClick={handlesubmit} />
+        <ButtonC style={{ marginLeft:'15px'}} label="SUBMIT" severity="primary" onClick={handlesubmit} />
       </div>
 
-        </section>
+         </section> 
       </div>  
       </div>
    
