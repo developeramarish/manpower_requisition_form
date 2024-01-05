@@ -53,6 +53,15 @@ namespace MRF.Utility
             }
         }
 
+        public bool IsValidUpdateValue(object value)
+        {
+            return value != null
+                && !(value is int intValue && intValue == 0)
+                && !(value is string stringValue && stringValue.Equals("string"))
+                && !string.IsNullOrEmpty(value.ToString())
+                && !(value is DateOnly dateOnlyValue && dateOnlyValue.Year == 1)
+                && !(value is bool boolValue && !boolValue);
+        }
         public void Dispose()
         {
             smtpClient.Dispose();
