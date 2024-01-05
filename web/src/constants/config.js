@@ -210,10 +210,12 @@ export const FORM_SCHEMA_CR = {
         [
           "positionTitleId", "departmentId", 
           "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
-          "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId","vacancyTypeId",
+          "reportsToEmployeeId",  "minGradeId", "maxGradeId","vacancyTypeId",
           "locationId"
         ].includes(key)
       );
     });
     
   };
+
+ 
