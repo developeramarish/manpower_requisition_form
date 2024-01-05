@@ -18,10 +18,10 @@ namespace MRF.Utility
         public SmtpEmailService(IConfiguration configuration, ILogger<SmtpEmailService> logger)
         {
             _configuration = configuration;
-            senderEmail = _configuration["SendGridSettings:senderEmail"];
-            password = _configuration["SendGridSettings:password"];
-            smtpServer = _configuration["SendGridSettings:smtpServer"];
-            smtpPort = Convert.ToInt32(_configuration["SendGridSettings:smtpPort"]);
+            senderEmail = _configuration["SMTP:senderEmail"];
+            password = _configuration["SMTP:password"];
+            smtpServer = _configuration["SMTP:Server"];
+            smtpPort = Convert.ToInt32(_configuration["SMTP:Port"]);
             _logger = logger;
             smtpClient = new SmtpClient(smtpServer, smtpPort);
             smtpClient.Credentials = new NetworkCredential(senderEmail, password);
