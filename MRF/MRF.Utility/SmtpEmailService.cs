@@ -34,6 +34,7 @@ namespace MRF.Utility
             {
                 using (MailMessage mailMessage = new MailMessage(senderEmail, receiverEmail, subject, body))
                 {
+                    mailMessage.IsBodyHtml = true;
                     if (!string.IsNullOrEmpty(attachmentPath))
                     {
                         Attachment attachment = new Attachment(attachmentPath);
