@@ -155,3 +155,48 @@ export const FORM_SCHEMA_CR = {
 
   
 };
+
+
+ export const isFormDataEmptyForSubmit = (formData) => {
+    if (formData === undefined) {
+      return true; // Treat it as empty if undefined
+    }
+      
+    return Object.keys(formData).filter((key) => {
+      const value = formData[key];
+      // Check specific condition for certain fields, and general check for others
+      return (
+        (value === "" || value === 0 || value === null) &&
+        [
+          "positionTitleId", "departmentId", "subDepartmentId",
+          "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
+          "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId",
+          "locationId", "qualificationId", "justification",
+          "minTargetSalary", "maxTargetSalary",
+           "jobDescription",
+          "skills"
+        ].includes(key)
+      );
+    });
+    
+  };
+
+
+  export const isFormDataEmptyForSaveasDraft = (formData) => {
+    if (formData === undefined) {
+      return true; // Treat it as empty if undefined
+    }
+      
+    return Object.keys(formData).filter((key) => {
+      const value = formData[key];
+      // Check specific condition for certain fields, and general check for others
+      return (
+        (value === "" || value === 0 || value === null) &&
+        [
+          "positionTitleId", "departmentId", "subDepartmentId",
+          "projectId", "vacancyNo",  "locationId"
+        ].includes(key)
+      );
+    });
+    
+  };
