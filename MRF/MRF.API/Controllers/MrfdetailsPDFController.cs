@@ -15,11 +15,11 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private ResponseDTO _response;
         private readonly ILoggerService _logger;
-        private readonly IEmailService _emailService;
+        private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IHTMLtoPDF _hTMLtoPDF;
         
-        public MrfdetailsPDFController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF)
+        public MrfdetailsPDFController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -62,7 +62,7 @@ namespace MRF.API.Controllers
             var emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Awaiting COO Approval");
             if (emailRequest != null)
             {
-               _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, htmlBody);
+               _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, htmlBody);
             }
             return mrfdetailpdf;
         }
