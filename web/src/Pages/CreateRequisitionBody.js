@@ -742,17 +742,18 @@ if (PosORPr === 1) {
                     <label htmlFor="EmployeeCode" className="font-bold text-sm">
                       Employee Code
                     </label>
-                    <InputTextCp
-                      id="EmployeeCode"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          employeeCode: e.target.value,
-                        })
-                      }
+                    <InputNumberComponent
+                    id="EmployeeCode"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        employeeCode: e.target.value,
+                      })}
                       value={formData.employeeCode}
                       disable={commonSettings.setReadOnly}
-                    />
+                  />
+
+                    
                   </div>
                 </div>
                 <div className="flex justify-content-between gap-5">
@@ -760,28 +761,30 @@ if (PosORPr === 1) {
                     <label htmlFor="AnnualCTC" className="font-bold text-sm">
                       Annual CTC
                     </label>
-                    <InputTextCp
-                      id="AnnualCTC"
-                      onChange={(e) =>
-                        setFormData({ ...formData, annualCtc: e.target.value })
-                      }
-                      value={formData.annualCtc}
-                      disable={commonSettings.setReadOnly}
-                    />
+                    <InputNumberComponent
+                    id="AnnualCTC"
+                    onChange={(e) =>
+                      setFormData({ ...formData, annualCtc: e.target.value })
+                    }
+                    value={formData.annualCtc}
+                    disable={commonSettings.setReadOnly}
+                  />
+                    
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
                       Annual Gross
                     </label>
-                    <InputTextCp
-                      id="AnnualGross"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          annualGross: e.target.value,
-                        })
-                      }
-                      value={formData.annualGross}
-                      disable={commonSettings.setReadOnly}
-                    />
+                    <InputNumberComponent
+                     id="AnnualGross"
+                     onChange={(e) =>
+                       setFormData({
+                         ...formData,
+                         annualGross: e.target.value,
+                       })
+                     }
+                     value={formData.annualGross}
+                     disable={commonSettings.setReadOnly}
+                  />
+                    
                   </div>
 
                   <div className="flex flex-column w-6 gap-2">
@@ -936,6 +939,8 @@ if (PosORPr === 1) {
                 />
               </div>
             </div>
+            { getReqRoleId  && (
+              <>
             <div className="flex justify-content-between">
               <h1 className="my-2 ">
                 EMAIL APPROVAL/SIGNATURE DATES
@@ -1302,6 +1307,8 @@ if (PosORPr === 1) {
                 />
               </div>
             </div>
+            </>
+            )}
           </section>
 
           <div className="flex flex-wrap justify-content-end gap-5 mt-3">

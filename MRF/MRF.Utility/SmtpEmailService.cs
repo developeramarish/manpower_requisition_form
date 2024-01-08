@@ -34,6 +34,7 @@ namespace MRF.Utility
             {
                 using (MailMessage mailMessage = new MailMessage(senderEmail, receiverEmail, subject, body))
                 {
+                    mailMessage.IsBodyHtml = true;
                     if (!string.IsNullOrEmpty(attachmentPath))
                     {
                         Attachment attachment = new Attachment(attachmentPath);
@@ -45,11 +46,15 @@ namespace MRF.Utility
             }
             catch (SmtpException ex)
             {
-                _logger.LogError($"Failed to send email. SMTP Error message: {ex.Message}");
+                _logger.LogError("SMTP ERROR START");
+                _logger.LogError($"message: {ex.Message}");              
+                _logger.LogError("SMTP ERROR END");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to send email. Error message: {ex.Message}");
+                _logger.LogError("EMAIL ERROR START");
+                _logger.LogError($"message: {ex.Message}");
+                _logger.LogError("SMTP ERROR END");             
             }
         }
 
