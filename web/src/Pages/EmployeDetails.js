@@ -133,7 +133,7 @@ export default function EmployeDetails() {
 		{
 			field: "id",
 			header: "Sr No.",
-			bodyClassName: "ref-col",
+			//bodyClassName: "ref-col",
 		},
 		{
 			field: "name",
