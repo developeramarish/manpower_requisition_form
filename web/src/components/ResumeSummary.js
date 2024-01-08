@@ -11,7 +11,7 @@ import { API_URL, FILE_URL,ROLES } from "../constants/config";
 import { changeDateFormat, strToArray } from "../constants/Utils";
 
 
-const ResumeSummary = ({ roleId=null,visible, onHide, mrfId = null, dashboard = true }) => {
+const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard = true,userId=null}) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
@@ -25,7 +25,7 @@ const ResumeSummary = ({ roleId=null,visible, onHide, mrfId = null, dashboard = 
 
   const fetchData = () => {
     try {
-      fetch(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}`)
+      fetch(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`)
         .then((response) => response.json())
         .then((data) => {
           setdata(data.result.resumeDetails);
@@ -55,13 +55,9 @@ const ResumeSummary = ({ roleId=null,visible, onHide, mrfId = null, dashboard = 
       </Dialog>
     );
   }
-
-
-console.log(roleId)
-
-
   const MultiSelectDrop = (rowData, options) => {
-    if (roleId === ROLES.hr) {
+    console.log(rowData);
+    if (roleId === ROLES.hr || roleId === ROLES.interviewer) {
       // Return a simple date or any other content for this role
       return (
         <div>
@@ -93,7 +89,7 @@ console.log(roleId)
           placeholder="Select Reviewer"
           className="w-full md:w-20rem "
         />
-      </div>
+      </div>     
     );
   }
 };
@@ -129,7 +125,6 @@ console.log(roleId)
     const name = "string"; // this because we are handling data in backend it not save as string
     const emailId = "string";
     const contactNo = "string";
-
     const id = data.candidateId;
     const candidateStatusId = data.candidateStatusId;
     const mrfId = data.mrfId;
@@ -199,10 +194,7 @@ console.log(roleId)
       </a>
     );
   };
-
-
-       
-      const reasonTemplate=(resume)=>{
+   const reasonTemplate=(resume)=>{
 console.log(resume.reason)
 if(!resume.reason ) return "To be Updated";
 
@@ -210,7 +202,6 @@ return(
   <p className="resume-reason-col">{resume.reason}</p>
 )
       }
-   
   let columns = [
     {
       header: "Sr.No",
@@ -265,11 +256,13 @@ return(
       sortable: true,
     },
   ];
-  if (roleId === ROLES.hr) {
+  
+  if (roleId === ROLES.hr || roleId === ROLES.interviewer) {
     columns = columns.filter(column => column.header !== "Action");
    };
   return (
     <div>
+       
       <Dialog
        header={
         <div>
@@ -297,18 +290,21 @@ return(
           scrollHeight="400px"
           draggable={false}
         >
-          {columns.map((col) => (
-            <Column
-              field={col.field}
-              header={col.header}
-              body={col.body}
-              bodyClassName={col.bodyClassName}
-              sortable={col.sortable}
-            />
-          ))}
-        </DataTable>
-        <ToastMessages ref={toastRef} />
+           {columns.map((col) => (
+              <Column
+                field={col.field}
+                header={col.header}
+                body={col.body}
+                bodyClassName={col.bodyClassName}
+                sortable={col.sortable}
+              />
+            ))}
+            </DataTable>
+         
+          
+  <ToastMessages ref={toastRef} />
       </Dialog>
+      
     </div>
   );
 };

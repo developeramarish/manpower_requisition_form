@@ -84,9 +84,11 @@ export const salaryInLPA = (value) => {
 };
 
 export const filterSelectedColumn = (rowData, selectedColum) => {
+  
   const filterData = rowData.resultGroups.find(
     (obj) => obj.candidatestatus == selectedColum
   );
+  console.log(filterData);
   if (filterData) {
     return filterData.totalstatusCount;
   }

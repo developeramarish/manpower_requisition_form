@@ -21,7 +21,7 @@ namespace MRF.DataAccess.Repository
             _db = db;
         }
 
-        public List<ResumeDetailsViewModel> GetResumeStatusDetails(int mrfId)
+        public List<ResumeDetailsViewModel> GetResumeStatusDetails(int mrfId,int roleId,int useId)
         {
 
             /* take list from resume reviewer assigned to mrfId   */

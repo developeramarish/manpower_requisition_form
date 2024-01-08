@@ -19,7 +19,7 @@ namespace MRF.DataAccess.Repository
             _db = db;
         }
 
-        public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId)
+        public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId,int roleId,int userId)
         {
             /* take list from Interview reviewer assigned to mrfId   */
             IQueryable<InterviewDetailsViewModel> Mrfinterviewmap =
