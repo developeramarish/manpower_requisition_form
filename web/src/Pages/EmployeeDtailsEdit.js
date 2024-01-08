@@ -19,7 +19,6 @@ useEffect(() => {
      emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
       employeeChange(result.result[0].employeeCode);
-      console.log(result)
       setRole(result.result[0].roleId);
       
   }).catch((err) => {

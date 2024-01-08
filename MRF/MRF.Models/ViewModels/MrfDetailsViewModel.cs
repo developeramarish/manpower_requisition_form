@@ -15,6 +15,8 @@ namespace MRF.Models.ViewModels
         public int RoleId { get; set; }
         public string   MrfStatus { get; set; } = null!;
         public string ReferenceNo { get; set; } = null!;
+
+        public string positionTitle { get; set; } = null!;
         public int CreatedByEmployeeId { get; set; }
         public string Name { get; set; } = null!;
         public DateTime UpdatedOnUtc { get; set; }

@@ -75,6 +75,12 @@ const DashMrfStatus = ({
 			sortable: true,
 		},
 		{
+			field: "positionTitle",
+			header: "Position",
+			bodyClassName: " mrfdraft-ref-col  ",
+			sortable: true,
+		},
+		{
 			field: "name",
 			header: "Created By",
 			bodyClassName: "mrfdraft-col mrfdraft-ref-col  ",
