@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import DropdownComponent from './../components/Dropdown';
 import InputTextCp from "./../components/Textbox";
-import ButtonC from "./../components/Button";
-// import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button } from 'primereact/button';
+import ButtonC from "./../components/Button"
+import { API_URL } from '../constants/config';
+import { navigateTo } from "../constants/Utils";
+import ToastMessages from "./../components/ToastMessages";
+
 const EmployeeDtailsEdit = ({id, updateData}) => {
-  // const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
 useEffect(() => {
-  console.log("id   ",id)
-  fetch("https://localhost:7128/api/Employeedetails/GetEmployee/" + id).then((res) => {
+  fetch(API_URL.GET_EMPLOYEE_DETAILS +"/"+id).then((res) => {
     console.log("resut for res  ", res)
       return res.json();
   }).then((result) => {
      namechange(result.result[0].name);
-    emailchange(result.result[0].email);
+     emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
       employeeChange(result.result[0].employeeCode);
+      console.log(result)
       setRole(result.result[0].roleId);
       
   }).catch((err) => {
       console.log(err.message);
   })
 }, []);
-
+const toastRef = useRef(null);
 const [name, namechange] = useState("");
 const [email, emailchange] = useState("");
 const [roleId, setRole] = useState({});
@@ -40,13 +41,14 @@ const [isAllowed] = useState(true);
 const [updatedOnUtc] = useState(new Date().toISOString());
 const [roleOptions, roleOptionchange] = useState([]);
   const fetchData = () => {
-    const apiUrl = `https://localhost:7128/api/Role`;
+    const apiUrl = API_URL.GET_ROLE;
     fetch(apiUrl)
       .then(response => response.json())
       .then(responseData => {
         if (Array.isArray(responseData.result)) {
           const data = responseData.result;
-          const options = data.map(x => { return { value: x.id, name: x.name } })
+          console.log(data);
+          const options = data.map(x => { return { value: x.id,  roleName: x.name } })
           roleOptionchange(options);
         } else {
           console.error('API response result is not an array:', responseData);
@@ -60,39 +62,48 @@ const [roleOptions, roleOptionchange] = useState([]);
   const updateEditmode = () =>{
     updateData(false);
   }
-  const handlesubmit = (e) => {
-    e.preventDefault();
-    const empdata = { name, email, contactNo,employeeCode,isDeleted,roleId: roleId.value,isAllowed,allowedByEmployeeId,createdByEmployeeId,
+
+  const handlesubmit = async ()  => {
+    const empdata = { name, email, contactNo,employeeCode,isDeleted,roleId: roleId,isAllowed,allowedByEmployeeId,createdByEmployeeId,
       createdOnUtc,updatedByEmployeeId,updatedOnUtc};
 
-
-    fetch("https://localhost:7128/api/Employeedetails/Put/"+id, {
-      method: "Put",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(empdata)
-       
-    }).then((res) => {
-      alert('updated successfully.')
-
-    }).catch((err) => {
-      console.log(err.message)
-    })
-
+      try {
+        const response = await fetch(API_URL.UPDATE_EMPLOYEE +id, {
+          method: "Put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(empdata),
+        });
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("Response Data:", responseData);
+          toastRef.current.showSuccessMessage("Form submitted successfully!");
+          setTimeout(() => {
+             navigateTo("dashborad");
+          }, 2000);
+        } else {
+          console.error("Request failed with status:", response.status);
+          if (response.status === 400) {
+            toastRef.current.showBadRequestMessage(
+              "Bad request: " + response.url
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
   }
   return (
     <div >
-   {/*  <DashboardHeader /> */}
     <div style={{ display: 'flex' }}>
-      {/* <LeftPanel /> */}
     <div
       className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
-      style={{ width: "210vw"} }
+      style={{ width: "190vw"} }
     >
       <h3 className="text-xl my-2">Fill the Details</h3>
-      <section
-        className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
-        style={{ height: "90%" }}
-      >
+      
+      <section>
         <div className="flex justify-content-between gap-5">
           <div className="flex flex-column w-6 gap-2">
             <label htmlFor="refno" className="font-bold text-sm">
@@ -133,28 +144,31 @@ const [roleOptions, roleOptionchange] = useState([]);
             </label>
 
             <DropdownComponent
-              optionLabel="name"
-              optionValue="value"
-              value={roleId}
-              type="roleId"
-              options={roleOptions}
-              //placeholder={}
-              onChange={e => {
-                console.log(e.target)
-                setRole(e.target )
-              }
+             optionLabel="roleName"
+             optionValue="value"
+             value={roleId}
+             type="roleId"
+             options={roleOptions}
+             //placeholder={}
+             onChange={e => {
+               console.log(e.target)
+               setRole(e.target.value)
+             }
               }
             />
          
          </div>
          
         </div>
-      <div className="flex justify-content gap-5">
+        <div style={{    display: 'flex', flexDirection:'row',width: '50%',
+    justifyContent: 'center',
+    marginTop: '15px'}}>
         <ButtonC  severity="danger" label="CANCEL" onClick={() => updateEditmode(false)}></ButtonC>
-        <Button label="SUBMIT" severity="primary" onClick={handlesubmit} />
+        <ButtonC style={{ marginLeft:'15px'}} label="SUBMIT" severity="primary" onClick={handlesubmit} />
+        <ToastMessages ref={toastRef} />
       </div>
 
-        </section>
+         </section> 
       </div>  
       </div>
    

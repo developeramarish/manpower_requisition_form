@@ -7,6 +7,7 @@ import InterviewSummary from "../components/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
 import ResumeSummary from "../components/ResumeSummary";
 import DashBoardDataTable from "../components/DashBoardDataTable";
+
 import {
   filterSelectedColumn,
   filterResultGroupByCandidatestatus,
@@ -32,8 +33,8 @@ function Dashboard({roleId,userId}) {
     async function getSummaryData() {
     const mrfStatusData = await getData(API_URL.MRF_STATUS_SUMMARY+"?roleId="+roleId+"&userId="+userId);
     // const mrfStatusData = API_URL.MRF_STATUS_SUMMARY;
-    const resumeSummaryData = await getData(API_URL.RESUME_SUMMARY+"?Count=0&roleId="+roleId+"&userId="+userId);
-    const interviewSummaryData = await getData(API_URL.INTERVIEW_SUMMARY+"?Count=0&roleId="+roleId+"&userId="+userId);
+    const resumeSummaryData = await getData(API_URL.RESUME_SUMMARY+"?Count=0&roleId="+ roleId+"&userId="+userId);
+    const interviewSummaryData = await getData(API_URL.INTERVIEW_SUMMARY+"?Count=0&roleId="+ roleId+"&userId="+userId);
     setMrfStatus(mrfStatusData.result);
     setResumeSummary(resumeSummaryData.result);
     setInterviewSummary(interviewSummaryData.result);
@@ -204,6 +205,7 @@ console.log(roleId)
             </table>
           </div>
         </div>
+  )}
         <div className="dashboard_body_right">
 
 {/* <div className="mrf_interview_summary "> */}

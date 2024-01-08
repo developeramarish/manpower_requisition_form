@@ -35,6 +35,8 @@ import AddCandidate from "./Pages/AddCandidate";
 import ViewCandidate from "./Pages/ViewCandidate";
 import MyReumes from "./Pages/MyReumes";
 import Footer from "./components/Footer";
+import EmployeDetails from "./Pages/EmployeDetails";
+import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
@@ -154,6 +156,14 @@ function App() {
                   <MyRequisitions
                     roleId={profile.roleId}
                     userId={profile.employeeId}
+                  />
+                )}
+                {currentPageKey === "employee" && (
+                  <EmployeDetails
+                  />
+                )}
+                 {currentPageKey === "employee_edit" && (
+                  <EmployeeDtailsEdit
                   />
                 )}
                 {currentPageKey === "add_candidate" && (

@@ -24,7 +24,7 @@ const Sidebar = ({roleId,sPageKey}) => {
     return (
         <div className='sidebar'>
         <ul>
-            {(roleId === ROLES.mrfOwner || roleId === ROLES.hr || roleId === ROLES.resumeReviwer) && (
+            {(roleId === ROLES.mrfOwner || roleId === ROLES.hr || roleId === ROLES.resumeReviwer ||roleId === ROLES.interviewer) && (
                 <>
                     <li>
                         <a className={active === 'dashboard' ? 'active' : ''} href="dashboard" onClick={(e) => onLinkClicked(e)}>
@@ -32,6 +32,12 @@ const Sidebar = ({roleId,sPageKey}) => {
                         </a>
                     </li>
                     {(roleId !== ROLES.hr && roleId !== ROLES.resumeReviwer) && (
+                    <li>
+                        <a className={active === 'employee' ? 'active' : ''} href="employee" onClick={(e) => onLinkClicked(e)}>
+                            <img src="./images/my_dashboard_selected.png" alt="employee" /><br />Employee
+                        </a>
+                    </li>
+                    {(roleId !== ROLES.hr && roleId !== ROLES.interviewer) &&(
                         <li>
                             <a className={active === 'create_requisition' ? 'active' : ''} href="create_requisition" onClick={(e) => onLinkClicked(e)}>
                                 <img src="./images/create_requisition_normal.png" alt="create_requisition" /><br />Create Requisition
@@ -45,6 +51,14 @@ const Sidebar = ({roleId,sPageKey}) => {
                     </li>) }
                     
                     {(roleId !== ROLES.mrfOwner && roleId !== ROLES.resumeReviwer ) && (
+                {roleId !== ROLES.interviewer &&(
+                    <li>
+                        <a className={active === 'my_requisition' ? 'active' : ''} href="my_requisition" onClick={(e) => onLinkClicked(e)}>
+                            <img src="./images/my_requisition_normal.png" alt="my_requisition" /><br />My Requisition
+                        </a>
+                    </li>
+                )}
+                    {(roleId !== ROLES.mrfOwner && roleId !== ROLES.interviewer) && (
                     <li>
                         <a className={active === 'view_candidate' ? 'active' : ''} href="view_candidate" onClick={(e) => onLinkClicked(e)}>
                             <img src="./images/my_requisition_normal.png" alt="my_requisition" /><br />View Candidate
