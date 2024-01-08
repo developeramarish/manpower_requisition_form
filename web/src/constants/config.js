@@ -41,6 +41,8 @@ export const ROUTES = {
   edit_requisition: "edit_requisition",
   add_candidate: "add_candidate",
   view_candidate: "view_candidate",
+  resume_summary:"resume_summary",
+  my_resume:"my_resume"
 };
 
 export const MRF_STATUS = {

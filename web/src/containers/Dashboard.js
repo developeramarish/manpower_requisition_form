@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./../css/Dashboard.css";
 import { getData } from "../constants/Utils";
-import { API_URL } from "../constants/config";
+import { API_URL, ROLES } from "../constants/config";
 import { storageService } from "../constants/storage";
 import InterviewSummary from "../components/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
@@ -11,8 +11,9 @@ import {
   filterSelectedColumn,
   filterResultGroupByCandidatestatus,
 } from "../constants/Utils";
+import { Dialog } from "primereact/dialog";
 // import HrResumeSummary from "../components/HrResumeSummary";
-
+import "../css/ResumeSummary.css";
 function Dashboard({roleId,userId}) {
   const [mrfStatus, setMrfStatus] = useState([]);
   const [resumeSummary, setResumeSummary] = useState([]);
@@ -42,6 +43,9 @@ function Dashboard({roleId,userId}) {
     interviewSummary,
     ["Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
   );
+
+
+console.log(roleId)
 
   const onMRFIdClicked = (e) => {
     console.log(e)
@@ -145,10 +149,15 @@ function Dashboard({roleId,userId}) {
 
   return (
     <div className="dashboard_wrapper">
-      <div className="dashboard_header">
-        <h3>My Dashboard</h3>
-      </div>
-      <div className="dashboard_body">
+        <h3 className="dashboard_title">My Dashboard</h3>
+
+      { roleId==ROLES.resumeReviwer && (<><div className="resume-viwer-table">
+      <ResumeSummary roleId={5} userId={2}/>
+
+      </div></>)
+
+      }
+      {(roleId ==ROLES.mrfOwner   || roleId==ROLES.hr) && (<div className="dashboard_body">
         <div className="dashboard_body_left">
           <div className="mrf_status_summary">
             <div className="header">
@@ -196,6 +205,8 @@ function Dashboard({roleId,userId}) {
           </div>
         </div>
         <div className="dashboard_body_right">
+
+{/* <div className="mrf_interview_summary "> */}
           <DashBoardDataTable
             value={interviewSummaryTableData}
             column={interviewSummaryColums}
@@ -216,12 +227,118 @@ function Dashboard({roleId,userId}) {
             headerHeading={"Resume Status"}
             table_title={"Resume Summary"}
           />
-          <ResumeSummary
-            visible={resumePopup}
-            onHide={() => setResumePopup(false)}
-            mrfId={resumePopupId}
+
+
+
+
+<Dialog  header={"Resume Summary"} visible={resumePopup} onHide={() => setResumePopup(false)} draggable={false} className="resume-card">
+        <ResumeSummary mrfId={resumePopupId}
+            roleId={roleId} 
+/>
+        </Dialog>
+
+        </div>      
+
+          
+        </div>
+      )  }
+
+       {/* <div className="dashboard_body">
+        <div className="dashboard_body_left">
+          <div className="mrf_status_summary">
+            <div className="header">
+              <h4>MRF Summary</h4>
+              <DashMrfStatus
+                visible={mrfStatusPopup}
+                onHide={() => setMrfStatusPopup(false)}
+                statusId={mrfStatusPopupId}
+                userId={userId}
+                roleId={roleId}
+              />
+            </div>
+            <table className="mrf_table">
+              <thead>
+                <tr>
+                  <th className="table_status">Status</th>
+                  <th className="table_count">Total Count</th>
+                </tr>
+              </thead>
+              <tbody className="mrf_table_body">
+                {mrfStatus.map((data, index) => {
+                 
+                  return (
+                    <tr key={"mrf_" + index}>
+                      <td>{data.status}</td>
+                      <td
+                        className={
+                          data.totalCount > 0
+                            ? "mrf_summary_total_count"
+                            : "mrf_summary_total_count count_zero"
+                        }
+                      >
+                        {data.totalCount > 0 && (
+                          <a onClick={(e) => onMRFIdClicked(data.mrfStatusId)}>
+                            {data.totalCount}
+                          </a>
+                        )}
+                        {data.totalCount === 0 && data.totalCount}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="dashboard_body_right">
+
+          <DashBoardDataTable
+            value={interviewSummaryTableData}
+            column={interviewSummaryColums}
+            headerHeading={"Interview Status"}
+            table_title={"Interview Summary"}
+            
+          />
+          <InterviewSummary
+            visible={interviewPopup}
+            onHide={() => setInterviewPopup(false)}
+            mrfId={interviewPopupId}
             roleId={roleId}
           />
+
+          <DashBoardDataTable
+            value={resumeSummary}
+            column={resumeSummaryColums}
+            headerHeading={"Resume Status"}
+            table_title={"Resume Summary"}
+          />
+
+
+
+
+<Dialog  header={"shshss"
+        // <div>
+        //    Resume Summary- MRF ID:{"\u00A0\u00A0"}
+        //   <span  style={{ fontWeight: 'bold', color: '#d9362b' }}>
+        //     {data[0].referenceNo}
+        //   </span>{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+        //   Position Title:{"\u00A0\u00A0"}
+        //   <span style={{ fontWeight: 'bold', color: '#d9362b' }}>
+        //   {data[0].positionTitle}</span>
+        // </div>
+      } visible={resumePopup} onHide={() => setResumePopup(false)} draggable={false}>
+        <ResumeSummary mrfId={resumePopupId}
+            roleId={roleId}/>
+        </Dialog>
+
+        
+
+          {/* <ResumeSummary
+            
+            
+            mrfId={resumePopupId}
+            roleId={roleId}
+          /> */}
 {/* <DashBoardDataTable
             value={resumeSummary}
             column={resumeSummaryColums}
@@ -230,9 +347,9 @@ function Dashboard({roleId,userId}) {
           />
           <HrResumeSummary  visible={false}
             onHide={() => setResumePopup(false)}
-            mrfId={resumePopupId}/> */}
+              mrfId={resumePopupId}/>
         </div>
-      </div>
+      </div>  */}
     </div>
   );
 }
