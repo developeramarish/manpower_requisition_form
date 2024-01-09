@@ -88,7 +88,6 @@ export const filterSelectedColumn = (rowData, selectedColum) => {
   const filterData = rowData.resultGroups.find(
     (obj) => obj.candidatestatus == selectedColum
   );
-  console.log(filterData);
   if (filterData) {
     return filterData.totalstatusCount;
   }
@@ -96,13 +95,14 @@ export const filterSelectedColumn = (rowData, selectedColum) => {
 
 export const filterResultGroupByCandidatestatus = (data, targetColumn) => {
   const filteredData = data.map((item) => {
-    const { mrfId, referenceno, resultGroups } = item;
+    const { mrfId, referenceno,positionTitle, resultGroups } = item;
 
     const filteredResultGroup = resultGroups
       .filter((result) => targetColumn.includes(result.candidatestatus));
     return {
       mrfId,
       referenceno,
+      positionTitle,
       resultGroups: filteredResultGroup,
     };
   });

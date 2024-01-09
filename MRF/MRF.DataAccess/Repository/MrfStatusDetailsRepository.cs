@@ -26,6 +26,7 @@ namespace MRF.DataAccess.Repository
     join mrfRolemap in _db.mrfStatusrolemap on mrfStatus.Id equals mrfRolemap.statusId
     join Emp in _db.Employeedetails on mrfDetails.CreatedByEmployeeId equals Emp.Id
     join Vacancy in _db.Vacancytypemaster on mrfDetails.VacancyTypeId equals Vacancy.Id
+    join position in _db.PositionTitlemaster on mrfDetails.PositionTitleId equals position.Id
     // Left join with Freshmrfdetails
     join salary in _db.Freshmrfdetails
          on mrfDetails.Id equals salary.MrfId into freshMrfDetailsGroup
@@ -50,6 +51,7 @@ namespace MRF.DataAccess.Repository
         VacancyNo = mrfDetails.VacancyNo,
         RequisitionType = mrfDetails.RequisitionType,
         RoleId = mrfRolemap.RoleId,
+        positionTitle =position.Name,
     };
 
 

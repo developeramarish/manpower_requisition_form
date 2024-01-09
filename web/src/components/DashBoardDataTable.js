@@ -44,11 +44,12 @@ const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
     <ColumnGroup>
       <Row>
         <Column header="MRF ID" rowSpan={2} />
-        <Column header={headerHeading} colSpan={4} className="statusHeading " />
+        <Column header="Position Title" rowSpan={2} />
+        <Column header={headerHeading} colSpan={4} />
       </Row>
       <Row>
         {column.map((col, index) => {
-          if (col.header != "MRF ID") {
+          if (col.header != "MRF ID" && col.header != "Position Title") {
             return <Column key={index} field={col.field} header={col.header} />;
           }
         })}

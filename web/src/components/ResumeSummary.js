@@ -20,9 +20,9 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
   const toastRef = useRef(null);
 
   useEffect(() => {
-    if (mrfId) {
+    
       fetchData();
-    }
+    
   }, [mrfId]);
 
   const fetchData = () => {
@@ -201,13 +201,13 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
       </a>
     );
   };
+ 
 
 
        
       const reasonTemplate=(resume)=>{
 
 if(!resume.reason ) return (<p className="resume-reason-col">To be Updated</p>);
-
 return(
 
   <InputTextareaComponent  value={resume.reason} rows={3} cols={50} />

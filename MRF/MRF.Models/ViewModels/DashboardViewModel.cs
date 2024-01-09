@@ -21,6 +21,8 @@ namespace MRF.Models.ViewModels
         public int EmployeeId { get; set; }
         public int RoleId { get; set; }
 
+        public string  PositionTitle { get; set; } = null!;
+
     }
 
     public class MrfSummaryViewModel: MrfDashboardViewModel
@@ -41,6 +43,8 @@ namespace MRF.Models.ViewModels
 {
         public int mrfId { get; set; }
         public string referenceno { get; set; }
+
+        public string positionTitle { get; set; }
         public List<ResultGroup> resultGroups { get; set; }
 }
 
