@@ -40,7 +40,7 @@ function Dashboard({ roleId, userId }) {
       var filterInterviewerResumtSumData = [];
       resumeSummaryData.result.map((data) => {
         data.resultGroups.map((res) => {
-          if (res.candidatestatus === "Rejected" && res.totalstatusCount > 0) {
+          if (res.candidatestatus === "Shortlisted" && res.totalstatusCount > 0) {
             filterInterviewerResumtSumData.push(data)
           }
         })
@@ -106,7 +106,7 @@ function Dashboard({ roleId, userId }) {
     },
     {
       field: "positionTitle",
-      header: "Position",
+      header: "Position Title",
     },
     {
       field: "New",
@@ -140,7 +140,7 @@ function Dashboard({ roleId, userId }) {
     },
     {
       field: "positionTitle",
-      header: "Position",
+      header: "Position Title",
     },
     {
       field: "Selected",
@@ -167,7 +167,7 @@ function Dashboard({ roleId, userId }) {
 
   if (roleId === ROLES.interviewer) {
     resumeSummaryColums = resumeSummaryColums.filter(column => column.header !== "New" && 
-    column.header !== "Shortlisted" && column.header !== "On Hold");
+    column.header !== "Rejected" && column.header !== "On Hold");
    };
 
   return (
@@ -225,12 +225,13 @@ function Dashboard({ roleId, userId }) {
             </div>
           </div>
         )}
+        
         <div className="dashboard_body_right">
 
           <DashBoardDataTable
             value={interviewSummaryTableData}
             column={interviewSummaryColums}
-            //headerHeading={"Interview Status"}
+            headerHeading={"Interview Status"}
             table_title={"Interview Summary"}
 
           />
@@ -245,7 +246,7 @@ function Dashboard({ roleId, userId }) {
           <DashBoardDataTable
             value={resumeSummary}
             column={resumeSummaryColums}
-           // headerHeading={"Resume Status"}
+           headerHeading={"Resume Status"}
             table_title={"Resume Summary"}
           />
           <ResumeSummary
@@ -267,8 +268,6 @@ function Dashboard({ roleId, userId }) {
             onHide={() => setResumePopup(false)}
             mrfId={resumePopupId}/> */}
         </div>
-
-
 
       </div>
     </div>

@@ -42,6 +42,12 @@ const MyRequisitions = ({roleId,userId}) => {
 			bodyClassName: "ref-col",
 		},
 		{
+			field: "positionTitle",
+			header: "Position Title",
+			bodyClassName: " mrfdraft-ref-col  ",
+			sortable: true,
+		},
+		{
 			field: "name",
 			header: "Created By",
 			sortable: true,
