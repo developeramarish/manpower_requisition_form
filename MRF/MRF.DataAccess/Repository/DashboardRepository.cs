@@ -132,7 +132,9 @@ namespace MRF.DataAccess.Repository
             string Role = _Utility.GetRole(roleId);
             var mrfDetails = from mrfD in _db.Mrfdetails
                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
-                             where (Role != "mrfowner" || (Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId))
+                             where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                             || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds!=null 
+                             && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer"))
                              group new { mrfD, Candidate } by new
                              {
                                  mrfD.Id,
@@ -227,8 +229,10 @@ namespace MRF.DataAccess.Repository
                          join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                          join interview in _db.Interviewevaluation on Candidate.Id equals interview.CandidateId
                          join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id
-                                       where (Role != "mrfowner" || (Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId))
-                                        group new { mrfD, Candidate,  interview, status } by new
+                                       where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                                        || (Role == "interviewer" && interview.InterviewerId != 0
+                             && interview.InterviewerId==userId)  || (Role != "mrfowner" && Role != "interviewer"))
+                                       group new { mrfD, Candidate,  interview, status } by new
                                        
                                        {
                              mrfD.Id,
