@@ -195,7 +195,6 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
     );
   };
    const reasonTemplate=(resume)=>{
-console.log(resume.reason)
 if(!resume.reason ) return "To be Updated";
 
 return(

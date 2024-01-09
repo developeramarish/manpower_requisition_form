@@ -19,7 +19,6 @@ useEffect(() => {
      emailchange(result.result[0].email);
       phonechange(result.result[0].contactNo);
       employeeChange(result.result[0].employeeCode);
-      console.log(result)
       setRole(result.result[0].roleId);
       
   }).catch((err) => {
@@ -81,7 +80,7 @@ const [roleOptions, roleOptionchange] = useState([]);
           toastRef.current.showSuccessMessage("Form submitted successfully!");
           setTimeout(() => {
              navigateTo("dashborad");
-          }, 2000);
+          }, 1000);
         } else {
           console.error("Request failed with status:", response.status);
           if (response.status === 400) {
