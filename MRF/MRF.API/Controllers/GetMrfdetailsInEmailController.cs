@@ -68,8 +68,6 @@ namespace MRF.API.Controllers
         }
         private string GetHtmlTemplateBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
         {
-            string approvalLink = Request.Host + "/api/";
-
             // Replace placeholders in HTML with data
             string messageBody = htmlBody
               .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
@@ -84,8 +82,8 @@ namespace MRF.API.Controllers
               .Replace("{Project}", mrfdetailpdf.Project)
               .Replace("{Justification}", mrfdetailpdf.Justification)
               .Replace("{MRFRaisedBy}", Convert.ToString(mrfdetailpdf.MRFRaisedBy))
-              .Replace("{approvalLink}", approvalLink)
-              .Replace("{rejectLink}", approvalLink);
+              .Replace("{approvalLink}", "https://" + Request.Host + "/request/approve")
+              .Replace("{rejectLink}", "https://" + Request.Host + "/request/reject");
 
             return messageBody;
         }
