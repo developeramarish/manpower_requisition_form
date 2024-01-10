@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import ButtonC from "./../components/Button";
 import "../styles/layout/MyRequisitionsBody.css";
 import { Toolbar } from "primereact/toolbar";
@@ -6,12 +6,13 @@ import EmployeeDtailsEdit from "./EmployeeDtailsEdit";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { API_URL } from "../constants/config";
-
+import { navigateTo } from "../constants/Utils";
+import ToastMessages from "./../components/ToastMessages";
 export default function EmployeDetails() {
   const [data, setData] = useState([{}]);
   const [editMode, setEditMode] = useState(false);
   const [editData, setEditData] = useState();
-   
+  const toastRef = useRef(null);
   //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means
   React.useEffect(() => {
     const url = API_URL.GET_EMPLOYEE_DETAILS+"/0";
@@ -40,50 +41,37 @@ export default function EmployeDetails() {
   //     </div>
   //   );
   // };
-  const [isDeleted] = useState(true);
-
-  const Removefunction = (
-    id,
-    name,
-    email,
-    contactNo,
-    employeeCode,
-    isAllowed,
-    allowedByEmployeeId,
-    createdByEmployeeId,
-    updatedByEmployeeId,
-    roleId
-  ) => {
-    const empdata = {
-      isDeleted,
-      name,
-      email,
-      contactNo,
-      employeeCode,
-      isAllowed,
-      allowedByEmployeeId,
-      createdByEmployeeId,
-      updatedByEmployeeId,
-      roleId,
-    };
-
+  const Removefunction = async (rowData) => {
+    rowData.isDeleted=true;
     if (window.confirm("Do you want to remove?")) {
-      fetch(API_URL.UPDATE_EMPLOYEE + id, {
-        method: "Put",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(empdata),
-      })
-        .then((res) => {
-          alert("Deleted successfully.");
-          var oData = data.filter((row) => {
-            return row.id !== id;
-          });
-          setData(oData);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+    const response = await fetch(API_URL.UPDATE_EMPLOYEE + rowData.id, {
+      method: "Put",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(rowData),
+    })
+    
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log("Response Data:", responseData);
+      toastRef.current.showSuccessMessage("Delete successfully!");
+      var oData = data.filter((row) => {
+                  return row.id !== rowData.id;
+                });
+                setData(oData);
+      setTimeout(() => {
+         navigateTo("employee");
+      }, 1000);
+      }
+      else {
+        console.error("Request failed with status:", response.status);
+        if (response.status === 400) {
+          toastRef.current.showBadRequestMessage(
+            "Bad request: " + response.url
+          );
+        }
+      }
     }
+
   };
   const updateData = (p_BVal) => {
     setEditMode(p_BVal);
@@ -93,7 +81,6 @@ export default function EmployeDetails() {
     setEditMode(true);
   };
   const actionBodyTemplate = (rowData) => {
-    console.log(rowData);
     return (
       <React.Fragment>
         <ButtonC
@@ -112,20 +99,10 @@ export default function EmployeDetails() {
           className="mr-2 text-white"
           severity="danger"
           onClick={() => {
-            Removefunction(
-              rowData.id,
-              rowData.name,
-              rowData.email,
-              rowData.contactNo,
-              rowData.employeeCode,
-              rowData.isAllowed,
-              rowData.allowedByEmployeeId,
-              rowData.createdByEmployeeId,
-              rowData.updatedByEmployeeId,
-              rowData.roleId
-            );
+            Removefunction(rowData);
           }}
         />
+         <ToastMessages ref={toastRef} />
       </React.Fragment>
     );
   };
