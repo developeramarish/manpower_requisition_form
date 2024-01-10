@@ -1,5 +1,5 @@
 export const APP_KEY = "MRF_v1.0";
- const APP = "https://10.22.11.101:90";
+const APP = "https://10.22.11.101:90";
 //const APP="https://localhost:7128";
 const APIPath=`${APP}/api/`;
 export const API_URL = {
@@ -27,7 +27,8 @@ export const API_URL = {
   GET_CANDIDATE_DETAILS: `${APIPath}Candidatedetail/GetReferenceNoAndPositiontitle`,
   GET_EMPLOYEE_DETAILS: `${APIPath}Employeedetails/GetEmployee`,
   UPDATE_EMPLOYEE:`${APIPath}Employeedetails/Put/`,
-  GET_ROLE:`${APIPath}Role`
+  GET_ROLE:`${APIPath}Role`,
+  GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`
 };
 
 export const FILE_URL = {

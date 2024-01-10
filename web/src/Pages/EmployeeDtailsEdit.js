@@ -5,7 +5,7 @@ import ButtonC from "./../components/Button"
 import { API_URL } from '../constants/config';
 import { navigateTo } from "../constants/Utils";
 import ToastMessages from "./../components/ToastMessages";
-
+import { storageService } from "../constants/storage";
 const EmployeeDtailsEdit = ({id, updateData}) => {
   useEffect(() => {
     fetchData();
@@ -25,17 +25,17 @@ useEffect(() => {
       console.log(err.message);
   })
 }, []);
+console.log(updateData);
 const toastRef = useRef(null);
 const [name, namechange] = useState("");
 const [email, emailchange] = useState("");
 const [roleId, setRole] = useState({});
 const [contactNo,phonechange] = useState("");
-const [isDeleted] = useState(false);
 const [employeeCode,employeeChange] = useState("");
-const [allowedByEmployeeId] = useState("1");
-const [createdByEmployeeId] = useState("1");
+const allowedByEmployeeId = storageService.getData("profile").employeeId;
+const createdByEmployeeId = storageService.getData("profile").employeeId;
 const [createdOnUtc] = useState(new Date().toISOString());
-const [updatedByEmployeeId] = useState("1");
+const updatedByEmployeeId = storageService.getData("profile").employeeId;
 const [isAllowed] = useState(true);
 const [updatedOnUtc] = useState(new Date().toISOString());
 const [roleOptions, roleOptionchange] = useState([]);
@@ -63,7 +63,7 @@ const [roleOptions, roleOptionchange] = useState([]);
   }
 
   const handlesubmit = async ()  => {
-    const empdata = { name, email, contactNo,employeeCode,isDeleted,roleId: roleId,isAllowed,allowedByEmployeeId,createdByEmployeeId,
+    const empdata = { name, email, contactNo,employeeCode,roleId: roleId,isAllowed,allowedByEmployeeId,createdByEmployeeId,
       createdOnUtc,updatedByEmployeeId,updatedOnUtc};
 
       try {

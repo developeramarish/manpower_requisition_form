@@ -4,201 +4,171 @@ import MultiSelectDropdown from "./../components/multiselectDropdown";
 import "primeicons/primeicons.css";
 import ButtonC from "./../components/Button";
 import { InputTextarea } from "primereact/inputtextarea";
-import { constantResumePath } from "./../components/constant";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
-import { FILE_URL } from "../constants/config";
-
+import { navigateTo } from "../constants/Utils";
+import { API_URL, FILE_URL } from "../constants/config";
+import ToastMessages from "./../components/ToastMessages";
+import {
+  arrayToObj,
+  objToIntArray,
+  getData,
+  strToArray,
+} from "../constants/Utils";
+import { Button } from "primereact/button";
 const MyReumes = () => {
-  const [myResumeData, setMyResumeData] = useState({});
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
   const [values, setValues] = useState([]);
-
+  const [saveBttn, setSaveBttn] = useState([]);
+  const toastRef = useRef(null);
   useEffect(() => {
-    const fetchData = () => {
-      try {
-        fetch(
-          "https://localhost:7128/api/Candidatedetail/GetResumeDropdownlist"
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setMyResumeData(data.result);
-            setValues(data.result.candidateDetails);
-            setForwardData(data.result.resumereviewer);
-            setStatusData(data.result.status);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    getResumeData();
   }, []);
-
-  // const  TextBoxComponent = (reason,param) => {
-  //    const [textBoxValue, setTextBoxValue] = useState(reason.reason);
-  //   const handleTextBoxChange = (e) => {
-  //   console.log(e.target.value);
-  //  // setTextBoxValue(e.target.value);
-  //   reason.editorCallback(e.target.value);
-  //    };
-  // return (
-  //     <InputTextarea  value={textBoxValue} onChange={handleTextBoxChange} rows={2} cols={30}  />
-  //     );
-  // };
-
-  const openPdfInNewTab = (pdfLink) => {
-    window.open(pdfLink, "_blank");
-  };
-  const SingleSelect = (statusdata) => {
-    const id = statusdata.candidateStatusId;
-    const [selectStatus, setSelectedststatus] = useState(id);
+ 
+  async function getResumeData() {
+    const resumeData = await getData(API_URL.GET_MYRESUME);
+    setValues(resumeData.result.candidateDetails);
+    setForwardData(resumeData.result.resumereviewer);
+    setStatusData(resumeData.result.status);
+    // console.log(resumeData.result)
+  }
+  const SingleSelect = (data, options) => {
+    const handleDropdownChange = (e) => {
+      let statusdataCopy = [...values];
+      let sv = [...saveBttn];
+      sv[options.rowIndex] = true;
+      statusdataCopy[options.rowIndex].candidateStatusId = e.target.value;
+      setValues(statusdataCopy);
+      setSaveBttn(sv);
+    };
     return (
       <DropdownComponent
         optionLabel="status"
         optionValue="id"
-        value={statusdata.candidateStatusId}
-        options={statusData || []}
-        placeholder="Select Status"
-        className="w-full md:w-23rem "
-        onChange={(e) => statusdata.editorCallback(e.target.value)}
-        style={{ color: "red" }}
+        // className="drop-width"
+        className="w-full md:w-15rem"
+        options={statusData}
+        value={data.candidateStatusId}
+        placeholder={"Select Status"}
+        onChange={handleDropdownChange}
       />
     );
   };
-
-  const MultiSelectTemplate = (options) => {
-    return <div></div>;
-  };
-
-  const MultiSelect = (data) => {
-    console.log("multiselect", data);
-    const [review, setreviewedByEmployeeId] = useState();
-
+ 
+ 
+ 
+  const MultiSelect = (data, options) => {
+    const handleMultiSelectChange = (e) => {
+      let interviewDataCopy = [...values];
+      let sv = [...saveBttn];
+      sv[options.rowIndex] = e.value.length > 0 ? true : false;
+      console.log(interviewDataCopy[options.rowIndex].reviewedByEmployeeIds);
+      interviewDataCopy[options.rowIndex].reviewedByEmployeeIds = objToIntArray(
+        e.value,
+        "employeeId"
+      ).toString();
+      setValues(interviewDataCopy);
+      setSaveBttn(sv);
+    };
+ 
     return (
       <MultiSelectDropdown
-        // id="resumeReviewer"
-        //options={dropdownData.resumereviewer}
+        // className="drop-width"
         options={forwardData}
-        value={arrayToObj(forwardData, strToArray(data.reviewedByEmployeeIds))}
-        onChange={(e) => {
-          console.log(e.value);
-          //setreviewedByEmployeeId(objToArray(e.value));
-          data.editorCallback(e.value);
-        }}
-        className="w-full md:w-23rem"
-        // style={{color: "#d32f2e", fontFamily: "Poppins", fontWeight: 500 , fontSize:"14px"}}
-
+        value={arrayToObj(
+          forwardData,
+          strToArray(data.reviewedByEmployeeIds),
+          "employeeId"
+        )}
+        placeholder={"Select Resume Reviwer"}
+        onChange={handleMultiSelectChange}
         optionLabel="name"
-        // optionValue="employeeId"
+        className="w-full md:w-15rem"
+      //placeholder="Select Interviewer"
+      // optionValue="employeeId"
       />
     );
   };
-  const updateData = (
-    id,
-    name,
-    emailId,
-    contactNo,
-    resumePath,
-    reviewedByEmployeeId,
-    reviewedByEmployeeIds,
-    candidateStatusId,
-    reason
-  ) => {
-    const empdata = {
-      name,
-      emailId,
-      contactNo,
-      resumePath,
-      reviewedByEmployeeId,
-      reviewedByEmployeeIds,
-      candidateStatusId,
-      reason,
-    };
-    fetch("https://localhost:7128/api/Candidatedetail/Put/" + id, {
+  const updateData = async (rowData) => {
+    const response = await fetch(API_URL.RESUME_SUMMARY_POST + rowData.id, {
       method: "Put",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(empdata),
+      body: JSON.stringify(rowData),
     })
-      .then((res) => {
-        alert("updated successfully.");
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log("Response Data:", responseData);
+      toastRef.current.showSuccessMessage("Update successfully!");
+      setTimeout(() => {
+        navigateTo("my_resume");
+      }, 1000);
+    } else {
+      console.error("Request failed with status:", response.status);
+      if (response.status === 400) {
+        toastRef.current.showBadRequestMessage(
+          "Bad request: " + response.url
+        );
+      }
+    }
   };
-  const header = <h3 className="req-header">My Resumes</h3>;
-
-  const textEditor = (options) => {
-    console.log("reason", options.value);
+ 
+ 
+  const textEditor = (data, options) => {
+    const TextChange = (e) => {
+      let statusdataCopy = [...values];
+ 
+      let sv = [...saveBttn];
+      sv[options.rowIndex] = true;
+ 
+      statusdataCopy[options.rowIndex].reason = e.target.value;
+ 
+      setValues(statusdataCopy);
+      setSaveBttn(sv);
+    };
     return (
       <InputTextarea
-        type="text"
-        value={options.value}
-        rows={2}
-        cols={28}
-        autoResize
-        style={{
-          color: "#6d6d6d",
-          fontFamily: "Poppins",
-          fontWeight: 500,
-          fontSize: "14px",
-        }}
-        onChange={(e) => options.editorCallback(e.target.value)}
+       
+        value={data.reason}
+        rows={2}  
+        cols={55}
+        // autoResize
+        // style={{
+        //   color: "#6d6d6d",
+        //   fontFamily: "Poppins",
+        //   fontWeight: 500,
+        //   fontSize: "14px",
+        // }}
+        onChange={TextChange}
+        placeholder={"Enter Reason"}
+ 
       />
     );
   };
-
-  const actionBodyTemplate = (rowData) => {
-    console.log("click", rowData);
-    return (
-      <React.Fragment>
-        <ButtonC
-          icon="pi pi-save"
-          rounded
-          outlined
-          className="mr-2 text-white"
-          onClick={() => {
-            updateData(
-              rowData.id,
-              rowData.name,
-              rowData.emailId,
-              rowData.contactNo,
-              rowData.resumePath,
-              rowData.reviewedByEmployeeId,
-              rowData.reviewedByEmployeeIds,
-              rowData.candidateStatusId,
-              rowData.reason
-            );
-          }}
-        />
-      </React.Fragment>
-    );
-  };
-  const strToArray = (s) => {
-    if (typeof s === "string") {
-      s = s.split(",").map(Number);
+  const actionBodyTemplate = (rowData, options) => {
+    //console.log(rowData);
+    if (saveBttn[options.rowIndex]) {
+      return (
+        <React.Fragment>
+          <ButtonC
+            icon="pi pi-save"
+            rounded
+            outlined
+            className="mr-2 text-white"
+            onClick={() => {
+              updateData(rowData);
+            }}
+          />
+          <ToastMessages ref={toastRef} />
+        </React.Fragment>
+      );
     }
-    return s;
-  };
-
-  const arrayToObj = (options = [], selectedOpt) => {
-    if (Array.isArray(selectedOpt)) {
-      return options.filter((e) => selectedOpt.includes(e.employeeId));
-    }
-  };
-
-  const objToArray = (selectedOpt = []) => {
-    return selectedOpt.map((e) => e.employeeId);
+    return <Button icon="pi pi-save" disabled />;
+ 
   };
   const resumeBodyTemplate = (interview) => {
-    console.log("UIUIIII")
     let resumeLink = FILE_URL.RESUME + interview.resumePath;
     return (
       <a href={resumeLink} target="_blank" className="int-link-cell">
@@ -206,52 +176,71 @@ const MyReumes = () => {
       </a>
     );
   };
-
-
+ 
+  const columns = [
+    {
+      header: "Sr. No.",
+      body: (data, options) => options.rowIndex + 1,
+      //bodyClassName: "int-edit-col",
+      bodyClassName: "my_resume-col",
+    },
+    {
+      field: "resumePath",
+      header: "Resume",
+      body: resumeBodyTemplate,
+      sortable: true,
+      bodyClassName: "my_resume-col",
+    },
+    {
+      field: "candidateStatusId",
+      header: "Status",
+      body: SingleSelect,
+      bodyClassName: "my_resume-col",
+      sortable: true,
+    },
+    {
+      field: "reviewedByEmployeeIds",
+      header: "Forward To",
+      body: MultiSelect,
+      bodyClassName: "my_resume-col",
+      sortable: true,
+    },
+    {
+      field: "reason",
+      header: "Reason",
+      body: textEditor,
+      sortable: true,
+    },
+    {
+      header: "Action",
+      body: actionBodyTemplate,
+      bodyClassName: "my_resume-col",
+    },
+  ];
   return (
     <div className="my-resume">
       <h3 className="my-resume-title">My Resumes</h3>
-
+ 
       <div className="my-resume-table">
         <DataTable
           value={values}
-          paginator={values.length > 7}
+          paginator={values.length > 10}
           removableSort
-          rows={7}
+          rows={10}
           scrollable
-          // header={header}
           scrollHeight="flex"
         >
-          <Column field="id" header="Sr No." headerStyle={{ width: "5%" }} ></Column>
-          <Column
-            field="resumePath"
-            header="Resume"
-            body={resumeBodyTemplate}
-          ></Column>
-          <Column
-            field="candidateStatusId"
-            header="Status"
-            body={SingleSelect}
-            editor={(options) => SingleSelect(options)}
-          ></Column>
-          <Column
-            field="reviewedByEmployeeId"
-            header="Forward To"
-            body={MultiSelect}
-            editor={(options) => MultiSelect(options)}
-          ></Column>
-          <Column
-            field="reason"
-            header="Reason"
-            editor={(options) => textEditor(options)}
-          ></Column>
-
-          <Column
-            header="Action"
-            headerStyle={{ width: "10%", minWidth: "8rem" }}
-            bodyStyle={{ textAlign: "left" }}
-            body={actionBodyTemplate}
-          ></Column>
+          {columns.map((col) => (
+            <Column
+              field={col.field}
+              header={col.header}
+              body={col.body}
+ 
+              bodyClassName={"int-col " + col.bodyClassName}
+              sortable={col.sortable}
+            />
+          ))}
+ 
         </DataTable>
       </div>
     </div>
