@@ -6,7 +6,7 @@
 
         public int CandidateId { get; set; }
 
-        public int EvaluationId { get; set; }
+       // public int EvaluationId { get; set; }
 
         public int InterviewerId { get; set; }
 
@@ -16,11 +16,11 @@
 
         public TimeOnly? ToTimeUtc { get; set; }
 
-        public int EvaluationFeedbackId { get; set; }
+      //  public int EvaluationFeedbackId { get; set; }
 
         public int EvalutionStatusId { get; set; }
 
-        public string FeedbackAsDraft { get; set; } = null!;
+       // public string FeedbackAsDraft { get; set; } = null!;
 
         public int CreatedByEmployeeId { get; set; }
 

@@ -365,9 +365,9 @@ public partial class MRFDBContext : DbContext
 
             entity.HasIndex(e => e.CandidateId, "FK_CandidateMasterInterviewEvaluation");
 
-            entity.HasIndex(e => e.EvaluationFeedbackId, "FK_EvaluationFeedbackMasterInterviewEvaluation");
+            //entity.HasIndex(e => e.EvaluationFeedbackId, "FK_EvaluationFeedbackMasterInterviewEvaluation");
 
-            entity.HasIndex(e => e.EvaluationId, "FK_EvaluationMasterInterviewEvaluation");
+            //entity.HasIndex(e => e.EvaluationId, "FK_EvaluationMasterInterviewEvaluation");
 
             entity.HasIndex(e => e.EvalutionStatusId, "FK_EvaluationStatusMasterInterviewEvaluation");
 
@@ -379,10 +379,10 @@ public partial class MRFDBContext : DbContext
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime");
-            entity.Property(e => e.EvaluationFeedbackId).HasColumnType("int(11)");
-            entity.Property(e => e.EvaluationId).HasColumnType("int(11)");
+            //entity.Property(e => e.EvaluationFeedbackId).HasColumnType("int(11)");
+            //entity.Property(e => e.EvaluationId).HasColumnType("int(11)");
             entity.Property(e => e.EvalutionStatusId).HasColumnType("int(11)");
-            entity.Property(e => e.FeedbackAsDraft).HasMaxLength(100);
+            //entity.Property(e => e.FeedbackAsDraft).HasMaxLength(100);
             entity.Property(e => e.FromTimeUtc).HasColumnType("time");
             entity.Property(e => e.InterviewerId).HasColumnType("int(11)");
             entity.Property(e => e.ToTimeUtc).HasColumnType("time");
