@@ -2,70 +2,81 @@ import { useEffect, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { API_URL } from "../constants/config";
 import { getData } from "../constants/Utils";
-
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import "../css/InterviewFeedback.css";
 
 const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
-	const [feedData, setFeedData] = useState({});
-	useEffect(() => {
-		async function getFeedData() {
-			const apiUrl = API_URL.INTERVIEW_FEEDBACK + "/" + cId;
-			const data = await getData(apiUrl);
-			setFeedData(data.result);
-		}
-		//feedList();
-		//if (cId) {
-			//getFeedData();
-		//}
-	}, [cId]);
-
-
-	const feedList = () => {
-		const apiUrl =
-		  API_URL.GET_CREATE_REQUISITION_DEPARTMENT ;
-		fetch(apiUrl)
-		  .then((response) => response.json())
-		  .then((responseData) => {
-			if (Array.isArray(responseData.result)) {
-			  const data = responseData.result;
+    const [feedData, setFeedData] = useState([{}]);
 	
-			  
-			} else {
-			  console.error("API response result is not an array:", responseData);
-			}
-		  })
-		  .catch((error) => {
-			console.error("Fetch error:", error);
-		  });
-	  };
-	
+    const onLoad = () => {
+        fetch(API_URL.INTERVIEW_FEEDBACK + "/" + cId)
+		.then((response) => {
+				return response.json();
+			  })
+			  .then((json) => {
+				setFeedData(json["result"]);
+				
+			  })
+		
+			  .catch((error) => console.log(error));
+		  
+    };
 
+    useEffect(() => {
+        onLoad();
+    }, [cId]);
 
+    const columns = [
+        {
+            field: "interviewRound",
+            header: "Round",
+            bodyClassName: ".feed-col",
+            sortable: true,
+        },
+        {
+            field: "comments",
+            header: "Comments",
+            sortable: true,
+        },
+    ];
 
-
-	return (
-		<Dialog
-			header="Interview Feedback"
-			visible={visible}
-			onHide={onHide}
-			draggable={false}
-			dismissableMask
-			className="feed-popup"
-		>
-			{!feedData ? (
-				<p className="no-feed">No Feedback Yet</p>
-			) : (
-				<ol className="feed-popup-content">
-					{feedList.map((e) => (
-						<li className="feed-li">
-							<p>{e.label}</p>
-							<p>{feedData[e.key]}</p>
-						</li>
-					))}
-				</ol>
-			)}
-		</Dialog>
-	);
+    return (
+        <Dialog
+            header="Interview Feedback"
+            visible={visible}
+            onHide={onHide}
+            draggable={false}
+            dismissableMask
+            className="feed-popup"
+        >
+            {feedData.length === 0 ? (
+                <p className="no-feed">No Feedback Yet</p>
+            ) : (
+                <div className="feed-table">
+                    <DataTable
+                        value={feedData}
+                        paginator={feedData.length > 10}
+                        removableSort
+                        rows={10}
+                        scrollable
+                        scrollHeight="flex"
+                    >
+                        {columns.map((col, index) => (
+                            <Column
+                                key={index}
+                                field={col.field}
+                                header={col.header}
+                                bodyClassName={"feed-col " + col.bodyClassName}
+                                sortable={col.sortable}
+                            />
+                        ))}
+                    </DataTable>
+                </div>
+            )}
+        </Dialog>
+    );
 };
 
 export default InterviewFeedbackComponent;
+

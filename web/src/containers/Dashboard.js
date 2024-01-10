@@ -248,6 +248,7 @@ function Dashboard({ roleId, userId }) {
                 onHide={() => setInterviewPopup(false)}
                 mrfId={interviewPopupId}
                 roleId={roleId}
+                userId={userId}
               />
 
               <DashBoardDataTable

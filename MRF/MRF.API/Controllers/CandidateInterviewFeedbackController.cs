@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CandidateInterviewFeedbackController : ControllerBase
     {
@@ -60,6 +60,26 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo($"Fetching All Gender by Id: {id}");
             CandidateInterviewFeedback candidateInterviewFeedback = _unitOfWork.CandidateInterviewFeedback.Get(u => u.Id == id);
+            if (candidateInterviewFeedback == null)
+            {
+                _logger.LogError($"No result found by this Id:{id}");
+            }
+            _response.Result = candidateInterviewFeedback;
+            return _response;
+        }
+
+        [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(CandidateInterviewFeedback))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetByCandidate(int id)
+        {
+            _logger.LogInfo($"Fetching All Gender by Id: {id}");
+            List<CandidateInterviewFeedback> candidateInterviewFeedback = _unitOfWork.CandidateInterviewFeedback.GetA(u => u.CandidateId == id).ToList();
             if (candidateInterviewFeedback == null)
             {
                 _logger.LogError($"No result found by this Id:{id}");
