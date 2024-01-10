@@ -32,12 +32,21 @@ const resumeBodyTemplate = (interview) => {
 };
 
 const attachmentBodyTemplate = (interview) => {
-	let attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
-	return (
-		<a href={attachmentLink} target="_blank" className="int-link-cell">
-			 
-		</a>
-	);
+	if (interview.attachment) {
+        let attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
+        return (
+            <a href={attachmentLink} target="_blank" className="int-link-cell">
+                {/* You can also display the attachment name or any other details */}
+                View Attachment
+            </a>
+        );
+    } else {
+        return (
+            <span className="no-attachment-message">
+                N/A
+            </span>
+        );
+    }
 };
 
 //summary component
@@ -50,6 +59,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 	const [saveBttn, setSaveBttn] = useState([]);
 	const [showFeed, setShowFeed] = useState(false);
 	const [selectedId, setSelectedId] = useState(null);
+	
 
 	async function getIntData() {
 		const apiUrl =
@@ -152,23 +162,35 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 
 	
 
-	const feedbackBodyTemplate = (interview) => {
-		if (interview.evalutionStatusId < 5) return "To be updated";
-		return (
-			<p
-				onClick={() => {
-					setSelectedId(interview.candidateId);
-					setShowFeed(true);
-				}}
-				className="int-link-cell"
-			>
-				Click Here
-			</p>
-		);
-	};
+			const feedbackBodyTemplate = (interview) => {
+				if (interview.evalutionStatusId < 5) return "To be updated";
+		
+				return (
+					<>
+						<p
+							onClick={() => {
+								setSelectedId(interview.candidateId);
+								setShowFeed(true);
+							}}
+							className="int-link-cell"
+						>
+							Click Here
+						</p>
+						{showFeed && selectedId === interview.candidateId && (
+							<InterviewFeedbackComponent
+								visible={showFeed}
+								onHide={() => setShowFeed(false)}
+								cId={selectedId}
+							/>
+						)}
+					</>
+				);
+			};
 
 	const actionBodyTemplate = (interview, options) => {
+		
 		if (saveBttn[options.rowIndex]) {
+			alert('hi');
 			return <Button icon="pi pi-save" />;
 		}
 		return <Button icon="pi pi-save" disabled />;
@@ -274,9 +296,5 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		</Dialog>
 	);
 };
-/*<InterviewFeedbackComponent
-				visible={showFeed}
-				onHide={setShowFeed}
-				cId={selectedId}
-			/>*/
+
 export default InterviewSummary;

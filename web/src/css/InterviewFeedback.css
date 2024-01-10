@@ -1,6 +1,8 @@
 .feed-popup {
 	font-weight: 500;
 	color: #0b1016;
+	width: 65%;
+    height: 50%;
 }
 .feed-popup .p-dialog-content {
 	padding: 0;
@@ -34,4 +36,45 @@
 .feed-li p:first-child {
 	color: #d32f2e;
 	min-width: 100px;
+}
+
+
+.feed-table {
+	border-radius: 0.5rem;
+	background-color: white;
+	padding: 0.5rem;
+	height: 77vh;
+}
+
+
+
+.feed-table th {
+	font-size: 14px;
+	color: black;
+	/* text-align: center; */
+}
+.feed-table .p-highlight,
+.feed-table .p-highlight .p-sortable-column-icon {
+	color: #d32f2e;
+}
+
+.ref-col-cell {
+	margin: 0;
+	font-weight: 500;
+	color: #d32f2e;
+	text-decoration: underline;
+	text-underline-offset: 5px;
+	cursor: pointer;
+}
+
+.feed-col {
+	font-size: 14px;
+	font-weight: 500;
+	color: #0b1016;
+	width: 8%;
+	min-width: max-content;
+}
+
+.feed-col {
+	width: 16%;
 }
