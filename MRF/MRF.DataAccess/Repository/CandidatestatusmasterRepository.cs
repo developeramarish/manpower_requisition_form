@@ -18,7 +18,7 @@ namespace MRF.DataAccess.Repository
         public List<Candidatestatusmaster> GetCandidatesByResumestatus() {
 
             List<Candidatestatusmaster> CStatus = (from s in _db.Candidatestatusmaster
-                           where s.Status.Contains("resume")
+                 
                            select s).ToList();
 
             return CStatus.ToList();
