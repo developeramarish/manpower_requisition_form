@@ -4,16 +4,16 @@ using MRF.Models.Models;
 
 namespace MRF.DataAccess.Repository
 {
-    public class MrfdetailsPDFRepository : Repository<MrfdetailsPDF>, IMrfdetailsPDFRepository
+    public class MrfdetailsEmailRepository : Repository<MrfdetailsPDF>, IMrfdetailsPDFRepository
     {
         private readonly Data.MRFDBContext _db;
-        public MrfdetailsPDFRepository(Data.MRFDBContext db) : base(db)
+        public MrfdetailsEmailRepository(Data.MRFDBContext db) : base(db)
         {
             _db = db;
         }
-        public MrfdetailsPDFRequestModel GetRequisition(int MrfId)
+        public MrfdetailsEmailRequestModel GetRequisition(int MrfId)
         {
-            List<MrfdetailsPDFRequestModel> query = (from MD in _db.Mrfdetails
+            List<MrfdetailsEmailRequestModel> query = (from MD in _db.Mrfdetails
                                                      join DEPT in _db.Departmentmaster on MD.DepartmentId equals DEPT.Id
                                                      join SUBDEPT in _db.Departmentmaster on MD.SubDepartmentId equals SUBDEPT.Id
                                                      join PM in _db.Projectmaster on MD.ProjectId equals PM.Id
@@ -31,8 +31,9 @@ namespace MRF.DataAccess.Repository
                                                      join FMRF in _db.Freshmrfdetails on MD.Id equals FMRF.MrfId
                                                      join CBY in _db.Employeedetails on MD.CreatedByEmployeeId equals CBY.Id
                                                      join PNAME in _db.PositionTitlemaster on MD.PositionTitleId equals PNAME.Id
+                                                     join MAPPR in _db.MrfEmailApproval on MD.Id equals MAPPR.MrfId
                                                      where MD.Id == MrfId
-                                                     select new MrfdetailsPDFRequestModel
+                                                     select new MrfdetailsEmailRequestModel
                                                      {
                                                          Id = MD.Id,
                                                          ReferenceNo = MD.ReferenceNo,
@@ -59,7 +60,8 @@ namespace MRF.DataAccess.Repository
                                                          Skills = FMRF.Skills,
                                                          MinTargetSalary = FMRF.MinTargetSalary,
                                                          MaxTargetSalary = FMRF.MaxTargetSalary,
-                                                         MRFRaisedBy=CBY.Name
+                                                         MRFRaisedBy=CBY.Name,
+                                                         ApproverId=MAPPR.EmployeeId
                                                      }).ToList();
             return query.FirstOrDefault();
 

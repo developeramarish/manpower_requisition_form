@@ -2,7 +2,7 @@
 
 namespace MRF.Models.DTO
 {
-    public class MrfdetailsPDFRequestModel
+    public class MrfdetailsEmailRequestModel
     {
         public int Id { get; set; }
         public string? ReferenceNo { get; set; } = null!;
@@ -31,6 +31,7 @@ namespace MRF.Models.DTO
         public int? MinTargetSalary { get; set; }
         public int? MaxTargetSalary { get; set; }
         public string? MRFRaisedBy { get; set; }
+        public int ApproverId { get; set; }
     }
 
     public class MrfdetailsPDFResponseModel

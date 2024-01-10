@@ -45,7 +45,7 @@ namespace MRF.DataAccess.Repository
         public IMrfEmailApprovalRepository MrfEmailApproval { get; private set; }
         public ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; private set; }
         public ImrfDetailsStatusHistory mrfDetailsStatusHistory { get; private set; }
-        public IMrfdetailsPDFRepository MrfdetailsPDFRepository { get; private set; }
+        public IMrfdetailsPDFRepository MrfdetailsEmailRepository { get; private set; }
 
         public IPositionTitlemasterRepository PositionTitlemaster { get; private set; }
 
@@ -93,7 +93,7 @@ namespace MRF.DataAccess.Repository
             MrfEmailApproval = new MrfEmailApprovalRepository(_db);
             CandidateInterviewFeedback = new CandidateInterviewFeedbackRepository(_db);
             mrfDetailsStatusHistory=new mrfDetailsStatusHistoryRepository(_db);
-            MrfdetailsPDFRepository = new MrfdetailsPDFRepository(_db);
+            MrfdetailsEmailRepository = new MrfdetailsEmailRepository(_db);
             PositionTitlemaster = new PositionTitleRepository(_db);
             Sourcemaster = new  SourceRepository(_db);
         }
