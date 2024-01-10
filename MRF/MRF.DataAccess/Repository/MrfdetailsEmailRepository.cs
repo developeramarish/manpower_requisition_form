@@ -31,6 +31,7 @@ namespace MRF.DataAccess.Repository
                                                      join FMRF in _db.Freshmrfdetails on MD.Id equals FMRF.MrfId
                                                      join CBY in _db.Employeedetails on MD.CreatedByEmployeeId equals CBY.Id
                                                      join PNAME in _db.PositionTitlemaster on MD.PositionTitleId equals PNAME.Id
+                                                     join MAPPR in _db.MrfEmailApproval on MD.Id equals MAPPR.MrfId
                                                      where MD.Id == MrfId
                                                      select new MrfdetailsEmailRequestModel
                                                      {
@@ -59,7 +60,8 @@ namespace MRF.DataAccess.Repository
                                                          Skills = FMRF.Skills,
                                                          MinTargetSalary = FMRF.MinTargetSalary,
                                                          MaxTargetSalary = FMRF.MaxTargetSalary,
-                                                         MRFRaisedBy=CBY.Name
+                                                         MRFRaisedBy=CBY.Name,
+                                                         ApproverId=MAPPR.EmployeeId
                                                      }).ToList();
             return query.FirstOrDefault();
 
