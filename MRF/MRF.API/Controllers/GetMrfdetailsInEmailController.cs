@@ -18,15 +18,16 @@ namespace MRF.API.Controllers
         private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IHTMLtoPDF _hTMLtoPDF;
-        
-        public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF)
+        private readonly IConfiguration _configuration;
+        public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
-            _hTMLtoPDF= hTMLtoPDF;
+            _hTMLtoPDF = hTMLtoPDF;
+            _configuration = configuration;
         }
 
         [HttpGet("{MrfId}")]
@@ -37,23 +38,23 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public MrfdetailsPDFRequestModel GetRequisition(int MrfId)
+        public MrfdetailsEmailRequestModel GetRequisition(int MrfId)
         {
-            var mrfdetailpdf = _unitOfWork.MrfdetailsPDFRepository.GetRequisition(MrfId);
-            if (mrfdetailpdf == null)
+            var mrfdetail = _unitOfWork.MrfdetailsEmailRepository.GetRequisition(MrfId);
+            if (mrfdetail == null)
             {
                 _logger.LogError($"No result found by this Id:{MrfId}");
-                return new MrfdetailsPDFRequestModel();
+                return new MrfdetailsEmailRequestModel();
             }
 
             var emailTemplatePath = Path.Combine(_hostEnvironment.ContentRootPath, "EmailTemplate", "MRFEmailTemplate.html");
-            var pdfFileName = $"{mrfdetailpdf.ReferenceNo.Replace("/", "_")}.pdf";
+            var pdfFileName = $"{mrfdetail.ReferenceNo.Replace("/", "_")}.pdf";
             string htmlBody;
             using (var sourceReader = System.IO.File.OpenText(emailTemplatePath))
             {
                 var builder = new BodyBuilder();
                 builder.HtmlBody = sourceReader.ReadToEnd();
-                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetailpdf);
+                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetail);
             }
 
             //Commented code to convert html to pdf
@@ -64,28 +65,36 @@ namespace MRF.API.Controllers
             {
                _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, htmlBody);
             }
-            return mrfdetailpdf;
+            return mrfdetail;
         }
-        private string GetHtmlTemplateBody(string htmlBody, MrfdetailsPDFRequestModel mrfdetailpdf)
+        private string GetHtmlTemplateBody(string htmlBody, MrfdetailsEmailRequestModel mrfdetailemail)
         {
-            string approvalLink = Request.Host + "/api/";
+            string base_url = _configuration["Links:BaseUrl"];
+          
+            int MRFId = mrfdetailemail.Id;
+            int EMPID = mrfdetailemail.ApproverId;
+            int StatusId = 7;
+            string strApprovalLink = $"{base_url}/approve/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
+            string strRejectionLink = $"{base_url}/reject/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
+            string strByPassLink = $"{base_url}/bypass/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
 
             // Replace placeholders in HTML with data
             string messageBody = htmlBody
-              .Replace("{ReferenceNo}", mrfdetailpdf.ReferenceNo)
-              .Replace("{NumberOfVacancies}", Convert.ToString(mrfdetailpdf.NumberOfVacancies))
-              .Replace("{MaxTargetSalary}", Convert.ToString((mrfdetailpdf.MaxTargetSalary) / 100000))
-              .Replace("{TotalTargetSalary}", Convert.ToString((mrfdetailpdf.MaxTargetSalary * mrfdetailpdf.NumberOfVacancies) / 100000))
-              .Replace("{GradeMin}", mrfdetailpdf.GradeMin)
-              .Replace("{GradeMax}", mrfdetailpdf.GradeMax)
-              .Replace("{PositionName}", mrfdetailpdf.PositionName)
-              .Replace("{Department}", mrfdetailpdf.Department)
-              .Replace("{SubDepartment}", mrfdetailpdf.SubDepartment)
-              .Replace("{Project}", mrfdetailpdf.Project)
-              .Replace("{Justification}", mrfdetailpdf.Justification)
-              .Replace("{MRFRaisedBy}", Convert.ToString(mrfdetailpdf.MRFRaisedBy))
-              .Replace("{approvalLink}", approvalLink)
-              .Replace("{rejectLink}", approvalLink);
+              .Replace("{ReferenceNo}", mrfdetailemail.ReferenceNo)
+              .Replace("{NumberOfVacancies}", Convert.ToString(mrfdetailemail.NumberOfVacancies))
+              .Replace("{MaxTargetSalary}", Convert.ToString((mrfdetailemail.MaxTargetSalary) / 100000))
+              .Replace("{TotalTargetSalary}", Convert.ToString((mrfdetailemail.MaxTargetSalary * mrfdetailemail.NumberOfVacancies) / 100000))
+              .Replace("{GradeMin}", mrfdetailemail.GradeMin)
+              .Replace("{GradeMax}", mrfdetailemail.GradeMax)
+              .Replace("{PositionName}", mrfdetailemail.PositionName)
+              .Replace("{Department}", mrfdetailemail.Department)
+              .Replace("{SubDepartment}", mrfdetailemail.SubDepartment)
+              .Replace("{Project}", mrfdetailemail.Project)
+              .Replace("{Justification}", mrfdetailemail.Justification)
+              .Replace("{MRFRaisedBy}", Convert.ToString(mrfdetailemail.MRFRaisedBy))
+              .Replace("{approvalLink}", strApprovalLink)
+              .Replace("{rejectLink}", strRejectionLink)
+              .Replace("{bypassLink}", strByPassLink);
 
             return messageBody;
         }
