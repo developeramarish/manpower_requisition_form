@@ -12,7 +12,7 @@ export const API_URL = {
   RESUME_SUMMARY_POPUP: `${APIPath}Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
   RESUME_SUMMARY_POST: `${APIPath}Candidatedetail/Put/`,
   INTERVIEW_FEEDBACK: `${APIPath}CandidateInterviewFeedback/GetByCandidate`,
-  INTERVIEW_EVALUATION: `${APIPath}intervewevaluation/PUT`,
+  INTERVIEW_EVALUATION: `${APIPath}interviewevaluation/`,
   INTERVIEW_FEEDBACK_MASTER: `${APIPath}evaluationfeedbackmaster`,
   MRF_PARTIAL_STATUS_UPDATE: `${APIPath}Mrfdetail/PartialUpdateMRFStatus/`,
   GET_CREATE_REQUISITION_DEPARTMENT: `${APIPath}Subdepartment/GetInfo/`,
