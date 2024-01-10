@@ -71,12 +71,12 @@ namespace MRF.API.Controllers
         {
             string base_url = _configuration["Links:BaseUrl"];
           
-            int MRFId = mrfdetailemail.Id;
-            int EMPID = mrfdetailemail.ApproverId;
+            int MrfId = mrfdetailemail.Id;
+            int EmpId = mrfdetailemail.ApproverId;
             int StatusId = 7;
-            string strApprovalLink = $"{base_url}/approve/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
-            string strRejectionLink = $"{base_url}/reject/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
-            string strByPassLink = $"{base_url}/bypass/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
+            string strApprovalLink = $"{base_url}/approve/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
+            string strRejectionLink = $"{base_url}/reject/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
+            string strByPassLink = $"{base_url}/bypass/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
 
             // Replace placeholders in HTML with data
             string messageBody = htmlBody
