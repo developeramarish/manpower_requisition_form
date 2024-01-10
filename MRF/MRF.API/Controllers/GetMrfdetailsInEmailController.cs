@@ -38,7 +38,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public MrfdetailsEmailRequestModel GetRequisition(int MrfId)
+        public MrfdetailsEmailRequestModel GetRequisition(int MrfId, int EmployeeId, int MrfStatusId)
         {
             var mrfdetail = _unitOfWork.MrfdetailsEmailRepository.GetRequisition(MrfId);
             if (mrfdetail == null)
@@ -54,28 +54,43 @@ namespace MRF.API.Controllers
             {
                 var builder = new BodyBuilder();
                 builder.HtmlBody = sourceReader.ReadToEnd();
-                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetail);
+                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetail, EmployeeId, MrfStatusId);
             }
 
             //Commented code to convert html to pdf
             //_hTMLtoPDF.CovertHtmlToPDF(htmlBody, pdfFileName);
 
-            var emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Awaiting COO Approval");
-            if (emailRequest != null)
+            // Send Email to HOD,COO
+            //Get Employee Details
+            var EmpDetails = _unitOfWork.Employeedetails.Get(u => u.Id == EmployeeId);
+
+            //Get MRF Status
+            var MrfStatus = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == MrfStatusId);
+
+
+            //if (MrfStatus != null && EmpDetails != null)
+            //    _emailService.SendEmail(EmpDetails.Email, MrfStatus.Status, htmlBody); // TO DO : Discussion Required on Subject
+
+            var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
+           
+            List<string> emailList = SendEmailOnStatus(MrfStatusId);
+            foreach (var emailReq in emailList)
             {
-               _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, htmlBody);
+                _emailService.SendEmail(emailReq, emailMaster.Subject, emailMaster.Content);
             }
+
             return mrfdetail;
         }
-        private string GetHtmlTemplateBody(string htmlBody, MrfdetailsEmailRequestModel mrfdetailemail)
+        private string GetHtmlTemplateBody(string htmlBody, MrfdetailsEmailRequestModel mrfdetailemail, int employeeId, int MrfStatusId)
         {
             string base_url = _configuration["Links:BaseUrl"];
           
             int MrfId = mrfdetailemail.Id;
-            int EmpId = mrfdetailemail.ApproverId;
-            int StatusId = 7;
+            int EmpId = employeeId;
+            int StatusId = MrfStatusId;
+            int RejectStatusId = 8;
             string strApprovalLink = $"{base_url}/approve/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
-            string strRejectionLink = $"{base_url}/reject/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
+            string strRejectionLink = $"{base_url}/reject/MrfId={MrfId}/EmpId={EmpId}/StatusId={RejectStatusId}";
             string strByPassLink = $"{base_url}/bypass/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
 
             // Replace placeholders in HTML with data
@@ -97,6 +112,11 @@ namespace MRF.API.Controllers
               .Replace("{bypassLink}", strByPassLink);
 
             return messageBody;
+        }
+
+        public List<string> SendEmailOnStatus(int MrfStatusId)
+        {
+            return _unitOfWork.EmailRecipientRepository.GetEmailRecipient(MrfStatusId);
         }
     }
 }
