@@ -40,7 +40,7 @@
         IMrfEmailApprovalRepository MrfEmailApproval { get; }
         ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; }
         ImrfDetailsStatusHistory mrfDetailsStatusHistory { get; }
-        IMrfdetailsPDFRepository MrfdetailsPDFRepository { get; }
+        IMrfdetailsPDFRepository MrfdetailsEmailRepository { get; }
 
         IPositionTitlemasterRepository PositionTitlemaster { get; }
 
