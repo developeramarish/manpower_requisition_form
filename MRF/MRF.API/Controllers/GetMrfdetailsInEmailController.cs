@@ -18,15 +18,16 @@ namespace MRF.API.Controllers
         private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IHTMLtoPDF _hTMLtoPDF;
-        
-        public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF)
+        private readonly IConfiguration _configuration;
+        public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
-            _hTMLtoPDF= hTMLtoPDF;
+            _hTMLtoPDF = hTMLtoPDF;
+            _configuration = configuration;
         }
 
         [HttpGet("{MrfId}")]
@@ -82,8 +83,9 @@ namespace MRF.API.Controllers
               .Replace("{Project}", mrfdetailpdf.Project)
               .Replace("{Justification}", mrfdetailpdf.Justification)
               .Replace("{MRFRaisedBy}", Convert.ToString(mrfdetailpdf.MRFRaisedBy))
-              .Replace("{approvalLink}", "https://" + Request.Host + "/request/approve")
-              .Replace("{rejectLink}", "https://" + Request.Host + "/request/reject");
+              .Replace("{approvalLink}", _configuration["Links:ApprovalLink"])
+              .Replace("{rejectLink}", _configuration["Links:RejectionLink"])
+              .Replace("{bypassLink}", _configuration["Links:BypassLink"]);
 
             return messageBody;
         }
