@@ -28,7 +28,14 @@ namespace MRF.API.Controllers
             {
                 string ldapServer = _configuration["LDAP:Server"];
                 int ldapPort = int.Parse(_configuration["LDAP:Port"]);
-                string baseDN = _configuration["LDAP:baseDN"];
+                string[] baseDNs = new string[]
+                {
+                    "OU=Mumbai,DC=kwglobal,DC=com",
+                    "OU=Chennai,DC=kwglobal,DC=com",
+                    "OU=Bangalore,DC=kwglobal,DC=com",
+                    "OU=Noida,DC=kwglobal,DC=com"
+                    // Add more OUs as needed
+                };
                 string username = _configuration["LDAP:UserName"];
                 string password = _configuration["LDAP:Password"];
 
@@ -43,53 +50,56 @@ namespace MRF.API.Controllers
                     ldapConnection.Credential = new System.Net.NetworkCredential(username, password);
                     ldapConnection.Bind();
 
-                    do
+                    foreach (string baseDN in baseDNs)
                     {
-                        SearchRequest searchRequest = new SearchRequest(
-                            baseDN,
-                            "(objectClass=user)",
-                            SearchScope.Subtree,
-                           // "sAMAccountName", "mail","description" // Add attributes to fetch here
-                           null
-                        );
-
-                        PageResultRequestControl pageRequestControl = new PageResultRequestControl(pageSize);
-                        if (cookie != null)
+                        do
                         {
-                            pageRequestControl.Cookie = cookie;
-                        }
-                        searchRequest.Controls.Add(pageRequestControl);
+                            SearchRequest searchRequest = new SearchRequest(
+                                baseDN,
+                                "(objectClass=user)",
+                                SearchScope.Subtree,
+                                // "sAMAccountName", "mail","description" // Add attributes to fetch here
+                                null
+                            );
 
-                        SearchResponse searchResponse = (SearchResponse)ldapConnection.SendRequest(searchRequest);
-
-                        results = searchResponse.Entries;
-
-                        foreach (SearchResultEntry entry in results)
-                        {
-                            var sAMAccountNameAttr = entry.Attributes["sAMAccountName"];
-                            var mailAttr = entry.Attributes["mail"];
-                            var description = entry.Attributes["description"];
-                            if (sAMAccountNameAttr != null && sAMAccountNameAttr.Count > 0
-                                && mailAttr != null && mailAttr.Count > 0 && description != null && description.Count > 0)
+                            PageResultRequestControl pageRequestControl = new PageResultRequestControl(pageSize);
+                            if (cookie != null)
                             {
-                                ldapEmployees.Add(new LdapEmployeeDTO
+                                pageRequestControl.Cookie = cookie;
+                            }
+                            searchRequest.Controls.Add(pageRequestControl);
+
+                            SearchResponse searchResponse = (SearchResponse)ldapConnection.SendRequest(searchRequest);
+
+                            results = searchResponse.Entries;
+
+                            foreach (SearchResultEntry entry in results)
+                            {
+                                var sAMAccountNameAttr = entry.Attributes["sAMAccountName"];
+                                var mailAttr = entry.Attributes["mail"];
+                                var description = entry.Attributes["description"];
+                                if (sAMAccountNameAttr != null && sAMAccountNameAttr.Count > 0
+                                    && mailAttr != null && mailAttr.Count > 0 && description != null && description.Count > 0)
                                 {
-                                    UserName = sAMAccountNameAttr[0].ToString(),
-                                    Email = mailAttr[0].ToString(),
-                                    EmployeeId = description[0].ToString()
-                                });
+                                    ldapEmployees.Add(new LdapEmployeeDTO
+                                    {
+                                        UserName = sAMAccountNameAttr[0].ToString(),
+                                        Email = mailAttr[0].ToString(),
+                                        EmployeeId = description[0].ToString()
+                                    });
+                                }
                             }
-                        }
 
-                        foreach (DirectoryControl control in searchResponse.Controls)
-                        {
-                            if (control is PageResultResponseControl)
+                            foreach (DirectoryControl control in searchResponse.Controls)
                             {
-                                cookie = ((PageResultResponseControl)control).Cookie;
-                                break;
+                                if (control is PageResultResponseControl)
+                                {
+                                    cookie = ((PageResultResponseControl)control).Cookie;
+                                    break;
+                                }
                             }
-                        }
-                    } while (cookie != null && cookie.Length > 0 && results != null && results.Count > 0);
+                        } while (cookie != null && cookie.Length > 0 && results != null && results.Count > 0);
+                    }
                 }
 
                 return Ok(ldapEmployees); // Return the fetched LDAP employees as JSON
@@ -100,5 +110,6 @@ namespace MRF.API.Controllers
                 return StatusCode(500, "Error fetching LDAP employees");
             }
         }
+
     }
 }

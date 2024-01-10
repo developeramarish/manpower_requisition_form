@@ -42,6 +42,12 @@ const MyRequisitions = ({roleId,userId}) => {
 			bodyClassName: "ref-col",
 		},
 		{
+			field: "positionTitle",
+			header: "Position Title",
+			bodyClassName: " mrfdraft-ref-col  ",
+			sortable: true,
+		},
+		{
 			field: "name",
 			header: "Created By",
 			sortable: true,
@@ -92,7 +98,6 @@ const MyRequisitions = ({roleId,userId}) => {
 			<h3 className="my-req-title">My Requisition</h3>
 			<div className="req-table">
 				<DataTable
-					header=""
 					value={reqData}
 					paginator={reqData.length > 10}
 					removableSort

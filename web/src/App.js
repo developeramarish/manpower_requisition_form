@@ -33,7 +33,10 @@ import MyRequisitions from "./containers/MyRequisitions";
 import CreateRequisition from "./Pages/CreateRequisition";
 import AddCandidate from "./Pages/AddCandidate";
 import ViewCandidate from "./Pages/ViewCandidate";
+import MyReumes from "./Pages/MyReumes";
 import Footer from "./components/Footer";
+import EmployeDetails from "./Pages/EmployeDetails";
+import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
@@ -155,6 +158,14 @@ function App() {
                     userId={profile.employeeId}
                   />
                 )}
+                {currentPageKey === "employee" && (
+                  <EmployeDetails
+                  />
+                )}
+                 {currentPageKey === "employee_edit" && (
+                  <EmployeeDtailsEdit
+                  />
+                )}
                 {currentPageKey === "add_candidate" && (
                   <AddCandidate 
                   reqId={params.mrfId}
@@ -170,6 +181,11 @@ function App() {
                   <ViewCandidate
                     
                   />
+                )}
+                {currentPageKey === "my_resume" && (
+                  <MyReumes/>
+                    
+                 
                 )}
                 {currentPageKey === "edit_requisition" && (
                   <CreateRequisition
@@ -188,9 +204,13 @@ function App() {
 
       <UnauthenticatedTemplate>
         <Login />
-        <h5 className="card-title">
+        <div className="login-load">
+
+        <img src="./images/logo.png" alt="mrf logo" />
+        </div>
+        {/* <h5 className="card-title">
           Please sign-in to see your profile information.
-        </h5>
+        </h5> */}
       </UnauthenticatedTemplate>
     </div>
   );
