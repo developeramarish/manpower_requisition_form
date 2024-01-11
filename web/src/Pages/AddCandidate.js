@@ -9,6 +9,7 @@ import { navigateTo } from "../constants/Utils";
 import { API_URL } from "../constants/config";
 import {FILE_URL} from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
+import InputNumberComponent from "../components/InputNumberComponent";
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -52,7 +53,7 @@ const AddCandidate = (reqId) => {
       });
     }, []);
     
-
+    const RedAsterisk = () => <span className="text-red-500">*</span>;
   const handleSubmit = async () => {
     const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
@@ -149,7 +150,7 @@ const AddCandidate = (reqId) => {
                 
                   <label htmlFor="name" className="font-bold text-sm">
                  
-                    Name
+                    Name<RedAsterisk/>
                   </label>
                   <InputTextCp
                     id="name"
@@ -161,7 +162,7 @@ const AddCandidate = (reqId) => {
                 </div>
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="email" className="font-bold text-sm">
-                    Email
+                    Email<RedAsterisk/>
                   </label>
                   <InputTextCp
                     id="email"
@@ -176,7 +177,7 @@ const AddCandidate = (reqId) => {
               <div className="flex justify-content-between gap-5">
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
-                    Contact
+                    Contact<RedAsterisk/>
                   </label>
                   <InputTextCp
                     id="contact"
@@ -185,10 +186,17 @@ const AddCandidate = (reqId) => {
                     }
                     value={formData.contactNo}
                   />
+                  {/* <InputNumberComponent
+                      id="contact"
+                      onChange={(e) =>
+                        setFormData({ ...formData, contactNo: e.target.value })
+                      }
+                      value={formData.contactNo}
+                    /> */}
                 </div>
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
-                     Source Name
+                     Source Name<RedAsterisk/>
                   </label>
                   <DropdownComponent
               optionLabel="name"
@@ -205,7 +213,7 @@ const AddCandidate = (reqId) => {
           
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="resume" className="font-bold text-sm">
-                    Resume
+                    Resume<RedAsterisk/>
                   </label>
                   <SingleFileUpload onChange={handleFileChange} />
                 </div>
