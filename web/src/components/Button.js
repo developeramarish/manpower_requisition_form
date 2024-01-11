@@ -10,7 +10,7 @@ const ButtonC = ({ onClick, label,style, icon, severity, className, outlined ,di
       severity={severity}
       className={className}
       label={label}
-      outlined={outlined}
+      // outlined
       disabled={disable}
       style={style}
     />
