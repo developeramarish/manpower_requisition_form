@@ -4,7 +4,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
-import { navigateTo } from "../constants/Utils";
+import { navigateTo, putData } from "../constants/Utils";
 import { API_URL, FILE_URL } from "../constants/config";
 import {
   arrayToObj,
@@ -93,11 +93,8 @@ const MyResume = () => {
     );
   };
   const updateData = async (rowData) => {
-    const response = await fetch(API_URL.RESUME_SUMMARY_POST + rowData.id, {
-      method: "Put",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(rowData),
-    })
+    
+    let response = await putData(`${API_URL.RESUME_SUMMARY_POST + rowData.id}`,rowData);
     if (response.ok) {
       const responseData = await response.json();
       console.log("Response Data:", responseData);
