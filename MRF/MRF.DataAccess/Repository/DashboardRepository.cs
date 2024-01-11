@@ -219,50 +219,63 @@ namespace MRF.DataAccess.Repository
             var CStatus = (from s in _db.Evaluationstatusmaster
                            select s).ToList();
             string Role = _Utility.GetRole(roleId);
+           
+            
+            
+                /* group by mrfid and evaluation id will get count */
+                var Interviewevaluation = (from mrfD in _db.Mrfdetails
+                                           join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                                           join interview in _db.Interviewevaluation on Candidate.Id equals interview.CandidateId
+                                           join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id
+                                           join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
+                                           where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                                                          || (Role == "interviewer" && interview.InterviewerId != 0
+                                               && interview.InterviewerId == userId) || (Role != "mrfowner" && Role != "interviewer"))
+                                           group new { mrfD, Candidate, interview, status } by new
 
-            //// by default all result added from evalution with count 0
-            //result.ForEach(r =>
-            //{
-            //result.resultGroups.AddRange(CStatus.Select(st => new ResultGroup
-            //{
-            //   Candidatestatus = st.Status,
-            //    TotalstatusCount = 0
-            //}));
-            //});
+                                           {
+                                               mrfD.Id,
+                                               mrfD.ReferenceNo,
+                                               position.Name,
+                                               status = status.Id,
 
-            /* group by mrfid and evaluation id will get count */
-            var Interviewevaluation = (from mrfD in _db.Mrfdetails
-                         join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
-                         join interview in _db.Interviewevaluation on Candidate.Id equals interview.CandidateId
-                         join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id 
-                         join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
-                         where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
-                                        || (Role == "interviewer" && interview.InterviewerId != 0
-                             && interview.InterviewerId==userId)  || (Role != "mrfowner" && Role != "interviewer"))
-                                       group new { mrfD, Candidate,  interview, status } by new
-                                       
-                                       {
-                             mrfD.Id,
-                             mrfD.ReferenceNo,
-                             position.Name,
-                             status=status.Id,
-                       
-                         }
-                 into grouped
-                         select new MrfInterviewSummaryViewModel
-                         {
-                             MrfId = grouped.Key.Id,
-                             EvaluationId= grouped.Key.status,
-                             ReferenceNo = grouped.Key.ReferenceNo,
-                             TotalCount = grouped.Count(),
-                             PositionTitle=grouped.Key.Name,
-                         })
-                         .OrderBy(result => result.MrfId)
-                         .ToList();
+                                           }
+                     into grouped
+                                           select new MrfInterviewSummaryViewModel
+                                           {
+                                               MrfId = grouped.Key.Id,
+                                               EvaluationId = grouped.Key.status,
+                                               ReferenceNo = grouped.Key.ReferenceNo,
+                                               TotalCount = grouped.Count(),
+                                               PositionTitle = grouped.Key.Name,
+                                           })
+                             .OrderBy(result => result.MrfId)
+                             .ToList();
 
 
+            if (Role == "mrfowner")
+            {
+                
+                var mrflist = (from mrfD in _db.Mrfdetails
+                           join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                           join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
+                           where mrfD.CreatedByEmployeeId == userId
+                           select new MrfInterviewSummaryViewModel
+                           {
+                               MrfId = mrfD.Id,
+                               ReferenceNo = mrfD.ReferenceNo,
+                               PositionTitle = position.Name,
+                           }).ToList();
 
-            //var result = new List<ResultViewModel>();
+
+                var newItems = mrflist.Where(x => !Interviewevaluation.Any(y => x.MrfId == y.MrfId));
+                foreach (var item in newItems)
+                {
+                    Interviewevaluation.Add(item);
+                }
+            }
+           
+            
 
             bool valid = false;
             foreach (var mrf in Interviewevaluation)
