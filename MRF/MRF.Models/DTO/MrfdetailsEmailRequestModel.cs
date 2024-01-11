@@ -31,7 +31,6 @@ namespace MRF.Models.DTO
         public int? MinTargetSalary { get; set; }
         public int? MaxTargetSalary { get; set; }
         public string? MRFRaisedBy { get; set; }
-        public int ApproverId { get; set; }
     }
 
     public class MrfdetailsPDFResponseModel

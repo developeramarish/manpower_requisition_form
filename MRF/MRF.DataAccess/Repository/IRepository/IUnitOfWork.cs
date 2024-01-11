@@ -41,11 +41,9 @@
         ICandidateInterviewFeedbackRepository CandidateInterviewFeedback { get; }
         ImrfDetailsStatusHistory mrfDetailsStatusHistory { get; }
         IMrfdetailsPDFRepository MrfdetailsEmailRepository { get; }
-
         IPositionTitlemasterRepository PositionTitlemaster { get; }
-
          ISourcemasterRepository  Sourcemaster { get; }
-
+        IEmailRecipientRepository EmailRecipient { get; }
         void Save();
     }
 }

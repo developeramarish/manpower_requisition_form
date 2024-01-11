@@ -2,13 +2,15 @@
 using MimeKit;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
+using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace MRF.API.Controllers
-{
-    [Route("api/[controller]")]
+{   
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class GetMrfdetailsInEmailController : ControllerBase
     {
@@ -38,7 +40,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public MrfdetailsEmailRequestModel GetRequisition(int MrfId)
+        public MrfdetailsEmailRequestModel GetRequisition(int MrfId, int EmployeeId, int MrfStatusId)
         {
             var mrfdetail = _unitOfWork.MrfdetailsEmailRepository.GetRequisition(MrfId);
             if (mrfdetail == null)
@@ -54,29 +56,56 @@ namespace MRF.API.Controllers
             {
                 var builder = new BodyBuilder();
                 builder.HtmlBody = sourceReader.ReadToEnd();
-                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetail);
+                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetail, EmployeeId, MrfStatusId);
             }
 
             //Commented code to convert html to pdf
             //_hTMLtoPDF.CovertHtmlToPDF(htmlBody, pdfFileName);
+          
+            var EmpDetails = _unitOfWork.Employeedetails.Get(u => u.Id == EmployeeId);
 
-            var emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Awaiting COO Approval");
-            if (emailRequest != null)
+            //Get MRF Status
+            var MrfStatus = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == MrfStatusId);
+
+
+            if (MrfStatus != null && EmpDetails != null)
+                try
+                {
+                    _emailService.SendEmail(EmpDetails.Email, MrfStatus.Status, htmlBody); // TO DO : Discussion Required on Subject
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while sending email: {ex}");
+                }
+
+            var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
+
+            List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId);
+            foreach (var emailReq in emailList)
             {
-               _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, htmlBody);
+                try
+                {
+                    _emailService.SendEmail(emailReq.Email, emailMaster.Subject, emailMaster.Content);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while sending email: {ex}");
+                }
             }
+
             return mrfdetail;
         }
-        private string GetHtmlTemplateBody(string htmlBody, MrfdetailsEmailRequestModel mrfdetailemail)
+        private string GetHtmlTemplateBody(string htmlBody, MrfdetailsEmailRequestModel mrfdetailemail, int employeeId, int MrfStatusId)
         {
             string base_url = _configuration["Links:BaseUrl"];
-          
-            int MRFId = mrfdetailemail.Id;
-            int EMPID = mrfdetailemail.ApproverId;
-            int StatusId = 7;
-            string strApprovalLink = $"{base_url}/approve/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
-            string strRejectionLink = $"{base_url}/reject/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
-            string strByPassLink = $"{base_url}/bypass/MrfId={MRFId}/EmpId={EMPID}/StatusId={StatusId}";
+
+            int MrfId = mrfdetailemail.Id;
+            int EmpId = employeeId;
+            int StatusId = MrfStatusId;
+            int RejectStatusId = 8;
+            string strApprovalLink = $"{base_url}/approve/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
+            string strRejectionLink = $"{base_url}/reject/MrfId={MrfId}/EmpId={EmpId}/StatusId={RejectStatusId}";
+            string strByPassLink = $"{base_url}/bypass/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
 
             // Replace placeholders in HTML with data
             string messageBody = htmlBody
@@ -97,6 +126,12 @@ namespace MRF.API.Controllers
               .Replace("{bypassLink}", strByPassLink);
 
             return messageBody;
+        }
+        
+        private List<EmailRecipient> SendEmailOnStatus(int MrfStatusId)
+        {
+            List<EmailRecipient> obj = _unitOfWork.EmailRecipient.GetEmailRecipient(MrfStatusId);
+            return obj;
         }
     }
 }
