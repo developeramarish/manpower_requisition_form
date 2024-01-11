@@ -82,14 +82,14 @@ namespace MRF.API.Controllers
             var interviewevaluation = new Interviewevaluation
             {
                 CandidateId = request.CandidateId,
-                EvaluationId = request.EvaluationId,
+                //EvaluationId = request.EvaluationId,
                 InterviewerId = request.InterviewerId,
                 EvaluationDateUtc = request.EvaluationDateUtc,
                 FromTimeUtc = request.FromTimeUtc,
                 ToTimeUtc = request.ToTimeUtc,
-                EvaluationFeedbackId = request.EvaluationFeedbackId,
+               // EvaluationFeedbackId = request.EvaluationFeedbackId,
                 EvalutionStatusId = request.EvalutionStatusId,
-                FeedbackAsDraft = request.FeedbackAsDraft,
+               // FeedbackAsDraft = request.FeedbackAsDraft,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -124,15 +124,15 @@ namespace MRF.API.Controllers
 
             if (existingRecord != null)
             {
-                existingRecord.CandidateId = request.CandidateId;
-                existingRecord.EvaluationId = request.EvaluationId;
-                existingRecord.InterviewerId = request.InterviewerId;
-                existingRecord.EvaluationDateUtc = request.EvaluationDateUtc;
-                existingRecord.FromTimeUtc = request.FromTimeUtc;
-                existingRecord.ToTimeUtc = request.ToTimeUtc;
-                existingRecord.EvaluationFeedbackId = request.EvaluationFeedbackId;
-                existingRecord.EvalutionStatusId = request.EvalutionStatusId;
-                existingRecord.FeedbackAsDraft = request.FeedbackAsDraft;
+                existingRecord.CandidateId = request.CandidateId==0? existingRecord.CandidateId : request.CandidateId;
+                //existingRecord.EvaluationId = request.EvaluationId;
+                existingRecord.InterviewerId = request.InterviewerId == 0 ? existingRecord.InterviewerId: request.InterviewerId;
+                existingRecord.EvaluationDateUtc = request.EvaluationDateUtc==DateOnly.MinValue? existingRecord.EvaluationDateUtc: request.EvaluationDateUtc;
+                existingRecord.FromTimeUtc = request.FromTimeUtc == TimeOnly.MinValue ? existingRecord.FromTimeUtc: request.FromTimeUtc;
+                existingRecord.ToTimeUtc = request.ToTimeUtc == TimeOnly.MinValue ?existingRecord.ToTimeUtc:request.ToTimeUtc;
+               // existingRecord.EvaluationFeedbackId = request.EvaluationFeedbackId;
+                existingRecord.EvalutionStatusId = request.EvalutionStatusId == 0 ? existingRecord.EvalutionStatusId : request.EvalutionStatusId;
+                //existingRecord.FeedbackAsDraft = request.FeedbackAsDraft;
                 existingRecord.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingRecord.UpdatedOnUtc = request.UpdatedOnUtc;
 

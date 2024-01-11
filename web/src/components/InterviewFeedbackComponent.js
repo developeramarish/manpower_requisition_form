@@ -31,12 +31,13 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
         {
             field: "interviewRound",
             header: "Round",
-            bodyClassName: ".feed-col",
+            bodyClassName: " feed-col-round",
             sortable: true,
         },
         {
             field: "comments",
             header: "Comments",
+            bodyClassName: " feed-col-comments",
             sortable: true,
         },
     ];

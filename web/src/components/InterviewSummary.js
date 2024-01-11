@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
@@ -7,12 +7,15 @@ import DropdownComponent from "./Dropdown";
 import MultiSelectDropdown from "./multiselectDropdown";
 import InterviewFeedbackComponent from "./InterviewFeedbackComponent";
 import { API_URL, FILE_URL, ROLES } from "../constants/config";
+import { storageService } from "../constants/storage";
+import ToastMessages from "./ToastMessages";
 import {
 	changeDateFormat,
 	arrayToObj,
 	objToIntArray,
 	getData,
 	strToArray,
+	putData,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 
@@ -59,7 +62,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 	const [saveBttn, setSaveBttn] = useState([]);
 	const [showFeed, setShowFeed] = useState(false);
 	const [selectedId, setSelectedId] = useState(null);
-	
+	const toastRef = useRef(null);
 
 	async function getIntData() {
 		const apiUrl =
@@ -79,21 +82,64 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		}
 	  }, [mrfId]);
 	  
-	//   if (!interviewData || interviewData.length === 0) {
-	// 	return (
-	// 	  <Dialog
-	// 		header="MRF ID (Interview Summary)"
-	// 		visible={visible}
-	// 		onHide={onHide}
-	// 		draggable={false}
-	// 		className="int-card no-res-card"
-	// 	  >
-	// 		No Result Found
-	// 	  </Dialog>
-	// 	);
-	//   }
+	  const update = async (data) => {
+		console.log(data);
+		 const id=data.interviewevaluationId;
+		 const candidateId=data.candidateId;
+		 const interviewerId=data.interviewerId;
+		 const evaluationDateUtc=data.evaluationDateUtc;
+		 const	evalutionStatusId=data.evalutionStatusId;
+		 const	updatedByEmployeeId=storageService.getData("profile").employeeId;
+		 const	updatedOnUtc=new Date().toISOString();
 	
-	// console.log(roleId)
+		 const interviewDetailsData = {
+			id,
+			evalutionStatusId,
+			updatedByEmployeeId,
+			updatedOnUtc
+		};
+
+		const updateStatus = {
+			id,
+			evalutionStatusId,
+			updatedByEmployeeId,
+			updatedOnUtc
+		};
+	
+		try {
+		//   const response = await fetch(`${API_URL.INTERVIEW_EVALUATION}${id}`, {
+		// 	method: "Put",
+		// 	headers: {
+		// 	  "Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify(updateStatus),
+		//   });
+		let response = await putData(`${API_URL.INTERVIEW_EVALUATION}${id}`,updateStatus);
+		
+		  if (response.ok) {
+			const responseData = response.json();
+			if (responseData.statusCode === 409) {
+			  toastRef.current.showConflictMessage(responseData.message);
+			} else {
+				
+			  toastRef.current.showSuccessMessage(
+				"Interview status updated successfully!"
+			  );
+			}
+		  } else {
+			console.error("Request failed with status:", response.status);
+			const errorData = await response.text();
+			console.error("Error Data:", errorData);
+			if (response.status === 400) {
+			  toastRef.current.showBadRequestMessage(
+				"Bad request: " + response.url
+			  );
+			}
+		  }
+		} catch (error) {
+		  console.error("Error:", error);
+		}
+	  };
 
 	const statusBodyTemplate = (interview, options) => {
 		const handleDropdownChange = (e) => {
@@ -188,12 +234,16 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 			};
 
 	const actionBodyTemplate = (interview, options) => {
-		
-		if (saveBttn[options.rowIndex]) {
-			alert('hi');
-			return <Button icon="pi pi-save" />;
-		}
-		return <Button icon="pi pi-save" disabled />;
+		const onClickHandleSave = () => {
+			update(interview);
+			let sv = [...saveBttn];
+			sv[options.rowIndex] = false;
+			setSaveBttn(sv);
+		  };
+		  if (saveBttn[options.rowIndex]) {
+			return <Button icon="pi pi-save " onClick={onClickHandleSave} />;
+		  }
+		  return <Button icon="pi pi-save" disabled />;
 	};
 
 	const columns = [
@@ -292,7 +342,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 					/>
 				))}
 			</DataTable>
-			
+			<ToastMessages ref={toastRef} />
 		</Dialog>
 	);
 };
