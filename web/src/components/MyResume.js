@@ -1,16 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import DropdownComponent from "./../components/Dropdown";
-import MultiSelectDropdown from "./../components/multiselectDropdown";
 import "primeicons/primeicons.css";
-import ButtonC from "./../components/Button";
-import { InputTextarea } from "primereact/inputtextarea";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
 import { navigateTo } from "../constants/Utils";
 import { API_URL, FILE_URL } from "../constants/config";
-import ToastMessages from "./../components/ToastMessages";
 import {
   arrayToObj,
   objToIntArray,
@@ -18,7 +13,12 @@ import {
   strToArray,
 } from "../constants/Utils";
 import { Button } from "primereact/button";
-const MyReumes = () => {
+import ToastMessages from "./ToastMessages";
+import DropdownComponent from "./Dropdown";
+import MultiSelectDropdown from "./multiselectDropdown";
+import ButtonC from "./Button";
+import InputTextareaComponent from "./InputTextarea";
+const MyResume = () => {
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
   const [values, setValues] = useState([]);
@@ -129,18 +129,11 @@ const MyReumes = () => {
       setSaveBttn(sv);
     };
     return (
-      <InputTextarea
+      <InputTextareaComponent
        
         value={data.reason}
         rows={2}  
         cols={55}
-        // autoResize
-        // style={{
-        //   color: "#6d6d6d",
-        //   fontFamily: "Poppins",
-        //   fontWeight: 500,
-        //   fontSize: "14px",
-        // }}
         onChange={TextChange}
         placeholder={"Enter Reason"}
  
@@ -246,4 +239,4 @@ const MyReumes = () => {
     </div>
   );
 };
-export default MyReumes;
+export default MyResume;
