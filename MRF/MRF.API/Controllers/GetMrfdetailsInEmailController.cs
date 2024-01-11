@@ -2,13 +2,15 @@
 using MimeKit;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
+using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace MRF.API.Controllers
-{
-    [Route("api/[controller]")]
+{   
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class GetMrfdetailsInEmailController : ControllerBase
     {
@@ -59,24 +61,36 @@ namespace MRF.API.Controllers
 
             //Commented code to convert html to pdf
             //_hTMLtoPDF.CovertHtmlToPDF(htmlBody, pdfFileName);
-
-            // Send Email to HOD,COO
-            //Get Employee Details
+          
             var EmpDetails = _unitOfWork.Employeedetails.Get(u => u.Id == EmployeeId);
 
             //Get MRF Status
             var MrfStatus = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == MrfStatusId);
 
 
-            //if (MrfStatus != null && EmpDetails != null)
-            //    _emailService.SendEmail(EmpDetails.Email, MrfStatus.Status, htmlBody); // TO DO : Discussion Required on Subject
+            if (MrfStatus != null && EmpDetails != null)
+                try
+                {
+                    _emailService.SendEmail(EmpDetails.Email, MrfStatus.Status, htmlBody); // TO DO : Discussion Required on Subject
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while sending email: {ex}");
+                }
 
             var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
-           
-            List<string> emailList = SendEmailOnStatus(MrfStatusId);
+
+            List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId);
             foreach (var emailReq in emailList)
             {
-                _emailService.SendEmail(emailReq, emailMaster.Subject, emailMaster.Content);
+                try
+                {
+                    _emailService.SendEmail(emailReq.Email, emailMaster.Subject, emailMaster.Content);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while sending email: {ex}");
+                }
             }
 
             return mrfdetail;
@@ -84,7 +98,7 @@ namespace MRF.API.Controllers
         private string GetHtmlTemplateBody(string htmlBody, MrfdetailsEmailRequestModel mrfdetailemail, int employeeId, int MrfStatusId)
         {
             string base_url = _configuration["Links:BaseUrl"];
-          
+
             int MrfId = mrfdetailemail.Id;
             int EmpId = employeeId;
             int StatusId = MrfStatusId;
@@ -113,10 +127,11 @@ namespace MRF.API.Controllers
 
             return messageBody;
         }
-
-        public List<string> SendEmailOnStatus(int MrfStatusId)
+        
+        private List<EmailRecipient> SendEmailOnStatus(int MrfStatusId)
         {
-            return _unitOfWork.EmailRecipientRepository.GetEmailRecipient(MrfStatusId);
+            List<EmailRecipient> obj = _unitOfWork.EmailRecipient.GetEmailRecipient(MrfStatusId);
+            return obj;
         }
     }
 }

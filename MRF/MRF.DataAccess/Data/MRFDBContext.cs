@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MRF.Models.DTO;
 using MRF.Models.Models;
 
 namespace MRF.DataAccess.Data
@@ -37,19 +38,16 @@ namespace MRF.DataAccess.Data
         public DbSet<Replacementmrfdetails> Replacementmrfdetails { get; set; }
         public DbSet<Resumeforwarddetails> Resumeforwarddetails { get; set; }
         public DbSet<AttachmentEvaluation> AttachmentEvaluation { get; set; }
-
         public DbSet<emailmaster> emailmaster { get; set; }
         public DbSet<MrfStatusRoleMap> mrfStatusrolemap { get; set; }
-
         public DbSet<MrfLastNumber> MrfLastNumber { get; set; }
         public DbSet<MrfEmailApproval> MrfEmailApproval { get; set; }
         public DbSet<CandidateInterviewFeedback> CandidateInterviewFeedback { get; set; }
         public DbSet<mrfDetailsStatusHistory> mrfDetailsStatusHistory { get; set; }
         public DbSet<MrfdetailsPDF> MrfdetailsPDF { get; set; }
-
         public DbSet<PositionTitlemaster> PositionTitlemaster { get; set; }
-
         public DbSet<Sourcemaster> Sourcemaster { get; set; }
+       
 
     }
 }

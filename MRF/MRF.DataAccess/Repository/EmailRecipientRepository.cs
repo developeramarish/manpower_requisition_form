@@ -1,10 +1,9 @@
 ﻿using MRF.DataAccess.Repository.IRepository;
-using MRF.Models.DTO;
 using MRF.Models.Models;
 
 namespace MRF.DataAccess.Repository
 {
-    public class EmailRecipientRepository : Repository<EmailRecipient>,   IEmailRecipientRepository
+    public class EmailRecipientRepository : Repository<EmailRecipient>, IEmailRecipientRepository
     {
         private readonly Data.MRFDBContext _db;
 
@@ -12,7 +11,7 @@ namespace MRF.DataAccess.Repository
         {
             _db = db;
         }
-        public List<string> GetEmailRecipient(int? MrfStatusId, string? MrfStatus)
+        public List<EmailRecipient> GetEmailRecipient(int? MrfStatusId, string? MrfStatus)
         {
             var emailMasterQuery = _db.emailmaster.AsQueryable();
 
@@ -29,15 +28,15 @@ namespace MRF.DataAccess.Repository
 
             List<int> RoleIds = roleId.Split(',').Select(int.Parse).ToList();
 
-            var result = (from MEA in _db.MrfEmailApproval
-                          join ERM in _db.Employeerolemap on MEA.EmployeeId equals ERM.EmployeeId
-                          join ED in _db.Employeedetails on MEA.EmployeeId equals ED.Id
-                          where MEA.MrfId == 1 && RoleIds.Contains(ERM.RoleId)
-                          select ED.Email).ToList();
-
-            return result;
+            IQueryable<EmailRecipient> query = from MEA in _db.MrfEmailApproval
+                                               join ERM in _db.Employeerolemap on MEA.EmployeeId equals ERM.EmployeeId
+                                               join ED in _db.Employeedetails on MEA.EmployeeId equals ED.Id
+                                               where MEA.MrfId == 1 && RoleIds.Contains(ERM.RoleId)
+                                               select new EmailRecipient
+                                               {
+                                                   Email = ED.Email
+                                               };
+            return query.ToList();
         }
-
-
     }
 }
