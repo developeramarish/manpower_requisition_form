@@ -59,3 +59,57 @@
   
 }
 
+.email_dropdown .p-dropdown-label {
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+  }
+  .email_dropdown .p-dropdown {
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+  /* background: aqua; */
+  /* border: 1px solid aqua; */
+  }
+  .email_dropdown .p-inputtext {
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+  }
+
+  .update_btn{
+    background-color: #d32f2e;
+   
+    color: #ffffff;
+    border-radius: 5px;
+    width: 15%;
+    margin-right: auto;
+   
+  }
+ /* .update_btn:hover{
+    background-color: #d32f2e;
+    color: #ffffff;
+    border-radius: 5px;
+  }
+
+  .hod_btn{
+    background-color: #ffffff;
+    border: 1px solid #d32f2e;
+    color: #d32f2e;
+    border-radius: 5px;
+    width: 50%;
+    padding-left: 2px;
+    padding-right: 2px;
+
+  }
+  .hod_btn:hover{
+    background-color: #d32f2e;
+    color: #ffffff;
+    border-radius: 5px;
+  } */
+
+  .cancel_btn{
+    background-color: #ffffff;
+    border: 1px solid #d32f2e;
+    color: #0b1016;
+    font-weight: 600;
+    width: 15%;
+    margin-right: auto;
+  }

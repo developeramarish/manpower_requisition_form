@@ -85,7 +85,6 @@ function Dashboard({ roleId, userId }) {
       </div>
     );
   };
- 
   const mrfIdResumeRefernceTemplate = (rowData) => {
     return (
       <div>
@@ -170,7 +169,6 @@ function Dashboard({ roleId, userId }) {
     resumeSummaryColums = resumeSummaryColums.filter(column => column.header !== "New" &&
     column.header !== "Rejected" && column.header !== "On Hold");
    };
- 
   return (
     <div className="dashboard_wrapper">
       <h3 className="dashboard_title">My Dashboard</h3>

@@ -252,7 +252,7 @@ namespace MRF.DataAccess.Repository
                          select new MrfInterviewSummaryViewModel
                          {
                              MrfId = grouped.Key.Id,
-                             //EvaluationId= grouped.Key.status,
+                             EvaluationId= grouped.Key.status,
                              ReferenceNo = grouped.Key.ReferenceNo,
                              TotalCount = grouped.Count(),
                              PositionTitle=grouped.Key.Name,
