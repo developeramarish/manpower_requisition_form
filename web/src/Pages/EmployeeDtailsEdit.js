@@ -162,8 +162,8 @@ const [roleOptions, roleOptionchange] = useState([]);
         <div style={{    display: 'flex', flexDirection:'row',width: '50%',
     justifyContent: 'center',
     marginTop: '15px'}}>
-        <ButtonC  severity="danger" label="CANCEL" onClick={() => updateEditmode(false)}></ButtonC>
-        <ButtonC style={{ marginLeft:'15px'}} label="SUBMIT" severity="primary" onClick={handlesubmit} />
+        <ButtonC  severity="danger" className={"w-20 px-7 bg-red-600 border-red-600"}label="CANCEL" onClick={() => updateEditmode(false)}></ButtonC>
+        <ButtonC style={{ marginLeft:'15px'}} className={"w-20 px-7 bg-red-600 border-red-600"}label="SUBMIT" severity="primary" onClick={handlesubmit} />
         <ToastMessages ref={toastRef} />
       </div>
 

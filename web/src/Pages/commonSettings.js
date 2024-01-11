@@ -17,9 +17,7 @@ export function applySettingsBasedOnRoleAndStatus(
   mrfStatusId,
   roleId
 ) {
-  console.log("roleid from det", getReqRoleId);
-  console.log("roleid", roleId);
-  console.log("statusid", mrfStatusId);
+  
   switch (getReqRoleId) {
     case 3 /* MRFOwner */:
       if (

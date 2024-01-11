@@ -20,7 +20,6 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
   const toastRef = useRef(null);
 
   useEffect(() => {
-    
       fetchData();
     
   }, [mrfId]);
@@ -43,26 +42,28 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
       console.error("Error fetching data:", error);
     }
   };
-   
-  if (data.length < 1) {
-    return (
-      <Dialog
-        header="MRF ID (Interview Summary)"
-        visible={visible}
-        onHide={onHide}
-        draggable={false}
-        className="int-card no-res-card"
-      >
-        No Result Found
-      </Dialog>
-    );
-  }
+    
+    // if (data.length < 1) {
+    //   return (
+    //     <Dialog
+    //       header="MRF ID (Interview Summary)"
+    //       visible={visible}
+    //       onHide={onHide}
+    //       draggable={false}
+    //       className="int-card no-res-card"
+    //     >
+    //       No Result Found
+    //     </Dialog>
+    //   );
+    // }
 
 
   const MultiSelectDrop = (rowData, options) => {
     console.log(roleId)
     if (roleId === ROLES.hr || roleId === ROLES.resumeReviwer || roleId === ROLES.interviewer ) {
-       // Return a simple date or any other content for this role
+       if(!rowData.resumeReviewerName){
+        return (<div><p className="resume-col">To be Updated</p></div>)
+       }
       
       return (
         <div>
@@ -210,7 +211,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 if(!resume.reason ) return (<p className="resume-reason-col">To be Updated</p>);
 return(
 
-  <InputTextareaComponent  value={resume.reason} rows={3} cols={50} />
+  <InputTextarea  value={resume.reason} rows={2} cols={50} />
   // <p className="resume-reason-col">{resume.reason}</p>
 )
       }
@@ -273,11 +274,10 @@ return(
    };
   return (
     <div className="resume-summary-table">
-      
         <DataTable
           value={data}
           paginator={data.length > 5}
-
+// header={""}
           rows={10}
           scrollable
           scrollHeight="400px"
