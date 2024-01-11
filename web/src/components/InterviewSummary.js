@@ -152,8 +152,10 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		};
 
 		if (roleId === ROLES.mrfOwner) {
+			if(interview.evalutionStatusId!=0){
 			let is = interviewStatus.filter((x) => x.id === interview.evalutionStatusId);
 			return <p className="drop-width">{is[0].status}</p>;
+			}else{return <p className="drop-width">{"\u00A0\u00A0\u00A0\u00A0"}{"N/A"}</p>;}
 		}
 
 		return (
