@@ -46,6 +46,63 @@ export async function getData(url) {
     .catch((error) => error);
 }
 
+
+export async function postData(url, data) {
+  const accessToken = storageService.getData("token");
+
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+  headers.append("Content-Type", "application/json");
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(data), 
+  };
+
+  return fetch(url, options)
+    .then((response) => response)
+    .catch((error) => error);
+};
+
+export async function putData(url, data) {
+  const accessToken = storageService.getData("token");
+
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+  headers.append("Content-Type", "application/json");
+
+  const options = {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify(data), // Convert data to JSON format
+  };
+  return fetch(url, options)
+  .then((response) => response)
+  .catch((error) => error);
+};
+
+export async function deleteData(url) {
+  const accessToken = storageService.getData("token");
+
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+
+  const options = {
+    method: "DELETE",
+    headers: headers,
+  };
+  return fetch(url, options)
+  .then((response) => response.json())
+  .catch((error) => error);
+};
+
 export const getKeyFromLocation = () => {
   return window.location.hash.split("#/")[1];
 };

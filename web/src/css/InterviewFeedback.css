@@ -51,8 +51,15 @@
 .feed-table th {
 	font-size: 14px;
 	color: black;
+	padding: 10px;
 	/* text-align: center; */
 }
+
+.feed-table td {
+	padding: 15px;
+	/* text-align: center; */
+}
+
 .feed-table .p-highlight,
 .feed-table .p-highlight .p-sortable-column-icon {
 	color: #d32f2e;
@@ -71,10 +78,14 @@
 	font-size: 14px;
 	font-weight: 500;
 	color: #0b1016;
-	width: 8%;
+	
 	min-width: max-content;
 }
 
-.feed-col {
-	width: 16%;
+.feed-col-round {
+	width: 10%;
+}
+
+.feed-col-comments {
+	width: 90%;
 }

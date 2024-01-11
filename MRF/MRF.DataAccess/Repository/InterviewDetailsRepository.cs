@@ -70,6 +70,18 @@ namespace MRF.DataAccess.Repository
                                                                     Attachment = Attachment.FilePath,
                                                                 };
 
+            /* fetch interviewfeedback */
+            IQueryable<InterviewDetailsViewModel> interviewfeedback = from mrfDetails in _db.Mrfdetails
+                                                                join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
+                                                                join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
+                                                                join InterviewFeedback in _db.CandidateInterviewFeedback on Ivaluation.Id equals InterviewFeedback.CandidateId
+                                                                      where mrfDetails.Id == mrfId
+                                                                select new InterviewDetailsViewModel
+                                                                {
+                                                                    EvaluationFeedbackId= InterviewFeedback.Id,
+                                                                };
+            
+
             /*IstatusGrouped contains only the latest status for each CandidateId.*/
             var statusGrouped = from mrfDetails in _db.Mrfdetails
                                 join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId

@@ -15,6 +15,7 @@ import {
 	objToIntArray,
 	getData,
 	strToArray,
+	putData,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 
@@ -85,16 +86,9 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		console.log(data);
 		 const id=data.interviewevaluationId;
 		 const candidateId=data.candidateId;
-		 //const evaluationId=data.evaluationId;
 		 const interviewerId=data.interviewerId;
 		 const evaluationDateUtc=data.evaluationDateUtc;
-		 //const fromTimeUtc=data.fromTimeUtc;
-		 //const	toTimeUtc=data.fromTimeUtc;
-		 //const evaluationFeedbackId=data.fromTimeUtc;
 		 const	evalutionStatusId=data.evalutionStatusId;
-		 //const	feedbackAsDraft=data.fromTimeUtc;
-		// const	createdByEmployeeId=data.fromTimeUtc;
-		// const	createdOnUtc=data.fromTimeUtc;
 		 const	updatedByEmployeeId=storageService.getData("profile").employeeId;
 		 const	updatedOnUtc=new Date().toISOString();
 	
@@ -113,22 +107,23 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		};
 	
 		try {
-		  const response = await fetch(`${API_URL.INTERVIEW_EVALUATION}${id}`, {
-			method: "Put",
-			headers: {
-			  "Content-Type": "application/json",
-			},
-			body: JSON.stringify(updateStatus),
-		  });
-	
+		//   const response = await fetch(`${API_URL.INTERVIEW_EVALUATION}${id}`, {
+		// 	method: "Put",
+		// 	headers: {
+		// 	  "Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify(updateStatus),
+		//   });
+		let response = await putData(`${API_URL.INTERVIEW_EVALUATION}${id}`,updateStatus);
+		
 		  if (response.ok) {
-			const responseData = await response.json();
+			const responseData = response.json();
 			if (responseData.statusCode === 409) {
 			  toastRef.current.showConflictMessage(responseData.message);
 			} else {
-				alert("Interviewers updated successfully!");
+				
 			  toastRef.current.showSuccessMessage(
-				"Interviewers updated successfully!"
+				"Interview status updated successfully!"
 			  );
 			}
 		  } else {
@@ -347,7 +342,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 					/>
 				))}
 			</DataTable>
-			
+			<ToastMessages ref={toastRef} />
 		</Dialog>
 	);
 };
