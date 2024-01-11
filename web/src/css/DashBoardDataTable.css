@@ -42,15 +42,17 @@
 
 .dashBoard_table .p-datatable .p-datatable-thead > tr > th {
   width: 300px;
+  padding-left: 28px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0b1016;
 }
-
-
-.statusHeading {
+/* .statusHeading {
   display: flex;
   align-items: center;
-  background-color: aqua;
+  background-color: rgb(16, 117, 117);
 justify-content: center;
-}
+} */
 
 
 .dash_table_header .search-box{
@@ -60,3 +62,13 @@ justify-content: center;
   /* border-radius-top: 50%; */
 
 } 
+.dash_status_col{
+  padding-left: 35px;
+  font-weight: 500;
+  font-size: 14px;
+}
+ /* .p-datatable .p-column-header-content{
+  display: flex;
+    align-items: center;
+    justify-content: center;
+} */

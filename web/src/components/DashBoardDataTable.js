@@ -79,6 +79,7 @@ const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
               field={col.field}
               header={col.header}
               body={col.body}
+              bodyClassName={col.bodyClassName}
             />
           );
         })}

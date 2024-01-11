@@ -217,7 +217,7 @@ const AddCandidate = (reqId) => {
               <ButtonC
                 label="CANCEL"
                 outlined
-                className="mr-auto w-2 border-red-600 text-red-600"
+                className="cancel_btn"
                 onClick={handleCancel}
               />
 

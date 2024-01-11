@@ -416,6 +416,7 @@ const CreateRequisitionBody = ({
                   <RedAsterisk />
                 </label>
                 <DropdownComponent
+                inputClassName="bg-gray-100"
                   optionLabel="name"
                   optionValue="id"
                   type="subDepartmentId"
@@ -1824,8 +1825,7 @@ const CreateRequisitionBody = ({
                           formData={formData}
 
                         /></>)}
- 
-                        <MrfPartialStatus
+    {(mrfStatusId!==MRF_STATUS.closed && mrfStatusId!==MRF_STATUS.rejected && mrfStatusId!==MRF_STATUS.withdrawn)&&(<><MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={8}
                           label={"Reject"}
@@ -1840,7 +1840,8 @@ const CreateRequisitionBody = ({
                           formData={formData}
                           className={"w-20 px-7 bg-red-600 border-red-600"}
                           message={"Do you want to hold on this MRF?"}
-                        />
+                        /></>)}
+                        
                       </>
                     );
                 }
