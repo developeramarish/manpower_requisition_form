@@ -8,7 +8,7 @@ import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "./multiselectDropdown";
 import { API_URL, FILE_URL,ROLES } from "../constants/config";
-import { changeDateFormat, strToArray } from "../constants/Utils";
+import { changeDateFormat, putData, strToArray } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import InputTextareaComponent from "./InputTextarea";
 
@@ -59,7 +59,6 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 
 
   const MultiSelectDrop = (rowData, options) => {
-    console.log(roleId)
     if (roleId === ROLES.hr || roleId === ROLES.resumeReviwer || roleId === ROLES.interviewer ) {
        if(!rowData.resumeReviewerName){
         return (<div><p className="resume-col">To be Updated</p></div>)
@@ -157,14 +156,8 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
     };
 
     try {
-      const response = await fetch(`${API_URL.RESUME_SUMMARY_POST}${id}`, {
-        method: "Put",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(candidateDetailsData),
-      });
 
+      let response = await putData(`${API_URL.RESUME_SUMMARY_POST}${id}`,candidateDetailsData)
       if (response.ok) {
         const responseData = await response.json();
         if (responseData.statusCode === 409) {
@@ -194,7 +187,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
   };
 
   const resumeBodyTemplate = (interview) => {
-    console.log("UIUIIII")
+    
     let resumeLink = FILE_URL.RESUME + interview.resumePath;
     return (
       <a href={resumeLink} target="_blank" className="int-link-cell">

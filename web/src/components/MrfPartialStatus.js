@@ -7,7 +7,7 @@ import {
   isFormDataEmptyForSubmit,
 } from "../constants/config";
 import { storageService } from "../constants/storage";
-import { formatDateToYYYYMMDD, navigateTo } from "../constants/Utils";
+import { formatDateToYYYYMMDD, navigateTo, putData } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
 import InputTextareaComponent from "./InputTextarea";
@@ -215,22 +215,18 @@ const MrfPartialStatus = ({
     let hiringManagerId, hiringManagerEmpId, siteHRSPOCId, siteHRSPOCEmpId,fiApprovalDate;
 
     if (siteHRUpdateClick) {
-      // console.log("siteHRUpdateClickfun");
       siteHRSPOCId = formData.siteHRSPOCId;
       siteHRSPOCEmpId = formData.siteHRSPOCEmpId;
     }
     if (hiringManagerUpdateClick) {
-      // console.log("hiringManagerUpdateClickfun");
       hiringManagerId = formData.hiringManagerId;
       hiringManagerEmpId = formData.hiringManagerEmpId;
     }
 
     if(bypassClicked){
-      // console.log("bypasssss")
       fiApprovalDate=formatDateToYYYYMMDD(new Date);
     }
     else{
-      // console.log("fffffffffffffffff")
       fiApprovalDate= formatDateToYYYYMMDD(formData.fiApprovalDate);
     }
     const partialsUpdate = {
@@ -258,17 +254,9 @@ const MrfPartialStatus = ({
     };
 
    
-    
-
-//     console.log(partialsUpdate);
-// console.log("api hitting")
     try {
-      const response = await fetch(API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId, {
-        method: "Put",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(partialsUpdate),
-      });
-
+   
+    let response = await putData(`${API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId}`,partialsUpdate)
       if (response.ok) {
         const responseData = await response.json();
         if (responseData.statusCode === 409) {
