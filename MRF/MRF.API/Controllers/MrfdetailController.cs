@@ -30,7 +30,8 @@ namespace MRF.API.Controllers
         private readonly ILoggerService _logger;
         private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment)
+        private readonly IConfiguration _configuration;
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -39,6 +40,7 @@ namespace MRF.API.Controllers
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
+            _configuration = configuration;
         }
 
         // GET: api/<MrfdetailController>
@@ -234,6 +236,12 @@ namespace MRF.API.Controllers
 
         }
 
+        private void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int MrfStatusId)
+        {
+            GetMrfdetailsInEmailController getMrfdetailsInEmailController =
+                new GetMrfdetailsInEmailController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
+            getMrfdetailsInEmailController.GetRequisition(MrfId, EmployeeId, MrfStatusId);
+        }
 
         private int CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update) 
         {
@@ -649,6 +657,7 @@ namespace MRF.API.Controllers
                 int employeeId=CallEmailApprovalController(request, id, false);
                 CallMrfHistory(request, id, false);
 
+                CallGetMrfdetailsInEmailController(id, employeeId, request.MrfStatusId);
                 // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
 
                 /*  if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
