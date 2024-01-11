@@ -413,7 +413,7 @@ const CreateRequisitionBody = ({
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="sub-department" className="font-bold text-sm">
                   Sub-Department
-                  <RedAsterisk />
+                 
                 </label>
                 <DropdownComponent
                 inputClassName="bg-gray-100"
@@ -821,7 +821,6 @@ const CreateRequisitionBody = ({
                       Replacement Justification
                     </label>
                     <InputTextareaComponent
-                      autoResize
                       id="ReplaceJustification"
                       className="bg-gray-100"
                       value={formData.replaceJustification}
@@ -870,7 +869,6 @@ const CreateRequisitionBody = ({
                 </label>
 
                 <InputTextareaComponent
-                  autoResize
                   id="Justification"
                   className="bg-gray-100"
                   rows={6}

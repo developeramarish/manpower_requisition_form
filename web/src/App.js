@@ -33,10 +33,10 @@ import MyRequisitions from "./containers/MyRequisitions";
 import CreateRequisition from "./Pages/CreateRequisition";
 import AddCandidate from "./Pages/AddCandidate";
 import ViewCandidate from "./Pages/ViewCandidate";
-import MyReumes from "./Pages/MyReumes";
 import Footer from "./components/Footer";
 import EmployeDetails from "./Pages/EmployeDetails";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
+import MyResume from "./components/MyResume";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
@@ -183,7 +183,7 @@ function App() {
                   />
                 )}
                 {currentPageKey === "my_resume" && (
-                  <MyReumes/>
+                  <MyResume/>
                     
                  
                 )}
