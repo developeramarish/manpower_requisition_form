@@ -1,8 +1,13 @@
-.p-inputnumber, .p-inputnumber-input, .p-inputnumber-input{
+.p-inputnumber, .p-inputnumber-input{
     font-size: 14px;
       font-weight: 400;
       color: #6d6d6d;
-      background-color: #ffffff;
+      background-color: #f5f5f5;
+  }
+
+
+  .p-dropdown ,.p-multiselect{
+    background-color: #f5f5f5;
   }
 
   .p-button.p-button-icon-only,

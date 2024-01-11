@@ -32,11 +32,11 @@ import Dashboard from "./containers/Dashboard";
 import MyRequisitions from "./containers/MyRequisitions";
 import CreateRequisition from "./Pages/CreateRequisition";
 import AddCandidate from "./Pages/AddCandidate";
-import ViewCandidate from "./Pages/ViewCandidate";
 import Footer from "./components/Footer";
 import EmployeDetails from "./Pages/EmployeDetails";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 import MyResume from "./components/MyResume";
+import ViewCandidate from "./components/ViewCandidate";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
@@ -178,9 +178,7 @@ function App() {
                   />
                 )}
                 {currentPageKey === "view_candidate" && (
-                  <ViewCandidate
-                    
-                  />
+                  <ViewCandidate/>
                 )}
                 {currentPageKey === "my_resume" && (
                   <MyResume/>

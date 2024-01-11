@@ -29,7 +29,6 @@ function Dashboard({ roleId, userId }) {
   useEffect(() => {
     getSummaryData();
   }, []);
- 
   async function getSummaryData() {
     const mrfStatusData = await getData(API_URL.MRF_STATUS_SUMMARY + "?roleId=" + roleId + "&userId=" + userId);
     // const mrfStatusData = API_URL.MRF_STATUS_SUMMARY;
@@ -244,7 +243,6 @@ function Dashboard({ roleId, userId }) {
             roleId === ROLES.mrfOwner ||
             roleId === ROLES.interviewer) && (
             <div className="dashboard_body_right">
-              {/* <div className="mrf_interview_summary "> */}
               <DashBoardDataTable
                 value={interviewSummaryTableData}
                 column={interviewSummaryColums}
