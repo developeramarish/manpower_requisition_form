@@ -12,8 +12,9 @@ export const API_URL = {
   RESUME_SUMMARY_POPUP: `${APIPath}Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
   RESUME_SUMMARY_POST: `${APIPath}Candidatedetail/Put/`,
   INTERVIEW_FEEDBACK: `${APIPath}CandidateInterviewFeedback/GetByCandidate`,
+  INTERVIEW_FEEDBACK_POST: `${APIPath}CandidateInterviewFeedback`,
   INTERVIEW_EVALUATION: `${APIPath}interviewevaluation/`,
-  INTERVIEW_FEEDBACK_MASTER: `${APIPath}evaluationfeedbackmaster`,
+  INTERVIEW_FEEDBACK_MASTER: `${APIPath}Evaluationfeedback`,
   MRF_PARTIAL_STATUS_UPDATE: `${APIPath}Mrfdetail/PartialUpdateMRFStatus/`,
   GET_CREATE_REQUISITION_DEPARTMENT: `${APIPath}Subdepartment/GetInfo/`,
   GET_CREATE_REQUISITION_DEATILS: `${APIPath}Mrfdetail/GetRequisition/`,
@@ -209,12 +210,13 @@ export const FORM_SCHEMA_CR = {
   export const isFormDataEmptyForSaveasDraft = (formData) => {
     if (formData === undefined) {
       return true; // Treat it as empty if undefined
-    }
-      
+    }   
+
     return Object.keys(formData).filter((key) => {
       const value = formData[key];
+  
       // Check specific condition for certain fields, and general check for others
-      return (
+      if (
         (value === "" || value === 0 || value === null) &&
         [
           "positionTitleId", "departmentId", 
@@ -222,9 +224,23 @@ export const FORM_SCHEMA_CR = {
           "reportsToEmployeeId",  "minGradeId", "maxGradeId","vacancyTypeId",
           "locationId"
         ].includes(key)
-      );
+      ) {
+        return true;
+      }
+  
+      // Additional check for fields related to replacements
+      if (formData.isReplacement) {
+        if (
+          ["replaceJustification", "employeeName","emailId","employeeCode","lastWorkingDate",
+          "annualCtc","annualGross"].includes(key) &&
+          value === ""
+        ) {
+          return true;
+        }
+      }
+  
+      return false;
     });
-    
   };
 
  

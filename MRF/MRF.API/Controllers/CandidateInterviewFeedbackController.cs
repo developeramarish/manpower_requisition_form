@@ -79,7 +79,7 @@ namespace MRF.API.Controllers
         public ResponseDTO GetByCandidate(int id)
         {
             _logger.LogInfo($"Fetching All Gender by Id: {id}");
-            List<CandidateInterviewFeedback> candidateInterviewFeedback = _unitOfWork.CandidateInterviewFeedback.GetA(u => u.CandidateId == id).ToList();
+            List<CandidateInterviewFeedback> candidateInterviewFeedback = _unitOfWork.CandidateInterviewFeedback.GetByCandidate(id);
             if (candidateInterviewFeedback == null)
             {
                 _logger.LogError($"No result found by this Id:{id}");

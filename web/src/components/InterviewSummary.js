@@ -211,7 +211,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 	
 
 			const feedbackBodyTemplate = (interview) => {
-				if (interview.evalutionStatusId < 5) return "To be updated";
+				if (roleId !== ROLES.interviewer && interview.evalutionStatusId < 5) return "To be updated";
 		
 				return (
 					<>
@@ -298,7 +298,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		},
 		{
 			field: "attachment",
-			header: "Attachment",
+			header: "Assignment",
 			body: attachmentBodyTemplate,
 		},
 		{
