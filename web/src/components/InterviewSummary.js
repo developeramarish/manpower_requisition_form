@@ -111,6 +111,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 
 		const updateStatus = {
 			id,
+			candidateId,
 			evalutionStatusId,
 			updatedByEmployeeId,
 			updatedOnUtc
