@@ -308,7 +308,7 @@ const CreateRequisitionBody = ({
           >
             {getReqId ? (
               <div className="flex justify-content-between gap-5">
-                <div className="flex flex-column w-6 gap-2">
+                <div className="flex flex-column w-19 gap-2">
                   <h4 className="text-xl my-2">
                     Reference Number:{" "}
                     <span className="text-red-600">
