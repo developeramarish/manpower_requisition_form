@@ -74,18 +74,24 @@ namespace MRF.API.Controllers
                 }
 
             var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
-
-            List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId);
-            foreach (var emailReq in emailList)
+            try
             {
-                try
+                List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId);
+                foreach (var emailReq in emailList)
                 {
-                    _emailService.SendEmail(emailReq.Email, emailMaster.Subject, emailMaster.Content);
+                    try
+                    {
+                        _emailService.SendEmail(emailReq.Email, emailMaster.Subject, emailMaster.Content);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error while sending email: {ex}");
+                    }
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error while sending email: {ex}");
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while sending email: {ex}");
             }
 
             return mrfdetail;
