@@ -224,6 +224,15 @@ table {
   text-decoration: none;
 }
 
+.dashboard_body_right h4{
+
+padding-left: 45px;
+width: 400px;
+margin: 0;
+text-align: center;
+
+}
+
 .mrf_interview_summary {
    /*width: 62vw; 
   height: 300px;*/

@@ -308,7 +308,7 @@ const CreateRequisitionBody = ({
           >
             {getReqId ? (
               <div className="flex justify-content-between gap-5">
-                <div className="flex flex-column w-6 gap-2">
+                <div className="flex flex-column w-19 gap-2">
                   <h4 className="text-xl my-2">
                     Reference Number:{" "}
                     <span className="text-red-600">
@@ -958,7 +958,7 @@ const CreateRequisitionBody = ({
                 />
               </div>
             </div>
-            {getReqRoleId && (
+            {(getReqRoleId===4 || (getReqRoleId===3 && mrfStatusId !==MRF_STATUS.draft && mrfStatusId !==MRF_STATUS.resubReq) )&& (
               <>
                 <div className="flex justify-content-between">
                   <h1 className="my-2 ">
@@ -1055,34 +1055,53 @@ const CreateRequisitionBody = ({
                       }
                     />
                   </div>
-
-                  {getReqRoleId == 4 && (
+                  {(getReqRoleId === 4 && ( mrfStatusId !==MRF_STATUS.rejected && MRF_STATUS.closed && MRF_STATUS.withdrawn ) )? (
                     <>
                       <div className="flex flex-column gap-2">
-                        <label
+                      <label
                           htmlFor="ApprovalDate"
                           className="font-bold text-sm"
                         >
                           Action
                         </label>
-
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={mrfStatusId}
                           label={"Update"}
                           formData={formData}
                           className={"w-20 px-7 bg-red-600 border-red-600"}
-
                           // className={"update_btn"}
                           hiringManagerUpdateClick={true}
+                          disabled={
+                            formData.hiringManagerId != 0 ? false : true
+                          }
                           message={"Are you sure you want to update?"}
-                          outlined={true}
                         />
                       </div>
                       <div className=" w-2 "></div>
                     </>
-                  )}
-                </div>{" "}
+                  ):(<><div className="flex flex-column gap-2">
+                    <label
+                          htmlFor="ApprovalDate"
+                          className="font-bold text-sm"
+                        >
+                          Action
+                        </label>
+                  <MrfPartialStatus
+                    mrfId={getReqId}
+                    mrfStatusId={mrfStatusId}
+                    label={"Update"}
+                    formData={formData}
+                    className={"w-20 px-7 surface-500"}
+                    // className={"update_btn"}
+                    hiringManagerUpdateClick={true}
+                    disabled={true}
+                    message={"Are you sure you want to update?"}
+                  /> 
+                </div>
+                <div className=" w-2 "></div></>)}
+                  
+                </div>
                 <div id="third" className="flex justify-content-evenly gap-4">
                   <div className="flex flex-column gap-2">
                     <InputTextCp
@@ -1154,7 +1173,7 @@ const CreateRequisitionBody = ({
                     />
                   </div>
 
-                  {getReqRoleId == 4 && (
+                  {(getReqRoleId === 4 && ( mrfStatusId !==MRF_STATUS.rejected && MRF_STATUS.closed && MRF_STATUS.withdrawn ) )? (
                     <>
                       <div className="flex flex-column gap-2">
                         <MrfPartialStatus
@@ -1165,12 +1184,28 @@ const CreateRequisitionBody = ({
                           className={"w-20 px-7 bg-red-600 border-red-600"}
                           // className={"update_btn"}
                           siteHRUpdateClick={true}
+                          disabled={
+                            formData.siteHRSPOCId != 0 ? false : true
+                          }
                           message={"Are you sure you want to update?"}
                         />
                       </div>
                       <div className=" w-2 "></div>
                     </>
-                  )}
+                  ):(<><div className="flex flex-column gap-2">
+                  <MrfPartialStatus
+                    mrfId={getReqId}
+                    mrfStatusId={mrfStatusId}
+                    label={"Update"}
+                    formData={formData}
+                    className={"w-20 px-7 surface-500"}
+                    // className={"update_btn"}
+                    siteHRUpdateClick={true}
+                    disabled={true}
+                    message={"Are you sure you want to update?"}
+                  /> 
+                </div>
+                <div className=" w-2 "></div></>)}
                 </div>
                 <div id="second" className="flex justify-content-evenly gap-4">
                   <div className="flex flex-column gap-2">

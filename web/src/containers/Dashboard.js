@@ -246,7 +246,7 @@ function Dashboard({ roleId, userId }) {
               <DashBoardDataTable
                 value={interviewSummaryTableData}
                 column={interviewSummaryColums}
-                headerHeading={"Interview Status"}
+                headerHeading={<h4 >Interview Status</h4>}
                 table_title={"Interview Summary"}
               />
               <InterviewSummary
@@ -260,7 +260,7 @@ function Dashboard({ roleId, userId }) {
               <DashBoardDataTable
                 value={resumeSummary}
                 column={resumeSummaryColums}
-                headerHeading={"Resume Status"}
+                headerHeading={<h4 >Resume Status</h4>}
                 table_title={"Resume Summary"}
               />
 
