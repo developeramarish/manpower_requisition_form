@@ -16,6 +16,7 @@ import {
 	getData,
 	strToArray,
 	putData,
+	postData
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 
@@ -86,17 +87,26 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		console.log(data);
 		 const id=data.interviewevaluationId;
 		 const candidateId=data.candidateId;
-		 const interviewerId=data.interviewerId;
+		 const interviewerEmployeeIds=data.interviewerEmployeeIds;
 		 const evaluationDateUtc=data.evaluationDateUtc;
 		 const	evalutionStatusId=data.evalutionStatusId;
 		 const	updatedByEmployeeId=storageService.getData("profile").employeeId;
+		 const createdByEmployeeId=storageService.getData("profile").employeeId;
 		 const	updatedOnUtc=new Date().toISOString();
-	
+		 const createdOnUtc=new Date().toISOString();
+		const fromTimeUtc="15:00:00";
+		const toTimeUtc="15:00:00";
 		 const interviewDetailsData = {
-			id,
+			candidateId,
+			interviewerEmployeeIds,
 			evalutionStatusId,
+			evaluationDateUtc,
 			updatedByEmployeeId,
-			updatedOnUtc
+			createdByEmployeeId,
+			updatedOnUtc,
+			createdOnUtc,
+			fromTimeUtc,
+			toTimeUtc
 		};
 
 		const updateStatus = {
@@ -114,7 +124,8 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		// 	},
 		// 	body: JSON.stringify(updateStatus),
 		//   });
-		let response = await putData(`${API_URL.INTERVIEW_EVALUATION}${id}`,updateStatus);
+		if(roleId === ROLES.hr){
+			let response = await putData(`${API_URL.INTERVIEW_EVALUATION}${id}`,updateStatus);
 		
 		  if (response.ok) {
 			const responseData = response.json();
@@ -136,6 +147,32 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 			  );
 			}
 		  }
+		}
+		else{
+			let response = await  postData(`${API_URL.INTERVIEW_EVALUATION}`,interviewDetailsData);
+		
+		  if (response.ok) {
+			const responseData = response.json();
+			if (responseData.statusCode === 409) {
+			  toastRef.current.showConflictMessage(responseData.message);
+			} else {
+				
+			  toastRef.current.showSuccessMessage(
+				"Interview status updated successfully!"
+			  );
+			}
+		  } else {
+			console.error("Request failed with status:", response.status);
+			const errorData = await response.text();
+			console.error("Error Data:", errorData);
+			if (response.status === 400) {
+			  toastRef.current.showBadRequestMessage(
+				"Bad request: " + response.url
+			  );
+			}
+		  }
+		}
+		
 		} catch (error) {
 		  console.error("Error:", error);
 		}
@@ -182,10 +219,10 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 			let interviewDataCopy = [...interviewData];
 			let sv = [...saveBttn];
 			sv[options.rowIndex] = e.value.length > 0 ? true : false;
-			interviewDataCopy[options.rowIndex].interviewerEmployeeId = objToIntArray(
+			interviewDataCopy[options.rowIndex].interviewerEmployeeIds = objToIntArray(
 				e.value,
 				"employeeId"
-			);
+			).toString();
 			setInterviewData(interviewDataCopy);
 			setSaveBttn(sv);
 		};
@@ -193,6 +230,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 		return (
 			<MultiSelectDropdown
 				className="drop-width"
+				id="interviewerEmployeeIds"
 				options={interviewerData}
 				value={arrayToObj(
 					interviewerData,

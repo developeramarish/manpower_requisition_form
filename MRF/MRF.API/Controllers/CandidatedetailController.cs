@@ -256,7 +256,7 @@ namespace MRF.API.Controllers
         public ResponseDTO GetResumeDropdownlist(int id,int roleId,int userId)
         {
             _logger.LogInfo("Fetching create MRF Dropdown list");
-            List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetForwardedTodata();
+           // List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetForwardedTodata();
             List<ResumeDetailsViewModel> ResumeDetails = _unitOfWork.ResumeDetail.GetResumeStatusDetails(id, roleId, userId);
             CanditeResponseDTO sw = new CanditeResponseDTO();
 

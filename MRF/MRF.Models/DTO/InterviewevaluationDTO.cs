@@ -10,6 +10,8 @@
 
         public int InterviewerId { get; set; }
 
+        public  String? interviewerEmployeeIds { get; set; } 
+
         public DateOnly EvaluationDateUtc { get; set; }
 
         public TimeOnly? FromTimeUtc { get; set; }
