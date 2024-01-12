@@ -16,7 +16,7 @@ const HeaderBar = ({ userFirstName, userLastName }) => {
           <button className="flex-add">
           {userFirstName && userLastName &&
               <>
-                <p className="acc-logo"> {userFirstName.charAt(0)} {userLastName.charAt(0)} </p>
+                <p className="acc-logo"> {userFirstName.charAt(0)}{userLastName.charAt(0)} </p>
                 <p className='logged-in-user'>{userFirstName} {userLastName}</p>
               </>
             }

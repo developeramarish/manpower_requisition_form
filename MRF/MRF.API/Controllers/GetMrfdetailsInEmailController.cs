@@ -6,29 +6,24 @@ using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace MRF.API.Controllers
-{   
+{
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class GetMrfdetailsInEmailController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private ResponseDTO _response;
         private readonly ILoggerService _logger;
         private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
-        private readonly IHTMLtoPDF _hTMLtoPDF;
         private readonly IConfiguration _configuration;
-        public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IHTMLtoPDF hTMLtoPDF, IConfiguration configuration)
+        public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment,  IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
-            _response = new ResponseDTO();
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
-            _hTMLtoPDF = hTMLtoPDF;
             _configuration = configuration;
         }
 

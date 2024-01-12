@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import "../styles/layout/Candidate.css";
+import "../css/Candidate.css";
 import "../css/MyRequisitions.css";
 import { API_URL, FILE_URL } from "../constants/config";
 function ViewCandidate() {
