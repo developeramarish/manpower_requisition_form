@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import "primeicons/primeicons.css";
 import { DataTable } from "primereact/datatable";
@@ -18,7 +19,7 @@ import DropdownComponent from "./Dropdown";
 import MultiSelectDropdown from "./multiselectDropdown";
 import ButtonC from "./Button";
 import InputTextareaComponent from "./InputTextarea";
-const MyResume = () => {
+const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
   const [values, setValues] = useState([]);
@@ -29,11 +30,11 @@ const MyResume = () => {
   }, []);
  
   async function getResumeData() {
-    const resumeData = await getData(API_URL.GET_MYRESUME);
+    const resumeData = await getData(API_URL.GET_MYRESUME+ "?id=0&roleId=" + roleId + "&userId=" + userId);
     setValues(resumeData.result.candidateDetails);
     setForwardData(resumeData.result.resumereviewer);
     setStatusData(resumeData.result.status);
-    // console.log(resumeData.result)
+     console.log(resumeData.result)
   }
   const SingleSelect = (data, options) => {
     const handleDropdownChange = (e) => {
@@ -65,8 +66,7 @@ const MyResume = () => {
       let interviewDataCopy = [...values];
       let sv = [...saveBttn];
       sv[options.rowIndex] = e.value.length > 0 ? true : false;
-      console.log(interviewDataCopy[options.rowIndex].reviewedByEmployeeIds);
-      interviewDataCopy[options.rowIndex].reviewedByEmployeeIds = objToIntArray(
+      interviewDataCopy[options.rowIndex].resumeReviewerEmployeeIds  = objToIntArray(
         e.value,
         "employeeId"
       ).toString();
@@ -80,7 +80,8 @@ const MyResume = () => {
         options={forwardData}
         value={arrayToObj(
           forwardData,
-          strToArray(data.reviewedByEmployeeIds),
+          strToArray(data.resumeReviewerEmployeeIds
+            ),
           "employeeId"
         )}
         placeholder={"Select Resume Reviwer"}
@@ -93,8 +94,32 @@ const MyResume = () => {
     );
   };
   const updateData = async (rowData) => {
-    
-    let response = await putData(`${API_URL.RESUME_SUMMARY_POST + rowData.id}`,rowData);
+    const reviewedByEmployeeIds = rowData.resumeReviewerEmployeeIds;
+    const name =  rowData.candidateName; // this because we are handling data in backend it not save as string
+    const emailId = "string";
+    const id = rowData.candidateId;
+    const candidateStatusId = rowData.candidateStatusId;
+    const mrfId = rowData.mrfId;
+    const contactNo = "string";
+    const reason = rowData.reason;
+    const resumePath = rowData.resumePath;
+    const createdByEmployeeId = rowData.createdByEmployeeId;
+    const createdOnUtc = rowData.createdOnUtc;
+    const candidateName=rowData.candidateName;
+    const candidateDetailsData = {
+      id,
+      mrfId,
+      name,
+      contactNo,
+      emailId,
+      resumePath,
+      candidateStatusId,
+      reviewedByEmployeeIds,
+      createdByEmployeeId,
+      createdOnUtc,
+      reason,
+    };
+    let response = await putData(`${API_URL.RESUME_SUMMARY_POST + id}`,candidateDetailsData);
     if (response.ok) {
       const responseData = await response.json();
       console.log("Response Data:", responseData);

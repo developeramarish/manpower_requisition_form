@@ -253,7 +253,7 @@ namespace MRF.DataAccess.Repository
                              .ToList();
 
 
-            if (Role == "mrfowner")
+            if (Role == "mrfowner" || Role == "hr")
             {
                 
                 var mrflist = (from mrfD in _db.Mrfdetails

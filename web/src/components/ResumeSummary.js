@@ -29,11 +29,21 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
       fetch(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`)
         .then((response) => response.json())
         .then((data) => {
-          setdata(data.result.resumeDetails);
+          if (roleId === ROLES.interviewer) {
+            var filterInterviewerResumtSumData = [];
+            data.result.resumeDetails.
+            map(( res) => {
+                if (res.candidatestatus === "Shortlisted" ) {
+                  filterInterviewerResumtSumData.push(res)
+                }
+            })
+            setdata(filterInterviewerResumtSumData);
+          } else {
+            setdata(data.result.resumeDetails);
+          }
           setResumeReviewer(data.result.employeeRoleMap);
           let array = new Array(data.result.resumeDetails.length).fill(false);
           setSaveBttn(array);
-          
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -203,8 +213,10 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 
 if(!resume.reason ) return (<p className="resume-reason-col">To be Updated</p>);
 return(
-
-  <InputTextarea  value={resume.reason} rows={2} cols={50} />
+ 
+<InputTextarea  readOnly={true}   value={resume.reason} rows={2} cols={50} />
+ 
+ 
   // <p className="resume-reason-col">{resume.reason}</p>
 )
       }

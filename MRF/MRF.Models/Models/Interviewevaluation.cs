@@ -20,7 +20,7 @@ public class Interviewevaluation
     //[NotMapped]
     //public int EvaluationFeedbackId { get; set; }
 
-    public int EvalutionStatusId { get; set; }
+    public int? EvalutionStatusId { get; set; }
     //[NotMapped]
     //public string FeedbackAsDraft { get; set; } = null!;
 
