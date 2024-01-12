@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Xml.Linq;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace MRF.API.Controllers
 {
@@ -252,11 +253,11 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetResumeDropdownlist()
+        public ResponseDTO GetResumeDropdownlist(int id,int roleId,int userId)
         {
             _logger.LogInfo("Fetching create MRF Dropdown list");
             List<Candidatedetails> obj = _unitOfWork.Candidatedetail.GetForwardedTodata();
-             
+            List<ResumeDetailsViewModel> ResumeDetails = _unitOfWork.ResumeDetail.GetResumeStatusDetails(id, roleId, userId);
             CanditeResponseDTO sw = new CanditeResponseDTO();
 
 
@@ -265,7 +266,7 @@ namespace MRF.API.Controllers
             var combinedData = new
             {
 
-                CandidateDetails = obj,
+                CandidateDetails = ResumeDetails,
                 sw.Resumereviewer,
                 sw.status
 

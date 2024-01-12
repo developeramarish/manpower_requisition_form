@@ -183,9 +183,10 @@ function App() {
                   />
                 )}
                 {currentPageKey === "my_resume" && (
-                  <MyResume/>
-                    
-                 
+                  <MyResume
+                  roleId={profile.roleId}
+                  userId={profile.employeeId}
+                  />
                 )}
                 {currentPageKey === "edit_requisition" && (
                   <CreateRequisition
