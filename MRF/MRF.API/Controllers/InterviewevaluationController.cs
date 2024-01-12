@@ -98,13 +98,10 @@ namespace MRF.API.Controllers
                     var interviewevaluation1 = new Interviewevaluation();
                     interviewevaluation1.InterviewerId = int.Parse(employeeId);
                     interviewevaluation1.CandidateId = request.CandidateId;
-                    interviewevaluation1.EvaluationDateUtc = request.EvaluationDateUtc;
-                    interviewevaluation1.FromTimeUtc = request.FromTimeUtc;
-                    interviewevaluation1.EvalutionStatusId = request.EvalutionStatusId;
+                    interviewevaluation1.EvalutionStatusId = request.EvalutionStatusId == 0 ? null : request.EvalutionStatusId;
                     interviewevaluation1.EvaluationDateUtc = request.EvaluationDateUtc;
                     interviewevaluation1.FromTimeUtc = request.FromTimeUtc;
                     interviewevaluation1.ToTimeUtc = request.ToTimeUtc;
-                    interviewevaluation1.EvalutionStatusId = request.EvalutionStatusId;
                     interviewevaluation1.CreatedByEmployeeId = request.CreatedByEmployeeId;
                     interviewevaluation1.CreatedOnUtc = request.CreatedOnUtc;
                     interviewevaluation1.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
