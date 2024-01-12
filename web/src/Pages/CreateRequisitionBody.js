@@ -1055,8 +1055,23 @@ const CreateRequisitionBody = ({
                       }
                     />
                   </div>
-                  {(getReqRoleId === 4 && ( mrfStatusId !==MRF_STATUS.rejected && MRF_STATUS.closed && MRF_STATUS.withdrawn ) )? (
-                    <>
+                  {(() => {
+                    if (getReqRoleId == 4) {
+                      switch (formData.mrfStatusId) {
+                        
+                        case MRF_STATUS.submToHr:
+                        // case MRF_STATUS.resubReq:
+                        case MRF_STATUS.hodapproval:
+                        case MRF_STATUS.awaitHodApproval:
+                        case MRF_STATUS.cooapproval:
+                        case MRF_STATUS.awaitCooApproval:
+                        case MRF_STATUS.recivedfinanceHeadApproval:
+                        case MRF_STATUS.awaitfinanceHeadApproval:
+                        case MRF_STATUS.bypassFinanceHeadApproval:
+                        case MRF_STATUS.mrfTransferToNew:
+
+                          return (
+                            <>
                       <div className="flex flex-column gap-2">
                       <label
                           htmlFor="ApprovalDate"
@@ -1080,7 +1095,10 @@ const CreateRequisitionBody = ({
                       </div>
                       <div className=" w-2 "></div>
                     </>
-                  ):(<><div className="flex flex-column gap-2">
+                          );
+                        default:
+                          return (
+                            <><div className="flex flex-column gap-2">
                     <label
                           htmlFor="ApprovalDate"
                           className="font-bold text-sm"
@@ -1094,13 +1112,16 @@ const CreateRequisitionBody = ({
                     formData={formData}
                     className={"w-20 px-7 surface-500"}
                     // className={"update_btn"}
-                    hiringManagerUpdateClick={true}
+                    // hiringManagerUpdateClick={true}
                     disabled={true}
-                    message={"Are you sure you want to update?"}
+                    // message={"Are you sure you want to update?"}
                   /> 
                 </div>
-                <div className=" w-2 "></div></>)}
-                  
+                <div className=" w-2 "></div></>
+                          );
+                      }
+                    }
+                  })()}
                 </div>
                 <div id="third" className="flex justify-content-evenly gap-4">
                   <div className="flex flex-column gap-2">
@@ -1173,10 +1194,25 @@ const CreateRequisitionBody = ({
                     />
                   </div>
 
-                  {(getReqRoleId === 4 && ( mrfStatusId !==MRF_STATUS.rejected && MRF_STATUS.closed && MRF_STATUS.withdrawn ) )? (
-                    <>
-                      <div className="flex flex-column gap-2">
-                        <MrfPartialStatus
+                  {(() => {
+                    if (getReqRoleId == 4) {
+                      switch (formData.mrfStatusId) {
+                        
+                        case MRF_STATUS.submToHr:
+                        // case MRF_STATUS.resubReq:
+                        case MRF_STATUS.hodapproval:
+                        case MRF_STATUS.awaitHodApproval:
+                        case MRF_STATUS.cooapproval:
+                        case MRF_STATUS.awaitCooApproval:
+                        case MRF_STATUS.recivedfinanceHeadApproval:
+                        case MRF_STATUS.awaitfinanceHeadApproval:
+                        case MRF_STATUS.bypassFinanceHeadApproval:
+                        case MRF_STATUS.mrfTransferToNew:
+
+                          return (
+                            <>
+                              <div className="flex flex-column gap-2 w-2">
+                              <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={mrfStatusId}
                           label={"Update"}
@@ -1189,10 +1225,13 @@ const CreateRequisitionBody = ({
                           }
                           message={"Are you sure you want to update?"}
                         />
-                      </div>
-                      <div className=" w-2 "></div>
-                    </>
-                  ):(<><div className="flex flex-column gap-2">
+                              </div>
+                              <div className=" w-2 "></div>
+                            </>
+                          );
+                        default:
+                          return (
+                            <><div className="flex flex-column gap-2">
                   <MrfPartialStatus
                     mrfId={getReqId}
                     mrfStatusId={mrfStatusId}
@@ -1200,12 +1239,16 @@ const CreateRequisitionBody = ({
                     formData={formData}
                     className={"w-20 px-7 surface-500"}
                     // className={"update_btn"}
-                    siteHRUpdateClick={true}
+                    // siteHRUpdateClick={true}
                     disabled={true}
-                    message={"Are you sure you want to update?"}
+                    // message={"Are you sure you want to update?"}
                   /> 
                 </div>
-                <div className=" w-2 "></div></>)}
+                <div className=" w-2 "></div></>
+                          );
+                      }
+                    }
+                  })()}
                 </div>
                 <div id="second" className="flex justify-content-evenly gap-4">
                   <div className="flex flex-column gap-2">

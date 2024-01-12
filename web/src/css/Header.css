@@ -65,12 +65,19 @@ header{
     font-weight:700;
   }
 
-  /* .top_band .logoutId:hover{
-    background-color: #d32f2e;
-    width: 90px;
+  .top_band .logoutId{
+    background-color: #ffffff;
     height: 30px;
     border-radius: 5px;
-    margin: 21px;
-    padding: 1px;
-    color: rgb(255, 255, 255);
-  } */
+    padding: 5px 10px 5px 10px;
+    color: #979799;
+  }
+
+
+  .top_band .logoutId:hover{
+    background-color: #d32f2e;
+    height: 30px;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+    color: rgb(0, 0, 0);
+  }

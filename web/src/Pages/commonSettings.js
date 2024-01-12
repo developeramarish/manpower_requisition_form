@@ -161,7 +161,15 @@ export function applySettingsBasedOnRoleAndStatus(
           setFinanceHeadApprovalDate: true,
         });
       }else {
-        applyCommonSettings(commonSettings);
+        applyCommonSettings({ setReadOnly: true,
+          setHiringManager: true,
+          setSiteHRSPOCApproval: true,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,});
       }
 
     default:
