@@ -43,7 +43,7 @@
 	border-radius: 0.5rem;
 	background-color: white;
 	padding: 0.5rem;
-	height: 77vh;
+	/*height: 77vh;*/
 }
 
 
@@ -88,4 +88,26 @@
 
 .feed-col-comments {
 	width: 90%;
+}
+
+.dvAddFeedback
+{
+	padding: 10px;
+}
+
+.dvinputFeedback
+{   width:100%;
+	height: 10%;
+	padding: 10px;
+}
+
+.inputRound
+{
+	width:70%;
+	height: 20%;
+}
+
+.dropdown-custom {
+	width:200px;
+	height:40px;
 }
