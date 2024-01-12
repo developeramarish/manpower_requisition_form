@@ -179,8 +179,8 @@ function Dashboard({ roleId, userId }) {
   ];
  
   if (roleId === ROLES.interviewer) {
-    resumeSummaryColums = resumeSummaryColums.filter(column => column.header !== "New" &&
-    column.header !== "Rejected" && column.header !== "On Hold");
+    resumeSummaryColums = resumeSummaryColums.filter(column => column.field !== "New" &&
+    column.field !== "Rejected" && column.field !== "On Hold");
    };
   return (
     <div className="dashboard_wrapper">
