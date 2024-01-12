@@ -255,17 +255,16 @@ namespace MRF.DataAccess.Repository
 
             if (Role == "mrfowner" || Role == "hr")
             {
-                
                 var mrflist = (from mrfD in _db.Mrfdetails
-                           join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
-                           join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
-                           where mrfD.CreatedByEmployeeId == userId
-                           select new MrfInterviewSummaryViewModel
-                           {
-                               MrfId = mrfD.Id,
-                               ReferenceNo = mrfD.ReferenceNo,
-                               PositionTitle = position.Name,
-                           }).ToList();
+                               join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                               join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
+                               where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId) || Role != "mrfowner")
+                               select new MrfInterviewSummaryViewModel
+                               {
+                                   MrfId = mrfD.Id,
+                                   ReferenceNo = mrfD.ReferenceNo,
+                                   PositionTitle = position.Name,
+                               }).ToList();
 
 
                 var newItems = mrflist.Where(x => !Interviewevaluation.Any(y => x.MrfId == y.MrfId));
