@@ -102,6 +102,7 @@ function Dashboard({ roleId, userId }) {
       field: "referenceno",
       header: "MRF ID",
       body: mrfIdResumeRefernceTemplate,
+      bodyClassName:"dash_status_col_mrfid",
     },
     {
       field: "positionTitle",
@@ -110,27 +111,27 @@ function Dashboard({ roleId, userId }) {
     },
     {
       field: "New",
-      header: "New",
+      header: <h5 className="dashborad_table_sub_header">New</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "New"),
       bodyClassName:"dash_status_col",
     },
  
     {
       field: "Shortlisted",
-      header: "Shortlisted",
+      header: <h5 className="dashborad_table_sub_header">Shortlisted</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Shortlisted"),
       bodyClassName:"dash_status_col",
     },
  
     {
       field: "Rejected",
-      header: "Rejected",
+      header: <h5 className="dashborad_table_sub_header">Rejected</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Rejected"),
       bodyClassName:"dash_status_col",
     },
     {
       field: "On Hold",
-      header: "On Hold",
+      header: <h5 className="dashborad_table_sub_header">On Hold</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "On Hold"),
       bodyClassName:"dash_status_col",
     },
@@ -141,34 +142,37 @@ function Dashboard({ roleId, userId }) {
       field: "referenceno",
       header: "MRF ID",
       body: mrfIdInterviewRefernceTemplate,
+      bodyClassName:"dash_status_col_mrfid",
     },
     {
       field: "positionTitle",
       header: "Position Title",
+      // header: <h5 className="dashborad_table_sub_header" >Position Title</h5>,
+
       bodyClassName:"dash_status_col",
     },
     {
       field: "Selected",
-      header: "Selected",
+      header: <h5 className="dashborad_table_sub_header" >Selected</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Selected"),
       bodyClassName:"dash_status_col",
     },
     {
       field: "Onboarded",
-      header: "Onboarded",
+      header: <h5 className="dashborad_table_sub_header">Onboarded</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Onboarded"),
       bodyClassName:"dash_status_col",
     },
     {
       field: "new",
-      header: "Assignment Sent",
+      header: <h5 className="dashborad_table_sub_header">Assignment Sent</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Assignment Sent"),
       bodyClassName:"dash_status_col",
     },
  
     {
       field: "Assignment Received",
-      header: "Assignment Received",
+      header: <h5 className="dashborad_table_sub_header">Assignment Received</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Assignment Received"),
       bodyClassName:"dash_status_col",
     },

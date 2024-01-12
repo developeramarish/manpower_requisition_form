@@ -233,6 +233,14 @@ text-align: center;
 
 }
 
+.dashborad_table_sub_header {
+  margin: 0;
+  text-align: left;
+  /* background-color: aqua; */
+  font-size: 14px;
+  color: #68696b;
+  font-weight:500 ;
+  }
 .mrf_interview_summary {
    /*width: 62vw; 
   height: 300px;*/
