@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import {
   detectDevice,
   getData,
+  getDataAPI,
   getKeyFromLocation,
   isTouchDevice,
   navigateTo,
@@ -84,7 +85,8 @@ function App() {
   }, [accounts]);
 
   async function callLoginAPI() {
-    const response = await getData(graphConfig.graphMeEndpoint);
+    const result = await getDataAPI(graphConfig.graphMeEndpoint);
+    const response=await result.json();
     var oData =
       response && response.hasOwnProperty("result") ? response.result : null;
     if (oData === null) {
@@ -205,7 +207,7 @@ function App() {
         <Login />
         <div className="login-load">
 
-        <img src="./images/logo.png" alt="mrf logo" />
+        <img src="./images/start_Logo.png" alt="mrf logo" />
         </div>
         {/* <h5 className="card-title">
           Please sign-in to see your profile information.

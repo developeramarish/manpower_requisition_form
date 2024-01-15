@@ -14,7 +14,7 @@ import { Editor } from "primereact/editor";
 import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
 import { mrfStatus } from "../components/constant";
-import { navigateTo } from "../constants/Utils";
+import { getData1, getDataAPI, navigateTo } from "../constants/Utils";
 import {
   API_URL,
   FORM_SCHEMA_CR,
@@ -55,19 +55,24 @@ const CreateRequisitionBody = ({
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState();
 
-  const OnLoad = () => {
-    fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
-      .then((response) => response.json())
-      .then((data) => {
-        const dropdown = data.result;
-        // Store the dropdown data in localStorage using your storageService
-        // storageService.set("dropdownData", dropdown);
-        // Update the state with the new dropdown data
-        setDropdownData(dropdown);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+  const OnLoad = async () => {
+    const dropDta = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
+    console.log(dropDta);
+    const ress = await dropDta.json();
+    setDropdownData(ress.result);
+    console.log(ress);
+    // fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
+    // .then((response) => response.json())
+    // .then((data) => {
+    //   const dropdown = data.result;
+    //   // Store the dropdown data in localStorage using your storageService
+    //   // storageService.set("dropdownData", dropdown);
+    //   // Update the state with the new dropdown data
+    //   setDropdownData(dropdown);
+    // })
+    // .catch((error) => {
+    //   console.error("Error fetching data:", error);
+    // });
   };
   useEffect(() => {
     setFormData(FORM_SCHEMA_CR);
@@ -413,10 +418,9 @@ const CreateRequisitionBody = ({
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="sub-department" className="font-bold text-sm">
                   Sub-Department
-                 
                 </label>
                 <DropdownComponent
-                inputClassName="bg-gray-100"
+                  inputClassName="bg-gray-100"
                   optionLabel="name"
                   optionValue="id"
                   type="subDepartmentId"
@@ -958,7 +962,10 @@ const CreateRequisitionBody = ({
                 />
               </div>
             </div>
-            {(getReqRoleId===4 || (getReqRoleId===3 && mrfStatusId !==MRF_STATUS.draft && mrfStatusId !==MRF_STATUS.resubReq) )&& (
+            {(getReqRoleId === 4 ||
+              (getReqRoleId === 3 &&
+                mrfStatusId !== MRF_STATUS.draft &&
+                mrfStatusId !== MRF_STATUS.resubReq)) && (
               <>
                 <div className="flex justify-content-between">
                   <h1 className="my-2 ">
@@ -1058,7 +1065,6 @@ const CreateRequisitionBody = ({
                   {(() => {
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
-                        
                         case MRF_STATUS.submToHr:
                         // case MRF_STATUS.resubReq:
                         case MRF_STATUS.hodapproval:
@@ -1069,55 +1075,52 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.awaitfinanceHeadApproval:
                         case MRF_STATUS.bypassFinanceHeadApproval:
                         case MRF_STATUS.mrfTransferToNew:
-
                           return (
                             <>
-                      <div className="flex flex-column gap-2">
-                      <label
-                          htmlFor="ApprovalDate"
-                          className="font-bold text-sm"
-                        >
-                          Action
-                        </label>
-                        <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={mrfStatusId}
-                          label={"Update"}
-                          formData={formData}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
-                          // className={"update_btn"}
-                          hiringManagerUpdateClick={true}
-                          disabled={
-                            formData.hiringManagerId != 0 ? false : true
-                          }
-                          message={"Are you sure you want to update?"}
-                        />
-                      </div>
-                      <div className=" w-2 "></div>
-                    </>
+                              <div className="flex flex-column gap-2 w-2">
+                                <label
+                                  htmlFor="ApprovalDate"
+                                  className="font-bold text-sm"
+                                >
+                                  Action
+                                </label>
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={mrfStatusId}
+                                  label={"Updatse"}
+                                  formData={formData}
+                                  className={"update_btn"}
+                                  hiringManagerUpdateClick={true}
+                                  disabled={
+                                    formData.hiringManagerId != 0 ? false : true
+                                  }
+                                  message={"Are you sure you want to update?"}
+                                />
+                              </div>
+                              <div className=" w-2 "></div>
+                            </>
                           );
                         default:
                           return (
-                            <><div className="flex flex-column gap-2">
-                    <label
-                          htmlFor="ApprovalDate"
-                          className="font-bold text-sm"
-                        >
-                          Action
-                        </label>
-                  <MrfPartialStatus
-                    mrfId={getReqId}
-                    mrfStatusId={mrfStatusId}
-                    label={"Update"}
-                    formData={formData}
-                    className={"w-20 px-7 surface-500"}
-                    // className={"update_btn"}
-                    // hiringManagerUpdateClick={true}
-                    disabled={true}
-                    // message={"Are you sure you want to update?"}
-                  /> 
-                </div>
-                <div className=" w-2 "></div></>
+                            <>
+                              <div className="flex flex-column gap-2 w-2">
+                                <label
+                                  htmlFor="ApprovalDate"
+                                  className="font-bold text-sm"
+                                >
+                                  Action
+                                </label>
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={mrfStatusId}
+                                  label={"Update"}
+                                  formData={formData}
+                                  className={"update_btn"}
+                                  disabled={true}
+                                />
+                              </div>
+                              <div className=" w-2 "></div>
+                            </>
                           );
                       }
                     }
@@ -1197,7 +1200,6 @@ const CreateRequisitionBody = ({
                   {(() => {
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
-                        
                         case MRF_STATUS.submToHr:
                         // case MRF_STATUS.resubReq:
                         case MRF_STATUS.hodapproval:
@@ -1208,43 +1210,41 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.awaitfinanceHeadApproval:
                         case MRF_STATUS.bypassFinanceHeadApproval:
                         case MRF_STATUS.mrfTransferToNew:
-
+                        case MRF_STATUS.open:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2">
-                              <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={mrfStatusId}
-                          label={"Update"}
-                          formData={formData}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
-                          // className={"update_btn"}
-                          siteHRUpdateClick={true}
-                          disabled={
-                            formData.siteHRSPOCId != 0 ? false : true
-                          }
-                          message={"Are you sure you want to update?"}
-                        />
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={mrfStatusId}
+                                  label={"Update"}
+                                  formData={formData}
+                                  className={"update_btn"}
+                                  siteHRUpdateClick={true}
+                                  disabled={
+                                    formData.siteHRSPOCId != 0 ? false : true
+                                  }
+                                  message={"Are you sure you want to update?"}
+                                />
                               </div>
                               <div className=" w-2 "></div>
                             </>
                           );
                         default:
                           return (
-                            <><div className="flex flex-column gap-2">
-                  <MrfPartialStatus
-                    mrfId={getReqId}
-                    mrfStatusId={mrfStatusId}
-                    label={"Update"}
-                    formData={formData}
-                    className={"w-20 px-7 surface-500"}
-                    // className={"update_btn"}
-                    // siteHRUpdateClick={true}
-                    disabled={true}
-                    // message={"Are you sure you want to update?"}
-                  /> 
-                </div>
-                <div className=" w-2 "></div></>
+                            <>
+                              <div className="flex flex-column gap-2 w-2">
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={mrfStatusId}
+                                  label={"Update"}
+                                  formData={formData}
+                                  className={"update_btn"}
+                                  disabled={true}
+                                />
+                              </div>
+                              <div className=" w-2 "></div>
+                            </>
                           );
                       }
                     }
@@ -1331,14 +1331,13 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.submToHr:
                           return (
                             <>
-                              <div className="flex flex-column gap-2 w-2">
+                              <div className="flex flex-column gap-2 w-2 ">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={11}
                                   label={"Send for HOD approval"}
                                   formData={formData}
-                                  className={"w-20 px-1 bg-red-600 text-sm "}
-                                  // className={"hod_btn"}
+                                  className={"hod_btn"}
                                   disabled={
                                     formData.functionHeadId != 0 ? false : true
                                   }
@@ -1353,16 +1352,13 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.awaitHodApproval:
                           return (
                             <>
-                              <div className="flex flex-column gap-2 w-2">
+                              <div className="flex flex-column gap-2  w-2">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={4}
                                   formData={formData}
-                                  className={
-                                    "w-20 px-1 py-2 bg-red-600 text-sm "
-                                  }
+                                  className={"hod_btn"}
                                   label={"Received HOD approval"}
-                                  // disabled={(formData.presidentnCOOId != 0)? false:true}
                                   message={
                                     "Do you want to submit it as Received HOD Approval?"
                                   }
@@ -1374,15 +1370,13 @@ const CreateRequisitionBody = ({
                         default:
                           return (
                             <>
-                              <div className="flex flex-column gap-2 w-2">
+                              <div className="flex flex-column gap-2  w-2">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={11}
                                   label={"Send for HOD approval"}
                                   formData={formData}
-                                  className={
-                                    "w-20 px-1 py-2  surface-500 text-sm "
-                                  }
+                                  className={"hod_btn"}
                                   disabled={true}
                                   message={
                                     "Do you want to submit it for HOD approval?"
@@ -1480,7 +1474,7 @@ const CreateRequisitionBody = ({
                                   mrfId={getReqId}
                                   mrfStatusId={13}
                                   formData={formData}
-                                  className={" py-1 px-1 bg-red-600 text-xs "}
+                                  className={"finance_btn"}
                                   label={"Send to Finance Head approval"}
                                   disabled={
                                     formData.financeHeadId != 0 ? false : true
@@ -1494,12 +1488,10 @@ const CreateRequisitionBody = ({
                               <div className="flex flex-column gap-2 w-2">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
-                                  // mrfStatusId={15}
                                   formData={formData}
-                                  className={" py-2 surface-500 text-base "}
+                                  className={"bypass_btn"}
                                   label={"By Pass"}
                                   disabled={true}
-                                 
                                 />
                               </div>
                             </>
@@ -1512,9 +1504,8 @@ const CreateRequisitionBody = ({
                                   mrfId={getReqId}
                                   mrfStatusId={14}
                                   formData={formData}
-                                  className={"py-1 px-1 bg-red-600 text-xs "}
+                                  className={"finance_btn"}
                                   label={"Received Finance Head approval"}
-                                  // disabled={(formData.presidentnCOOId != 0)? false:true}
                                   message={
                                     "Do you want to submit it as Received Finance Head approval?"
                                   }
@@ -1525,7 +1516,7 @@ const CreateRequisitionBody = ({
                                   mrfId={getReqId}
                                   mrfStatusId={15}
                                   formData={formData}
-                                  className={" py-2 bg-red-600 text-base "}
+                                  className={"bypass_btn"}
                                   label={"By Pass"}
                                   bypassClicked={true}
                                   message={"Do you want to ByPass MRF?"}
@@ -1541,7 +1532,7 @@ const CreateRequisitionBody = ({
                                   mrfId={getReqId}
                                   mrfStatusId={14}
                                   formData={formData}
-                                  className={"py-1 px-1  surface-500 text-xs "    }
+                                  className={"finance_btn"}
                                   label={"Received Finance Head approval"}
                                   disabled={true}
                                   message={
@@ -1552,12 +1543,10 @@ const CreateRequisitionBody = ({
                               <div className="flex flex-column gap-2 w-2">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
-                                  // mrfStatusId={15}
                                   formData={formData}
-                                  className={" surface-500 text-sm "}
+                                  className={"bypass_btn"}
                                   label={"By Pass"}
                                   disabled={true}
-                                 
                                 />
                               </div>
                             </>
@@ -1645,16 +1634,17 @@ const CreateRequisitionBody = ({
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
                         case MRF_STATUS.recivedfinanceHeadApproval:
+                        case MRF_STATUS.bypassFinanceHeadApproval:
                           return (
                             <>
-                              <div className="flex flex-column gap-2 w-2">
+                              <div className="flex flex-column gap-2 w-2 ">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={12}
                                   formData={formData}
                                   label={"Send to COO approval"}
                                   cooClick={true}
-                                  className={"w-20 px-2 bg-red-600 text-sm "}
+                                  className={"coo_btn"}
                                   disabled={
                                     formData.presidentnCOOId != 0 ? false : true
                                   }
@@ -1666,28 +1656,7 @@ const CreateRequisitionBody = ({
                               <div className=" w-2 "></div>
                             </>
                           );
-                        case MRF_STATUS.bypassFinanceHeadApproval:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={12}
-                                  formData={formData}
-                                  label={"Send to COO approval"}
-                                  className={"w-20 px-2 bg-red-600 text-sm "}
-                                  // cooClick={true}
-                                  disabled={
-                                    formData.presidentnCOOId != 0 ? false : true
-                                  }
-                                  message={
-                                    "Do you want to submit it for COO approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-2 "></div>
-                            </>
-                          );
+                        
                         case MRF_STATUS.awaitCooApproval:
                           return (
                             <>
@@ -1696,9 +1665,7 @@ const CreateRequisitionBody = ({
                                   mrfId={getReqId}
                                   mrfStatusId={5}
                                   formData={formData}
-                                  className={"w-20 px-2 bg-red-600 text-sm "}
-                                  // disabled={(formData.financeHeadId != 0)? false:true}
-
+                                  className={"coo_btn "}
                                   label={"Received COO approval"}
                                   message={
                                     "Do you want to submit it as Received COO Approval?"
@@ -1716,7 +1683,7 @@ const CreateRequisitionBody = ({
                                   mrfId={getReqId}
                                   mrfStatusId={12}
                                   formData={formData}
-                                  className={"w-20 px-2 surface-500 text-sm"}
+                                  className={"coo_btn"}
                                   label={"Send to COO approval"}
                                   // cooClick={true}
                                   disabled={true}
@@ -1737,26 +1704,26 @@ const CreateRequisitionBody = ({
           </section>
 
           <div className="flex flex-wrap justify-content-end gap-5 mt-3">
-          <ButtonC
-                          label="CANCEL"
-                          // className=" w-2 surface-hover border-red-600 text-red-600"
-                          className="cancel_btn"
-                          onClick={handleCancel}
-                          outlined="true"
-                          // disable="true"
-                        />
+            <ButtonC
+              label="CANCEL"
+              // className=" w-2 surface-hover border-red-600 text-red-600"
+              className="cancel_btn"
+              onClick={handleCancel}
+              outlined="true"
+              // disable="true"
+            />
             {(() => {
               if (getReqRoleId == 3) {
                 switch (formData.mrfStatusId) {
                   case MRF_STATUS.draft:
                     return (
                       <>
-                       
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={1}
                           label={"SAVE AS DRAFT"}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
+                          className={"save_draft_btn"}
+                          // className={"w-20 px-7 bg-red-600 border-red-600"}
                           message={"Do you want to Submit this MRF as Draft?"}
                           formData={formData}
                           roleID={getReqRoleId}
@@ -1766,7 +1733,7 @@ const CreateRequisitionBody = ({
                           mrfId={getReqId}
                           mrfStatusId={2}
                           label={"SUBMIT"}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
+                          className={"submit_btn"}
                           message={
                             "After submitting you won't be able to edit the MRF details"
                           }
@@ -1778,22 +1745,20 @@ const CreateRequisitionBody = ({
                   case MRF_STATUS.submToHr:
                     return (
                       <>
-                       
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={9}
                           label={"Withdraw"}
                           formData={formData}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
+                          className={"submit_btn"}
                           message={"Do you want to withdraw this MRF?"}
                         />
                       </>
                     );
-                 
+
                   case MRF_STATUS.resubReq:
                     return (
                       <>
-                        
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={2}
@@ -1801,22 +1766,21 @@ const CreateRequisitionBody = ({
                           message={
                             "After submitting you won't be able to edit the MRF details"
                           }
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
+                          className={"submit_btn"}
                           formData={formData}
                           roleID={getReqRoleId}
                         />
                       </>
                     );
-                 
+
                   case MRF_STATUS.open:
                     return (
                       <>
-                       
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={9}
                           label={"Withdraw"}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
+                          className={"submit_btn"}
                           formData={formData}
                           message={"Do you want to withdraw this MRF?"}
                         />
@@ -1825,7 +1789,6 @@ const CreateRequisitionBody = ({
                 }
               } else if (getReqRoleId == 4) {
                 switch (formData.mrfStatusId) {
-                 
                   case MRF_STATUS.onHold:
                     return (
                       <>
@@ -1862,13 +1825,10 @@ const CreateRequisitionBody = ({
                         />
                       </>
                     );
-                  
 
                   case MRF_STATUS.open:
                     return (
                       <>
-                     
-
                         <ButtonC
                           label="Add Resume"
                           className="w-2 bg-red-600 border-red-600"
@@ -1890,34 +1850,45 @@ const CreateRequisitionBody = ({
                   default:
                     return (
                       <>
-                        
-                        {(mrfStatusId===MRF_STATUS.submToHr)&&(<><MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={3}
-                          header={"Resubmission"}
-                          label={"Resubmission Required"}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
-                          textbox={true}
-                          formData={formData}
-
-                        /></>)}
-    {(mrfStatusId!==MRF_STATUS.closed && mrfStatusId!==MRF_STATUS.rejected && mrfStatusId!==MRF_STATUS.withdrawn)&&(<><MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={8}
-                          label={"Reject"}
-                          formData={formData}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
-                          message={"Do you want to Reject this MRF?"}
-                        />
-                        <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={7}
-                          label={"On Hold"}
-                          formData={formData}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
-                          message={"Do you want to hold on this MRF?"}
-                        /></>)}
-                        
+                        {mrfStatusId === MRF_STATUS.submToHr && (
+                          <>
+                            <MrfPartialStatus
+                              mrfId={getReqId}
+                              mrfStatusId={3}
+                              header={"Resubmission"}
+                              label={"Resubmission Required"}
+                              className={"w-20 px-7 bg-red-600 border-red-600"}
+                              textbox={true}
+                              formData={formData}
+                            />
+                          </>
+                        )}
+                        {mrfStatusId !== MRF_STATUS.closed &&
+                          mrfStatusId !== MRF_STATUS.rejected &&
+                          mrfStatusId !== MRF_STATUS.withdrawn && (
+                            <>
+                              <MrfPartialStatus
+                                mrfId={getReqId}
+                                mrfStatusId={8}
+                                label={"Reject"}
+                                formData={formData}
+                                className={
+                                  "w-20 px-7 bg-red-600 border-red-600"
+                                }
+                                message={"Do you want to Reject this MRF?"}
+                              />
+                              <MrfPartialStatus
+                                mrfId={getReqId}
+                                mrfStatusId={7}
+                                label={"On Hold"}
+                                formData={formData}
+                                className={
+                                  "w-20 px-7 bg-red-600 border-red-600"
+                                }
+                                message={"Do you want to hold on this MRF?"}
+                              />
+                            </>
+                          )}
                       </>
                     );
                 }
@@ -1928,7 +1899,7 @@ const CreateRequisitionBody = ({
                       mrfId={getReqId}
                       mrfStatusId={1}
                       label={"SAVE AS DRAFT"}
-                      className={"w-20 px-7 bg-red-600 border-red-600"}
+                      className={"save_draft_btn"}
                       message={"Do you want to Submit this MRF as Draft?"}
                       formData={formData}
                       roleID={getReqRoleId}
@@ -1938,7 +1909,7 @@ const CreateRequisitionBody = ({
                       mrfId={getReqId}
                       mrfStatusId={2}
                       label={"SUBMIT"}
-                      className={"w-20 px-7 bg-red-600 border-red-600"}
+                      className={"submit_btn"}
                       message={
                         "After submitting you won't be able to edit the MRF details"
                       }

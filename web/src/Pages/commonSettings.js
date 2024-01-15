@@ -110,11 +110,11 @@ export function applySettingsBasedOnRoleAndStatus(
           awatingFinance: true,
           recievedFinance: true,
         });
-      } else if (mrfStatusId == MRF_STATUS.cooapproval) {
+      } else if (mrfStatusId == MRF_STATUS.cooapproval || mrfStatusId==MRF_STATUS.open) {
         applyCommonSettings({
           setReadOnly: true,
-          setHiringManager: true,
-          setSiteHRSPOCApproval: true,
+          setHiringManager: false,
+          setSiteHRSPOCApproval: false,
           setHodapprovalName: true,
           setHodapprovalDate: true,
           setCooapprovalName: true,
