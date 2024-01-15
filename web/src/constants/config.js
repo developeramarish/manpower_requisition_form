@@ -166,6 +166,7 @@ export const FORM_SCHEMA_CR = {
   
 };
 
+export const emailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
   export const isFormDataEmptyForSubmit = (formData) => {
     if (formData === undefined) {
@@ -244,3 +245,21 @@ export const FORM_SCHEMA_CR = {
   };
 
  
+  export const isFormDataEmptyForAddCandidate=(formData)=>{
+    if(formData===undefined){
+      return true;
+    }
+    
+    return Object.keys(formData).filter((key)=>{
+      const value =formData[key];
+    if((value ==="" || value===0|| value===null) && [
+      "name","emailId","contactNo"
+    ].includes(key)
+    ){
+      return true;
+    }
+
+    return false;
+    })
+
+  }
