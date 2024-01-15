@@ -6,8 +6,12 @@ import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import { navigateTo } from "../constants/Utils";
-import { API_URL } from "../constants/config";
-import {FILE_URL} from "../constants/config";
+import {
+  API_URL,
+  emailRegex,
+  isFormDataEmptyForAddCandidate,
+} from "../constants/config";
+import { FILE_URL } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
 import InputNumberComponent from "../components/InputNumberComponent";
 const AddCandidate = (reqId) => {
@@ -16,7 +20,7 @@ const AddCandidate = (reqId) => {
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
- // console.log(referenceNo);
+  // console.log(referenceNo);
   const formSchema = {
     id: 0,
     mrfId: reqId.reqId,
@@ -35,32 +39,58 @@ const AddCandidate = (reqId) => {
 
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
-  const[dropdowns,setDropdownData]=useState();
+  const [dropdowns, setDropdownData] = useState();
   useEffect(() => {
     // Fetch the data for all the dropdowns
     fetch(API_URL.ADD_SOURCE_NAME)
       .then((response) => response.json())
       .then((data) => {
-        
-          console.log(data.result);
+        // console.log(data.result);
         // Store the dropdown data in localStorage using your storageService
         // storageService.set("dropdownData", dropdown);
         // Update the state with the new dropdown data
-       setDropdownData(data.result);
+        setDropdownData(data.result);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-    }, []);
-    
-    const RedAsterisk = () => <span className="text-red-500">*</span>;
+  }, []);
+
+  const RedAsterisk = () => <span className="text-red-500">*</span>;
+
+  const formatAndShowErrorMessage = (emptyFields) => {
+    const formattedEmptyFields = emptyFields.map((field) =>
+      field.replace(/Id$/, "")
+    );
+    const errorMessage = `Some required fields are empty: ${formattedEmptyFields.join(
+      ", "
+    )}`;
+    toastRef.current.showBadRequestMessage(errorMessage);
+  };
+
+  const handleEmail = (emailValue) => {
+    if (emailRegex.test(emailValue)) {
+      return true;
+    } else {
+      toastRef.current.showBadRequestMessage("Invalid Email format");
+      return false;
+    }
+  };
+
   const handleSubmit = async () => {
+    //we need to do proper alignment of code here
+    handleEmail(formData.emailId);
+    if (isFormDataEmptyForAddCandidate(formData).length > 0) {
+      const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
+      formatAndShowErrorMessage(emptyFieldss);
+    }
+
     const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
 
     try {
-      const fileUploadResponse = await fetch(API_URL.RESUME_UPLOAD +
-          removeSpaces(formData.name),
+      const fileUploadResponse = await fetch(
+        API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
         {
           method: "POST",
           body: fileUploadData,
@@ -77,12 +107,12 @@ const AddCandidate = (reqId) => {
           resumePath: removeSpaces(formData.name) + ".pdf",
           candidateStatusId: 1,
           reviewedByEmployeeIds: "",
-          createdByEmployeeId:  formData.createdByEmployeeId,
-          createdOnUtc:formData.createdOnUtc,
+          createdByEmployeeId: formData.createdByEmployeeId,
+          createdOnUtc: formData.createdOnUtc,
           updatedByEmployeeId: formData.updatedByEmployeeId,
-          updatedOnUtc:formData.updatedOnUtc,
+          updatedOnUtc: formData.updatedOnUtc,
           reason: "",
-          sourceId:formData.sourceId,
+          sourceId: formData.sourceId,
         };
         try {
           const response = await fetch(API_URL.ADD_CANDIDATE, {
@@ -97,7 +127,7 @@ const AddCandidate = (reqId) => {
             console.log("Response Data:", responseData);
             toastRef.current.showSuccessMessage("Form submitted successfully!");
             setTimeout(() => {
-               navigateTo("my_requisition");
+              navigateTo("my_requisition");
             }, 2000);
           } else {
             console.error("Request failed with status:", response.status);
@@ -109,7 +139,7 @@ const AddCandidate = (reqId) => {
           }
         } catch (error) {
           console.error("Error:", error);
-        }  
+        }
       } else {
         if (fileUploadResponse.status === 400) {
           toastRef.current.showBadRequestMessage("you have to upload Resume!");
@@ -123,7 +153,7 @@ const AddCandidate = (reqId) => {
 
   //need to change this
   const handleCancel = () => {
-    navigateTo("my_requisition")
+    navigateTo("my_requisition");
   };
 
   return (
@@ -134,23 +164,20 @@ const AddCandidate = (reqId) => {
             className="border-round-lg bg-white text-black-alpha-90 p-3 flex flex-column justify-content-between"
             style={{ height: "81vh" }}
           >
-            <h3 className="text-xl my-2">Fill the Details : 
-            
-            </h3>
+            <h3 className="text-xl my-2">Fill the Details :</h3>
             <section
               className="flex flex-column flex-nowrap gap-3 border-y-2 border-gray-300 py-3 px-1 overflow-y-scroll"
               style={{ height: "95%" }}
             >
-              <h4 className="text-xl my-2">Reference Number :
-              <span className="text-red-600"> {reqId.referenceNo}</span>
+              <h4 className="text-xl my-2">
+                Reference Number :
+                <span className="text-red-600"> {reqId.referenceNo}</span>
               </h4>
               <div className="flex justify-content-between gap-5">
-              
                 <div className="flex flex-column w-6 gap-2">
-                
                   <label htmlFor="name" className="font-bold text-sm">
-                 
-                    Name<RedAsterisk/>
+                    Name
+                    <RedAsterisk />
                   </label>
                   <InputTextCp
                     id="name"
@@ -162,10 +189,12 @@ const AddCandidate = (reqId) => {
                 </div>
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="email" className="font-bold text-sm">
-                    Email<RedAsterisk/>
+                    Email
+                    <RedAsterisk />
                   </label>
                   <InputTextCp
                     id="email"
+                    // onChange={handleEmail}
                     onChange={(e) =>
                       setFormData({ ...formData, emailId: e.target.value })
                     }
@@ -177,48 +206,51 @@ const AddCandidate = (reqId) => {
               <div className="flex justify-content-between gap-5">
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
-                    Contact<RedAsterisk/>
+                    Contact
+                    <RedAsterisk />
                   </label>
-                  <InputTextCp
+                  {/* <InputTextCp
                     id="contact"
                     onChange={(e) =>
                       setFormData({ ...formData, contactNo: e.target.value })
                     }
                     value={formData.contactNo}
+                  /> */}
+                  <InputNumberComponent
+                    id="contact"
+                    onChange={(e) =>
+                      setFormData({ ...formData, contactNo: e.target.value })
+                    }
+                    useGrouping={false}
+                    maxLength={10}
+                    value={formData.contactNo}
                   />
-                  {/* <InputNumberComponent
-                      id="contact"
-                      onChange={(e) =>
-                        setFormData({ ...formData, contactNo: e.target.value })
-                      }
-                      value={formData.contactNo}
-                    /> */}
                 </div>
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
-                     Source Name<RedAsterisk/>
+                    Source Name
+                    <RedAsterisk />
                   </label>
                   <DropdownComponent
-              optionLabel="name"
-              optionValue="id"
-              type="source"
-              options={dropdowns}
-              value={formData.sourceId}
-              onChange={(e) => {
-                setFormData({ ...formData, sourceId: e.target.value });
-              }}
-            />
+                    optionLabel="name"
+                    optionValue="id"
+                    type="source"
+                    options={dropdowns}
+                    value={formData.sourceId}
+                    onChange={(e) => {
+                      setFormData({ ...formData, sourceId: e.target.value });
+                    }}
+                  />
                 </div>
-                </div>
-          
-                <div className="flex flex-column w-6 gap-2">
-                  <label htmlFor="resume" className="font-bold text-sm">
-                    Resume<RedAsterisk/>
-                  </label>
-                  <SingleFileUpload onChange={handleFileChange} />
-                </div>
-               
-              
+              </div>
+
+              <div className="flex flex-column w-6 gap-2">
+                <label htmlFor="resume" className="font-bold text-sm">
+                  Resume
+                  <RedAsterisk />
+                </label>
+                <SingleFileUpload onChange={handleFileChange} />
+              </div>
             </section>
 
             <div className="flex flex-wrap justify-content-end gap-5 mt-3">

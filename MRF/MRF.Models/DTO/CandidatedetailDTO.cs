@@ -10,7 +10,7 @@
 
         public string EmailId { get; set; } = null!;
 
-        public string ContactNo { get; set; } = null!;
+        public int ContactNo { get; set; } 
 
         public string ResumePath { get; set; } = null!;
 
