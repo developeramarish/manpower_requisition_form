@@ -1,12 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MRF.Utility;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace MRF.Web.Controllers
 {
     public class RequestController : Controller
     {
-        public IActionResult Approve()
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        public RequestController(IEmailService emailService, IConfiguration configuration)
+        {
+            _emailService = emailService;
+            _configuration = configuration;
+        }
+        public async Task<IActionResult> Approve([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
+        {
+            try
+            {
+                HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
+                if (response.IsSuccessStatusCode)
+                {
+                    _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test", "Test");
+                    return Ok("MRF has been approved successfully!");
+                }
+                else
+                {
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        private async Task<HttpResponseMessage> ChangeMrfStatusAsync(int mrfID, int mrfStatusId, int updatedByEmployeeId)
         {
             try
             {
@@ -19,26 +49,29 @@ namespace MRF.Web.Controllers
                         var accessToken = GetAccessToken();
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                        var apiUrl = "https://10.22.11.101:90/api/Mrfdetail/Get";
-                        var response = client.GetAsync(apiUrl).Result;
+                        var apiUrl = _configuration["AppUrl"] + mrfID;
 
-                        if (response.IsSuccessStatusCode)
+                        var requestBody = new
                         {
-                            return Ok("API call successful");
-                        }
-                        else
-                        {
-                            return BadRequest("API call failed");
-                        }
+                            mrfID = mrfID,
+                            mrfStatusId = mrfStatusId,
+                            updatedByEmployeeId = updatedByEmployeeId,
+                            updatedOnUtc = DateTime.UtcNow
+                        };
+
+                        string jsonPayloadString = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
+                        StringContent content = new StringContent(jsonPayloadString, Encoding.UTF8, "application/json");
+                        HttpResponseMessage response = await client.PutAsync(apiUrl, content);
+
+                        return response;
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
-
 
         public string GetAccessToken()
         {
@@ -68,9 +101,25 @@ namespace MRF.Web.Controllers
                 throw new Exception("Failed to retrieve access token");
             }
         }
-        public IActionResult Reject()
+        public async Task<IActionResult> Reject([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
         {
-            return View(); 
+            try
+            {
+                HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
+                if (response.IsSuccessStatusCode)
+                {
+                    _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test", "Test");
+                    return Ok("MRF has been rejected successfully!");
+                }
+                else
+                {
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

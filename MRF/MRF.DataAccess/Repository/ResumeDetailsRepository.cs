@@ -55,6 +55,7 @@ namespace MRF.DataAccess.Repository
              join candidate in _db.Candidatedetails on mrfDetails.Id equals candidate.MrfId
              join emp in _db.Employeedetails on candidate.CreatedByEmployeeId equals emp.Id
              join status in _db.Candidatestatusmaster on candidate.CandidateStatusId equals status.Id
+              
              // Left outer join with Mrfresumereviewermap only if candidate.ReviewedByEmployeeIds is an empty string
              join resume in Mrfresumereviewermap
                   on new { MrfId = mrfDetails.Id, IsEmptyReview = candidate.ReviewedByEmployeeIds == "" }
@@ -76,6 +77,7 @@ namespace MRF.DataAccess.Repository
                  Reason = candidate.Reason,
                  PositionTitle = pos.Name,
                  CandidateName = candidate.Name,
+                 MrfStatus= mrfDetails.MrfStatusId,
 
              });
                 list = ResumeDetails.ToList();
@@ -99,6 +101,7 @@ namespace MRF.DataAccess.Repository
                         join candidate in _db.Candidatedetails on mrfDetails.Id equals candidate.MrfId
                         join emp in _db.Employeedetails on candidate.CreatedByEmployeeId equals emp.Id
                         join status in _db.Candidatestatusmaster on candidate.CandidateStatusId equals status.Id
+                         
                         // Left outer join with Mrfresumereviewermap only if candidate.ReviewedByEmployeeIds is an empty string
                         join resume in Mrfresumereviewermap
                              on new { MrfId = mrfDetails.Id, IsEmptyReview = candidate.ReviewedByEmployeeIds == "" }
@@ -120,7 +123,7 @@ namespace MRF.DataAccess.Repository
                             Reason = candidate.Reason,
                             PositionTitle = pos.Name,
                             CandidateName = candidate.Name,
-
+                            MrfStatus = mrfDetails.MrfStatusId,
                         });
 
                 list = ReviewedByEmployee.ToList();

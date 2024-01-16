@@ -79,52 +79,49 @@ const ResumeSummary = ({
   console.log(roleId);
 
   const MultiSelectDrop = (rowData, options) => {
-    if (
-      roleId === ROLES.hr ||
-      roleId === ROLES.resumeReviwer ||
-      roleId === ROLES.interviewer
-    ) {
-      if (!rowData.resumeReviewerName) {
-        return (
-          <div>
-            <p className="resume-col">To be Updated</p>
-          </div>
-        );
-      }
-
+ 
+    if (roleId === ROLES.hr || roleId === ROLES.resumeReviwer || roleId === ROLES.interviewer ) {
+       if(!rowData.resumeReviewerName){
+        return (<div><p className="resume-col">To be Updated</p></div>)
+       }
+      
       return (
         <div>
           <p className="resume-col">{rowData.resumeReviewerName}</p>
         </div>
       );
-    } else {
-      return (
-        <div>
-          <MultiSelectDropdown
-            id="resumeReviewerEmployeeIds"
-            value={arrayToObj(
-              resumeReviewer,
-              strToArray(rowData.resumeReviewerEmployeeIds)
-            )}
-            onChange={(e) => {
-              let resumeReviewers = JSON.parse(JSON.stringify(data));
-              let sv = [...saveBttn];
-              sv[options.rowIndex] = e.value.length > 0 ? true : false;
-              resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
-                objToArray(e.value);
-              setdata(resumeReviewers);
-              setSaveBttn(sv);
-            }}
-            options={resumeReviewer}
-            optionLabel="name"
-            filter
-            placeholder="Select Reviewer"
-            className="w-full md:w-20rem "
-          />
-        </div>
-      );
-    }
-  };
+    } 
+    else 
+    {
+    return (
+      <div>
+        <MultiSelectDropdown
+          id="resumeReviewerEmployeeIds"
+          value={arrayToObj(
+            resumeReviewer,
+            strToArray(rowData.resumeReviewerEmployeeIds)
+          )}
+          onChange={(e) => {
+            let resumeReviewers = JSON.parse(JSON.stringify(data));
+            let sv = [...saveBttn];
+            sv[options.rowIndex] = e.value.length > 0 ? true : false;
+            resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
+              objToArray(e.value);
+            setdata(resumeReviewers);
+            setSaveBttn(sv);
+          }}
+          options={resumeReviewer}
+          optionLabel="name"
+          filter
+          placeholder="Select Reviewer"
+          className="w-full md:w-20rem "
+          disable={(rowData.mrfStatus !== 8 && rowData.mrfStatus !== 9 && rowData.mrfStatus !== 10)?false:true }
+           
+        />
+      </div>     
+    );
+  }
+};
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -144,7 +141,6 @@ const ResumeSummary = ({
       sv[options.rowIndex] = false;
       setSaveBttn(sv);
     };
-
     if (saveBttn[options.rowIndex]) {
       return (
         <Button
@@ -162,7 +158,7 @@ const ResumeSummary = ({
     const reviewedByEmployeeIds = resumeRevierInArray.toString();
     const name = "string"; // this because we are handling data in backend it not save as string
     const emailId = "string";
-    const contactNo = "string";
+    const contactNo = 0;
     const id = data.candidateId;
     const candidateStatusId = data.candidateStatusId;
     const mrfId = data.mrfId;

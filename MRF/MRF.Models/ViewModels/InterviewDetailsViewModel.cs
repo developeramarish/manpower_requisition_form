@@ -39,6 +39,8 @@ namespace MRF.Models.ViewModels
 
         public string  CandidateName { get; set; } = null!;
 
+        public int?  mrfStatusId { get; set; }
+
     }
 
 
