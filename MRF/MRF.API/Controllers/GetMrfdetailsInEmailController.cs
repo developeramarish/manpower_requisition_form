@@ -104,10 +104,9 @@ namespace MRF.API.Controllers
             int EmpId = employeeId;
             int StatusId = MrfStatusId;
             int RejectStatusId = 8;
-            string strApprovalLink = $"{base_url}/approve/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
-            string strRejectionLink = $"{base_url}/reject/MrfId={MrfId}/EmpId={EmpId}/StatusId={RejectStatusId}";
-            string strByPassLink = $"{base_url}/bypass/MrfId={MrfId}/EmpId={EmpId}/StatusId={StatusId}";
-
+            string strApprovalLink = $"{base_url}/approve?MrfId={MrfId}&EmpId={EmpId}&StatusId={StatusId}";
+            string strRejectionLink = $"{base_url}/approve?MrfId={MrfId}&EmpId={EmpId}&StatusId={RejectStatusId}";
+            string strByPassLink = $"{base_url}/approve?MrfId={MrfId}&EmpId={EmpId}&StatusId={StatusId}";
             // Replace placeholders in HTML with data
             string messageBody = htmlBody
               .Replace("{ReferenceNo}", mrfdetailemail.ReferenceNo)
