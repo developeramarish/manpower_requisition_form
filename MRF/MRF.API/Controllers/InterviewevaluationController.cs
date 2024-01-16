@@ -84,7 +84,7 @@ namespace MRF.API.Controllers
 
             if (!string.IsNullOrEmpty(request.interviewerEmployeeIds))
             {
-                
+
                 List<Interviewevaluation>? obj = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(request.CandidateId);
                 foreach (Interviewevaluation inter in obj)
                 {
@@ -110,10 +110,10 @@ namespace MRF.API.Controllers
                     _unitOfWork.Save();
                 }
             }
-            
+
             else
             {
-               
+
                 interviewevaluation.InterviewerId = request.InterviewerId;
                 interviewevaluation.CandidateId = request.CandidateId;
                 interviewevaluation.EvaluationDateUtc = request.EvaluationDateUtc;
@@ -131,7 +131,7 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
             }
-           _responseModel.Id = interviewevaluation.Id;
+            _responseModel.Id = interviewevaluation.Id;
             return _responseModel;
         }
         // PUT api/<InterviewevaluationController>/5
@@ -149,36 +149,46 @@ namespace MRF.API.Controllers
         public InterviewevaluationResponseModel Put(int id, [FromBody] InterviewevaluationRequestModel request)
         {
 
-            var existingRecord = _unitOfWork.Interviewevaluation.Get(u => u.Id == id);
+            List<Interviewevaluation> record = _unitOfWork.Interviewevaluation.GetA(u => u.CandidateId == request.CandidateId).ToList();
 
-            if (existingRecord != null)
+            if (record.Count > 0)
             {
-                existingRecord.CandidateId = request.CandidateId==0? existingRecord.CandidateId : request.CandidateId;
-                //existingRecord.EvaluationId = request.EvaluationId;
-                existingRecord.InterviewerId = request.InterviewerId == 0 ? existingRecord.InterviewerId : request.InterviewerId;
-                existingRecord.EvaluationDateUtc = request.EvaluationDateUtc == DateOnly.MinValue ? existingRecord.EvaluationDateUtc : request.EvaluationDateUtc;
-                existingRecord.FromTimeUtc = request.FromTimeUtc == TimeOnly.MinValue ? existingRecord.FromTimeUtc: request.FromTimeUtc;
-                existingRecord.ToTimeUtc = request.ToTimeUtc == TimeOnly.MinValue ?existingRecord.ToTimeUtc:request.ToTimeUtc;
-               // existingRecord.EvaluationFeedbackId = request.EvaluationFeedbackId;
-                existingRecord.EvalutionStatusId = request.EvalutionStatusId == 0 ? existingRecord.EvalutionStatusId : request.EvalutionStatusId;
-                //existingRecord.FeedbackAsDraft = request.FeedbackAsDraft;
-                existingRecord.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                existingRecord.UpdatedOnUtc = request.UpdatedOnUtc;
+                for (int i = 0; i < record.Count; i++)
+                {
 
-                _unitOfWork.Interviewevaluation.Update(existingRecord);
-                _unitOfWork.Save();
+                    var existingRecord = record[i];
+                    if (existingRecord != null)
+                    {
+                        existingRecord.CandidateId = request.CandidateId == 0 ? existingRecord.CandidateId : request.CandidateId;
+                        existingRecord.InterviewerId = request.InterviewerId == 0 ? existingRecord.InterviewerId : request.InterviewerId;
+                        existingRecord.EvaluationDateUtc = request.EvaluationDateUtc == DateOnly.MinValue ? existingRecord.EvaluationDateUtc : request.EvaluationDateUtc;
+                        existingRecord.FromTimeUtc = request.FromTimeUtc == TimeOnly.MinValue ? existingRecord.FromTimeUtc : request.FromTimeUtc;
+                        existingRecord.ToTimeUtc = request.ToTimeUtc == TimeOnly.MinValue ? existingRecord.ToTimeUtc : request.ToTimeUtc;
+                        existingRecord.EvalutionStatusId = request.EvalutionStatusId == 0 ? existingRecord.EvalutionStatusId : request.EvalutionStatusId;
+                        existingRecord.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                        existingRecord.UpdatedOnUtc = request.UpdatedOnUtc;
 
-                _responseModel.Id = existingRecord.Id;
 
+                        _unitOfWork.Interviewevaluation.Update(existingRecord);
+                        _unitOfWork.Save();
+
+                        _responseModel.Id = existingRecord.Id;
+                    }
+                    else
+                    {
+                        _logger.LogError($"No result found by this Id: {id}");
+
+                        _responseModel.Id = 0;
+                        _responseModel.Status = null;
+                        _responseModel.IsActive = false;
+                    }
+                }
             }
             else
             {
-                _logger.LogError($"No result found by this Id: {id}");
-
-                _responseModel.Id = 0;
-                _responseModel.Status = null;
-                _responseModel.IsActive = false;
+                Post(request);
             }
+
             return _responseModel;
 
         }

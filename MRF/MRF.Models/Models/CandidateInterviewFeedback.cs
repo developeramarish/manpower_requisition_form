@@ -14,6 +14,8 @@ namespace MRF.Models.Models
         public int EvaluationFeedBackId { get; set; }
         [NotMapped]
         public string? EvaluationFeedBack { get; set; }
+
+        public int? FeedbackAsDraft { get; set; }
         public int InterviewRound { get; set; }        
         public string Comments { get; set; }
         public int CreatedByEmployeeId { get; set; }

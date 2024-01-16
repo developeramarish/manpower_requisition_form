@@ -8,28 +8,35 @@ import { API_URL } from "../constants/config";
 import ButtonC from "./../components/Button";
 import { storageService } from "../constants/storage";
 import ToastMessages from "./../components/ToastMessages";
-const FeedbackForm = ({ visible, onHide, onSubmit, count,candidateId=null })=> {
+const FeedbackForm = ({ visible, onHide, onSubmit, count,candidateId=null, refreshParent })=> {
+    
   const [interviewRound, setRound] = useState('');
-  const [evaluationFeedBackId,setevaluationFeedBackId] = useState('');
+  const [evaluationFeedBack,setevaluationFeedBack] = useState('');
   const [comments,Setcomments] = useState('');
   const [FeedData, setFeedData] = useState();
-  const roundLabels = ['Round 1', 'Round 2', 'Round 3'];
+
   const interviewDetailsData = {
-    //id,
-    candidateId,
-    evaluationFeedBackId,
-    interviewRound,
+    id:0,
+    candidateId:candidateId,
+    evaluationFeedBack,
+    interviewRound:count,
     comments,
-    //createdByEmployeeId,
-    //createdOnUtc,
-    //updatedByEmployeeId,
-    //updatedOnUtc
+    FeedbackAsDraft:1,
+    createdByEmployeeId: storageService.getData("profile").employeeId,
+    createdOnUtc:new Date().toISOString(),
+    updatedByEmployeeId: storageService.getData("profile").employeeId,
+    updatedOnUtc:new Date().toISOString()
   };
   
-  const [formData, setFormData] = useState({
+  let [formData, setFormData] = useState({
     ...interviewDetailsData
   });
-  
+  const [isPopupVisible, setPopupVisible] = useState(true);
+
+
+const closePopup = () => {
+  setPopupVisible(false);
+};
   const RedAsterisk = () => <span className="text-red-500">*</span>;
   const toastRef = useRef(null);
   const onLoad = () => {
@@ -51,40 +58,57 @@ useEffect(() => {
     onLoad();
 }, [candidateId]);
 
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    //onSubmit({ round1, round2, round3, comments });
+  const handleInputChange = (id, value,evId) => {
+    setFormData({
+      ...formData,
+      [id]: value,
+      [evId]:evId,
+    });
   };
 
-      
-  
-	  const AddForm = async (data) => {
-		console.log(data);
-        const id= data.id;
-        const candidateId=candidateId;
-        const evaluationFeedBackId=0;
-        const interviewRound= interviewRound;
-        const comments= data.comments;
-        const createdByEmployeeId=storageService.getData("profile").employeeId;
-        const createdOnUtc=new Date().toISOString();
-        const	updatedByEmployeeId=storageService.getData("profile").employeeId;
-		const	updatedOnUtc=new Date().toISOString();
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    const evaluationFeedBack = Array.from({ length: FeedData.length }, (_, index) => formData[`ev${index + 1}`]).join(';');
+    //const comments3 = Array.from({ length: FeedData.length }, (_, index) => formData[`comments${index + 1}`]).join(';');
+ 
+    const comments = Array.from({ length: FeedData.length }, (_, index) => {
+        const data = formData[`comments${index + 1}`];
+        return (data !== undefined && data !== "") ? data : false;
+    }).join(';');
+    
+    const isValid = evaluationFeedBack.includes(true);
+   // if(!isValid){ alert('d');     }
 
+
+const data = {
+    id:0,
+    candidateId:formData.candidateId,
+    evaluationFeedBack:evaluationFeedBack,
+    interviewRound:count+1,
+    comments:comments,
+    FeedbackAsDraft:0,
+    createdByEmployeeId: formData.createdByEmployeeId,
+    createdOnUtc:formData.createdOnUtc,
+    updatedByEmployeeId: formData.createdByEmployeeId,
+    updatedOnUtc:formData.createdOnUtc};
 		try {
-		
-		let response = await postData(`${API_URL.INTERVIEW_FEEDBACK_POST}`,interviewDetailsData);
+		if(data.evaluationFeedBack!=''){
+		let response = await postData(`${API_URL.INTERVIEW_FEEDBACK_POST}`,data);
 		
 		  if (response.ok) {
 			const responseData = response.json();
 			if (responseData.statusCode === 409) {
 			  toastRef.current.showConflictMessage(responseData.message);
+              
 			} else {
 				
 			  toastRef.current.showSuccessMessage(
 				"Interview Feedback updated successfully!"
 			  );
+              setTimeout(() => {
+                onHide();
+                refreshParent();
+              }, 2000);
 			}
 		  } else {
 			console.error("Request failed with status:", response.status);
@@ -95,52 +119,55 @@ useEffect(() => {
 				"Bad request: " + response.url
 			  );
 			}
-		  }
+		  }}
 		} catch (error) {
 		  console.error("Error:", error);
 		}
 	  };
-
+      if (!FeedData || FeedData.length === 0) {
+        return <p>No data available.</p>; // You can customize this message
+      }
   return (
-    <Dialog header="Interview Feedback" visible={visible} onHide={onHide} draggable={false} className="feed-popup">
-	<form>
-      {roundLabels.slice(count - 1).map((roundLabel, index) => (
-        <div key={index} className="flex gap-2 dvinputFeedback">
-          <label htmlFor={`round${index + count}`}>{roundLabel}:</label>
-          <label htmlFor="FeedbackType" className="font-bold text-sm">
-            Feedback Type <RedAsterisk />
+    <Dialog header="Interview Feedback" visible={visible} onHide={onHide} draggable={false} className="feed-popup feedback-popup">
+	
+          <label htmlFor="Round" className="font-bold lableRound">
+            {`Round ${count+1}`} 
           </label>
-          <DropdownComponent
-            id={`dround${index + count}`}
-            optionLabel="description"
-            optionValue="id"
-            type="evaluationFeedBack"
-            className="dropdown-custom"
-            options={FeedData}
-            value={formData.evaluationFeedBackId}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                evaluationFeedBackId: e.target.value,
-              })
-            }
-          />
-          <label htmlFor={`round${index + count}`} className="font-bold text-sm">
-            Comments <RedAsterisk />
-          </label>
-          <InputTextareaComponent
-            id={`round${index + count}`}
-            value={interviewRound[index + count - 1]}
-            onChange={(e) => setRound((prevRound) => [...prevRound.slice(0, index + count - 1), e.target.value, ...prevRound.slice(index + count)])
-            }
+      
+    <form>
+    <div>
+    
+    <table className="feedback-table">
+  <thead>
+    <tr>
+      <th>Index</th>
+      <th>Feedback Type</th>
+      <th>Comments</th>
+    </tr>
+  </thead>
+  <tbody>
+    {FeedData.map((dataItem, index) => (
+      <tr key={index}>
+        <td>{index + 1}</td>
+        <td>{dataItem.description}</td>
+        <td>
+        <InputTextareaComponent
+            id={`comments${index + 1}`}
+            value={formData[`comments${index + 1}`] || ''}
+            onChange={(e) => handleInputChange(`comments${index + 1}`, e.target.value,`ev${dataItem.id}`)}
             className="inputRound bg-gray-100"
             rows={2}
             cols={60}
           />
-        </div>
-      ))}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+    </div>
+      
       <div className="dvAddFeedback">
-        <ButtonC label="Submit Feedback" className="w-15 bg-red-600 border-red-600 BtnAddFeedback" outlined="true" />
+        <ButtonC label="Submit Feedback" className="w-15 bg-red-600 border-red-600 BtnAddFeedback" onClick={handleSubmit} outlined="true" />
       </div>
       <ToastMessages ref={toastRef} />
     </form>

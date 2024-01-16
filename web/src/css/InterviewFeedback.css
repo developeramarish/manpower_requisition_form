@@ -105,9 +105,48 @@
 {
 	width:70%;
 	height: 20%;
+	padding-left: 5px;
 }
 
 .dropdown-custom {
 	width:200px;
 	height:40px;
 }
+
+
+.feedback-popup {
+	height: 70%;
+}
+
+.feedback-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	margin-left: 20px;
+	font-size: 14px;
+	color: #0b1016;
+	
+  }
+  
+  .feedback-table th, .feedback-table td {
+	border-bottom: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+  }
+  
+  .feedback-table th {
+	background-color: #fafbfd;
+  }
+  
+  .inputRound {
+	width: 100%;
+	box-sizing: border-box;
+	/* Add any additional styles as needed */
+  }
+
+  .lableRound
+  {
+	margin-left: 20px;
+	font-weight: 200;
+  }
+  
