@@ -1,7 +1,7 @@
 // Textbox.js
 import React from "react";
 import { InputText } from "primereact/inputtext";
-const InputTextCp = ({ value, onChange, className,placeholder,disable }) => {
+const InputTextCp = ({ value, onChange, className,placeholder,disable,onBlur }) => {
   return (
     <InputText
       type="text"
@@ -10,6 +10,7 @@ const InputTextCp = ({ value, onChange, className,placeholder,disable }) => {
       placeholder={placeholder}
       className={`bg-gray-100 ${className}`}
       disabled ={disable}
+      onBlur={onBlur}
     />
   );
 };
