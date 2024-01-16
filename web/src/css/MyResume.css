@@ -29,3 +29,13 @@ height: 77vh;
   min-width: max-content;
   /* background-color: aqua; */
 }
+
+
+.my-resume .myaction_btn{
+  color: #ffffff;
+  background-color: #d32f2e;
+}
+.my-resume .myaction_btn:disabled{
+  color: #ffffff;
+  background-color: #c5c5c5;
+}

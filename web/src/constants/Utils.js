@@ -43,9 +43,29 @@ export async function getData(url) {
  
   return fetch(url, options)
     .then((response) => response.json())
+    // .then((response) => response)
     .catch((error) => error);
 }
 
+
+export async function getDataAPI(url) {
+  const accessToken = storageService.getData("token");
+  
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+
+  const options = {
+    method: "GET",
+    headers: headers,
+  };
+ 
+  return fetch(url, options)
+    // .then((response) => response.json())
+    .then((response) => response)
+    .catch((error) => error);
+}
 
 export async function postData(url, data) {
   const accessToken = storageService.getData("token");

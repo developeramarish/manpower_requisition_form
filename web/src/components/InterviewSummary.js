@@ -282,9 +282,9 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 			setSaveBttn(sv);
 		  };
 		  if (saveBttn[options.rowIndex]) {
-			return <Button icon="pi pi-save " onClick={onClickHandleSave} />;
+			return <Button icon="pi pi-save "   className="action_btn" onClick={onClickHandleSave} />;
 		  }
-		  return <Button icon="pi pi-save" disabled />;
+		  return <Button icon="pi pi-save" className="action_btn" disabled />;
 	};
 
 	const columns = [

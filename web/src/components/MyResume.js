@@ -170,8 +170,8 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
           <ButtonC
             icon="pi pi-save"
             rounded
-            outlined
-            className="mr-2 text-white"
+            // outlined
+            className="myaction_btn"
             onClick={() => {
               updateData(rowData);
             }}
@@ -180,7 +180,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
         </React.Fragment>
       );
     }
-    return <Button icon="pi pi-save" disabled />;
+    return <Button icon="pi pi-save" disabled className="myaction_btn"/>;
  
   };
   const resumeBodyTemplate = (interview) => {
@@ -198,6 +198,12 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
       body: (data, options) => options.rowIndex + 1,
       //bodyClassName: "int-edit-col",
       bodyClassName: "my_resume-col",
+    },
+    {
+      field: "candidateName",
+      header: "Name",
+      bodyClassName: "my_resume-col",
+      sortable: true,
     },
     {
       field: "resumePath",

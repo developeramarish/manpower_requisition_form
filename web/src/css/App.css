@@ -54,6 +54,5 @@ a {
 }
 
 .login-load img {
-  width: 70px;
-  aspect-ratio: 1;
+  transform: scale(0.6);
 }
