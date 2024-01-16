@@ -7,36 +7,42 @@ import ToastMessages from "./ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "./multiselectDropdown";
-import { API_URL, FILE_URL,ROLES } from "../constants/config";
+import { API_URL, FILE_URL, ROLES } from "../constants/config";
 import { changeDateFormat, putData, strToArray } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import InputTextareaComponent from "./InputTextarea";
 
-
-const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard = true,userId=null}) => {
+const ResumeSummary = ({
+  roleId = null,
+  visible,
+  onHide,
+  mrfId = null,
+  dashboard = true,
+  userId = null,
+}) => {
   const [data, setdata] = useState([]);
   const [resumeReviewer, setResumeReviewer] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
   const toastRef = useRef(null);
 
   useEffect(() => {
-      fetchData();
-    
+    fetchData();
   }, [mrfId]);
 
   const fetchData = () => {
     try {
-      fetch(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`)
+      fetch(
+        `${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`
+      )
         .then((response) => response.json())
         .then((data) => {
           if (roleId === ROLES.interviewer) {
             var filterInterviewerResumtSumData = [];
-            data.result.resumeDetails.
-            map(( res) => {
-                if (res.candidatestatus === "Shortlisted" ) {
-                  filterInterviewerResumtSumData.push(res)
-                }
-            })
+            data.result.resumeDetails.map((res) => {
+              if (res.candidatestatus === "Shortlisted") {
+                filterInterviewerResumtSumData.push(res);
+              }
+            });
             setdata(filterInterviewerResumtSumData);
           } else {
             setdata(data.result.resumeDetails);
@@ -52,63 +58,73 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
       console.error("Error fetching data:", error);
     }
   };
-    
-    // if (data.length < 1) {
-    //   return (
-    //     <Dialog
-    //       header="MRF ID (Interview Summary)"
-    //       visible={visible}
-    //       onHide={onHide}
-    //       draggable={false}
-    //       className="int-card no-res-card"
-    //     >
-    //       No Result Found
-    //     </Dialog>
-    //   );
-    // }
 
+  // if (data.length < 1) {
+  //   return (
+  //     <Dialog
+  //       header="MRF ID (Interview Summary)"
+  //       visible={visible}
+  //       onHide={onHide}
+  //       draggable={false}
+  //       className="int-card no-res-card"
+  //     >
+  //       No Result Found
+  //     </Dialog>
+  //   );
+  // }
+
+  console.log(roleId);
+  console.log(mrfId);
+  console.log(visible);
+  console.log(roleId);
 
   const MultiSelectDrop = (rowData, options) => {
-    if (roleId === ROLES.hr || roleId === ROLES.resumeReviwer || roleId === ROLES.interviewer ) {
-       if(!rowData.resumeReviewerName){
-        return (<div><p className="resume-col">To be Updated</p></div>)
-       }
-      
+    if (
+      roleId === ROLES.hr ||
+      roleId === ROLES.resumeReviwer ||
+      roleId === ROLES.interviewer
+    ) {
+      if (!rowData.resumeReviewerName) {
+        return (
+          <div>
+            <p className="resume-col">To be Updated</p>
+          </div>
+        );
+      }
+
       return (
         <div>
-
-<p className="resume-col">{rowData.resumeReviewerName}</p>
+          <p className="resume-col">{rowData.resumeReviewerName}</p>
         </div>
       );
-    } else 
-    {
-    return (
-      <div>
-        <MultiSelectDropdown
-          id="resumeReviewerEmployeeIds"
-          value={arrayToObj(
-            resumeReviewer,
-            strToArray(rowData.resumeReviewerEmployeeIds)
-          )}
-          onChange={(e) => {
-            let resumeReviewers = JSON.parse(JSON.stringify(data));
-            let sv = [...saveBttn];
-            sv[options.rowIndex] = e.value.length > 0 ? true : false;
-            resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
-              objToArray(e.value);
-            setdata(resumeReviewers);
-            setSaveBttn(sv);
-          }}
-          options={resumeReviewer}
-          optionLabel="name"
-          filter
-          placeholder="Select Reviewer"
-          className="w-full md:w-20rem "
-        />
-      </div>     
-    );
-  }
-};
+    } else {
+      return (
+        <div>
+          <MultiSelectDropdown
+            id="resumeReviewerEmployeeIds"
+            value={arrayToObj(
+              resumeReviewer,
+              strToArray(rowData.resumeReviewerEmployeeIds)
+            )}
+            onChange={(e) => {
+              let resumeReviewers = JSON.parse(JSON.stringify(data));
+              let sv = [...saveBttn];
+              sv[options.rowIndex] = e.value.length > 0 ? true : false;
+              resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
+                objToArray(e.value);
+              setdata(resumeReviewers);
+              setSaveBttn(sv);
+            }}
+            options={resumeReviewer}
+            optionLabel="name"
+            filter
+            placeholder="Select Reviewer"
+            className="w-full md:w-20rem "
+          />
+        </div>
+      );
+    }
+  };
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -130,9 +146,15 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
     };
 
     if (saveBttn[options.rowIndex]) {
-      return <Button icon="pi pi-save " onClick={onClickHandleSave} />;
+      return (
+        <Button
+          icon="pi pi-save "
+          className="action_btn"
+          onClick={onClickHandleSave}
+        />
+      );
     }
-    return <Button icon="pi pi-save" disabled />;
+    return <Button icon="pi pi-save" className="action_btn" disabled />;
   };
   const update = async (data) => {
     console.log(data);
@@ -148,7 +170,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
     const resumePath = data.resumePath;
     const createdByEmployeeId = data.createdByEmployeeId;
     const createdOnUtc = data.createdOnUtc;
-    const candidateName=data.candidateName;
+    const candidateName = data.candidateName;
 
     const candidateDetailsData = {
       id,
@@ -166,8 +188,10 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
     };
 
     try {
-
-      let response = await putData(`${API_URL.RESUME_SUMMARY_POST}${id}`,candidateDetailsData)
+      let response = await putData(
+        `${API_URL.RESUME_SUMMARY_POST}${id}`,
+        candidateDetailsData
+      );
       if (response.ok) {
         const responseData = await response.json();
         if (responseData.statusCode === 409) {
@@ -197,7 +221,6 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
   };
 
   const resumeBodyTemplate = (interview) => {
-    
     let resumeLink = FILE_URL.RESUME + interview.resumePath;
     return (
       <a href={resumeLink} target="_blank" className="int-link-cell">
@@ -205,21 +228,16 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
       </a>
     );
   };
- 
 
+  const reasonTemplate = (resume) => {
+    if (!resume.reason)
+      return <p className="resume-reason-col">To be Updated</p>;
+    return (
+      <InputTextarea readOnly={true} value={resume.reason} rows={2} cols={50} />
 
-       
-      const reasonTemplate=(resume)=>{
-
-if(!resume.reason ) return (<p className="resume-reason-col">To be Updated</p>);
-return(
- 
-<InputTextarea  readOnly={true}   value={resume.reason} rows={2} cols={50} />
- 
- 
-  // <p className="resume-reason-col">{resume.reason}</p>
-)
-      }
+      // <p className="resume-reason-col">{resume.reason}</p>
+    );
+  };
   let columns = [
     {
       header: "Sr.No",
@@ -228,11 +246,11 @@ return(
       sortable: true,
     },
     {
-			field: "candidateName",
-			header: "Name",
+      field: "candidateName",
+      header: "Name",
       bodyClassName: " resume-col",
-			sortable: true,
-		},
+      sortable: true,
+    },
     {
       field: "resumePath",
       header: "Resume",
@@ -274,33 +292,79 @@ return(
       sortable: true,
     },
   ];
-  if (roleId === ROLES.hr || roleId === ROLES.resumeReviwer || roleId === ROLES.interviewer ) {
-    columns = columns.filter(column => column.header !== "Action");
-   };
+  if (
+    roleId === ROLES.hr ||
+    roleId === ROLES.resumeReviwer ||
+    roleId === ROLES.interviewer
+  ) {
+    columns = columns.filter((column) => column.header !== "Action");
+  }
+
+  const DataTableResume = ({ value, columns }) => {
+    console.log("rrrrrrrrrrrrrrrr");
+    console.log(value);
+    console.log(columns);
+
+    return (
+      <DataTable
+        value={value}
+        paginator={value.length > 5}
+        rows={10}
+        scrollable
+        scrollHeight="400px"
+        draggable={false}
+      >
+        {columns.map((col) => (
+          <Column
+            field={col.field}
+            header={col.header}
+            body={col.body}
+            bodyClassName={"resume-col" + col.bodyClassName}
+            sortable={col.sortable}
+          />
+        ))}
+      </DataTable>
+    );
+  };
+
   return (
-    <div className="resume-summary-table">
-        <DataTable
-          value={data}
-          paginator={data.length > 5}
-// header={""}
-          rows={10}
-          scrollable
-          scrollHeight="400px"
-          draggable={false}
-        >
-          {columns.map((col) => (
-            <Column
-              field={col.field}
-              header={col.header}
-              body={col.body}
-              bodyClassName={"resume-col" + col.bodyClassName}
-              sortable={col.sortable}
-            />
-          ))}
-        </DataTable>
-        <ToastMessages ref={toastRef} />
-      {/* </Dialog> */}
-    </div>
+    <>
+      {(roleId === ROLES.hr || roleId === ROLES.mrfOwner) && (
+        <>
+          <Dialog
+            header={
+              <div>
+                Resume Summary- MRF ID:{"\u00A0\u00A0"}
+                <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+                  {data[0]?.referenceNo}
+                </span>
+                {"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+                Position Title:{"\u00A0\u00A0"}
+                <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+                  {data[0]?.positionTitle}
+                </span>
+              </div>
+            }
+            visible={visible}
+            onHide={onHide}
+            draggable={false}
+            className="resume-card"
+          >
+            <DataTableResume value={data} columns={columns} />
+          </Dialog>
+        </>
+      )}
+
+      {roleId === ROLES.resumeReviwer && (
+        <>
+          <div className="resume-summary-table">
+            <DataTableResume value={data} columns={columns} />
+
+            <ToastMessages ref={toastRef} />
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
