@@ -100,31 +100,34 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidateInterviewFeedbackResponseModel Post([FromBody] CandidateInterviewFeedbackRequestModel request)
         {
-            string[] evaluationFeedBackArray = request.EvaluationFeedBack.Replace("ev","").Split(';');
-            //int[] EvaluationFeedBackId = Array.ConvertAll(evaluationFeedBackArray, int.Parse);
-            string[] Comments = request.Comments.Split(';');
-            for (int i = 0; i < evaluationFeedBackArray.Count(); i++)
+            if (request.EvaluationFeedBack != null)
             {
-                if (evaluationFeedBackArray[i] != "")
+                string[] evaluationFeedBackArray = request.EvaluationFeedBack.Replace("ev", "").Split(';');
+                //int[] EvaluationFeedBackId = Array.ConvertAll(evaluationFeedBackArray, int.Parse);
+                string[] Comments = request.Comments.Split(';');
+                for (int i = 0; i < evaluationFeedBackArray.Count(); i++)
                 {
-                    var candidateInterviewFeedback = new CandidateInterviewFeedback
+                    if (evaluationFeedBackArray[i] != "")
                     {
-                        CandidateId = request.CandidateId,
-                        EvaluationFeedBackId =Convert.ToInt32(evaluationFeedBackArray[i]),
-                        InterviewRound = request.InterviewRound,
-                        Comments = Comments[i],
-                        FeedbackAsDraft = request.FeedbackAsDraft,
-                        CreatedByEmployeeId = request.CreatedByEmployeeId,
-                        CreatedOnUtc = request.CreatedOnUtc,
-                        UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                        UpdatedOnUtc = request.UpdatedOnUtc
-                    };
+                        var candidateInterviewFeedback = new CandidateInterviewFeedback
+                        {
+                            CandidateId = request.CandidateId,
+                            EvaluationFeedBackId = Convert.ToInt32(evaluationFeedBackArray[i]),
+                            InterviewRound = request.InterviewRound,
+                            Comments = Comments[i],
+                            FeedbackAsDraft = request.FeedbackAsDraft,
+                            CreatedByEmployeeId = request.CreatedByEmployeeId,
+                            CreatedOnUtc = request.CreatedOnUtc,
+                            UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                            UpdatedOnUtc = request.UpdatedOnUtc
+                        };
 
 
-                    _unitOfWork.CandidateInterviewFeedback.Add(candidateInterviewFeedback);
-                    _unitOfWork.Save();
+                        _unitOfWork.CandidateInterviewFeedback.Add(candidateInterviewFeedback);
+                        _unitOfWork.Save();
 
-                    _responseModel.Id = candidateInterviewFeedback.Id;
+                        _responseModel.Id = candidateInterviewFeedback.Id;
+                    }
                 }
             }
             return _responseModel;
