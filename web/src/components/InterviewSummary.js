@@ -84,7 +84,6 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 	  }, [mrfId]);
 	  
 	  const update = async (data) => {
-		console.log(data);
 		 const id=data.interviewevaluationId;
 		 const candidateId=data.candidateId;
 		 const interviewerEmployeeIds=data.interviewerEmployeeIds;
@@ -135,7 +134,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 			} else {
 				
 			  toastRef.current.showSuccessMessage(
-				"Interview status updated successfully!"
+				" Interview status updated successfully!"
 			  );
 			}
 		  } else {
@@ -159,7 +158,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 			} else {
 				
 			  toastRef.current.showSuccessMessage(
-				"Interview status updated successfully!"
+				"Interviewer updated successfully!"
 			  );
 			}
 		  } else {
@@ -180,6 +179,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 	  };
 
 	const statusBodyTemplate = (interview, options) => {
+		
 		const handleDropdownChange = (e) => {
 			let interviewDataCopy = [...interviewData];
 			let sv = [...saveBttn];
@@ -204,6 +204,7 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 				options={interviewStatus}
 				value={interview.evalutionStatusId}
 				onChange={handleDropdownChange}
+				disable={(interview.mrfStatusId !== 8 && interview.mrfStatusId !== 9 && interview.mrfStatusId !== 10)?false:true }
 			/>
 		);
 	};
@@ -242,6 +243,8 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
 				optionLabel="name"
 				placeholder="Select Interviewer"
 				// optionValue="employeeId"
+				disable={(interview.mrfStatusId !== 8 && interview.mrfStatusId !== 9 && interview.mrfStatusId !== 10)?false:true }
+				
 			/>
 		);
 				}
