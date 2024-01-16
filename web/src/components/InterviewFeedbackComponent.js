@@ -10,6 +10,8 @@ import FeedbackForm from '../Pages/FeedbackForm';
 const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
     const [feedData, setFeedData] = useState([{}]);
 	const [showForm, setShowForm] = useState(false);
+    const [buttonDisplayed, setButtonDisplayed] = useState(true);
+    const [count, setCount] = useState(0);
     const RedAsterisk = () => <span className="text-red-500">*</span>;
     const onLoad = () => {
         fetch(API_URL.INTERVIEW_FEEDBACK + "/" + cId)
@@ -18,13 +20,23 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
 			  })
 			  .then((json) => {
 				setFeedData(json["result"]);
-				
+                
+				const updatedResult = json.result.map(dataItem => {
+                     if (dataItem.interviewRound === 3) {
+                        setButtonDisplayed(false) ;
+                       
+                    }
+                    
+                    setCount(dataItem.interviewRound);
+                });
 			  })
 		
 			  .catch((error) => console.log(error));
 		  
     };
-
+    const refreshParentComponent = () => {
+        onLoad();
+      };
     useEffect(() => {
         onLoad();
     }, [cId]);
@@ -75,8 +87,9 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
           visible={true} 
           onHide={() => setShowForm(false)}
           onSubmit={handleFormSubmit}
-          count={(feedData.length+1)}
+          count={count}
           candidateId={cId}
+          refreshParent={refreshParentComponent}
         />
         ) : (
           <>
@@ -104,18 +117,19 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
                 </DataTable>
               </div>
             )}
-            {feedData.length < 3 && (
-                <div className="dvAddFeedback">
-                <ButtonC
-                label="Add Feedback"
-                // className=" w-2 surface-hover border-red-600 text-red-600"
-                className="w-15 bg-red-600 border-red-600 BtnAddFeedback"
-                onClick={handleAddFeedbackClick}
-                outlined="true"
-                // disable="true"
-              />
-            </div>
-          )}
+          
+    {buttonDisplayed && (
+      <div className="dvAddFeedback">
+        <ButtonC
+          label="Add Feedback"
+          className="w-15 bg-red-600 border-red-600 BtnAddFeedback"
+          onClick={() => handleAddFeedbackClick()}  // Pass index or any identifier you need
+          outlined="true"
+        />
+      </div>
+    )}
+  
+
           </>
         )}
       </Dialog>

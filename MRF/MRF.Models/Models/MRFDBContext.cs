@@ -246,6 +246,29 @@ public partial class MRFDBContext : DbContext
                 .HasColumnType("datetime");
         });
 
+
+        modelBuilder.Entity<CandidateInterviewFeedback>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("CandidateInterviewFeedback");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.CreatedByEmployeeId).HasColumnType("int(11)");
+            entity.Property(e => e.CreatedOnUtc)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
+            entity.Property(e => e.EvaluationFeedBackId).HasColumnType("int(11)");
+            entity.Property(e => e.CandidateId).HasColumnType("int(11)");
+            entity.Property(e => e.FeedbackAsDraft).HasColumnType("int(11)");
+            entity.Property(e => e.InterviewRound).HasColumnType("int(11)");
+            entity.Property(e => e.Comments).HasMaxLength(255);
+            entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
+            entity.Property(e => e.UpdatedOnUtc)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<Evaluationmaster>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
