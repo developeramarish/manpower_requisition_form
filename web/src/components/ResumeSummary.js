@@ -69,6 +69,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 
 
   const MultiSelectDrop = (rowData, options) => {
+ 
     if (roleId === ROLES.hr || roleId === ROLES.resumeReviwer || roleId === ROLES.interviewer ) {
        if(!rowData.resumeReviewerName){
         return (<div><p className="resume-col">To be Updated</p></div>)
@@ -80,7 +81,8 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 <p className="resume-col">{rowData.resumeReviewerName}</p>
         </div>
       );
-    } else 
+    } 
+    else 
     {
     return (
       <div>
@@ -104,6 +106,8 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
           filter
           placeholder="Select Reviewer"
           className="w-full md:w-20rem "
+          disable={(rowData.mrfStatus !== 8 && rowData.mrfStatus !== 9 && rowData.mrfStatus !== 10)?false:true }
+           
         />
       </div>     
     );
@@ -128,7 +132,6 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
       sv[options.rowIndex] = false;
       setSaveBttn(sv);
     };
-
     if (saveBttn[options.rowIndex]) {
       return <Button icon="pi pi-save " onClick={onClickHandleSave} />;
     }
@@ -140,7 +143,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
     const reviewedByEmployeeIds = resumeRevierInArray.toString();
     const name = "string"; // this because we are handling data in backend it not save as string
     const emailId = "string";
-    const contactNo = "string";
+    const contactNo = 0;
     const id = data.candidateId;
     const candidateStatusId = data.candidateStatusId;
     const mrfId = data.mrfId;
@@ -214,7 +217,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 if(!resume.reason ) return (<p className="resume-reason-col">To be Updated</p>);
 return(
  
-<InputTextarea  readOnly={true}   value={resume.reason} rows={2} cols={50} />
+<InputTextarea autoResize  readOnly={true}   value={resume.reason} rows={2} cols={50} />
  
  
   // <p className="resume-reason-col">{resume.reason}</p>

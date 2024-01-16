@@ -6,7 +6,7 @@ import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
 import { navigateTo, putData } from "../constants/Utils";
-import { API_URL, FILE_URL } from "../constants/config";
+import { API_URL, FILE_URL, ROLES } from "../constants/config";
 import {
   arrayToObj,
   objToIntArray,
@@ -31,10 +31,24 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
  
   async function getResumeData() {
     const resumeData = await getData(API_URL.GET_MYRESUME+ "?id=0&roleId=" + roleId + "&userId=" + userId);
-    setValues(resumeData.result.candidateDetails);
-    setForwardData(resumeData.result.resumereviewer);
-    setStatusData(resumeData.result.status);
-     console.log(resumeData.result)
+    if (roleId === 5) {
+      var filterInterviewerResumtSumData = [];
+      resumeData.result.candidateDetails.map(( res) => {
+          if (res.mrfStatus !== 8 && res.mrfStatus !== 9 && res.mrfStatus !== 10 ) {
+            filterInterviewerResumtSumData.push(res)
+          }
+      })
+      setValues(filterInterviewerResumtSumData);
+      setForwardData(resumeData.result.resumereviewer);
+      setStatusData(resumeData.result.status);
+    }
+    else{
+      setValues(resumeData.result.candidateDetails);
+      setForwardData(resumeData.result.resumereviewer);
+      setStatusData(resumeData.result.status);
+       
+    }
+   
   }
   const SingleSelect = (data, options) => {
     const handleDropdownChange = (e) => {
@@ -100,7 +114,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
     const id = rowData.candidateId;
     const candidateStatusId = rowData.candidateStatusId;
     const mrfId = rowData.mrfId;
-    const contactNo = "string";
+    const contactNo = 0;
     const reason = rowData.reason;
     const resumePath = rowData.resumePath;
     const createdByEmployeeId = rowData.createdByEmployeeId;
@@ -125,7 +139,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
       console.log("Response Data:", responseData);
       toastRef.current.showSuccessMessage("Update successfully!");
       setTimeout(() => {
-        navigateTo("my_resume");
+        navigateTo("dashboard");
       }, 1000);
     } else {
       console.error("Request failed with status:", response.status);
@@ -152,7 +166,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
     };
     return (
       <InputTextareaComponent
-       
+        //autoResize={true}
         value={data.reason}
         rows={2}  
         cols={55}
@@ -212,6 +226,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
       sortable: true,
       bodyClassName: "my_resume-col",
     },
+   
     {
       field: "candidateStatusId",
       header: "Status",

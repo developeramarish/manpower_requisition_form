@@ -25,5 +25,7 @@ namespace MRF.Models.ViewModels
 
         public string CandidateName { get; set; }
 
+        public int MrfStatus { get; set; }
+
     }
 }
