@@ -133,7 +133,7 @@ namespace MRF.API.Test.Controllers
                 Name = "ABc",
                 MrfId = 1,
                 EmailId = "amita@kwglobal.com",
-                ContactNo = "1234567890",
+                ContactNo = 1234567890,
                 ResumePath = "cdd",
                 ReviewedByEmployeeId = 1,
                 CandidateStatusId = 1,
