@@ -29,7 +29,8 @@ export const API_URL = {
   GET_EMPLOYEE_DETAILS: `${APIPath}Employeedetails/GetEmployee`,
   UPDATE_EMPLOYEE:`${APIPath}Employeedetails/Put/`,
   GET_ROLE:`${APIPath}Role`,
-  GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`
+  GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
+  ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assign&FileName=`,
 };
 
 export const FILE_URL = {
