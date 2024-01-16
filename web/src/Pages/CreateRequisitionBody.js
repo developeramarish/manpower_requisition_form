@@ -169,6 +169,30 @@ const CreateRequisitionBody = ({
     setFormData({ ...formData, maxGradeId: maxGradeId });
   };
 
+const handleMinExpChange=(e)=>{
+  const minExp=e.target.value;
+  if(formData.maxExperience!==0){
+    if (minExp>formData.maxExperience){
+      toastRef.current.showWarrningMessage(
+        "Min Experience is Greater than Max Experience"
+      );
+      return;
+    }
+  }
+  setFormData({ ...formData, minExperience: minExp });
+  }
+
+const handleMaxExpChange=(e)=>{
+const maxExp=e.target.value;
+if(maxExp<formData.minExperience){
+  toastRef.current.showWarrningMessage(
+    "Max Experience is Less than Min Experience"
+  );
+  return;
+}
+setFormData({ ...formData, maxExperience: maxExp });
+}
+
   const fetchSubDepartments = (selectedDepartment) => {
     const apiUrl =
       API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment;
@@ -632,12 +656,7 @@ const CreateRequisitionBody = ({
                     optionLabel="label"
                     placeholder="Min"
                     disable={commonSettings.setReadOnly}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        minExperience: e.target.value,
-                      })
-                    }
+                    onChange={handleMinExpChange}
                     className="custom-width"
                   />
 
@@ -650,12 +669,7 @@ const CreateRequisitionBody = ({
                     optionLabel="label"
                     placeholder="Max"
                     disable={commonSettings.setReadOnly}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        maxExperience: e.target.value,
-                      })
-                    }
+                    onChange={handleMaxExpChange}
                     className="custom-width"
                   />
                 </div>
