@@ -29,7 +29,7 @@ const ResumeSummary = ({
     fetchData();
   }, [mrfId]);
 
-  const fetchData = () => {
+  const fetchData = async() => {
     try {
       fetch(
         `${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`

@@ -5,7 +5,7 @@ import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
-import { navigateTo } from "../constants/Utils";
+import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
 import {
   API_URL,
   emailRegex,
@@ -120,13 +120,9 @@ const fileUploadData = new FormData();
           sourceId: formData.sourceId,
         };
         try {
-          const response = await fetch(API_URL.ADD_CANDIDATE, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          });
+
+let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
+
           if (response.ok) {
             const responseData = await response.json();
             console.log("Response Data:", responseData);

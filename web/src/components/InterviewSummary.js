@@ -16,7 +16,8 @@ import {
     getData,
     strToArray,
     putData,
-    postData
+    postData,
+    getDataAPI
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 import AssignmentUpload from "./AssignmentUpload";
@@ -56,6 +57,10 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
         const apiUrl =
           API_URL.INTERVIEW_SUMMARY_POPUP + `?id=${mrfId}&DashBoard=true&roleId=${roleId}&userId=${userId}`;
         let response = await getData(apiUrl);
+
+const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}&DashBoard=true&roleId=${roleId}&userId=${userId}`)
+
+
         const data = response.result;
         let arr = new Array(data.interviewDetails.length).fill(false);
         setInterviewData(data.interviewDetails);

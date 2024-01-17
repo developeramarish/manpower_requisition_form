@@ -57,11 +57,9 @@ const CreateRequisitionBody = ({
   const [formData, setFormData] = useState();
 
   const OnLoad = async () => {
-    const dropDta = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
-    console.log(dropDta);
-    const ress = await dropDta.json();
-    setDropdownData(ress.result);
-    console.log(ress);
+    const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
+    const dropDowndata = await result.json();
+    setDropdownData(dropDowndata.result);
     // fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
     // .then((response) => response.json())
     // .then((data) => {
@@ -83,6 +81,8 @@ const CreateRequisitionBody = ({
     // Fetch the data for all the dropdowns
     OnLoad();
     if (getReqId) {
+
+      
       const apiUrl = API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId;
       fetch(apiUrl)
         .then((response) => response.json())
