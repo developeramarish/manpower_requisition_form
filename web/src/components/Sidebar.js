@@ -35,6 +35,13 @@ const Sidebar = ({roleId,sPageKey}) => {
                     </li>
                     {(roleId !== ROLES.hr && roleId !== ROLES.interviewer && roleId !== ROLES.resumeReviwer) &&(
                         <li>
+                            <a className={active === 'allemployees' ? 'active' : ''} href="allemployees" onClick={(e) => onLinkClicked(e)}>
+                                <img src="./images/create_requisition_normal.png" alt="allemployees" /><br />All Employees
+                            </a>
+                        </li>
+                    )}
+                    {(roleId !== ROLES.hr && roleId !== ROLES.interviewer && roleId !== ROLES.resumeReviwer) &&(
+                        <li>
                             <a className={active === 'create_requisition' ? 'active' : ''} href="create_requisition" onClick={(e) => onLinkClicked(e)}>
                                 <img src="./images/create_requisition_normal.png" alt="create_requisition" /><br />Create Requisition
                             </a>
