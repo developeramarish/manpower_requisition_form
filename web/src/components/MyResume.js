@@ -34,7 +34,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
     if (roleId === ROLES.resumeReviwer) {
       var filterInterviewerResumtSumData = [];
       resumeData.result.candidateDetails.map(( res) => {
-          if (MRF_STATUS_FOR_DISABLE(roleId,res.mrfStatus)) {
+          if (!MRF_STATUS_FOR_DISABLE(roleId,res.mrfStatus)) {
             filterInterviewerResumtSumData.push(res)
           }
       })
