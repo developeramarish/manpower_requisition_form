@@ -27,10 +27,12 @@ export const API_URL = {
   ADD_PROJECT: `${APIPath}Project`,
   GET_CANDIDATE_DETAILS: `${APIPath}Candidatedetail/GetReferenceNoAndPositiontitle`,
   GET_EMPLOYEE_DETAILS: `${APIPath}Employeedetails/GetEmployee`,
+  ALL_EMPLOYEE: `${APIPath}GetLDAPEmployee`,
   UPDATE_EMPLOYEE:`${APIPath}Employeedetails/Put/`,
   GET_ROLE:`${APIPath}Role`,
   GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
   ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assign&FileName=`,
+  ASSIGNMENT_POST:`${APIPath}Attachment`,
 };
 
 export const FILE_URL = {
@@ -52,6 +54,7 @@ export const ROUTES = {
   my_resume:"my_resume",
   employee_edit:"employee_edit",
   employee:"employee",
+  allemployees:"allemployees",
 };
 
 export const MRF_STATUS = {
@@ -146,8 +149,8 @@ export const FORM_SCHEMA_CR = {
   replaceJustification: "",
   jobDescription: "",
   skills: "",
-  resumeReviewerEmployeeIds: [],
-  interviewerEmployeeIds: [],
+  resumeReviewerEmployeeIds:"",
+  interviewerEmployeeIds: "",
   hiringManagerId: 0,
   hiringManagerEmpId: 0,
   functionHeadId: 0,
@@ -179,14 +182,14 @@ export const emailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   
       // Check specific condition for certain fields, and general check for others
       if (
-        (value === "" || value === 0 || value === null) &&
+        (value === "" || value === 0 || value === null ) &&
         [
           "positionTitleId", "departmentId", 
           "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
           "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId",
           "locationId", "qualificationId", "justification",
           "minTargetSalary", "maxTargetSalary","vacancyTypeId",
-           "jobDescription",
+           "jobDescription","resumeReviewerEmployeeIds","interviewerEmployeeIds",
           "skills"
         ].includes(key)
       ) {

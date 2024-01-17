@@ -7,7 +7,7 @@ import {
   isFormDataEmptyForSubmit,
 } from "../constants/config";
 import { storageService } from "../constants/storage";
-import { formatDateToYYYYMMDD, navigateTo, putData } from "../constants/Utils";
+import { formatDateToYYYYMMDD, navigateTo, postData, putData } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
 import InputTextareaComponent from "./InputTextarea";
@@ -115,7 +115,6 @@ const MrfPartialStatus = ({
         vacancyNo: Number(formData.vacancyNo),
         genderId: formData.genderId,
         qualification: formData.qualification,
-        // requisitionDateUtc: formData.requisitionDateUtc.toISOString().slice(0,10),
         requisitionDateUtc: formatDateToYYYYMMDD(formData.requisitionDateUtc),
         reportsToEmployeeId: formData.reportsToEmployeeId,
         minGradeId: formData.minGradeId,
@@ -143,7 +142,6 @@ const MrfPartialStatus = ({
         note: formData.note,
         employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
         lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
-        // lastWorkingDate:formData.lastWorkingDate !="" ?  formatDateToYYYYMMDD(formData.lastWorkingDate): new Date().toISOString().slice(0,10),
         annualCtc: formData.annualCtc,
         annualGross: formData.annualGross,
         replaceJustification: formData.replaceJustification,
@@ -166,14 +164,8 @@ const MrfPartialStatus = ({
       };
       console.log(data);
       try {
-        const response = await fetch(API_URL.POST_CREATE_REQUISITION, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
 
+        let response=await postData(`${API_URL.POST_CREATE_REQUISITION}`,data);
         if (response.ok) {
           const responseData = await response.json();
           console.log("Response Data:", responseData);

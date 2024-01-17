@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { changeDateFormat, getData, salaryInLPA } from "../constants/Utils";
+import { changeDateFormat, getData, getDataAPI, salaryInLPA } from "../constants/Utils";
 import { API_URL } from "../constants/config";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -24,9 +24,9 @@ const MyRequisitions = ({roleId,userId}) => {
 	const [reqData, setReqData] = useState([]);
 	useEffect(() => {
 		async function getReqData() {   
-			const apiUrl = API_URL.MY_REQUISITION + "?statusId=0&roleId=" + roleId+"&userId="+userId;
-			const data = await getData(apiUrl);
-			setReqData(data.result);
+			const result = await getDataAPI(`${API_URL.MY_REQUISITION}?statusId=0&roleId=${roleId}&userId=${userId}`);
+			const response=await result.json();
+			setReqData(response.result);
 		}
 
 		if (roleId) {
