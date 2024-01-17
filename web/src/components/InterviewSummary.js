@@ -196,7 +196,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
                 options={interviewStatus}
                 value={interview.evalutionStatusId}
                 onChange={handleDropdownChange}
-                disable={MRF_STATUS_FOR_DISABLE(roleId,interview.mrfStatus)}
+                disable={MRF_STATUS_FOR_DISABLE(roleId,interview.mrfStatusId)}
             />
         );
     };
@@ -272,7 +272,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
                 optionLabel="name"
                 placeholder="Select Interviewer"
                 // optionValue="employeeId"
-               disable={MRF_STATUS_FOR_DISABLE(roleId,interview.mrfStatus)}
+               disable={MRF_STATUS_FOR_DISABLE(roleId,interview.mrfStatusId)}
             />
         );
                 }
