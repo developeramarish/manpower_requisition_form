@@ -32,6 +32,7 @@ export const API_URL = {
   GET_ROLE:`${APIPath}Role`,
   GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
   ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assign&FileName=`,
+  ASSIGNMENT_POST:`${APIPath}Attachment`,
 };
 
 export const FILE_URL = {
@@ -148,8 +149,8 @@ export const FORM_SCHEMA_CR = {
   replaceJustification: "",
   jobDescription: "",
   skills: "",
-  resumeReviewerEmployeeIds: [],
-  interviewerEmployeeIds: [],
+  resumeReviewerEmployeeIds:"",
+  interviewerEmployeeIds: "",
   hiringManagerId: 0,
   hiringManagerEmpId: 0,
   functionHeadId: 0,
@@ -181,14 +182,14 @@ export const emailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   
       // Check specific condition for certain fields, and general check for others
       if (
-        (value === "" || value === 0 || value === null) &&
+        (value === "" || value === 0 || value === null ) &&
         [
           "positionTitleId", "departmentId", 
           "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
           "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId",
           "locationId", "qualificationId", "justification",
           "minTargetSalary", "maxTargetSalary","vacancyTypeId",
-           "jobDescription",
+           "jobDescription","resumeReviewerEmployeeIds","interviewerEmployeeIds",
           "skills"
         ].includes(key)
       ) {

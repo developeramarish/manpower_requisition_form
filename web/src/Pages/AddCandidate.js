@@ -5,7 +5,7 @@ import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
-import { navigateTo } from "../constants/Utils";
+import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
 import {
   API_URL,
   emailRegex,
@@ -88,9 +88,9 @@ const AddCandidate = (reqId) => {
     if (isFormDataEmptyForAddCandidate(formData).length > 0) {
       const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
       formatAndShowErrorMessage(emptyFieldss);
-    }
+    }else{
 
-    const fileUploadData = new FormData();
+const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
     console.log(fileUploadData)
     try {
@@ -120,13 +120,9 @@ const AddCandidate = (reqId) => {
           sourceId: formData.sourceId,
         };
         try {
-          const response = await fetch(API_URL.ADD_CANDIDATE, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          });
+
+let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
+
           if (response.ok) {
             const responseData = await response.json();
             console.log("Response Data:", responseData);
@@ -153,6 +149,7 @@ const AddCandidate = (reqId) => {
       }
     } catch (error) {
       console.error("Error:", error);
+    }
     }
   };
 
