@@ -217,7 +217,7 @@ const ResumeSummary = ({roleId =null, visible, onHide, mrfId = null, dashboard =
 if(!resume.reason ) return (<p className="resume-reason-col">To be Updated</p>);
 return(
  
-<InputTextarea autoResize  readOnly={true}   value={resume.reason} rows={2} cols={50} />
+<InputTextarea   readOnly={true}   value={resume.reason} rows={2} cols={50} />
  
  
   // <p className="resume-reason-col">{resume.reason}</p>

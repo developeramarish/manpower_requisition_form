@@ -31,7 +31,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
  
   async function getResumeData() {
     const resumeData = await getData(API_URL.GET_MYRESUME+ "?id=0&roleId=" + roleId + "&userId=" + userId);
-    if (roleId === 5) {
+    if (roleId === ROLES.resumeReviwer) {
       var filterInterviewerResumtSumData = [];
       resumeData.result.candidateDetails.map(( res) => {
           if (res.mrfStatus !== 8 && res.mrfStatus !== 9 && res.mrfStatus !== 10 ) {
@@ -166,7 +166,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
     };
     return (
       <InputTextareaComponent
-        //autoResize={true}
+        
         value={data.reason}
         rows={2}  
         cols={55}

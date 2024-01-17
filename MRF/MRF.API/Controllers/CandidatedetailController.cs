@@ -93,7 +93,8 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatedetailResponseModel Post([FromBody] CandidatedetailRequestModel request)
         {
-
+            List < Mrfresumereviewermap> mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == request.MrfId).ToList();
+            string  reviewerEmpId = string.Join(",", mrfresumereviewermap.Select(r => r.ResumeReviewerEmployeeId).Distinct());
             var Candidatedetail = new Candidatedetails
             {
                 Name = request.Name,
@@ -101,7 +102,7 @@ namespace MRF.API.Controllers
                 EmailId = request.EmailId,
                 ContactNo = request.ContactNo,
                 ResumePath = request.ResumePath,
-                ReviewedByEmployeeIds = request.ReviewedByEmployeeIds,
+                ReviewedByEmployeeIds = reviewerEmpId,
                 CandidateStatusId = request.CandidateStatusId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 Reason = request.Reason,
@@ -115,6 +116,27 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
 
             _responseModel.Id = Candidatedetail.Id;
+           
+            List < Mrfinterviewermap> mrfinterviewermap = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == Candidatedetail.MrfId).ToList();
+            
+            string  interviewerId = string.Join(",", mrfinterviewermap.Select(r => r.InterviewerEmployeeId).Distinct());
+            var interviewevaluation = new InterviewevaluationRequestModel {
+                CandidateId = Candidatedetail.Id,
+                CreatedByEmployeeId = request.CreatedByEmployeeId,
+                CreatedOnUtc = request.CreatedOnUtc,
+                EvalutionStatusId = 0,
+                FromTimeUtc =  TimeOnly.FromDateTime(DateTime.Now),
+                interviewerEmployeeIds = interviewerId,
+                ToTimeUtc= TimeOnly.FromDateTime(DateTime.Now),
+                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                UpdatedOnUtc = request.UpdatedOnUtc,
+            };
+            InterviewevaluationController controller = new InterviewevaluationController(_unitOfWork, _logger);
+
+            controller.Post(interviewevaluation);
+           
+
+
             _responseModel.IsActive = true;
 
 
