@@ -24,6 +24,7 @@ import {
   MRF_STATUS,
   REQUISITION_TYPE,
   ROLES,
+  emailRegex,
 } from "../constants/config";
 import { storageService } from "../constants/storage";
 import MrfPartialStatus from "../components/MrfPartialStatus";
@@ -56,11 +57,9 @@ const CreateRequisitionBody = ({
   const [formData, setFormData] = useState();
 
   const OnLoad = async () => {
-    const dropDta = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
-    console.log(dropDta);
-    const ress = await dropDta.json();
-    setDropdownData(ress.result);
-    console.log(ress);
+    const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
+    const dropDowndata = await result.json();
+    setDropdownData(dropDowndata.result);
     // fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
     // .then((response) => response.json())
     // .then((data) => {
@@ -82,6 +81,8 @@ const CreateRequisitionBody = ({
     // Fetch the data for all the dropdowns
     OnLoad();
     if (getReqId) {
+
+      
       const apiUrl = API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId;
       fetch(apiUrl)
         .then((response) => response.json())
@@ -169,29 +170,41 @@ const CreateRequisitionBody = ({
     setFormData({ ...formData, maxGradeId: maxGradeId });
   };
 
-const handleMinExpChange=(e)=>{
-  const minExp=e.target.value;
-  if(formData.maxExperience!==0){
-    if (minExp>formData.maxExperience){
+  const handleEmail = (e) => {
+    const emailValue=formData.emailId;
+    if (!emailRegex.test(emailValue)) {
+      toastRef.current.showWarrningMessage("Invalid Email format");
+      // setSubmitBtnDisable(true);
+    }
+    
+  };
+
+  const handleMinExpChange = (e) => {
+    const minExp = e.target.value;
+    if (formData.maxExperience !== 0) {
+      if (minExp > formData.maxExperience) {
+        toastRef.current.showWarrningMessage(
+          "Min Experience is Greater than Max Experience"
+        );
+        return;
+      }
+    }
+    setFormData({ ...formData, minExperience: minExp });
+  };
+
+  const handleMaxExpChange = (e) => {
+    console.log(e.target.value)
+    const maxExp = e.target.value;
+
+    if (maxExp < formData.minExperience) {
+      console.log("eeee")
       toastRef.current.showWarrningMessage(
-        "Min Experience is Greater than Max Experience"
+        "Max Experience is Less than Min Experience"
       );
       return;
     }
-  }
-  setFormData({ ...formData, minExperience: minExp });
-  }
-
-const handleMaxExpChange=(e)=>{
-const maxExp=e.target.value;
-if(maxExp<formData.minExperience){
-  toastRef.current.showWarrningMessage(
-    "Max Experience is Less than Min Experience"
-  );
-  return;
-}
-setFormData({ ...formData, maxExperience: maxExp });
-}
+    setFormData({ ...formData, maxExperience: maxExp });
+  };
 
   const fetchSubDepartments = (selectedDepartment) => {
     const apiUrl =
@@ -648,7 +661,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                 </label>
                 <div className="p-col-7">
                   <label className="font-bold text-sm label-with-padding-right">
-                    Min
+                    Min<RedAsterisk />
                   </label>
                   <DropdownComponent
                     value={formData.minExperience}
@@ -661,7 +674,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                   />
 
                   <label className="font-bold text-sm label-with-padding-left label-with-padding-right">
-                    Max
+                    Max<RedAsterisk />
                   </label>
                   <DropdownComponent
                     value={formData.maxExperience}
@@ -676,7 +689,7 @@ setFormData({ ...formData, maxExperience: maxExp });
               </div>
               <div className="flex flex-column w-6 row-gap-2">
                 <label htmlFor="gender" className="font-bold text-sm">
-                  Gender
+                  Gender<RedAsterisk />
                 </label>
                 <DropdownComponent
                   optionLabel="label"
@@ -692,7 +705,7 @@ setFormData({ ...formData, maxExperience: maxExp });
               </div>
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="qualification" className="font-bold text-sm">
-                  Qualification
+                  Qualification<RedAsterisk />
                 </label>
                 <DropdownComponent
                   optionLabel="type"
@@ -730,7 +743,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                 <div className="flex justify-content-between gap-5">
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="employeeName" className="font-bold text-sm">
-                      Employee Name
+                      Employee Name<RedAsterisk />
                     </label>
                     <InputTextCp
                       id="employeeName"
@@ -750,7 +763,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       htmlFor="lastworkingDate"
                       className="font-bold text-sm"
                     >
-                      Last Working Date
+                      Last Working Date<RedAsterisk />
                     </label>
                     <CalendarComponent
                       id="lastworkingDate"
@@ -772,7 +785,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       htmlFor="EmployeeEmail"
                       className="font-bold text-sm"
                     >
-                      Employee Email
+                      Employee Email<RedAsterisk />
                     </label>
                     <InputTextCp
                       id="EmployeeEmail"
@@ -780,13 +793,14 @@ setFormData({ ...formData, maxExperience: maxExp });
                         setFormData({ ...formData, emailId: e.target.value })
                       }
                       value={formData.emailId}
+                      onBlur={handleEmail}
                       disable={commonSettings.setReadOnly}
                     />
                   </div>
 
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="EmployeeCode" className="font-bold text-sm">
-                      Employee Code
+                      Employee Code<RedAsterisk />
                     </label>
                     <InputNumberComponent
                       id="EmployeeCode"
@@ -804,7 +818,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                 <div className="flex justify-content-between gap-5">
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="AnnualCTC" className="font-bold text-sm">
-                      Annual CTC
+                      Annual CTC<RedAsterisk />
                     </label>
                     <InputNumberComponent
                       id="AnnualCTC"
@@ -816,7 +830,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                     />
 
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
-                      Annual Gross
+                      Annual Gross<RedAsterisk />
                     </label>
                     <InputNumberComponent
                       id="AnnualGross"
@@ -836,7 +850,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       htmlFor="ReplaceJustification"
                       className="font-bold text-sm"
                     >
-                      Replacement Justification
+                      Replacement Justification<RedAsterisk />
                     </label>
                     <InputTextareaComponent
                       id="ReplaceJustification"
@@ -870,7 +884,7 @@ setFormData({ ...formData, maxExperience: maxExp });
 
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="skills" className="font-bold text-sm">
-                  Skills
+                  Skills<RedAsterisk />
                 </label>
                 <EditorComponent
                   value={formData.skills}
@@ -883,7 +897,7 @@ setFormData({ ...formData, maxExperience: maxExp });
             <div className="flex justify-content-between gap-5 ">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="Justification" className="font-bold text-sm">
-                  Justification
+                  Justification <RedAsterisk />
                 </label>
 
                 <InputTextareaComponent
@@ -904,7 +918,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                     htmlFor="MinTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Min Target Salary
+                    Min Target Salary<RedAsterisk />
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
@@ -918,7 +932,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                     htmlFor="MaxTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Max Target Salary
+                    Max Target Salary<RedAsterisk />
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
@@ -932,7 +946,7 @@ setFormData({ ...formData, maxExperience: maxExp });
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="resumeReviewer" className="font-bold text-sm">
-                  Resume Reviewer
+                  Resume Reviewer<RedAsterisk />
                 </label>
 
                 <MultiSelectDropdown
@@ -954,7 +968,7 @@ setFormData({ ...formData, maxExperience: maxExp });
               </div>
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="interviewer" className="font-bold text-sm">
-                  Interviewer/Panel
+                  Interviewer/Panel<RedAsterisk />
                 </label>
 
                 <MultiSelectDropdown
@@ -1065,7 +1079,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       id="ApprovalDate"
                       inputClassName="bg-gray-100"
                       value={new Date(formData.hmApprovalDate)}
-                      minDate={new Date()}
+                      maxDate={new Date()}
                       className={"email_dropdown"}
                       disable={commonSettings.setHiringManager}
                       onChange={(e) =>
@@ -1089,6 +1103,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                         case MRF_STATUS.awaitfinanceHeadApproval:
                         case MRF_STATUS.bypassFinanceHeadApproval:
                         case MRF_STATUS.mrfTransferToNew:
+                        case MRF_STATUS.open:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2">
@@ -1101,7 +1116,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={mrfStatusId}
-                                  label={"Updatse"}
+                                  label={"Update"}
                                   formData={formData}
                                   className={"update_btn"}
                                   hiringManagerUpdateClick={true}
@@ -1200,7 +1215,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       inputClassName="bg-gray-100"
                       value={new Date(formData.spApprovalDate)}
                       disable={commonSettings.setSiteHRSPOCApproval}
-                      minDate={new Date()}
+                      maxDate={new Date()}
                       className={"email_dropdown"}
                       onChange={(e) =>
                         setFormData({
@@ -1330,6 +1345,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       value={new Date(formData.fhApprovalDate)}
                       disable={commonSettings.setHodapprovalDate}
                       className={"email_dropdown"}
+                      maxDate={new Date()}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -1467,6 +1483,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       value={new Date(formData.fiApprovalDate)}
                       minDate={new Date()}
                       className={"email_dropdown"}
+                      maxDate={new Date()}
                       disable={commonSettings.setFinanceHeadApprovalDate}
                       onChange={(e) =>
                         setFormData({
@@ -1633,7 +1650,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                       id="pcApprovalDate"
                       inputClassName="bg-gray-100"
                       value={new Date(formData.pcApprovalDate)}
-                      minDate={new Date()}
+                      maxDate={new Date()}
                       disable={commonSettings.setCooapprovalDate}
                       className={"email_dropdown"}
                       onChange={(e) =>
@@ -1670,7 +1687,7 @@ setFormData({ ...formData, maxExperience: maxExp });
                               <div className=" w-2 "></div>
                             </>
                           );
-                        
+
                         case MRF_STATUS.awaitCooApproval:
                           return (
                             <>

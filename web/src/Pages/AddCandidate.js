@@ -5,7 +5,7 @@ import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
-import { navigateTo } from "../constants/Utils";
+import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
 import {
   API_URL,
   emailRegex,
@@ -17,6 +17,7 @@ import InputNumberComponent from "../components/InputNumberComponent";
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [submitBtnDisable,setSubmitBtnDisable]=useState(true);
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
@@ -37,9 +38,11 @@ const AddCandidate = (reqId) => {
     sourceId: 0,
   };
 
+  console.log(submitBtnDisable);
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
   const [dropdowns, setDropdownData] = useState();
+  
   useEffect(() => {
     // Fetch the data for all the dropdowns
     fetch(API_URL.ADD_SOURCE_NAME)
@@ -65,29 +68,31 @@ const AddCandidate = (reqId) => {
     const errorMessage = `Some required fields are empty: ${formattedEmptyFields.join(
       ", "
     )}`;
-    toastRef.current.showBadRequestMessage(errorMessage);
+    toastRef.current.showWarrningMessage(errorMessage);
   };
 
-  const handleEmail = (emailValue) => {
-    if (emailRegex.test(emailValue)) {
-      return true;
-    } else {
-      toastRef.current.showBadRequestMessage("Invalid Email format");
-      return false;
+  const handleEmail = (e) => {
+    const emailValue=formData.emailId;
+    if (!emailRegex.test(emailValue)) {
+      toastRef.current.showWarrningMessage("Invalid Email format");
+      setSubmitBtnDisable(true);
+    }else{
+      setSubmitBtnDisable(false);
     }
+    
   };
 
   const handleSubmit = async () => {
-    //we need to do proper alignment of code here
-    handleEmail(formData.emailId);
+    
+
     if (isFormDataEmptyForAddCandidate(formData).length > 0) {
       const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
       formatAndShowErrorMessage(emptyFieldss);
-    }
+    }else{
 
-    const fileUploadData = new FormData();
+const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
-
+    console.log(fileUploadData)
     try {
       const fileUploadResponse = await fetch(
         API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
@@ -115,13 +120,9 @@ const AddCandidate = (reqId) => {
           sourceId: formData.sourceId,
         };
         try {
-          const response = await fetch(API_URL.ADD_CANDIDATE, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          });
+
+let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
+
           if (response.ok) {
             const responseData = await response.json();
             console.log("Response Data:", responseData);
@@ -149,12 +150,14 @@ const AddCandidate = (reqId) => {
     } catch (error) {
       console.error("Error:", error);
     }
+    }
   };
 
   //need to change this
   const handleCancel = () => {
     navigateTo("my_requisition");
   };
+
 
   return (
     <div>
@@ -194,10 +197,10 @@ const AddCandidate = (reqId) => {
                   </label>
                   <InputTextCp
                     id="email"
-                    // onChange={handleEmail}
                     onChange={(e) =>
                       setFormData({ ...formData, emailId: e.target.value })
                     }
+                    onBlur={handleEmail}
                     value={formData.emailId}
                   />
                 </div>
@@ -263,8 +266,10 @@ const AddCandidate = (reqId) => {
 
               <ButtonC
                 label="SUBMIT"
-                className="w-2 bg-red-600 border-red-600"
+                className="resume_update_btn"
                 onClick={() => handleSubmit()}
+          // disable={submitBtnDisable}
+          // disable={true}
               />
               <ToastMessages ref={toastRef} />
             </div>

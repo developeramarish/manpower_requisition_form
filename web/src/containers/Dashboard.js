@@ -262,25 +262,17 @@ function Dashboard({ roleId, userId }) {
               />
 
               <DashBoardDataTable
-                value={resumeSummary}
-                column={resumeSummaryColums}
-                headerHeading={<h4 >Resume Status</h4>}
-                table_title={"Resume Summary"}
-              />
-
-              <Dialog
-                header={"Resume Summary"}
-                visible={resumePopup}
-                onHide={() => setResumePopup(false)}
-                draggable={false}
-                className="resume-card"
-              >
-                <ResumeSummary
-                  mrfId={resumePopupId}
-                  roleId={roleId}
-                  userId={userId}
-                />
-              </Dialog>
+               value={resumeSummary}
+               column={resumeSummaryColums}
+               headerHeading={<h4 >Resume Status</h4>}
+               table_title={"Resume Summary"}
+             />
+             <ResumeSummary  visible={resumePopup}
+                onHide={() => setResumePopup(false)} 
+                 mrfId={resumePopupId}
+                roleId={roleId}
+                userId={userId} />
+              
             </div>
           )}
         </div>
