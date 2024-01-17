@@ -6,7 +6,7 @@ import { Column } from "primereact/column";
 import DropdownComponent from "./Dropdown";
 import MultiSelectDropdown from "./multiselectDropdown";
 import InterviewFeedbackComponent from "./InterviewFeedbackComponent";
-import { API_URL, FILE_URL, ROLES } from "../constants/config";
+import { API_URL, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
 import { storageService } from "../constants/storage";
 import ToastMessages from "./ToastMessages";
 import {
@@ -196,7 +196,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
                 options={interviewStatus}
                 value={interview.evalutionStatusId}
                 onChange={handleDropdownChange}
-                disable={(interview.mrfStatusId !== 8 && interview.mrfStatusId !== 9 && interview.mrfStatusId !== 10)?false:true }
+                disable={MRF_STATUS_FOR_DISABLE(roleId,interview.mrfStatus)}
             />
         );
     };
@@ -270,8 +270,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
                 optionLabel="name"
                 placeholder="Select Interviewer"
                 // optionValue="employeeId"
-                disable={(interview.mrfStatusId !== 8 && interview.mrfStatusId !== 9 && interview.mrfStatusId !== 10)?false:true }
-               
+               disable={MRF_STATUS_FOR_DISABLE(roleId,interview.mrfStatus)}
             />
         );
                 }

@@ -6,7 +6,7 @@ import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
 import { navigateTo, putData } from "../constants/Utils";
-import { API_URL, FILE_URL, ROLES } from "../constants/config";
+import { API_URL, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
 import {
   arrayToObj,
   objToIntArray,
@@ -34,7 +34,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
     if (roleId === ROLES.resumeReviwer) {
       var filterInterviewerResumtSumData = [];
       resumeData.result.candidateDetails.map(( res) => {
-          if (res.mrfStatus !== 8 && res.mrfStatus !== 9 && res.mrfStatus !== 10 ) {
+          if (MRF_STATUS_FOR_DISABLE(roleId,res.mrfStatus)) {
             filterInterviewerResumtSumData.push(res)
           }
       })

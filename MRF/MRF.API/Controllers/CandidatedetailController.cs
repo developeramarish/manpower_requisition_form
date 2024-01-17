@@ -116,24 +116,27 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
 
             _responseModel.Id = Candidatedetail.Id;
-           
-            List < Mrfinterviewermap> mrfinterviewermap = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == Candidatedetail.MrfId).ToList();
             
-            string  interviewerId = string.Join(",", mrfinterviewermap.Select(r => r.InterviewerEmployeeId).Distinct());
-            var interviewevaluation = new InterviewevaluationRequestModel {
-                CandidateId = Candidatedetail.Id,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                EvalutionStatusId = 0,
-                FromTimeUtc =  TimeOnly.FromDateTime(DateTime.Now),
-                interviewerEmployeeIds = interviewerId,
-                ToTimeUtc= TimeOnly.FromDateTime(DateTime.Now),
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc,
-            };
-            InterviewevaluationController controller = new InterviewevaluationController(_unitOfWork, _logger);
+            List < Mrfinterviewermap> mrfinterviewermap = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == Candidatedetail.MrfId).ToList();
+            if (mrfinterviewermap.Count > 0) {
+                string interviewerId = string.Join(",", mrfinterviewermap.Select(r => r.InterviewerEmployeeId).Distinct());
+                var interviewevaluation = new InterviewevaluationRequestModel
+                {
+                    CandidateId = Candidatedetail.Id,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    EvalutionStatusId = 0,
+                    FromTimeUtc = TimeOnly.FromDateTime(DateTime.Now),
+                    interviewerEmployeeIds = interviewerId,
+                    ToTimeUtc = TimeOnly.FromDateTime(DateTime.Now),
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc,
+                };
+                InterviewevaluationController controller = new InterviewevaluationController(_unitOfWork, _logger);
 
-            controller.Post(interviewevaluation);
+                controller.Post(interviewevaluation);
+            }
+            
            
 
 
