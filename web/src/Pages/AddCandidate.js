@@ -88,9 +88,9 @@ const AddCandidate = (reqId) => {
     if (isFormDataEmptyForAddCandidate(formData).length > 0) {
       const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
       formatAndShowErrorMessage(emptyFieldss);
-    }
+    }else{
 
-    const fileUploadData = new FormData();
+const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
     console.log(fileUploadData)
     try {
@@ -153,6 +153,7 @@ const AddCandidate = (reqId) => {
       }
     } catch (error) {
       console.error("Error:", error);
+    }
     }
   };
 

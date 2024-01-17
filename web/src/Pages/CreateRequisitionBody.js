@@ -661,7 +661,7 @@ const CreateRequisitionBody = ({
                 </label>
                 <div className="p-col-7">
                   <label className="font-bold text-sm label-with-padding-right">
-                    Min
+                    Min<RedAsterisk />
                   </label>
                   <DropdownComponent
                     value={formData.minExperience}
@@ -674,7 +674,7 @@ const CreateRequisitionBody = ({
                   />
 
                   <label className="font-bold text-sm label-with-padding-left label-with-padding-right">
-                    Max
+                    Max<RedAsterisk />
                   </label>
                   <DropdownComponent
                     value={formData.maxExperience}
@@ -689,7 +689,7 @@ const CreateRequisitionBody = ({
               </div>
               <div className="flex flex-column w-6 row-gap-2">
                 <label htmlFor="gender" className="font-bold text-sm">
-                  Gender
+                  Gender<RedAsterisk />
                 </label>
                 <DropdownComponent
                   optionLabel="label"
@@ -705,7 +705,7 @@ const CreateRequisitionBody = ({
               </div>
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="qualification" className="font-bold text-sm">
-                  Qualification
+                  Qualification<RedAsterisk />
                 </label>
                 <DropdownComponent
                   optionLabel="type"
@@ -743,7 +743,7 @@ const CreateRequisitionBody = ({
                 <div className="flex justify-content-between gap-5">
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="employeeName" className="font-bold text-sm">
-                      Employee Name
+                      Employee Name<RedAsterisk />
                     </label>
                     <InputTextCp
                       id="employeeName"
@@ -763,7 +763,7 @@ const CreateRequisitionBody = ({
                       htmlFor="lastworkingDate"
                       className="font-bold text-sm"
                     >
-                      Last Working Date
+                      Last Working Date<RedAsterisk />
                     </label>
                     <CalendarComponent
                       id="lastworkingDate"
@@ -785,7 +785,7 @@ const CreateRequisitionBody = ({
                       htmlFor="EmployeeEmail"
                       className="font-bold text-sm"
                     >
-                      Employee Email
+                      Employee Email<RedAsterisk />
                     </label>
                     <InputTextCp
                       id="EmployeeEmail"
@@ -800,7 +800,7 @@ const CreateRequisitionBody = ({
 
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="EmployeeCode" className="font-bold text-sm">
-                      Employee Code
+                      Employee Code<RedAsterisk />
                     </label>
                     <InputNumberComponent
                       id="EmployeeCode"
@@ -818,7 +818,7 @@ const CreateRequisitionBody = ({
                 <div className="flex justify-content-between gap-5">
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="AnnualCTC" className="font-bold text-sm">
-                      Annual CTC
+                      Annual CTC<RedAsterisk />
                     </label>
                     <InputNumberComponent
                       id="AnnualCTC"
@@ -830,7 +830,7 @@ const CreateRequisitionBody = ({
                     />
 
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
-                      Annual Gross
+                      Annual Gross<RedAsterisk />
                     </label>
                     <InputNumberComponent
                       id="AnnualGross"
@@ -850,7 +850,7 @@ const CreateRequisitionBody = ({
                       htmlFor="ReplaceJustification"
                       className="font-bold text-sm"
                     >
-                      Replacement Justification
+                      Replacement Justification<RedAsterisk />
                     </label>
                     <InputTextareaComponent
                       id="ReplaceJustification"
@@ -884,7 +884,7 @@ const CreateRequisitionBody = ({
 
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="skills" className="font-bold text-sm">
-                  Skills
+                  Skills<RedAsterisk />
                 </label>
                 <EditorComponent
                   value={formData.skills}
@@ -897,7 +897,7 @@ const CreateRequisitionBody = ({
             <div className="flex justify-content-between gap-5 ">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="Justification" className="font-bold text-sm">
-                  Justification
+                  Justification <RedAsterisk />
                 </label>
 
                 <InputTextareaComponent
@@ -918,7 +918,7 @@ const CreateRequisitionBody = ({
                     htmlFor="MinTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Min Target Salary
+                    Min Target Salary<RedAsterisk />
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
@@ -932,7 +932,7 @@ const CreateRequisitionBody = ({
                     htmlFor="MaxTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Max Target Salary
+                    Max Target Salary<RedAsterisk />
                   </label>
                   <InputNumberComponent
                     id="MaxTargetSalary"
@@ -946,7 +946,7 @@ const CreateRequisitionBody = ({
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="resumeReviewer" className="font-bold text-sm">
-                  Resume Reviewer
+                  Resume Reviewer<RedAsterisk />
                 </label>
 
                 <MultiSelectDropdown
@@ -968,7 +968,7 @@ const CreateRequisitionBody = ({
               </div>
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="interviewer" className="font-bold text-sm">
-                  Interviewer/Panel
+                  Interviewer/Panel<RedAsterisk />
                 </label>
 
                 <MultiSelectDropdown

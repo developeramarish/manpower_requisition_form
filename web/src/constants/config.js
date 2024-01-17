@@ -31,6 +31,7 @@ export const API_URL = {
   GET_ROLE:`${APIPath}Role`,
   GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
   ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assign&FileName=`,
+  ASSIGNMENT_POST:`${APIPath}Attachment`,
 };
 
 export const FILE_URL = {

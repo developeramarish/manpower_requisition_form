@@ -19,6 +19,7 @@ import {
     postData
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
+import AssignmentUpload from "./AssignmentUpload";
  
  //const roleId = 3;
  
@@ -35,23 +36,7 @@ const resumeBodyTemplate = (interview) => {
     );
 };
  
-const attachmentBodyTemplate = (interview) => {
-    if (interview.attachment) {
-        let attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
-        return (
-            <a href={attachmentLink} target="_blank" className="int-link-cell">
-                {/* You can also display the attachment name or any other details */}
-                View Attachment
-            </a>
-        );
-    } else {
-        return (
-            <span className="no-attachment-message">
-                N/A
-            </span>
-        );
-    }
-};
+
  
 //summary component
  
@@ -63,6 +48,8 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
     const [saveBttn, setSaveBttn] = useState([]);
     const [showFeed, setShowFeed] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
+	const [showUploadAssignment, setshowUploadAssignment] = useState(false);
+  const [candidateInterviewDetails, setCandidateInterviewDetails] = useState({});
     const toastRef = useRef(null);
  
     async function getIntData() {
@@ -208,7 +195,42 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
             />
         );
     };
+
+    const onUploadAssginmentClick=(interview)=>{
+      console.log(interview)
+      setCandidateInterviewDetails(interview)
+      setshowUploadAssignment(true);
+    }
  
+
+	const attachmentBodyTemplate = (interview) => {
+    console.log(interview)
+		if (interview.attachment) {
+			let attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
+			return (
+				<a href={attachmentLink} target="_blank" className="int-link-cell">
+					{/* You can also display the attachment name or any other details */}
+					View Attachment
+				</a>
+			);
+		} else {
+			return (
+				<div>
+		  <a
+			className="int-link-cell"
+			onClick={(e) => {
+        console.log(interview)
+			  onUploadAssginmentClick(interview)
+			}}
+		  >
+			Upload Assignment
+		  </a>
+		  
+		</div>
+			);
+		}
+	};
+
     const interviewerBodyTemplate = (interview, options) => {
         if (roleId === ROLES.hr)
         {
@@ -386,6 +408,9 @@ const InterviewSummary = ({ roleId=null,visible, onHide, mrfId = null,userId=nul
                     />
                 ))}
             </DataTable>
+            {(setshowUploadAssignment)&&(            <AssignmentUpload visible={showUploadAssignment} data={candidateInterviewDetails} onHide={() => setshowUploadAssignment(false)}/>
+)}
+
             <ToastMessages ref={toastRef} />
         </Dialog>
     );
