@@ -218,7 +218,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
 					View Attachment
 				</a>
 			);
-		} else {
+		} else if(roleId===ROLES.hr) {
 			return (
 				<div>
 		  <a
@@ -233,7 +233,9 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
 		  
 		</div>
 			);
-		}
+		}else{
+      return(<p > N/A</p>)
+    }
 	};
 
     const interviewerBodyTemplate = (interview, options) => {
