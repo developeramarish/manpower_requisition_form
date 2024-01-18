@@ -27,6 +27,7 @@ export const API_URL = {
   ADD_PROJECT: `${APIPath}Project`,
   GET_CANDIDATE_DETAILS: `${APIPath}Candidatedetail/GetReferenceNoAndPositiontitle`,
   GET_EMPLOYEE_DETAILS: `${APIPath}Employeedetails/GetEmployee`,
+  ALL_EMPLOYEE: `${APIPath}GetLDAPEmployee`,
   UPDATE_EMPLOYEE:`${APIPath}Employeedetails/Put/`,
   GET_ROLE:`${APIPath}Role`,
   GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
@@ -53,6 +54,7 @@ export const ROUTES = {
   my_resume:"my_resume",
   employee_edit:"employee_edit",
   employee:"employee",
+  allemployees:"allemployees",
 };
 
 export const MRF_STATUS = {
