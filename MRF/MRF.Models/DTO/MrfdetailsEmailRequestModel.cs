@@ -28,8 +28,8 @@ namespace MRF.Models.DTO
         public string? JobDescription { get; set; }
         public string? Skills { get; set; }
         public string? Justification { get; set; }
-        public int? MinTargetSalary { get; set; }
-        public int? MaxTargetSalary { get; set; }
+        public float? MinTargetSalary { get; set; }
+        public float? MaxTargetSalary { get; set; }
         public string? MRFRaisedBy { get; set; }
     }
 
