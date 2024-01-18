@@ -13,12 +13,11 @@ import {
   getData,
   strToArray,
 } from "../constants/Utils";
-import { Button } from "primereact/button";
-import ToastMessages from "./ToastMessages";
-import DropdownComponent from "./Dropdown";
-import MultiSelectDropdown from "./multiselectDropdown";
-import ButtonC from "./Button";
-import InputTextareaComponent from "./InputTextarea";
+import ToastMessages from "../components/ToastMessages";
+import InputTextareaComponent from "../components/InputTextarea";
+import MultiSelectDropdown from "../components/multiselectDropdown";
+import DropdownComponent from "../components/Dropdown";
+import ButtonC from "../components/Button";
 const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
@@ -114,7 +113,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
     const id = rowData.candidateId;
     const candidateStatusId = rowData.candidateStatusId;
     const mrfId = rowData.mrfId;
-    const contactNo = 0;
+    const contactNo = "string";
     const reason = rowData.reason;
     const resumePath = rowData.resumePath;
     const createdByEmployeeId = rowData.createdByEmployeeId;
@@ -194,7 +193,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
         </React.Fragment>
       );
     }
-    return <Button icon="pi pi-save" disabled className="myaction_btn"/>;
+    return <ButtonC icon="pi pi-save" disable={true} className="myaction_btn"/>;
  
   };
   const resumeBodyTemplate = (interview) => {

@@ -87,8 +87,8 @@ export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
 }
 
 export const COUNTRIES = [
-  { name:<> <span style={{ marginRight: '60px' }}>India </span><span>+91</span></>, code: 'IN' },
-  { name:<> <span style={{ marginRight: '85px' }}>US </span><span>+1</span></>, code: 'US' },
+  { name:<> <span><img src="./images/india_flag.png" width={"20px"} height={"12px"}/></span><span style={{ marginRight: '50px' }}> India </span><span>+91</span></>, code: 'IN' },
+  { name:<><span><img src="./images/us_flag.png" width={"20px"} height={"12px"}/></span> <span style={{ marginRight: '75px' }}> US </span><span>+1</span></>, code: 'US' },
 ];
 
 export const ROLES = {

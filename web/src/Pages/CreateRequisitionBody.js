@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   commonSettings,
   applySettingsBasedOnRoleAndStatus,
-} from "./commonSettings";
+} from "../components/commonSetting";
 import "../css/InputComponent.css";
 import DropdownComponent from "./../components/Dropdown";
 import InputTextCp from "./../components/Textbox";

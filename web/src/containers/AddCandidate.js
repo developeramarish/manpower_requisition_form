@@ -6,8 +6,6 @@ import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
-import { ChevronDownIcon } from "primereact/icons/chevrondown";
-import { ChevronRightIcon } from "primereact/icons/chevronright";
 import { InputMask } from "primereact/inputmask";
 import {
   API_URL,
@@ -15,15 +13,12 @@ import {
   emailRegex,
   isFormDataEmptyForAddCandidate,
 } from "../constants/config";
-import { FILE_URL } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
-import InputNumberComponent from "../components/InputNumberComponent";
-import { Dropdown } from "primereact/dropdown";
+
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [submitBtnDisable, setSubmitBtnDisable] = useState(true);
-  // const [selectedCountry, setSelectedCountry] = useState("");
   const [mask, setMask] = useState("");
   const handleFileChange = (event) => {
     setSelectedFile(event);
@@ -49,21 +44,19 @@ const AddCandidate = (reqId) => {
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
   const [dropdowns, setDropdownData] = useState();
+
   useEffect(() => {
-    // Fetch the data for all the dropdowns
-    fetch(API_URL.ADD_SOURCE_NAME)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(data.result);
-        // Store the dropdown data in localStorage using your storageService
-        // storageService.set("dropdownData", dropdown);
-        // Update the state with the new dropdown data
-        setDropdownData(data.result);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+   fectData();
   }, []);
+
+const fectData=async()=>{
+
+    const result=await getDataAPI(`${API_URL.ADD_SOURCE_NAME}`)
+     // Fetch the data for all the dropdowns
+     const response=await result.json();
+     setDropdownData(response.result);
+     
+}
 
   useEffect(() => {
     console.log(formData.countrycode.code)
@@ -278,7 +271,7 @@ const AddCandidate = (reqId) => {
                           ...formData,
                           countrycode: e.target.value,
                         })} 
-                        className="w-full md:w-12rem" />
+                        className="w-full md:w-13rem" />
 
                      
                     </div>
