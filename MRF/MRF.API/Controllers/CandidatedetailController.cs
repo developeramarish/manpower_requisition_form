@@ -135,16 +135,14 @@ namespace MRF.API.Controllers
                 InterviewevaluationController controller = new InterviewevaluationController(_unitOfWork, _logger);
 
                 controller.Post(interviewevaluation);
+                _responseModel.Id = Candidatedetail.Id;
+                _responseModel.IsActive = true;
             }
-            
-           
-
-
-            _responseModel.IsActive = true;
-
-
+            else { _responseModel.Id = -1; }
             return _responseModel;
         }
+        
+    
 
         // PUT api/<CandidatedetailController>/5
 

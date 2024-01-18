@@ -77,17 +77,13 @@ export const MRF_STATUS = {
 };
 
 export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
-    if((roleId === ROLES.hr || roleId === ROLES.mrfOwner) &&
-    (mrfstatusId !== 8 && mrfstatusId !== 9 && mrfstatusId !== 10)){
-      return false;
-    }
-    else if((roleId === ROLES.resumeReviwer) &&
-    (mrfstatusId !== 8 && mrfstatusId !== 9 && mrfstatusId !== 10)){
-      return false;
-    }
-    else {
-      return true;
-    }
+  if((roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.resumeReviwer)  && [
+    MRF_STATUS.closed,MRF_STATUS.rejected,MRF_STATUS.withdrawn
+  ].includes(mrfstatusId)
+  ){
+    return  true;
+  }
+ return  false;
 }
 
 
