@@ -36,7 +36,7 @@ const Sidebar = ({roleId,sPageKey}) => {
                     {(roleId !== ROLES.hr && roleId !== ROLES.interviewer && roleId !== ROLES.resumeReviwer) &&(
                         <li>
                             <a className={active === 'allemployees' ? 'active' : ''} href="allemployees" onClick={(e) => onLinkClicked(e)}>
-                                <img src="./images/create_requisition_normal.png" alt="allemployees" /><br />All Employees
+                                <img src="./images/my_dashboard_selected.png" alt="allemployees" /><br />All Employees
                             </a>
                         </li>
                     )}
