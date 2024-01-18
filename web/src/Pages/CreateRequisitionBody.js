@@ -657,11 +657,11 @@ const CreateRequisitionBody = ({
             <div className="flex justify-content-between gap-5 ">
               <div className="flex flex-column w-5 gap-2">
                 <label htmlFor="experience" className="font-bold text-sm">
-                  Experience
+                  Experience<RedAsterisk />
                 </label>
                 <div className="p-col-7">
                   <label className="font-bold text-sm label-with-padding-right">
-                    Min<RedAsterisk />
+                    Min
                   </label>
                   <DropdownComponent
                     value={formData.minExperience}
@@ -674,7 +674,7 @@ const CreateRequisitionBody = ({
                   />
 
                   <label className="font-bold text-sm label-with-padding-left label-with-padding-right">
-                    Max<RedAsterisk />
+                    Max
                   </label>
                   <DropdownComponent
                     value={formData.maxExperience}

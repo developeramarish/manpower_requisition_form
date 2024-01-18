@@ -9,7 +9,7 @@ const InputNumberComponent = ({id,value,onChange,disable,maxLength,useGrouping,o
       onValueChange={onChange}
       disabled={disable}
       maxLength={maxLength}
-      className={className}
+      className={`bg-gray-100`}
       useGrouping={useGrouping}
       onBlur={onBlur}
     />
