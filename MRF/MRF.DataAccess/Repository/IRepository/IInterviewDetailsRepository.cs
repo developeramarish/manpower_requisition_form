@@ -9,6 +9,6 @@ namespace MRF.DataAccess.Repository.IRepository
 {
     public interface IInterviewDetailsRepository: IRepository<InterviewDetailsViewModel>
     {
-        public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId);
+        public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId, int roleId, int userId);
     }
 }

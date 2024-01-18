@@ -43,8 +43,85 @@ export async function getData(url) {
  
   return fetch(url, options)
     .then((response) => response.json())
+    // .then((response) => response)
     .catch((error) => error);
 }
+
+
+export async function getDataAPI(url) {
+  const accessToken = storageService.getData("token");
+  
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+
+  const options = {
+    method: "GET",
+    headers: headers,
+  };
+ 
+  return fetch(url, options)
+    // .then((response) => response.json())
+    .then((response) => response)
+    .catch((error) => error);
+}
+
+export async function postData(url, data) {
+  const accessToken = storageService.getData("token");
+
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+  headers.append("Content-Type", "application/json");
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(data), 
+  };
+
+  return fetch(url, options)
+    .then((response) => response)
+    .catch((error) => error);
+};
+
+export async function putData(url, data) {
+  const accessToken = storageService.getData("token");
+
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+  headers.append("Content-Type", "application/json");
+
+  const options = {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify(data), // Convert data to JSON format
+  };
+  return fetch(url, options)
+  .then((response) => response)
+  .catch((error) => error);
+};
+
+export async function deleteData(url) {
+  const accessToken = storageService.getData("token");
+
+  const headers = new Headers();
+  const bearer = `Bearer ${accessToken}`;
+
+  headers.append("Authorization", bearer);
+
+  const options = {
+    method: "DELETE",
+    headers: headers,
+  };
+  return fetch(url, options)
+  .then((response) => response.json())
+  .catch((error) => error);
+};
 
 export const getKeyFromLocation = () => {
   return window.location.hash.split("#/")[1];
@@ -84,6 +161,7 @@ export const salaryInLPA = (value) => {
 };
 
 export const filterSelectedColumn = (rowData, selectedColum) => {
+  
   const filterData = rowData.resultGroups.find(
     (obj) => obj.candidatestatus == selectedColum
   );
@@ -94,13 +172,14 @@ export const filterSelectedColumn = (rowData, selectedColum) => {
 
 export const filterResultGroupByCandidatestatus = (data, targetColumn) => {
   const filteredData = data.map((item) => {
-    const { mrfId, referenceno, resultGroups } = item;
+    const { mrfId, referenceno,positionTitle, resultGroups } = item;
 
     const filteredResultGroup = resultGroups
       .filter((result) => targetColumn.includes(result.candidatestatus));
     return {
       mrfId,
       referenceno,
+      positionTitle,
       resultGroups: filteredResultGroup,
     };
   });

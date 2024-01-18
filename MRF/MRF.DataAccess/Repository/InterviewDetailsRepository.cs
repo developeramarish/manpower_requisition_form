@@ -19,7 +19,7 @@ namespace MRF.DataAccess.Repository
             _db = db;
         }
 
-        public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId)
+        public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId,int roleId,int userId)
         {
             /* take list from Interview reviewer assigned to mrfId   */
             IQueryable<InterviewDetailsViewModel> Mrfinterviewmap =
@@ -70,6 +70,18 @@ namespace MRF.DataAccess.Repository
                                                                     Attachment = Attachment.FilePath,
                                                                 };
 
+            /* fetch interviewfeedback */
+            IQueryable<InterviewDetailsViewModel> interviewfeedback = from mrfDetails in _db.Mrfdetails
+                                                                join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
+                                                                join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
+                                                                join InterviewFeedback in _db.CandidateInterviewFeedback on Ivaluation.Id equals InterviewFeedback.CandidateId
+                                                                      where mrfDetails.Id == mrfId
+                                                                select new InterviewDetailsViewModel
+                                                                {
+                                                                    EvaluationFeedbackId= InterviewFeedback.Id,
+                                                                };
+            
+
             /*IstatusGrouped contains only the latest status for each CandidateId.*/
             var statusGrouped = from mrfDetails in _db.Mrfdetails
                                 join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
@@ -114,6 +126,7 @@ namespace MRF.DataAccess.Repository
                                                                   CandidateId = Candidate.Id,
                                                                   PositionTitle = pos.Name,
                                                                   CandidateName = Candidate.Name,
+                                                                  mrfStatusId = mrfDetails.MrfStatusId,
                                                               };
 
             IQueryable<InterviewDetailsViewModel> secondmerge = from q in firstlist
@@ -131,7 +144,7 @@ namespace MRF.DataAccess.Repository
                                                                     PositionTitle = q.PositionTitle,
                                                                     InterviewerEmployeeIds = i.InterviewerEmployeeIds,
                                                                     CandidateName=q.CandidateName,
-
+                                                                    mrfStatusId = q.mrfStatusId,
                                                                 };
 
 
@@ -150,6 +163,7 @@ namespace MRF.DataAccess.Repository
                                                                    PositionTitle = q.PositionTitle,
                                                                    CandidateName= q.CandidateName,
                                                                    InterviewerEmployeeIds = i.InterviewerEmployeeIds == "" ? q.InterviewerEmployeeIds : i.InterviewerEmployeeIds,
+                                                                   mrfStatusId = q.mrfStatusId,
 
                                                                };
 
@@ -170,7 +184,7 @@ namespace MRF.DataAccess.Repository
                                                                    CandidateName=q.CandidateName,   
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = i.Attachment == null ? "" : i.Attachment,
-
+                                                                   mrfStatusId = q.mrfStatusId,
                                                                };
 
 
@@ -195,6 +209,7 @@ namespace MRF.DataAccess.Repository
                                                                    EvalutionStatus = i != null ? i.EvalutionStatus : "",  // Check for null outside the query
                                                                    CandidateStatusChangedOnUtc = i == null ? DateTime.MinValue : i.CandidateStatusChangedOnUtc ?? DateTime.MinValue,
                                                                    InterviewevaluationId = i != null ? i.InterviewevaluationId ?? 0 : 0,
+                                                                   mrfStatusId = q.mrfStatusId,
                                                                };
 
             List<InterviewDetailsViewModel> queryResults = finalmerge.ToList();

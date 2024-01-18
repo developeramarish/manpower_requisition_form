@@ -43,151 +43,17 @@ const ReferenceBodyTemplate = (mrf) => {
   // const roleId = storageService.getData("profile").roleId;
   // const roleId = mrf.roleId;
   const mrfRef = mrf.referenceNo;
-// console.log(mrf)
-  switch (mrf.mrfStatusId) {
-    case MRF_STATUS.draft:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          role={mrf.roleId}
-          status={mrf.mrfStatus}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.submToHr:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.open:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          role={mrf.roleId}
-          status={mrf.mrfStatus}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.resubReq: 
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.rejected:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.closed:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.withdrawn:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.onHold:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    // case MRF_STATUS.hodapproval:
-    //   return (
-    //     <MrfLink
-    //       mrfRef={mrfRef}
-    //       mrfId={mrf.mrfId}
-    //       status={mrf.mrfStatus}
-    //       role={mrf.roleId}
-    //       statusId={mrf.mrfStatusId}
-    //     />
-    //   );
-    // case MRF_STATUS.cooapproval:
-    //   return (
-    //     <MrfLink
-    //       mrfRef={mrfRef}
-    //       mrfId={mrf.mrfId}
-    //       status={mrf.mrfStatus}
-    //       role={mrf.roleId}
-    //       statusId={mrf.mrfStatusId}
-    //     />
-    //   );
-    case MRF_STATUS.awaitCooApproval:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.awaitHodApproval:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-    case MRF_STATUS.awaitfinanceHeadApproval:
-    
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-   
-    case MRF_STATUS.recivedfinanceHeadApproval:
-      return (
-        <MrfLink
-          mrfRef={mrfRef}
-          mrfId={mrf.mrfId}
-          status={mrf.mrfStatus}
-          role={mrf.roleId}
-          statusId={mrf.mrfStatusId}
-        />
-      );
-  }
+
+return (
+  <MrfLink
+    mrfRef={mrfRef}
+    mrfId={mrf.mrfId}
+    role={mrf.roleId}
+    status={mrf.mrfStatus}
+    statusId={mrf.mrfStatusId}
+  />
+);
+  
 };
 
 export default ReferenceBodyTemplate;

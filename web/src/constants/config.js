@@ -1,5 +1,5 @@
 export const APP_KEY = "MRF_v1.0";
- const APP = "https://10.22.11.101:90";
+const APP = "https://10.22.11.101:90";
 //const APP="https://localhost:7128";
 const APIPath=`${APP}/api/`;
 export const API_URL = {
@@ -11,8 +11,10 @@ export const API_URL = {
   MY_REQUISITION: `${APIPath}Mrfdetail/GetMrfDetails/GetMrfDetails`,
   RESUME_SUMMARY_POPUP: `${APIPath}Mrfresumereviewermap/GetResumeStatusDetails/GetResumeStatusDetails?`,
   RESUME_SUMMARY_POST: `${APIPath}Candidatedetail/Put/`,
-  INTERVIEW_FEEDBACK: `${APIPath}CandidateInterviewFeedback`,
-  INTERVIEW_FEEDBACK_MASTER: `${APIPath}evaluationfeedbackmaster`,
+  INTERVIEW_FEEDBACK: `${APIPath}CandidateInterviewFeedback/GetByCandidate`,
+  INTERVIEW_FEEDBACK_POST: `${APIPath}CandidateInterviewFeedback/POST`,
+  INTERVIEW_EVALUATION: `${APIPath}interviewevaluation/`,
+  INTERVIEW_FEEDBACK_MASTER: `${APIPath}Evaluationfeedback`,
   MRF_PARTIAL_STATUS_UPDATE: `${APIPath}Mrfdetail/PartialUpdateMRFStatus/`,
   GET_CREATE_REQUISITION_DEPARTMENT: `${APIPath}Subdepartment/GetInfo/`,
   GET_CREATE_REQUISITION_DEATILS: `${APIPath}Mrfdetail/GetRequisition/`,
@@ -24,6 +26,13 @@ export const API_URL = {
   ADD_POSITIONTITLE: `${APIPath}PositionTitle`,
   ADD_PROJECT: `${APIPath}Project`,
   GET_CANDIDATE_DETAILS: `${APIPath}Candidatedetail/GetReferenceNoAndPositiontitle`,
+  GET_EMPLOYEE_DETAILS: `${APIPath}Employeedetails/GetEmployee`,
+  ALL_EMPLOYEE: `${APIPath}GetLDAPEmployee`,
+  UPDATE_EMPLOYEE:`${APIPath}Employeedetails/Put/`,
+  GET_ROLE:`${APIPath}Role`,
+  GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
+  ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assign&FileName=`,
+  ASSIGNMENT_POST:`${APIPath}Attachment`,
 };
 
 export const FILE_URL = {
@@ -41,6 +50,11 @@ export const ROUTES = {
   edit_requisition: "edit_requisition",
   add_candidate: "add_candidate",
   view_candidate: "view_candidate",
+  resume_summary:"resume_summary",
+  my_resume:"my_resume",
+  employee_edit:"employee_edit",
+  employee:"employee",
+  allemployees:"allemployees",
 };
 
 export const MRF_STATUS = {
@@ -58,12 +72,24 @@ export const MRF_STATUS = {
   awaitCooApproval: 12,
   awaitfinanceHeadApproval: 13,
   recivedfinanceHeadApproval: 14,
-  mrfTransferToNew: 15,
+  bypassFinanceHeadApproval:15,
+  mrfTransferToNew: 16,
 };
 
+export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
+  if((roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.resumeReviwer)  && [
+    MRF_STATUS.closed,MRF_STATUS.rejected,MRF_STATUS.withdrawn
+  ].includes(mrfstatusId)
+  ){
+    return  true;
+  }
+ return  false;
+}
 
-
-
+export const COUNTRIES = [
+  { name:<> <span style={{ marginRight: '60px' }}>India </span><span>+91</span></>, code: 'IN' },
+  { name:<> <span style={{ marginRight: '85px' }}>US </span><span>+1</span></>, code: 'US' },
+];
 
 export const ROLES = {
   superAdmin: 1,
@@ -134,8 +160,8 @@ export const FORM_SCHEMA_CR = {
   replaceJustification: "",
   jobDescription: "",
   skills: "",
-  resumeReviewerEmployeeIds: [],
-  interviewerEmployeeIds: [],
+  resumeReviewerEmployeeIds:"",
+  interviewerEmployeeIds: "",
   hiringManagerId: 0,
   hiringManagerEmpId: 0,
   functionHeadId: 0,
@@ -154,3 +180,101 @@ export const FORM_SCHEMA_CR = {
 
   
 };
+
+export const emailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+  export const isFormDataEmptyForSubmit = (formData) => {
+    if (formData === undefined) {
+      return true; // Treat it as empty if undefined
+    }
+  
+    return Object.keys(formData).filter((key) => {
+      const value = formData[key];
+  
+      // Check specific condition for certain fields, and general check for others
+      if (
+        (value === "" || value === 0 || value === null ) &&
+        [
+          "positionTitleId", "departmentId", 
+          "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
+          "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId",
+          "locationId", "qualificationId", "justification",
+          "minTargetSalary", "maxTargetSalary","vacancyTypeId",
+           "jobDescription","resumeReviewerEmployeeIds","interviewerEmployeeIds",
+          "skills"
+        ].includes(key)
+      ) {
+        return true;
+      }
+  
+      // Additional check for fields related to replacements
+      if (formData.isReplacement) {
+        if (
+          ["replaceJustification", "employeeName","emailId","employeeCode","lastWorkingDate",
+          "annualCtc","annualGross"].includes(key) &&
+          value === ""
+        ) {
+          return true;
+        }
+      }
+  
+      return false;
+    });
+  };
+  
+
+  export const isFormDataEmptyForSaveasDraft = (formData) => {
+    if (formData === undefined) {
+      return true; // Treat it as empty if undefined
+    }   
+
+    return Object.keys(formData).filter((key) => {
+      const value = formData[key];
+  
+      // Check specific condition for certain fields, and general check for others
+      if (
+        (value === "" || value === 0 || value === null) &&
+        [
+          "positionTitleId", "departmentId", 
+          "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
+          "reportsToEmployeeId",  "minGradeId", "maxGradeId","vacancyTypeId",
+          "locationId"
+        ].includes(key)
+      ) {
+        return true;
+      }
+  
+      // Additional check for fields related to replacements
+      if (formData.isReplacement) {
+        if (
+          ["replaceJustification", "employeeName","emailId","employeeCode","lastWorkingDate",
+          "annualCtc","annualGross"].includes(key) &&
+          value === ""
+        ) {
+          return true;
+        }
+      }
+  
+      return false;
+    });
+  };
+
+ 
+  export const isFormDataEmptyForAddCandidate=(formData)=>{
+    if(formData===undefined){
+      return true;
+    }
+    
+    return Object.keys(formData).filter((key)=>{
+      const value =formData[key];
+    if((value ==="" || value===0|| value===null) && [
+      "name","emailId","contactNo","sourceId"
+    ].includes(key)
+    ){
+      return true;
+    }
+
+    return false;
+    })
+
+  }

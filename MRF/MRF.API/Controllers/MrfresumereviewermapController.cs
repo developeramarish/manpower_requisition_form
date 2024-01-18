@@ -221,10 +221,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetResumeStatusDetails(int id,bool DashBoard)
+        public ResponseDTO GetResumeStatusDetails(int id,bool DashBoard,int roleId,int userId)
         {
             _logger.LogInfo($"Fetching All Mrf resume reviewer map by Id: {id}");
-            List<ResumeDetailsViewModel> ResumeDetails = _unitOfWork.ResumeDetail.GetResumeStatusDetails(id);
+            List<ResumeDetailsViewModel> ResumeDetails = _unitOfWork.ResumeDetail.GetResumeStatusDetails(id, roleId, userId);
             if (ResumeDetails == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");

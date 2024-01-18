@@ -4,6 +4,7 @@ using Moq;
 using MRF.Utility;
 using Microsoft.Extensions.Hosting;
 using MRF.DataAccess.Repository;
+using Microsoft.Extensions.Configuration;
 
 namespace MRF.API.Test.Controllers
 {
@@ -16,7 +17,8 @@ namespace MRF.API.Test.Controllers
 
         public Mock<IHostEnvironment> MockHostEnvironment { get; }
         public Mock<IUserService> MockUserService { get; }
-
+        public Mock<IConfiguration> Mockconfiguration { get; }
+         
         public TestFixture()
         {
             MockUnitOfWork = new Mock<IUnitOfWork>();
@@ -24,8 +26,9 @@ namespace MRF.API.Test.Controllers
             MockEmailService = new Mock<IEmailService>();
             MockHostEnvironment = new Mock<IHostEnvironment>();
             MockUserService = new Mock<IUserService>();
-          
-        Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object,MockHostEnvironment.Object);
+            Mockconfiguration = new Mock<IConfiguration>();
+
+            Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object,MockHostEnvironment.Object);
         }
     }
 }

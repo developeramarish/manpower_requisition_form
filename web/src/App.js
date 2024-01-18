@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import {
   detectDevice,
   getData,
+  getDataAPI,
   getKeyFromLocation,
   isTouchDevice,
   navigateTo,
@@ -32,8 +33,12 @@ import Dashboard from "./containers/Dashboard";
 import MyRequisitions from "./containers/MyRequisitions";
 import CreateRequisition from "./Pages/CreateRequisition";
 import AddCandidate from "./Pages/AddCandidate";
-import ViewCandidate from "./Pages/ViewCandidate";
 import Footer from "./components/Footer";
+import EmployeDetails from "./Pages/EmployeDetails";
+import AllEmployees  from "./Pages/AllEmployees";
+import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
+import MyResume from "./components/MyResume";
+import ViewCandidate from "./components/ViewCandidate";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
@@ -81,7 +86,8 @@ function App() {
   }, [accounts]);
 
   async function callLoginAPI() {
-    const response = await getData(graphConfig.graphMeEndpoint);
+    const result = await getDataAPI(graphConfig.graphMeEndpoint);
+    const response=await result.json();
     var oData =
       response && response.hasOwnProperty("result") ? response.result : null;
     if (oData === null) {
@@ -155,6 +161,18 @@ function App() {
                     userId={profile.employeeId}
                   />
                 )}
+                {currentPageKey === "allemployees" && (
+                  <AllEmployees
+                  />
+                )}
+                {currentPageKey === "employee" && (
+                  <EmployeDetails
+                  />
+                )}
+                 {currentPageKey === "employee_edit" && (
+                  <EmployeeDtailsEdit
+                  />
+                )}
                 {currentPageKey === "add_candidate" && (
                   <AddCandidate 
                   reqId={params.mrfId}
@@ -167,8 +185,12 @@ function App() {
                   />
                 )}
                 {currentPageKey === "view_candidate" && (
-                  <ViewCandidate
-                    
+                  <ViewCandidate/>
+                )}
+                {currentPageKey === "my_resume" && (
+                  <MyResume
+                  roleId={profile.roleId}
+                  userId={profile.employeeId}
                   />
                 )}
                 {currentPageKey === "edit_requisition" && (
@@ -188,9 +210,13 @@ function App() {
 
       <UnauthenticatedTemplate>
         <Login />
-        <h5 className="card-title">
+        <div className="login-load">
+
+        <img src="./images/start_Logo.png" alt="mrf logo" />
+        </div>
+        {/* <h5 className="card-title">
           Please sign-in to see your profile information.
-        </h5>
+        </h5> */}
       </UnauthenticatedTemplate>
     </div>
   );

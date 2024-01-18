@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { changeDateFormat, getData, salaryInLPA } from "../constants/Utils";
+import { changeDateFormat, getData, getDataAPI, salaryInLPA } from "../constants/Utils";
 import { API_URL } from "../constants/config";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -24,9 +24,9 @@ const MyRequisitions = ({roleId,userId}) => {
 	const [reqData, setReqData] = useState([]);
 	useEffect(() => {
 		async function getReqData() {   
-			const apiUrl = API_URL.MY_REQUISITION + "?statusId=0&roleId=" + roleId+"&userId="+userId;
-			const data = await getData(apiUrl);
-			setReqData(data.result);
+			const result = await getDataAPI(`${API_URL.MY_REQUISITION}?statusId=0&roleId=${roleId}&userId=${userId}`);
+			const response=await result.json();
+			setReqData(response.result);
 		}
 
 		if (roleId) {
@@ -40,6 +40,12 @@ const MyRequisitions = ({roleId,userId}) => {
 			header: "MRF ID",
 			body: ReferenceBodyTemplate,
 			bodyClassName: "ref-col",
+		},
+		{
+			field: "positionTitle",
+			header: "Position Title",
+			bodyClassName: " mrfdraft-ref-col  ",
+			sortable: true,
 		},
 		{
 			field: "name",
@@ -92,7 +98,6 @@ const MyRequisitions = ({roleId,userId}) => {
 			<h3 className="my-req-title">My Requisition</h3>
 			<div className="req-table">
 				<DataTable
-					header=""
 					value={reqData}
 					paginator={reqData.length > 10}
 					removableSort

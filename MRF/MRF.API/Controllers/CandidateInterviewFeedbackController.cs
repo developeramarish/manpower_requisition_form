@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CandidateInterviewFeedbackController : ControllerBase
     {
@@ -68,6 +68,26 @@ namespace MRF.API.Controllers
             return _response;
         }
 
+        [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(CandidateInterviewFeedback))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetByCandidate(int id)
+        {
+            _logger.LogInfo($"Fetching All Gender by Id: {id}");
+            List<CandidateInterviewFeedback> candidateInterviewFeedback = _unitOfWork.CandidateInterviewFeedback.GetByCandidate(id);
+            if (candidateInterviewFeedback == null)
+            {
+                _logger.LogError($"No result found by this Id:{id}");
+            }
+            _response.Result = candidateInterviewFeedback;
+            return _response;
+        }
+
 
         // POST api/<CandidateInterviewFeedbackController>
         [HttpPost]
@@ -80,23 +100,36 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidateInterviewFeedbackResponseModel Post([FromBody] CandidateInterviewFeedbackRequestModel request)
         {
-            var candidateInterviewFeedback = new CandidateInterviewFeedback
+            if (request.EvaluationFeedBack != null)
             {
-                CandidateId = request.CandidateId,
-                EvaluationFeedBackId = request.EvaluationFeedBackId,
-                InterviewRound = request.InterviewRound,
-                Comments = request.Comments,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
-            };
+                string[] evaluationFeedBackArray = request.EvaluationFeedBack.Replace("ev", "").Split(';');
+                //int[] EvaluationFeedBackId = Array.ConvertAll(evaluationFeedBackArray, int.Parse);
+                string[] Comments = request.Comments.Split(';');
+                for (int i = 0; i < evaluationFeedBackArray.Count(); i++)
+                {
+                    if (evaluationFeedBackArray[i] != "")
+                    {
+                        var candidateInterviewFeedback = new CandidateInterviewFeedback
+                        {
+                            CandidateId = request.CandidateId,
+                            EvaluationFeedBackId = Convert.ToInt32(evaluationFeedBackArray[i]),
+                            InterviewRound = request.InterviewRound,
+                            Comments = Comments[i],
+                            FeedbackAsDraft = request.FeedbackAsDraft,
+                            CreatedByEmployeeId = request.CreatedByEmployeeId,
+                            CreatedOnUtc = request.CreatedOnUtc,
+                            UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                            UpdatedOnUtc = request.UpdatedOnUtc
+                        };
 
-            _unitOfWork.CandidateInterviewFeedback.Add(candidateInterviewFeedback);
-            _unitOfWork.Save();
 
-            _responseModel.Id = candidateInterviewFeedback.Id;           
+                        _unitOfWork.CandidateInterviewFeedback.Add(candidateInterviewFeedback);
+                        _unitOfWork.Save();
 
+                        _responseModel.Id = candidateInterviewFeedback.Id;
+                    }
+                }
+            }
             return _responseModel;
         }
 

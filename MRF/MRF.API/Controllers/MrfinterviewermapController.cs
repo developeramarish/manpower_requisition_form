@@ -228,10 +228,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetInterviewDetails(int id, bool DashBoard)
+        public ResponseDTO GetInterviewDetails(int id, bool DashBoard,int roleId,int userId)
         {
             _logger.LogInfo($"Fetching All Mrf Interviewer Map by Id: {id}");
-            List<InterviewDetailsViewModel> InterviewDetails = _unitOfWork.InterviewDetail.GetInterviewDetails(id);
+            List<InterviewDetailsViewModel> InterviewDetails = _unitOfWork.InterviewDetail.GetInterviewDetails(id, roleId, userId);
             if (InterviewDetails == null)
             {
                 _logger.LogError($"No result found by this Id: {id}");

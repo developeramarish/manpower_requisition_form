@@ -1,14 +1,15 @@
 .footer{
 /* background-color: #d32f2e; */
-background-color: #ffffff;
-height: 5%;
+background-color: #f6f6f6;
+height: 55px;
 text-align: center;
-font-size: medium;
+font-size: 14px;
 font-weight: 500;
 padding: 15px;
-color: red;
+color:  #979799;
+
 text-align: right;
 /* margin: 2px; */
-border-top: 1px solid rgb(221, 221, 221);
+/* border-top: 1px solid rgb(221, 221, 221); */
 /* background-color: rgba(0, 0, 0, 0.2); */
 }

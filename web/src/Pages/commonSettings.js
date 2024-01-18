@@ -1,14 +1,15 @@
 import { MRF_STATUS } from "../constants/config";
 
 export const commonSettings = {
-  setReadOnly: false,
-  setHiringManager: false,
-  setSiteHRSPOCApproval: false,
-  setHodapproval: false,
-  setCooapproval: false,
-  setFinanceHeadApproval: false,
-  awatingFinance: false,
-  recievedFinance: false,
+  setReadOnly: true,
+  setHiringManager: true,
+  setSiteHRSPOCApproval: true,
+  setHodapprovalName: true,
+  setHodapprovalDate: true,
+  setCooapprovalName: true,
+  setCooapprovalDate: true,
+  setFinanceHeadApprovalName: true,
+  setFinanceHeadApprovalDate: true,
 };
 
 export function applySettingsBasedOnRoleAndStatus(
@@ -16,8 +17,7 @@ export function applySettingsBasedOnRoleAndStatus(
   mrfStatusId,
   roleId
 ) {
-  console.log(getReqRoleId);
-  console.log(roleId);
+  
   switch (getReqRoleId) {
     case 3 /* MRFOwner */:
       if (
@@ -26,15 +26,28 @@ export function applySettingsBasedOnRoleAndStatus(
       ) {
         applyCommonSettings({
           setReadOnly: false,
+          setHiringManager: true,
+          setSiteHRSPOCApproval: true,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
+          awatingFinance: true,
+          recievedFinance: true,
         });
       } else {
         applyCommonSettings({
           setReadOnly: true,
-          setHodapproval: true,
           setHiringManager: true,
           setSiteHRSPOCApproval: true,
-          setFinanceHeadApproval: true,
-          setCooapproval: true,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
           awatingFinance: true,
           recievedFinance: true,
         });
@@ -44,73 +57,125 @@ export function applySettingsBasedOnRoleAndStatus(
       if (mrfStatusId == MRF_STATUS.submToHr) {
         applyCommonSettings({
           setReadOnly: true,
-          setHodapproval: false,
           setHiringManager: false,
           setSiteHRSPOCApproval: false,
-          setFinanceHeadApproval: true,
-          setCooapproval: true,
+          setHodapprovalName: false,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
           awatingFinance: true,
           recievedFinance: true,
         });
       } else if (mrfStatusId == MRF_STATUS.awaitHodApproval) {
         applyCommonSettings({
           setReadOnly: true,
-          setHodapproval: true,
           setHiringManager: false,
           setSiteHRSPOCApproval: false,
-          setFinanceHeadApproval: true,
-          setCooapproval: false,
+          setHodapprovalDate: false,
+          setHodapprovalName: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
+          awatingFinance: true,
+          recievedFinance: true,
+        });
+      } else if (mrfStatusId == MRF_STATUS.hodapproval) {
+        applyCommonSettings({
+          setReadOnly: true,
+          setHiringManager: false,
+          setSiteHRSPOCApproval: false,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: false,
+          setFinanceHeadApprovalDate: true,
           awatingFinance: true,
           recievedFinance: true,
         });
       } else if (mrfStatusId == MRF_STATUS.awaitCooApproval) {
         applyCommonSettings({
           setReadOnly: true,
-          setHodapproval: true,
           setHiringManager: false,
           setSiteHRSPOCApproval: false,
-          setFinanceHeadApproval: false,
-          setCooapproval: true,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: false,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
+          awatingFinance: true,
+          recievedFinance: true,
+        });
+      } else if (mrfStatusId == MRF_STATUS.cooapproval || mrfStatusId==MRF_STATUS.open) {
+        applyCommonSettings({
+          setReadOnly: true,
+          setHiringManager: false,
+          setSiteHRSPOCApproval: false,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
           awatingFinance: true,
           recievedFinance: true,
         });
       } else if (mrfStatusId == MRF_STATUS.awaitfinanceHeadApproval) {
         applyCommonSettings({
           setReadOnly: true,
-          setHodapproval: true,
           setHiringManager: false,
           setSiteHRSPOCApproval: false,
-          setFinanceHeadApproval: true,
-          setCooapproval: true,
-          awatingFinance: false,
-          recievedFinance: true,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: false,
         });
-      } else {
+      } else if (mrfStatusId == MRF_STATUS.recivedfinanceHeadApproval) {
         applyCommonSettings({
           setReadOnly: true,
-          setHodapproval: true,
+          setHiringManager: false,
+          setSiteHRSPOCApproval: false,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: false,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
+        });
+      }else if (mrfStatusId == MRF_STATUS.bypassFinanceHeadApproval) {
+        applyCommonSettings({
+          setReadOnly: true,
+          setHiringManager: false,
+          setSiteHRSPOCApproval: false,
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: false,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,
+        });
+      }else {
+        applyCommonSettings({ setReadOnly: true,
           setHiringManager: true,
           setSiteHRSPOCApproval: true,
-          setFinanceHeadApproval: true,
-          setCooapproval: true,
-          awatingFinance: true,
-          recievedFinance: true,
-        });
+          setHodapprovalName: true,
+          setHodapprovalDate: true,
+          setCooapprovalName: true,
+          setCooapprovalDate: true,
+          setFinanceHeadApprovalName: true,
+          setFinanceHeadApprovalDate: true,});
       }
 
     default:
       if (roleId === 3) {
         // applyCommonSettings(commonSettings);
-        applyCommonSettings({
-          setReadOnly: false,
-          setHodapproval: true,
-          setHiringManager: true,
-          setSiteHRSPOCApproval: true,
-          setFinanceHeadApproval: true,
-          setCooapproval: true,
-          awatingFinance: true,
-          recievedFinance: true,
-        });
+        applyCommonSettings({ setReadOnly: false });
         break;
       }
   }

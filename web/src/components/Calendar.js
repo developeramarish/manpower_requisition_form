@@ -2,7 +2,7 @@
 import React from "react";
 import { Calendar } from "primereact/calendar";
 
-const CalendarComponent = ({ value, onChange, minDate,inputClassName,disable ,maxDate }) => {
+const CalendarComponent = ({ value, onChange, minDate,inputClassName,disable, className,maxDate }) => {
   return (
     <Calendar
       value={value}
@@ -12,6 +12,7 @@ const CalendarComponent = ({ value, onChange, minDate,inputClassName,disable ,ma
       disabled ={disable}
       minDate={minDate} 
       maxDate={maxDate}
+      className={className}
     />
   );
 };

@@ -57,10 +57,11 @@ const DashMrfStatus = ({
     );
   }
 
-	const uploadedOnBodyTemplate = (data) => {
-		return changeDateFormat(data.createdOnUtc);
-	};
 
+  		const uploadedOnBodyTemplate = (data) => {
+	  return changeDateFormat(data.createdOnUtc);
+	};
+	
 	const SalaryTemplate = (mrf) => {
 		return <h4 className="mrfdraft-col">{salaryInLPA(mrf.salary)}</h4>;
 	};
@@ -71,6 +72,12 @@ const DashMrfStatus = ({
 			header: "MRF ID",
 			body: ReferenceBodyTemplate,
 			bodyClassName: " mrfdraft-ref-col  ",
+			sortable: true,
+		},
+		{
+			field: "positionTitle",
+			header: "Position Title",
+			bodyClassName: "mrfdraft-col mrfdraft-ref-col  ",
 			sortable: true,
 		},
 		{
@@ -101,7 +108,7 @@ const DashMrfStatus = ({
 		},
 		{
 			field: "vacancyNo",
-			header: "No. of PostionCreated On",
+			header: "No. of Position",
 			bodyClassName: "mrfdraft-col ",
 			sortable: true,
 		},

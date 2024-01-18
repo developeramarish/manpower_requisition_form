@@ -9,6 +9,6 @@ namespace MRF.DataAccess.Repository.IRepository
 {
     public interface IResumeDetailsRepository: IRepository<ResumeDetailsViewModel>
     {
-        public List<ResumeDetailsViewModel> GetResumeStatusDetails(int mrfId);
+        public List<ResumeDetailsViewModel> GetResumeStatusDetails(int mrfId,int roleId,int userId);
     }
 }

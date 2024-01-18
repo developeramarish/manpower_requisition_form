@@ -20,5 +20,24 @@ namespace MRF.DataAccess.Repository
         {
             _db.CandidateInterviewFeedback.Update(candidateInterviewFeedback);
         }
+
+        public List<CandidateInterviewFeedback> GetByCandidate(int CandidateId)
+        {
+            List<CandidateInterviewFeedback> list=(from m in _db.CandidateInterviewFeedback
+                                                  join e in _db.Evaluationfeedbackmaster on m.EvaluationFeedBackId equals e.Id
+                                                  where m.CandidateId == CandidateId
+                                                   orderby m.InterviewRound
+                                                   select new CandidateInterviewFeedback 
+                                                  { Id = m.Id, 
+                                                    CandidateId = m.CandidateId,
+                                                    EvaluationFeedBack=e.Description,
+                                                    InterviewRound=m.InterviewRound,
+                                                    Comments=m.Comments,
+                                                  })
+                                                  .ToList();
+
+            return list;
+        }
+
     }
 }
