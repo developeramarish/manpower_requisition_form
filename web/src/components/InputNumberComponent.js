@@ -1,6 +1,6 @@
 import React from "react";
 import { InputNumber } from "primereact/inputnumber";
-const InputNumberComponent = ({id,value,onChange,disable,maxLength,useGrouping}) => {
+const InputNumberComponent = ({id,value,onChange,disable,maxLength,useGrouping,onBlur, className}) => {
   return (
     <InputNumber
 
@@ -9,8 +9,9 @@ const InputNumberComponent = ({id,value,onChange,disable,maxLength,useGrouping})
       onValueChange={onChange}
       disabled={disable}
       maxLength={maxLength}
-      className={`bg-gray-100`}
+      className={className}
       useGrouping={useGrouping}
+      onBlur={onBlur}
     />
   );
 };

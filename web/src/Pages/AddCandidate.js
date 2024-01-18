@@ -6,18 +6,23 @@ import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
+import { ChevronDownIcon } from 'primereact/icons/chevrondown';
+import { ChevronRightIcon } from 'primereact/icons/chevronright';
 import {
   API_URL,
+  COUNTRIES,
   emailRegex,
   isFormDataEmptyForAddCandidate,
 } from "../constants/config";
 import { FILE_URL } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
 import InputNumberComponent from "../components/InputNumberComponent";
+import { Dropdown } from "primereact/dropdown";
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [submitBtnDisable,setSubmitBtnDisable]=useState(true);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
@@ -27,7 +32,7 @@ const AddCandidate = (reqId) => {
     mrfId: reqId.reqId,
     name: "",
     emailId: "",
-    contactNo: "",
+    contactNo: 0,
     resumePath: "",
     candidateStatusId: 1,
     createdByEmployeeId: storageService.getData("profile").employeeId,
@@ -158,6 +163,48 @@ let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
     navigateTo("my_requisition");
   };
 
+// const handleMinimum=(e)=>{
+//   const ConatctValue=e.target.value;
+//   // ConatctValue.toString
+//   // console.log(ConatctValue.toString().length)
+//   if(ConatctValue.length<=9 ){
+//     setFormData({ ...formData, contactNo: ConatctValue})
+//   }else{
+//     toastRef.current.showWarrningMessage("Contact Number is less than 10 Digit");
+//   }
+// }
+
+const selectedCountryTemplate = (option, props) => {
+  if (option) {
+    return (
+      <div className="flex align-items-center">
+        <img
+          alt={option.name}
+          src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
+          className={`mr-2 flag flag-${option.code.toLowerCase()}`}
+          style={{ width: '18px' }}
+        />
+        <div>{option.name}</div>
+      </div>
+    );
+  }
+
+  return <span>{props.placeholder}</span>;
+};
+
+const countryOptionTemplate = (option) => {
+  return (
+    <div className="flex align-items-center">
+      <img
+        alt={option.name}
+        src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
+        className={`mr-2 flag flag-${option.code.toLowerCase()}`}
+        style={{ width: '18px' }}
+      />
+      <div>{option.name}</div>
+    </div>
+  );
+};
 
   return (
     <div>
@@ -212,22 +259,43 @@ let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
                     Contact
                     <RedAsterisk />
                   </label>
-                  {/* <InputTextCp
+
+                  <div className="flex flex-row w-6 gap-2">
+
+                  <div className="flex flex-column  "><Dropdown
+        value={selectedCountry}
+        onChange={(e) => 
+          
+          setSelectedCountry(e.value)}
+        options={COUNTRIES}
+        optionLabel="name"
+        placeholder="Select a Country"
+        valueTemplate={selectedCountryTemplate}
+        itemTemplate={countryOptionTemplate}
+        className="w-full md:w-12rem"
+        // panelFooterTemplate={panelFooterTemplate}
+        dropdownIcon={(opts) => {
+          return opts.iconProps['data-pr-overlay-visible'] ? (
+            <ChevronRightIcon {...opts.iconProps} />
+          ) : (
+            <ChevronDownIcon {...opts.iconProps} />
+          );
+        }}
+      /></div>
+                  <div className="flex flex-column  "> <InputNumberComponent
                     id="contact"
                     onChange={(e) =>
                       setFormData({ ...formData, contactNo: e.target.value })
                     }
-                    value={formData.contactNo}
-                  /> */}
-                  <InputNumberComponent
-                    id="contact"
-                    onChange={(e) =>
-                      setFormData({ ...formData, contactNo: e.target.value })
-                    }
+                    // onChange={handleMinimum}
                     useGrouping={false}
                     maxLength={10}
+                    className="w-full md:w-30rem"
                     value={formData.contactNo}
-                  />
+                  /></div>
+
+                  </div>
+                 
                 </div>
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
