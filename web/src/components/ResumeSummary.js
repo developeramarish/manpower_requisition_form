@@ -158,7 +158,7 @@ const ResumeSummary = ({
     const reviewedByEmployeeIds = resumeRevierInArray.toString();
     const name = "string"; // this because we are handling data in backend it not save as string
     const emailId = "string";
-    const contactNo = 0;
+    const contactNo = "string";
     const id = data.candidateId;
     const candidateStatusId = data.candidateStatusId;
     const mrfId = data.mrfId;
@@ -297,11 +297,8 @@ const ResumeSummary = ({
   }
 
   const DataTableResume = ({ value, columns }) => {
-    console.log("rrrrrrrrrrrrrrrr");
-    console.log(value);
-    console.log(columns);
 
-    return (
+    return (<>
       <DataTable
         value={value}
         paginator={value.length > 5}
@@ -320,6 +317,8 @@ const ResumeSummary = ({
           />
         ))}
       </DataTable>
+      <ToastMessages ref={toastRef} />
+      </>
     );
   };
 
@@ -356,7 +355,6 @@ const ResumeSummary = ({
           <div className="resume-summary-table">
             <DataTableResume value={data} columns={columns} />
 
-            <ToastMessages ref={toastRef} />
           </div>
         </>
       )}

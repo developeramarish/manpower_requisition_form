@@ -6,27 +6,34 @@ import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
+import { ChevronDownIcon } from "primereact/icons/chevrondown";
+import { ChevronRightIcon } from "primereact/icons/chevronright";
+import { InputMask } from "primereact/inputmask";
 import {
   API_URL,
+  COUNTRIES,
   emailRegex,
   isFormDataEmptyForAddCandidate,
 } from "../constants/config";
 import { FILE_URL } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
 import InputNumberComponent from "../components/InputNumberComponent";
+import { Dropdown } from "primereact/dropdown";
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [submitBtnDisable,setSubmitBtnDisable]=useState(true);
+  const [submitBtnDisable, setSubmitBtnDisable] = useState(true);
+  // const [selectedCountry, setSelectedCountry] = useState("");
+  const [mask, setMask] = useState("");
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
-  // console.log(referenceNo);
   const formSchema = {
     id: 0,
     mrfId: reqId.reqId,
     name: "",
     emailId: "",
+    countrycode: 0,
     contactNo: "",
     resumePath: "",
     candidateStatusId: 1,
@@ -42,7 +49,6 @@ const AddCandidate = (reqId) => {
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
   const [dropdowns, setDropdownData] = useState();
-  
   useEffect(() => {
     // Fetch the data for all the dropdowns
     fetch(API_URL.ADD_SOURCE_NAME)
@@ -59,6 +65,15 @@ const AddCandidate = (reqId) => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log(formData.countrycode.code)
+    if(formData.countrycode.code==="IN"){
+      setMask("99-99-999999")
+    }else{
+      setMask("(999) 999-999")
+    }
+    }, [formData]);
+
   const RedAsterisk = () => <span className="text-red-500">*</span>;
 
   const formatAndShowErrorMessage = (emptyFields) => {
@@ -72,88 +87,92 @@ const AddCandidate = (reqId) => {
   };
 
   const handleEmail = (e) => {
-    const emailValue=formData.emailId;
+    const emailValue = formData.emailId;
     if (!emailRegex.test(emailValue)) {
       toastRef.current.showWarrningMessage("Invalid Email format");
       setSubmitBtnDisable(true);
-    }else{
+    } else {
       setSubmitBtnDisable(false);
     }
-    
   };
 
   const handleSubmit = async () => {
-    
-
     if (isFormDataEmptyForAddCandidate(formData).length > 0) {
       const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
       formatAndShowErrorMessage(emptyFieldss);
-    }else{
-
-const fileUploadData = new FormData();
-    fileUploadData.append("file", selectedFile);
-    console.log(fileUploadData)
-    try {
-      const fileUploadResponse = await fetch(
-        API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
-        {
-          method: "POST",
-          body: fileUploadData,
-        }
-      );
-
-      if (fileUploadResponse.ok) {
-        const data = {
-          id: 0,
-          mrfId: formData.mrfId,
-          name: formData.name,
-          emailId: formData.emailId,
-          contactNo: formData.contactNo,
-          resumePath: removeSpaces(formData.name) + ".pdf",
-          candidateStatusId: 1,
-          reviewedByEmployeeIds: "",
-          createdByEmployeeId: formData.createdByEmployeeId,
-          createdOnUtc: formData.createdOnUtc,
-          updatedByEmployeeId: formData.updatedByEmployeeId,
-          updatedOnUtc: formData.updatedOnUtc,
-          reason: "",
-          sourceId: formData.sourceId,
-        };
-        try {
-
-let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
-
-          if (response.ok) {
-            const responseData = await response.json();
-            console.log("Response Data:", responseData);
-            if(responseData.id===-1){
-              toastRef.current.showBadRequestMessage("Duplicate Candidate Name");
-            }
-            else{
-            toastRef.current.showSuccessMessage("Form submitted successfully!");
-            setTimeout(() => {
-              navigateTo("my_requisition");
-            }, 2000);}
-          } else {
-            console.error("Request failed with status:", response.status);
-            if (response.status === 400) {
-              toastRef.current.showBadRequestMessage(
-                "Bad request: " + response.url
-              );
-            }
+    } else {
+      const fileUploadData = new FormData();
+      fileUploadData.append("file", selectedFile);
+      console.log(fileUploadData);
+      try {
+        const fileUploadResponse = await fetch(
+          API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
+          {
+            method: "POST",
+            body: fileUploadData,
           }
-        } catch (error) {
-          console.error("Error:", error);
+        );
+
+        if (fileUploadResponse.ok) {
+          const data = {
+            id: 0,
+            mrfId: formData.mrfId,
+            name: formData.name,
+            emailId: formData.emailId,
+            contactNo: formData.contactNo,
+            resumePath: removeSpaces(formData.name) + ".pdf",
+            candidateStatusId: 1,
+            reviewedByEmployeeIds: "",
+            createdByEmployeeId: formData.createdByEmployeeId,
+            createdOnUtc: formData.createdOnUtc,
+            updatedByEmployeeId: formData.updatedByEmployeeId,
+            updatedOnUtc: formData.updatedOnUtc,
+            reason: "",
+            sourceId: formData.sourceId,
+          };
+          try {
+            let response = await postData(`${API_URL.ADD_CANDIDATE}`, data);
+
+            if (response.ok) {
+              const responseData = await response.json();
+              console.log("Response Data:", responseData);
+              if (responseData.id === -1) {
+                toastRef.current.showBadRequestMessage(
+                  "Duplicate Candidate Name"
+                );
+              } else {
+                toastRef.current.showSuccessMessage(
+                  "Form submitted successfully!"
+                );
+                setTimeout(() => {
+                  navigateTo("my_requisition");
+                }, 2000);
+              }
+            } else {
+              console.error("Request failed with status:", response.status);
+              if (response.status === 400) {
+                toastRef.current.showBadRequestMessage(
+                  "Bad request: " + response.url
+                );
+              }
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        } else {
+          if (fileUploadResponse.status === 400) {
+            toastRef.current.showBadRequestMessage(
+              "you have to upload Resume!"
+            );
+          }
+          console.error(
+            "Request failed with status:",
+            fileUploadResponse.status
+          );
         }
-      } else {
-        if (fileUploadResponse.status === 400) {
-          toastRef.current.showBadRequestMessage("you have to upload Resume!");
-        }
-        console.error("Request failed with status:", fileUploadResponse.status);
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
-    }
     }
   };
 
@@ -162,7 +181,38 @@ let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
     navigateTo("my_requisition");
   };
 
+  const handleMinimumContact=(e)=>{
+    const ConatctValue=e.target.value;
+    console.log(ConatctValue)
+    
+    console.log(ConatctValue.length)
+    if(formData.countrycode.code==="IN" && ConatctValue.length< 12){
+      toastRef.current.showWarrningMessage("Contact Number is less than 10 Digit");
+     
+    }else if(formData.countrycode.code==="US" && ConatctValue.length< 13){
+      toastRef.current.showWarrningMessage("Contact Number is less than 9 Digit");
+    }
+  }
 
+  const selectedCountryTemplate = (option, props) => {
+    if (option) {
+      return (
+        <div className="flex align-items-center">
+          <img
+            alt={option.name}
+            src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
+            className={`mr-2 flag flag-${option.code.toLowerCase()}`}
+            style={{ width: "18px" }}
+          />
+          <div>{option.name}</div>
+        </div>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
+  };
+
+  
   return (
     <div>
       <div className="flex bg-gray-200">
@@ -216,22 +266,35 @@ let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
                     Contact
                     <RedAsterisk />
                   </label>
-                  {/* <InputTextCp
-                    id="contact"
-                    onChange={(e) =>
-                      setFormData({ ...formData, contactNo: e.target.value })
-                    }
-                    value={formData.contactNo}
-                  /> */}
-                  <InputNumberComponent
-                    id="contact"
-                    onChange={(e) =>
-                      setFormData({ ...formData, contactNo: e.target.value })
-                    }
-                    useGrouping={false}
-                    maxLength={10}
-                    value={formData.contactNo}
-                  />
+
+                  <div className="flex flex-row w-6 gap-2">
+                    <div className="flex flex-column  ">
+
+<DropdownComponent  options={COUNTRIES}
+                        optionLabel="name"
+                        placeholder="Country code"
+                        value={formData.countrycode} 
+                         onChange={(e)=> setFormData({
+                          ...formData,
+                          countrycode: e.target.value,
+                        })} 
+                        className="w-full md:w-12rem" />
+
+                     
+                    </div>
+                    <div className="flex flex-column  ">
+                      <InputMask
+                        mask={mask}
+                        value={formData.contactNo}
+                          onChange={(e) =>
+                          setFormData({ ...formData, contactNo: e.target.value })
+                        }
+                        onBlur={handleMinimumContact}
+                        // autoClear={false}
+                        className="w-full md:w-30rem bg-gray-100"
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
@@ -272,8 +335,6 @@ let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
                 label="SUBMIT"
                 className="resume_update_btn"
                 onClick={() => handleSubmit()}
-          // disable={submitBtnDisable}
-          // disable={true}
               />
               <ToastMessages ref={toastRef} />
             </div>
