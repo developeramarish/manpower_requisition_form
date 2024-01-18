@@ -7,13 +7,12 @@ import { API_URL } from "../constants/config";
 import { navigateTo, postData } from "../constants/Utils";
 import ToastMessages from "./../components/ToastMessages";
 import { removeSpaces } from "./constant";
-const AssignmentUpload = ({ visible, data, onHide }) => {
+const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const toastRef = useRef(null);
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
-
 
   const handleSubmit = async () => {
     const fileUploadData = new FormData();
@@ -53,6 +52,8 @@ const AssignmentUpload = ({ visible, data, onHide }) => {
             toastRef.current.showSuccessMessage(
               "Assignment submitted successfully!"
             );
+onHide();
+refreshParent();
             
           } else {
             console.error("Request failed with status:", response.status);
@@ -80,10 +81,10 @@ const AssignmentUpload = ({ visible, data, onHide }) => {
 
   return (
     <>
-      <Dialog header={"Upload Assignment"} visible={visible} onHide={onHide}>
+      <Dialog header={"Upload Assignment"} visible={visible} onHide={onHide} className="w-4 h-17rem">
        
 
-        <div className="my-4">
+        <div className="mt-3 mb-8">
           <SingleFileUpload onChange={handleFileChange} />
         </div>
 

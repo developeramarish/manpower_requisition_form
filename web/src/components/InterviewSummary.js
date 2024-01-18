@@ -120,7 +120,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
             let response = await putData(`${API_URL.INTERVIEW_EVALUATION}${id}`,updateStatus);
        
           if (response.ok) {
-            const responseData = response.json();
+            const responseData =await response.json();
             if (responseData.statusCode === 409) {
               toastRef.current.showConflictMessage(responseData.message);
             } else {
@@ -128,6 +128,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
               toastRef.current.showSuccessMessage(
                 " Interview status updated successfully!"
               );
+              refreshParentComponent();
             }
           } else {
             console.error("Request failed with status:", response.status);
@@ -169,7 +170,9 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
           console.error("Error:", error);
         }
       };
- 
+      const refreshParentComponent = () => {
+        getIntData();
+      };
     const statusBodyTemplate = (interview, options) => {
        
         const handleDropdownChange = (e) => {
@@ -202,7 +205,6 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
     };
 
     const onUploadAssginmentClick=(interview)=>{
-      console.log(interview)
       setCandidateInterviewDetails(interview)
       setshowUploadAssignment(true);
     }
@@ -224,7 +226,6 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
 		  <a
 			className="int-link-cell"
 			onClick={(e) => {
-        console.log(interview)
 			  onUploadAssginmentClick(interview)
 			}}
 		  >
@@ -414,7 +415,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
                     />
                 ))}
             </DataTable>
-            {(setshowUploadAssignment)&&(            <AssignmentUpload visible={showUploadAssignment} data={candidateInterviewDetails} onHide={() => setshowUploadAssignment(false)}/>
+            {(setshowUploadAssignment)&&(            <AssignmentUpload visible={showUploadAssignment} data={candidateInterviewDetails} onHide={() => setshowUploadAssignment(false)}   refreshParent={refreshParentComponent}/>
 )}
 
             <ToastMessages ref={toastRef} />
