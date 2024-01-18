@@ -318,8 +318,8 @@ public partial class MRFDBContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.JobDescription).HasColumnType("text");
             entity.Property(e => e.Justification).HasColumnType("text");
-            entity.Property(e => e.MaxTargetSalary).HasColumnType("int(11)");
-            entity.Property(e => e.MinTargetSalary).HasColumnType("int(11)");
+            entity.Property(e => e.MaxTargetSalary).HasColumnType("float(11)");
+            entity.Property(e => e.MinTargetSalary).HasColumnType("float(11)");
             entity.Property(e => e.MrfId).HasColumnType("int(11)");
             entity.Property(e => e.Skills).HasColumnType("text");
             entity.Property(e => e.UpdatedByEmployeeId).HasColumnType("int(11)");
@@ -648,9 +648,9 @@ public partial class MRFDBContext : DbContext
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.AnnualCtc)
-                .HasColumnType("int(11)")
+                .HasColumnType("float(11)")
                 .HasColumnName("AnnualCTC");
-            entity.Property(e => e.AnnualGross).HasColumnType("int(11)");
+            entity.Property(e => e.AnnualGross).HasColumnType("float(11)");
             entity.Property(e => e.CreatedByEmployeeId).HasColumnType("int(11)");
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

@@ -38,17 +38,17 @@ namespace MRF.Models.DTO
 
         public string? Skills { get; set; } 
 
-        public int? MinTargetSalary { get; set; }
+        public float? MinTargetSalary { get; set; }
 
-        public int? MaxTargetSalary { get; set; }
+        public float? MaxTargetSalary { get; set; }
 
         public string? EmployeeName { get; set; }
         public string? EmailId { get; set; } 
         public int EmployeeCode { get; set; }
         public DateOnly LastWorkingDate { get; set; }
         public string? ReplaceJustification { get; set; }
-        public int AnnualCtc { get; set; }
-        public int AnnualGross { get; set; }
+        public float AnnualCtc { get; set; }
+        public float AnnualGross { get; set; }
 
         public int ResumeReviewerEmployeeId { get; set; }
         public int InterviewerEmployeeId { get; set; }
