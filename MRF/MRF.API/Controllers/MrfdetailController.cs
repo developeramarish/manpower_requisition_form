@@ -157,8 +157,8 @@ namespace MRF.API.Controllers
                 MinGradeId = request.MinGradeId == 0 ? null : request.MinGradeId,
                 MaxGradeId = request.MaxGradeId == 0 ? null : request.MaxGradeId,
                 EmploymentTypeId = request.EmploymentTypeId == 0 ? null : request.EmploymentTypeId,
-                MinExperience = request.MinExperience == 0 ? null : request.MinExperience,
-                MaxExperience = request.MaxExperience == 0 ? null : request.MaxExperience,
+                MinExperience = request.MinExperience == 0 ? 0 : request.MinExperience,
+                MaxExperience = request.MaxExperience == 0 ? 0 : request.MaxExperience,
                 VacancyTypeId = request.VacancyTypeId == 0 ? null : request.VacancyTypeId,
                 IsReplacement = request.IsReplacement,
                 MrfStatusId = request.MrfStatusId,
@@ -585,8 +585,8 @@ namespace MRF.API.Controllers
                 existingStatus.MinGradeId = request.MinGradeId == 0 ? null : request.MinGradeId;
                 existingStatus.MaxGradeId = request.MaxGradeId == 0 ? null : request.MaxGradeId;
                 existingStatus.EmploymentTypeId = request.EmploymentTypeId == 0 ? null : request.EmploymentTypeId;
-                existingStatus.MinExperience = request.MinExperience == 0 ? null : request.MinExperience;
-                existingStatus.MaxExperience = request.MaxExperience == 0 ? null : request.MaxExperience;
+                existingStatus.MinExperience = request.MinExperience == 0 ? 0 : request.MinExperience;
+                existingStatus.MaxExperience = request.MaxExperience == 0 ? 0 : request.MaxExperience;
                 existingStatus.VacancyTypeId = request.VacancyTypeId == 0 ? null : request.VacancyTypeId;
                 existingStatus.IsReplacement = request.IsReplacement;
                 existingStatus.MrfStatusId = request.MrfStatusId;
