@@ -3,8 +3,9 @@
 public class Evaluationstatusmaster
 {
     public int Id { get; set; }
-
     public string Status { get; set; } = null!;
+
+    public int RoleId { get; set; }
 
     public bool IsActive { get; set; }
 
