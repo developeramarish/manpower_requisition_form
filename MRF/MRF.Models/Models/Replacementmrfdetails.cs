@@ -16,9 +16,9 @@ public class Replacementmrfdetails
 
     public string Justification { get; set; } = null!;
 
-    public int AnnualCtc { get; set; }
+    public float AnnualCtc { get; set; }
 
-    public int AnnualGross { get; set; }
+    public float AnnualGross { get; set; }
 
     //public int GradeId { get; set; }
 
