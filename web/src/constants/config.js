@@ -76,6 +76,15 @@ export const MRF_STATUS = {
   mrfTransferToNew: 16,
 };
 
+export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
+  if((roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.resumeReviwer)  && [
+    MRF_STATUS.closed,MRF_STATUS.rejected,MRF_STATUS.withdrawn
+  ].includes(mrfstatusId)
+  ){
+    return  true;
+  }
+ return  false;
+}
 
 
 

@@ -73,6 +73,8 @@
 	font-size: 14px;
 	font-weight: 400;
 	color: #6d6d6d;
+	resize: none;
+    overflow-y: auto !important;
 }
 .p-dropdown-label {
 	text-wrap: balance;
