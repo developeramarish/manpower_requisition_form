@@ -126,10 +126,14 @@ let response=await postData(`${API_URL.ADD_CANDIDATE}`,data)
           if (response.ok) {
             const responseData = await response.json();
             console.log("Response Data:", responseData);
+            if(responseData.id===-1){
+              toastRef.current.showBadRequestMessage("Duplicate Candidate Name");
+            }
+            else{
             toastRef.current.showSuccessMessage("Form submitted successfully!");
             setTimeout(() => {
               navigateTo("my_requisition");
-            }, 2000);
+            }, 2000);}
           } else {
             console.error("Request failed with status:", response.status);
             if (response.status === 400) {
