@@ -35,6 +35,7 @@ import CreateRequisition from "./Pages/CreateRequisition";
 import AddCandidate from "./Pages/AddCandidate";
 import Footer from "./components/Footer";
 import EmployeDetails from "./Pages/EmployeDetails";
+import AllEmployees  from "./Pages/AllEmployees";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 import MyResume from "./components/MyResume";
 import ViewCandidate from "./components/ViewCandidate";
@@ -158,6 +159,10 @@ function App() {
                   <MyRequisitions
                     roleId={profile.roleId}
                     userId={profile.employeeId}
+                  />
+                )}
+                {currentPageKey === "allemployees" && (
+                  <AllEmployees
                   />
                 )}
                 {currentPageKey === "employee" && (

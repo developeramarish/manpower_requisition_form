@@ -69,6 +69,7 @@ namespace MRF.DataAccess.Repository
                     TotalCount = grouped.MrfDetailsCount,
                 })
                 .Distinct() // Apply distinct to avoid duplications
+                .OrderBy(item => item.Status.Length)
                 .ToList();
 
             return result;

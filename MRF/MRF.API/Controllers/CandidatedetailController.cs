@@ -93,30 +93,36 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatedetailResponseModel Post([FromBody] CandidatedetailRequestModel request)
         {
+            var existingCandidate = _unitOfWork.Candidatedetail
+            .Get(u => u.Name != null && u.Name.ToLower().Replace(" ", "") == request.Name.ToLower().Replace(" ", ""));
 
-            var Candidatedetail = new Candidatedetails
+            if (existingCandidate == null)
+
             {
-                Name = request.Name,
-                MrfId = request.MrfId,
-                EmailId = request.EmailId,
-                ContactNo = request.ContactNo,
-                ResumePath = request.ResumePath,
-                ReviewedByEmployeeIds = request.ReviewedByEmployeeIds,
-                CandidateStatusId = request.CandidateStatusId,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                Reason = request.Reason,
-                SourceId = request.SourceId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
-            };
+                var Candidatedetail = new Candidatedetails
+                {
+                    Name = request.Name,
+                    MrfId = request.MrfId,
+                    EmailId = request.EmailId,
+                    ContactNo = request.ContactNo,
+                    ResumePath = request.ResumePath,
+                    ReviewedByEmployeeIds = request.ReviewedByEmployeeIds,
+                    CandidateStatusId = request.CandidateStatusId,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    Reason = request.Reason,
+                    SourceId = request.SourceId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc
+                };
 
-            _unitOfWork.Candidatedetail.Add(Candidatedetail);
-            _unitOfWork.Save();
+                _unitOfWork.Candidatedetail.Add(Candidatedetail);
+                _unitOfWork.Save();
 
-            _responseModel.Id = Candidatedetail.Id;
-            _responseModel.IsActive = true;
-
+                _responseModel.Id = Candidatedetail.Id;
+                _responseModel.IsActive = true;
+            }
+            else { _responseModel.Id = -1; }
 
             return _responseModel;
         }
