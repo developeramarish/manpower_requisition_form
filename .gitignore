@@ -360,13 +360,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
-# Fody - auto-generated XML schema
-FodyWeavers.xsd
-/web/package-lock.json
-/web/package.json
-/MRF/MRF.Web/appsettings.json
-/MRF/MRF.Web/appsettings.Development.json
-/MRF/MRF.API/appsettings.Development.json
-/MRF/MRF.API/appsettings.json
-/MRF/MRF.API/appsettings.Production.json
