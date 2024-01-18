@@ -86,8 +86,10 @@ export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
  return  false;
 }
 
-
-
+export const COUNTRIES = [
+  { name:<> <span style={{ marginRight: '60px' }}>India </span><span>+91</span></>, code: 'IN' },
+  { name:<> <span style={{ marginRight: '85px' }}>US </span><span>+1</span></>, code: 'US' },
+];
 
 export const ROLES = {
   superAdmin: 1,

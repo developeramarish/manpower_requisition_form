@@ -1481,7 +1481,6 @@ const CreateRequisitionBody = ({
                       id="ApprovalDate"
                       inputClassName="bg-gray-100"
                       value={new Date(formData.fiApprovalDate)}
-                      minDate={new Date()}
                       className={"email_dropdown"}
                       maxDate={new Date()}
                       disable={commonSettings.setFinanceHeadApprovalDate}
