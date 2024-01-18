@@ -7,7 +7,7 @@ import ToastMessages from "./ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "./multiselectDropdown";
-import { API_URL, FILE_URL, ROLES } from "../constants/config";
+import { API_URL, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
 import { changeDateFormat, putData, strToArray } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import InputTextareaComponent from "./InputTextarea";
@@ -115,7 +115,7 @@ const ResumeSummary = ({
           filter
           placeholder="Select Reviewer"
           className="w-full md:w-20rem "
-          disable={(rowData.mrfStatus !== 8 && rowData.mrfStatus !== 9 && rowData.mrfStatus !== 10)?false:true }
+          disable={MRF_STATUS_FOR_DISABLE(roleId,rowData.mrfStatus)}
            
         />
       </div>     
@@ -230,10 +230,10 @@ const ResumeSummary = ({
       return <p className="resume-reason-col">To be Updated</p>;
     return (
       <InputTextarea readOnly={true} value={resume.reason} rows={2} cols={50} />
-
       // <p className="resume-reason-col">{resume.reason}</p>
     );
   };
+ 
   let columns = [
     {
       header: "Sr.No",
