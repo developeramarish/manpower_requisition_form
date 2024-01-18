@@ -120,7 +120,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
             let response = await putData(`${API_URL.INTERVIEW_EVALUATION}${id}`,updateStatus);
        
           if (response.ok) {
-            const responseData = response.json();
+            const responseData =await response.json();
             if (responseData.statusCode === 409) {
               toastRef.current.showConflictMessage(responseData.message);
             } else {
