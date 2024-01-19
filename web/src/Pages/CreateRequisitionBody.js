@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   commonSettings,
   applySettingsBasedOnRoleAndStatus,
-} from "./commonSettings";
+} from "../components/commonSetting";
 import "../css/InputComponent.css";
 import DropdownComponent from "./../components/Dropdown";
 import InputTextCp from "./../components/Textbox";
@@ -925,7 +925,7 @@ const CreateRequisitionBody = ({
                     htmlFor="MinTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Min Target Salary<RedAsterisk />
+                    Min Target Salary (in LPA)<RedAsterisk />
                   </label>
                   <InputNumberamount
                     id="MinTargetSalary"
@@ -939,7 +939,7 @@ const CreateRequisitionBody = ({
                     htmlFor="MaxTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Max Target Salary<RedAsterisk />
+                    Max Target Salary (in LPA)<RedAsterisk />
                   </label>
                   <InputNumberamount
                     id="MaxTargetSalary"
