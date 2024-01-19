@@ -40,7 +40,6 @@ const AddCandidate = (reqId) => {
     sourceId: 0,
   };
 
-  console.log(submitBtnDisable);
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
   const [dropdowns, setDropdownData] = useState();
@@ -59,9 +58,8 @@ const fectData=async()=>{
 }
 
   useEffect(() => {
-    console.log(formData.countrycode.code)
     if(formData.countrycode.code==="IN"){
-      setMask("99-99-999999")
+      setMask("99999-99999")
     }else{
       setMask("(999) 999-999")
     }
@@ -94,10 +92,10 @@ const fectData=async()=>{
     if (isFormDataEmptyForAddCandidate(formData).length > 0) {
       const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
       formatAndShowErrorMessage(emptyFieldss);
+      setSubmitBtnDisable(false);
     } else {
       const fileUploadData = new FormData();
       fileUploadData.append("file", selectedFile);
-      console.log(fileUploadData);
       try {
         const fileUploadResponse = await fetch(
           API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
@@ -158,6 +156,7 @@ const fectData=async()=>{
             toastRef.current.showBadRequestMessage(
               "you have to upload Resume!"
             );
+            setSubmitBtnDisable(false);
           }
           console.error(
             "Request failed with status:",
@@ -177,10 +176,8 @@ const fectData=async()=>{
 
   const handleMinimumContact=(e)=>{
     const ConatctValue=e.target.value;
-    console.log(ConatctValue)
     
-    console.log(ConatctValue.length)
-    if(formData.countrycode.code==="IN" && ConatctValue.length< 12){
+    if(formData.countrycode.code==="IN" && ConatctValue.length< 11){
       toastRef.current.showWarrningMessage("Contact Number is less than 10 Digit");
      
     }else if(formData.countrycode.code==="US" && ConatctValue.length< 13){
@@ -188,23 +185,7 @@ const fectData=async()=>{
     }
   }
 
-  const selectedCountryTemplate = (option, props) => {
-    if (option) {
-      return (
-        <div className="flex align-items-center">
-          <img
-            alt={option.name}
-            src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
-            className={`mr-2 flag flag-${option.code.toLowerCase()}`}
-            style={{ width: "18px" }}
-          />
-          <div>{option.name}</div>
-        </div>
-      );
-    }
-
-    return <span>{props.placeholder}</span>;
-  };
+  
 
   
   return (

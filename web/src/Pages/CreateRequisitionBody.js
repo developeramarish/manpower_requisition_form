@@ -140,7 +140,7 @@ const CreateRequisitionBody = ({
   
 
   const handleMinGradeChange = (e) => {
-    setFormData({ ...formData, minGradeId: e.target.value });
+    // setFormData({ ...formData, minGradeId: e.target.value });
     handleMinChange(e);
   };
 
@@ -158,7 +158,7 @@ const CreateRequisitionBody = ({
   };
 
   const handleMaxGradeChange = (e) => {
-    setFormData({ ...formData, maxGradeId: e.target.value });
+    // setFormData({ ...formData, maxGradeId: e.target.value });
     handleMaxChange(e);
   };
 
@@ -286,6 +286,7 @@ const CreateRequisitionBody = ({
     }
     return s;
   };
+
 
   const renderHeader = () => {
     return (
@@ -638,6 +639,7 @@ const CreateRequisitionBody = ({
                       vacancyNo: e.target.value,
                     })
                   }
+                  maxLength={2}
                   value={formData.vacancyNo}
                   disable={commonSettings.setReadOnly}
                 />
@@ -825,7 +827,7 @@ const CreateRequisitionBody = ({
                 <div className="flex justify-content-between gap-5">
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="AnnualCTC" className="font-bold text-sm">
-                      Annual CTC<RedAsterisk />
+                      Annual CTC (in LPA)<RedAsterisk />
                     </label>
                     <InputNumberamount
                       id="AnnualCTC"
@@ -837,7 +839,7 @@ const CreateRequisitionBody = ({
                     />
 
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
-                      Annual Gross<RedAsterisk />
+                      Annual Gross (in LPA)<RedAsterisk />
                     </label>
                     <InputNumberamount
                       id="AnnualGross"
