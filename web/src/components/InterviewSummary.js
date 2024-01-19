@@ -300,6 +300,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
                                 visible={showFeed}
                                 onHide={() => setShowFeed(false)}
                                 cId={selectedId}
+                                roleId={roleId}
                             />
                         )}
                     </>
