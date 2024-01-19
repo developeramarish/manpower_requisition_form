@@ -2,7 +2,6 @@ export const APP_KEY = "MRF_v1.0";
 const APP = "https://10.22.11.101:90";
 //const APP="https://localhost:7128";
 const APIPath=`${APP}/api/`;
-
 export const API_URL = {
   MRF_STATUS_SUMMARY: `${APIPath}Dashboard/GetMrfStatusSummary`,
   RESUME_SUMMARY: `${APIPath}Dashboard/GetMrfResumeSummary/Count`,
@@ -32,7 +31,7 @@ export const API_URL = {
   UPDATE_EMPLOYEE:`${APIPath}Employeedetails/Put/`,
   GET_ROLE:`${APIPath}Role`,
   GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
-  ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assignment&FileName=`,
+  ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assign&FileName=`,
   ASSIGNMENT_POST:`${APIPath}Attachment`,
 };
 
