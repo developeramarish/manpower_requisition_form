@@ -1,7 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
 import ButtonC from "../components/Button";
 import { Button } from "primereact/button";
-import "../styles/layout/MyRequisitionsBody.css";
+import "../css/MyRequistionsBody.css";
 import { Toolbar } from "primereact/toolbar";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
