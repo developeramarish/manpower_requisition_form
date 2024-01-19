@@ -4,6 +4,8 @@
     {
         public string Status { get; set; } = null!;
 
+        public int RoleId { get; set; }
+
         public bool IsActive { get; set; }
 
         public int CreatedByEmployeeId { get; set; }

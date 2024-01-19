@@ -91,7 +91,6 @@ namespace MRF.DataAccess.Repository
                                 select new InterviewStatus
                                 {
                                     CandidateId = Candidate.Id,
-                                    
                                     EvalutionStatusId = Ivaluation.EvalutionStatusId,
                                     CandidateStatusChangedOnUtc = Ivaluation.UpdatedOnUtc,
                                     EvalutionStatus = status.Status,
