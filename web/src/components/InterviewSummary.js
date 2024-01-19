@@ -255,7 +255,7 @@ const InterviewSummary = ({
 					View Attachment
 				</a>
 			);
-		} else if (roleId === ROLES.hr) {
+		} else if (roleId === ROLES.hr && interview.interviewevaluationId != 0) {
 			return (
 				<div>
 					<a
@@ -309,8 +309,9 @@ const InterviewSummary = ({
 	};
 
 	const feedbackBodyTemplate = (interview) => {
-		if (roleId !== ROLES.interviewer && interview.evalutionStatusId < 5)
-			return "To be updated";
+		// if (roleId !== ROLES.interviewer && interview.evalutionStatusId < 5)
+		// 	return "To be updated";
+		if (interview.interviewevaluationId == 0) return "To be updated";
 
 		return (
 			<>
