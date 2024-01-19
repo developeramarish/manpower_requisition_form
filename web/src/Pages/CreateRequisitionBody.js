@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   commonSettings,
   applySettingsBasedOnRoleAndStatus,
-} from "./commonSettings";
+} from "../components/commonSetting";
 import "../css/InputComponent.css";
 import DropdownComponent from "./../components/Dropdown";
 import InputTextCp from "./../components/Textbox";
@@ -10,6 +10,7 @@ import ButtonC from "./../components/Button";
 import CalendarComponent from "./../components/Calendar";
 import CheckboxComponent from "./../components/Checkbox";
 import InputTextareaComponent from "./../components/InputTextarea";
+import InputNumberamount from "./../components/InputNumberAmount";
 import { Editor } from "primereact/editor";
 import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
@@ -47,31 +48,16 @@ const CreateRequisitionBody = ({
   const [subDepartments, setSubDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const RedAsterisk = () => <span className="text-red-500">*</span>;
-
-  //const history = useHistory();
+  const [minSal, setMinSal] = useState(0.0);
   const dispatch = useDispatch();
-
   const toastRef = useRef(null);
-
-  // Initialize the formData state using the form schema
   const [formData, setFormData] = useState();
 
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
     const dropDowndata = await result.json();
     setDropdownData(dropDowndata.result);
-    // fetch(API_URL.GET_CREATE_REQUISITION_DROPDOWN)
-    // .then((response) => response.json())
-    // .then((data) => {
-    //   const dropdown = data.result;
-    //   // Store the dropdown data in localStorage using your storageService
-    //   // storageService.set("dropdownData", dropdown);
-    //   // Update the state with the new dropdown data
-    //   setDropdownData(dropdown);
-    // })
-    // .catch((error) => {
-    //   console.error("Error fetching data:", error);
-    // });
+    
   };
   useEffect(() => {
     setFormData(FORM_SCHEMA_CR);
@@ -113,26 +99,45 @@ const CreateRequisitionBody = ({
   const handleMinSalaryChange = (e) => {
     const minSalary = e.target.value;
     if (formData.maxTargetSalary !== 0) {
+      
       if (minSalary > formData.maxTargetSalary) {
         toastRef.current.showWarrningMessage(
           "Min Target Salary is Greater than Max Target salary"
         );
+        setMinSal(minSalary);
         return;
       }
+      
     }
+   
     setFormData({ ...formData, minTargetSalary: minSalary });
+    
   };
 
   const handleMaxSalaryChange = (e) => {
     const maxSalary = e.target.value;
-    if (maxSalary < formData.minTargetSalary) {
-      toastRef.current.showWarrningMessage(
-        "Max Target Salary is Less than Min Target salary"
-      );
-      return;
-    }
-    setFormData({ ...formData, maxTargetSalary: maxSalary });
+  
+    setFormData(prevFormData => {
+      if (minSal !== 0) {
+        if (maxSalary < minSal) {
+          toastRef.current.showWarrningMessage(
+            "Max Target Salary is Less than Min Target salary"
+          );
+          return prevFormData; 
+        } else {
+          return { ...prevFormData, minTargetSalary: minSal,maxTargetSalary: maxSalary };
+        }
+      } else if (maxSalary < prevFormData.minTargetSalary) {
+        toastRef.current.showWarrningMessage(
+          "Max Target Salary is Less than Min Target salary"
+        );
+        return prevFormData; 
+      }
+  
+      return { ...prevFormData, maxTargetSalary: maxSalary };
+    });
   };
+  
 
   const handleMinGradeChange = (e) => {
     setFormData({ ...formData, minGradeId: e.target.value });
@@ -197,7 +202,7 @@ const CreateRequisitionBody = ({
     const maxExp = e.target.value;
 
     if (maxExp < formData.minExperience) {
-      console.log("eeee")
+      
       toastRef.current.showWarrningMessage(
         "Max Experience is Less than Min Experience"
       );
@@ -205,6 +210,8 @@ const CreateRequisitionBody = ({
     }
     setFormData({ ...formData, maxExperience: maxExp });
   };
+
+ 
 
   const fetchSubDepartments = (selectedDepartment) => {
     const apiUrl =
@@ -820,7 +827,7 @@ const CreateRequisitionBody = ({
                     <label htmlFor="AnnualCTC" className="font-bold text-sm">
                       Annual CTC<RedAsterisk />
                     </label>
-                    <InputNumberComponent
+                    <InputNumberamount
                       id="AnnualCTC"
                       onChange={(e) =>
                         setFormData({ ...formData, annualCtc: e.target.value })
@@ -832,7 +839,7 @@ const CreateRequisitionBody = ({
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
                       Annual Gross<RedAsterisk />
                     </label>
-                    <InputNumberComponent
+                    <InputNumberamount
                       id="AnnualGross"
                       onChange={(e) =>
                         setFormData({
@@ -918,10 +925,10 @@ const CreateRequisitionBody = ({
                     htmlFor="MinTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Min Target Salary<RedAsterisk />
+                    Min Target Salary (in LPA)<RedAsterisk />
                   </label>
-                  <InputNumberComponent
-                    id="MaxTargetSalary"
+                  <InputNumberamount
+                    id="MinTargetSalary"
                     onChange={handleMinSalaryChange}
                     value={formData.minTargetSalary}
                     disable={commonSettings.setReadOnly}
@@ -932,9 +939,9 @@ const CreateRequisitionBody = ({
                     htmlFor="MaxTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Max Target Salary<RedAsterisk />
+                    Max Target Salary (in LPA)<RedAsterisk />
                   </label>
-                  <InputNumberComponent
+                  <InputNumberamount
                     id="MaxTargetSalary"
                     onChange={handleMaxSalaryChange}
                     value={formData.maxTargetSalary}

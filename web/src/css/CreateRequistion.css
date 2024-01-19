@@ -1,0 +1,19 @@
+.create_requistion{
+    background-color: #f6f6f6;
+
+}
+
+.create_requistion_title{
+    font-size: 22px;
+	font-weight: 600;
+	margin: 0;
+    /* margin-top:3px ; */
+    margin-left: 3px;
+	margin-bottom: 15px;
+	color: #0b1016;
+    /* background-color: aqua; */
+}
+
+.create_requistn_section{
+    padding: 1rem;
+}

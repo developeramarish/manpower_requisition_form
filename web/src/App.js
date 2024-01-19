@@ -1,5 +1,5 @@
 import "./css/App.css";
-import "./styles/layout/theme.css";
+import "./css/theme.css";
 import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
@@ -32,13 +32,13 @@ import { PAGE_ACTIONS, Page } from "./reducers/Page_r";
 import Dashboard from "./containers/Dashboard";
 import MyRequisitions from "./containers/MyRequisitions";
 import CreateRequisition from "./Pages/CreateRequisition";
-import AddCandidate from "./Pages/AddCandidate";
+import AddCandidate from "./containers/AddCandidate";
 import Footer from "./components/Footer";
 import EmployeDetails from "./Pages/EmployeDetails";
 import AllEmployees  from "./Pages/AllEmployees";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
-import MyResume from "./components/MyResume";
-import ViewCandidate from "./components/ViewCandidate";
+import MyResume from "./containers/MyResume";
+import ViewCandidate from "./containers/ViewCandidate";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();

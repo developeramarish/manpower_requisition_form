@@ -1,15 +1,37 @@
 import React, { useEffect, useState,useRef } from "react";
 import ButtonC from "../components/Button";
-import "../styles/layout/MyRequisitionsBody.css";
+import "../css/MyRequistionsBody.css";
 import { Toolbar } from "primereact/toolbar";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { API_URL } from "../constants/config";
 import { getData, navigateTo } from "../constants/Utils";
 import ToastMessages from "../components/ToastMessages";
+import DropdownComponent from "../components/Dropdown";
 export default function AllEmployees() {
   const [data, setData] = useState([{}]);
   const [editMode, setEditMode] = useState(false);
+  const [roleId, setRole] = useState({});
+  const [roleOptions, roleOptionchange] = useState([]);
+  const fetchData = () => {
+    const apiUrl = API_URL.GET_ROLE;
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(responseData => {
+        if (Array.isArray(responseData.result)) {
+          const data = responseData.result;
+          console.log(data);
+          const options = data.map(x => { return { value: x.id,  roleName: x.name } })
+          roleOptionchange(options);
+        } else {
+          console.error('API response result is not an array:', responseData);
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+
+  };
   const [editData, setEditData] = useState();
   const toastRef = useRef(null);
   //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means
@@ -20,42 +42,10 @@ export default function AllEmployees() {
 			const data = await getData(apiUrl);
 			setData(data);
 		}
+    fetchData();
     getReqData();
 	});
-
-  console.log(data);
-  const Removefunction = async (rowData) => {
-    rowData.isDeleted=true;
-    if (window.confirm("Do you want to remove?")) {
-    const response = await fetch(API_URL.UPDATE_EMPLOYEE + rowData.id, {
-      method: "Put",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(rowData),
-    })
-    
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log("Response Data:", responseData);
-      toastRef.current.showSuccessMessage("Delete successfully!");
-      var oData = data.filter((row) => {
-                  return row.id !== rowData.id;
-                });
-                setData(oData);
-      setTimeout(() => {
-         navigateTo("employee");
-      }, 1000);
-      }
-      else {
-        console.error("Request failed with status:", response.status);
-        if (response.status === 400) {
-          toastRef.current.showBadRequestMessage(
-            "Bad request: " + response.url
-          );
-        }
-      }
-    }
-
-  };
+  
   const updateData = (p_BVal) => {
     setEditMode(p_BVal);
   };
@@ -63,20 +53,20 @@ export default function AllEmployees() {
     setEditData(id);
     setEditMode(true);
   };
-  const actionBodyTemplate = (rowData) => {
+  const actionBodyTemplate = () => {
     return (
-      <React.Fragment>
-        <ButtonC
-          icon="pi pi-pencil"
-          rounded
-          outlined
-          className="mr-2 text-white"
-          onClick={() => {
-            LoadEdit(rowData.employeeId);
-          }}
-        />       
-         <ToastMessages ref={toastRef} />
-      </React.Fragment>
+        <DropdownComponent
+             optionLabel="roleName"
+             optionValue="value"
+             value={roleId}
+             type="roleId"
+             options={roleOptions}
+              onChange={e => {
+                console.log(e.target)
+                setRole(e.target.value)
+              }}
+            />
+    
     );
   };
   const columns = [
@@ -95,7 +85,7 @@ export default function AllEmployees() {
 			sortable: true,
 		},
     {
-      header: "Action",
+      header: "Role",
       body:actionBodyTemplate,
 			sortable: true,
 		},

@@ -10,11 +10,14 @@ import { removeSpaces } from "./constant";
 const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const toastRef = useRef(null);
+  const [submitBtnDisable, setSubmitBtnDisable] = useState(false);
+
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
 
   const handleSubmit = async () => {
+    setSubmitBtnDisable(true);
     const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
 
@@ -91,6 +94,7 @@ refreshParent();
         <ButtonC
           label={"Submit"}
           className={"update_btn"}
+          disable={submitBtnDisable}
           onClick={() => handleSubmit()}
         />
       </Dialog>
