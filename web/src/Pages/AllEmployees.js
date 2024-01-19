@@ -6,7 +6,7 @@ import { Toolbar } from "primereact/toolbar";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { API_URL } from "../constants/config";
-import { getData, navigateTo } from "../constants/Utils";
+import { getData, navigateTo, postData } from "../constants/Utils";
 import ToastMessages from "../components/ToastMessages";
 import DropdownComponent from "../components/Dropdown";
 export default function AllEmployees() {
@@ -83,10 +83,55 @@ export default function AllEmployees() {
     
     );
   };
+  const update = async (data, roleId) => {
+    
+    const empdata = {
+      "name": data.userName,
+      "email": data.email,
+      "contactNo": "0",
+      "employeeCode": data.employeeId,
+      "isDeleted": false,
+      "roleId": roleId,
+      "isAllowed": true,
+      "allowedByEmployeeId": 1,
+      "createdByEmployeeId": 1,
+      "createdOnUtc": "2024-01-19T10:21:19.001Z",
+      "updatedByEmployeeId": 1,
+      "updatedOnUtc": "2024-01-19T10:21:19.001Z"
+    };
+    try {
 
-  const actionBodyTemplate = (interview, options) => {
+    let response = await postData(API_URL.CREATE_EMPLOYEE,empdata);
+
+    if (response.ok) {
+      const responseData =await response.json();
+      if (responseData.statusCode === 409) {
+        toastRef.current.showConflictMessage(responseData.message);
+      } else {         
+        toastRef.current.showSuccessMessage(
+          "Role assigned successfully!"
+        );
+      
+      }
+    } else {
+      console.error("Request failed with status:", response.status);
+      const errorData = await response.text();
+      console.error("Error Data:", errorData);
+      if (response.status === 400) {
+        toastRef.current.showBadRequestMessage(
+          "Bad request: " + response.url
+        );
+      }
+    }
+    
+  } catch (error) {
+    console.error("Error:", error);
+  }
+  
+  }
+  const actionBodyTemplate = (rowData, options) => {
     const onClickHandleSave = () => {
-      //  update(interview);
+        update(rowData, roleId[options.rowIndex]);
         let sv = [...saveBttn];
         sv[options.rowIndex] = false;
         setSaveBttn(sv);
