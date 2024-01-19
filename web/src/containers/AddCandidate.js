@@ -6,8 +6,6 @@ import SingleFileUpload from "./../components/FileUpload";
 import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
 import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
-import { ChevronDownIcon } from "primereact/icons/chevrondown";
-import { ChevronRightIcon } from "primereact/icons/chevronright";
 import { InputMask } from "primereact/inputmask";
 import {
   API_URL,
@@ -15,15 +13,12 @@ import {
   emailRegex,
   isFormDataEmptyForAddCandidate,
 } from "../constants/config";
-import { FILE_URL } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
-import InputNumberComponent from "../components/InputNumberComponent";
-import { Dropdown } from "primereact/dropdown";
+
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [submitBtnDisable, setSubmitBtnDisable] = useState(true);
-  // const [selectedCountry, setSelectedCountry] = useState("");
+  const [submitBtnDisable, setSubmitBtnDisable] = useState(false);
   const [mask, setMask] = useState("");
   const handleFileChange = (event) => {
     setSelectedFile(event);
@@ -45,30 +40,26 @@ const AddCandidate = (reqId) => {
     sourceId: 0,
   };
 
-  console.log(submitBtnDisable);
   // Initialize the formData state using the form schema
   const [formData, setFormData] = useState(formSchema);
   const [dropdowns, setDropdownData] = useState();
-  useEffect(() => {
-    // Fetch the data for all the dropdowns
-    fetch(API_URL.ADD_SOURCE_NAME)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(data.result);
-        // Store the dropdown data in localStorage using your storageService
-        // storageService.set("dropdownData", dropdown);
-        // Update the state with the new dropdown data
-        setDropdownData(data.result);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
 
   useEffect(() => {
-    console.log(formData.countrycode.code)
+   fectData();
+  }, []);
+
+const fectData=async()=>{
+
+    const result=await getDataAPI(`${API_URL.ADD_SOURCE_NAME}`)
+     // Fetch the data for all the dropdowns
+     const response=await result.json();
+     setDropdownData(response.result);
+     
+}
+
+  useEffect(() => {
     if(formData.countrycode.code==="IN"){
-      setMask("99-99-999999")
+      setMask("99999-99999")
     }else{
       setMask("(999) 999-999")
     }
@@ -97,13 +88,14 @@ const AddCandidate = (reqId) => {
   };
 
   const handleSubmit = async () => {
+    setSubmitBtnDisable(true);
     if (isFormDataEmptyForAddCandidate(formData).length > 0) {
       const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
       formatAndShowErrorMessage(emptyFieldss);
+      setSubmitBtnDisable(false);
     } else {
       const fileUploadData = new FormData();
       fileUploadData.append("file", selectedFile);
-      console.log(fileUploadData);
       try {
         const fileUploadResponse = await fetch(
           API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
@@ -164,6 +156,7 @@ const AddCandidate = (reqId) => {
             toastRef.current.showBadRequestMessage(
               "you have to upload Resume!"
             );
+            setSubmitBtnDisable(false);
           }
           console.error(
             "Request failed with status:",
@@ -183,10 +176,8 @@ const AddCandidate = (reqId) => {
 
   const handleMinimumContact=(e)=>{
     const ConatctValue=e.target.value;
-    console.log(ConatctValue)
     
-    console.log(ConatctValue.length)
-    if(formData.countrycode.code==="IN" && ConatctValue.length< 12){
+    if(formData.countrycode.code==="IN" && ConatctValue.length< 11){
       toastRef.current.showWarrningMessage("Contact Number is less than 10 Digit");
      
     }else if(formData.countrycode.code==="US" && ConatctValue.length< 13){
@@ -194,23 +185,7 @@ const AddCandidate = (reqId) => {
     }
   }
 
-  const selectedCountryTemplate = (option, props) => {
-    if (option) {
-      return (
-        <div className="flex align-items-center">
-          <img
-            alt={option.name}
-            src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
-            className={`mr-2 flag flag-${option.code.toLowerCase()}`}
-            style={{ width: "18px" }}
-          />
-          <div>{option.name}</div>
-        </div>
-      );
-    }
-
-    return <span>{props.placeholder}</span>;
-  };
+  
 
   
   return (
@@ -278,7 +253,7 @@ const AddCandidate = (reqId) => {
                           ...formData,
                           countrycode: e.target.value,
                         })} 
-                        className="w-full md:w-12rem" />
+                        className="w-full md:w-13rem" />
 
                      
                     </div>
@@ -334,6 +309,7 @@ const AddCandidate = (reqId) => {
               <ButtonC
                 label="SUBMIT"
                 className="resume_update_btn"
+                disable={submitBtnDisable}
                 onClick={() => handleSubmit()}
               />
               <ToastMessages ref={toastRef} />
