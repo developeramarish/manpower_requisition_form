@@ -94,7 +94,7 @@ namespace MRF.API.Controllers
         public CandidatedetailResponseModel Post([FromBody] CandidatedetailRequestModel request)
         {
             var existingCandidate = _unitOfWork.Candidatedetail
-           .Get(u => u.Name != null && u.Name.ToLower().Replace(" ", "") == request.Name.ToLower().Replace(" ", ""));
+           .Get(u => u.MrfId == request.MrfId && u.Name != null && u.Name.ToLower().Replace(" ", "") == request.Name.ToLower().Replace(" ", ""));
             
              
             if (existingCandidate == null)
@@ -187,7 +187,7 @@ namespace MRF.API.Controllers
                     existingDetails.Name = request.Name == "string" ? existingDetails.Name : request.Name;
 
                     existingDetails.EmailId = request.EmailId == "string" ? existingDetails.EmailId : request.EmailId;
-                existingDetails.ContactNo = request.ContactNo == "" ? existingDetails.ContactNo : request.ContactNo;
+                     existingDetails.ContactNo = request.ContactNo == "string" ? existingDetails.ContactNo : request.ContactNo;
                 existingDetails.ResumePath = request.ResumePath;
                     existingDetails.ReviewedByEmployeeIds = request.ReviewedByEmployeeIds;
                     existingDetails.CandidateStatusId = request.CandidateStatusId;
