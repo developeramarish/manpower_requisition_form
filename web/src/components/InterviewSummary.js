@@ -329,6 +329,7 @@ const InterviewSummary = ({
 						visible={showFeed}
 						onHide={() => setShowFeed(false)}
 						cId={selectedId}
+						roleId={roleId}
 					/>
 				)}
 			</>
