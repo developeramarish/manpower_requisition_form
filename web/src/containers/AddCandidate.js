@@ -18,7 +18,7 @@ import DropdownComponent from "../components/Dropdown";
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [submitBtnDisable, setSubmitBtnDisable] = useState(true);
+  const [submitBtnDisable, setSubmitBtnDisable] = useState(false);
   const [mask, setMask] = useState("");
   const handleFileChange = (event) => {
     setSelectedFile(event);
@@ -90,6 +90,7 @@ const fectData=async()=>{
   };
 
   const handleSubmit = async () => {
+    setSubmitBtnDisable(true);
     if (isFormDataEmptyForAddCandidate(formData).length > 0) {
       const emptyFieldss = isFormDataEmptyForAddCandidate(formData);
       formatAndShowErrorMessage(emptyFieldss);
@@ -327,6 +328,7 @@ const fectData=async()=>{
               <ButtonC
                 label="SUBMIT"
                 className="resume_update_btn"
+                disable={submitBtnDisable}
                 onClick={() => handleSubmit()}
               />
               <ToastMessages ref={toastRef} />
