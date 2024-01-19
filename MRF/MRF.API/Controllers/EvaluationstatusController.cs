@@ -83,6 +83,7 @@ namespace MRF.API.Controllers
             var evaluationstatus = new Evaluationstatusmaster
             {
                 Status = request.Status,
+                RoleId = request.RoleId,
                 IsActive = request.IsActive,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
@@ -118,6 +119,7 @@ namespace MRF.API.Controllers
             if (existingStatus != null)
             {
                 existingStatus.Status = request.Status;
+                existingStatus.RoleId = request.RoleId;
                 existingStatus.IsActive = request.IsActive;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
@@ -138,7 +140,7 @@ namespace MRF.API.Controllers
         }
 
         // DELETE api/<EvaluationstatusController>/5
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(EvaluationstatusmasterResponseModel))]
         [SwaggerResponse(StatusCodes.Status204NoContent, Description = "No content (successful deletion)")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad request")]
