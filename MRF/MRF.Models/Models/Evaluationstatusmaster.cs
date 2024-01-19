@@ -22,9 +22,9 @@ public class Interviewstatus
 {
     public int Id { get; set; }
 
-    public int RoleId { get; set; }
-
     public string Status { get; set; } = null!;
+
+    public int RoleId { get; set; }
     public string CandidateorEvalution { get; set; } = null!;
 
 }
