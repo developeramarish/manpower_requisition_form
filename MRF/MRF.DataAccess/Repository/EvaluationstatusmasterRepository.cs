@@ -28,6 +28,7 @@ namespace MRF.DataAccess.Repository
         .Select(evaluationStatus => new Interviewstatus
         {
             Id = evaluationStatus.Id,
+            RoleId= evaluationStatus.RoleId,
             Status = evaluationStatus.Status,
             CandidateorEvalution = "E",
         })

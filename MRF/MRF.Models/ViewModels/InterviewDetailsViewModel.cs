@@ -30,7 +30,7 @@ namespace MRF.Models.ViewModels
         public int EvaluationId { get; set; }
         public int EvaluationFeedbackId { get; set; }
 
-        public int? RoleId { get; set; }
+        
         public string EvalutionStatus { get; set; } = null!;
 
         public string? Attachment { get; set; }
@@ -49,7 +49,6 @@ namespace MRF.Models.ViewModels
 
         public int? CandidateId { get; set; }
 
-        public int?  RoleId { get; set; }
         public int? EvalutionStatusId { get; set; }
         public string? EvalutionStatus { get; set; }
         public int? InterviewevaluationId { get; set; }

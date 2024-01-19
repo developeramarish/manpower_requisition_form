@@ -91,7 +91,6 @@ namespace MRF.DataAccess.Repository
                                 select new InterviewStatus
                                 {
                                     CandidateId = Candidate.Id,
-                                    RoleId=status.RoleId,
                                     EvalutionStatusId = Ivaluation.EvalutionStatusId,
                                     CandidateStatusChangedOnUtc = Ivaluation.UpdatedOnUtc,
                                     EvalutionStatus = status.Status,
@@ -102,7 +101,6 @@ namespace MRF.DataAccess.Repository
                                  select new InterviewStatus
                                  {
                                      CandidateId = grouped.Key,
-                                     RoleId = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().RoleId,
                                      EvalutionStatusId = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().EvalutionStatusId,
                                      CandidateStatusChangedOnUtc = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().CandidateStatusChangedOnUtc,
                                      EvalutionStatus = grouped.OrderByDescending(s => s.CandidateStatusChangedOnUtc).First().EvalutionStatus,
@@ -206,7 +204,6 @@ namespace MRF.DataAccess.Repository
                                                                    CandidateName =  q.CandidateName,
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = q.Attachment,
-                                                                   RoleId = i != null ? i.RoleId ?? 0 : 0,
                                                                    EvalutionStatusId = i != null ? i.EvalutionStatusId ?? 0 : 0, // Check for null outside the query
                                                                    EvalutionStatus = i != null ? i.EvalutionStatus : "",  // Check for null outside the query
                                                                    CandidateStatusChangedOnUtc = i == null ? DateTime.MinValue : i.CandidateStatusChangedOnUtc ?? DateTime.MinValue,
