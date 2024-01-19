@@ -57,7 +57,7 @@ const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
             );
 onHide();
 refreshParent();
-            
+setSubmitBtnDisable(false);
           } else {
             console.error("Request failed with status:", response.status);
             if (response.status === 400) {
@@ -74,6 +74,7 @@ refreshParent();
           toastRef.current.showBadRequestMessage(
             "you have to upload Assignment!"
           );
+          setSubmitBtnDisable(false);
         }
         console.error("Request failed with status:", fileUploadResponse.status);
       }

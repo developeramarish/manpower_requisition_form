@@ -220,7 +220,7 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
 					View Attachment
 				</a>
 			);
-		} else if(roleId===ROLES.hr) {
+		} else if(roleId===ROLES.hr && interview.interviewevaluationId!=0) {
 			return (
 				<div>
 		  <a
@@ -282,7 +282,8 @@ const result=await getDataAPI(`${API_URL.INTERVIEW_SUMMARY_POPUP} + ?id=${mrfId}
    
  
             const feedbackBodyTemplate = (interview) => {
-                if (roleId !== ROLES.interviewer && interview.evalutionStatusId < 5) return "To be updated";
+                // if (roleId !== ROLES.interviewer && interview.evalutionStatusId < 5) return "To be updated";
+                if (interview.interviewevaluationId==0) return "To be updated";
        
                 return (
                     <>
