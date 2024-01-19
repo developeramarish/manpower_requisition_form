@@ -95,11 +95,12 @@ namespace MRF.API.Controllers
         {
             var existingCandidate = _unitOfWork.Candidatedetail
            .Get(u => u.Name != null && u.Name.ToLower().Replace(" ", "") == request.Name.ToLower().Replace(" ", ""));
-            List<Mrfresumereviewermap> mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == request.MrfId).ToList();
+            
             var Candidatedetail = new Candidatedetails();
             if (existingCandidate == null)
 
             {
+                List<Mrfresumereviewermap> mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == request.MrfId).ToList();
                 if (mrfresumereviewermap.Count > 0)
                 {
                     string reviewerEmpId = string.Join(",", mrfresumereviewermap.Select(r => r.ResumeReviewerEmployeeId).Distinct());
