@@ -96,59 +96,39 @@ namespace MRF.API.Controllers
             var existingCandidate = _unitOfWork.Candidatedetail
            .Get(u => u.Name != null && u.Name.ToLower().Replace(" ", "") == request.Name.ToLower().Replace(" ", ""));
             
-            var Candidatedetail = new Candidatedetails();
+             
             if (existingCandidate == null)
 
             {
                 List<Mrfresumereviewermap> mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == request.MrfId).ToList();
+                string reviewerEmpId="";
                 if (mrfresumereviewermap.Count > 0)
                 {
-                    string reviewerEmpId = string.Join(",", mrfresumereviewermap.Select(r => r.ResumeReviewerEmployeeId).Distinct());
-
-
-                    Candidatedetail.Name = request.Name;
-                    Candidatedetail.MrfId = request.MrfId;
-                    Candidatedetail.EmailId = request.EmailId;
-                    Candidatedetail.ContactNo = request.ContactNo;
-                    Candidatedetail.ResumePath = request.ResumePath;
-                    Candidatedetail.ReviewedByEmployeeIds = reviewerEmpId;
-                    Candidatedetail.CandidateStatusId = request.CandidateStatusId;
-                    Candidatedetail.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                    Candidatedetail.Reason = request.Reason;
-                    Candidatedetail.SourceId = request.SourceId;
-                    Candidatedetail.CreatedOnUtc = request.CreatedOnUtc;
-                    Candidatedetail.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                    Candidatedetail.UpdatedOnUtc = request.UpdatedOnUtc;
-
-
-
-                    _unitOfWork.Candidatedetail.Add(Candidatedetail);
-                    _unitOfWork.Save();
+                     reviewerEmpId = string.Join(",", mrfresumereviewermap.Select(r => r.ResumeReviewerEmployeeId).Distinct());
 
                 }
-                else {
-                    Candidatedetail.Name = request.Name;
-                    Candidatedetail.MrfId = request.MrfId;
-                    Candidatedetail.EmailId = request.EmailId;
-                    Candidatedetail.ContactNo = request.ContactNo;
-                    Candidatedetail.ResumePath = request.ResumePath;
-                    Candidatedetail.ReviewedByEmployeeIds = request.ReviewedByEmployeeIds;
-                    Candidatedetail.CandidateStatusId = request.CandidateStatusId;
-                    Candidatedetail.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                    Candidatedetail.Reason = request.Reason;
-                    Candidatedetail.SourceId = request.SourceId;
-                    Candidatedetail.CreatedOnUtc = request.CreatedOnUtc;
-                    Candidatedetail.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                    Candidatedetail.UpdatedOnUtc = request.UpdatedOnUtc;
+                var Candidatedetail = new Candidatedetails {
+                    Name = request.Name,
+                    MrfId = request.MrfId,
+                    EmailId = request.EmailId,
+                    ContactNo = request.ContactNo,
+                 ResumePath = request.ResumePath,
+                 ReviewedByEmployeeIds = reviewerEmpId,
+                 CandidateStatusId = request.CandidateStatusId,
+                 CreatedByEmployeeId = request.CreatedByEmployeeId,
+                 Reason = request.Reason,
+                SourceId = request.SourceId,
+                 CreatedOnUtc = request.CreatedOnUtc,
+                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                 UpdatedOnUtc = request.UpdatedOnUtc,
 
-
-
-                    _unitOfWork.Candidatedetail.Add(Candidatedetail);
-                    _unitOfWork.Save();
-
-                }
+            };
                
 
+
+
+                    _unitOfWork.Candidatedetail.Add(Candidatedetail);
+                    _unitOfWork.Save();
                 List<Mrfinterviewermap> mrfinterviewermap = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == Candidatedetail.MrfId).ToList();
                 if (mrfinterviewermap.Count > 0)
                 {
