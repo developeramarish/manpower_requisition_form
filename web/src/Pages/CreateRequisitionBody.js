@@ -925,7 +925,7 @@ const CreateRequisitionBody = ({
                     htmlFor="MinTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Min Target Salary<RedAsterisk />
+                    Min Target Salary (in LPA)<RedAsterisk />
                   </label>
                   <InputNumberamount
                     id="MinTargetSalary"
@@ -939,7 +939,7 @@ const CreateRequisitionBody = ({
                     htmlFor="MaxTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Max Target Salary<RedAsterisk />
+                    Max Target Salary (in LPA)<RedAsterisk />
                   </label>
                   <InputNumberamount
                     id="MaxTargetSalary"
