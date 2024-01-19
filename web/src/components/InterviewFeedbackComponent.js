@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Dialog } from "primereact/dialog";
-import { API_URL } from "../constants/config";
+import { API_URL, ROLES } from "../constants/config";
 import { getData } from "../constants/Utils";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ButtonC from "./../components/Button";
 import "../css/InterviewFeedback.css";
 import FeedbackForm from '../Pages/FeedbackForm';
-const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
+const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null }) => {
     const [feedData, setFeedData] = useState([{}]);
 	const [showForm, setShowForm] = useState(false);
     const [buttonDisplayed, setButtonDisplayed] = useState(true);
@@ -118,7 +118,7 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null }) => {
               </div>
             )}
           
-    {buttonDisplayed && (
+    {buttonDisplayed && roleId===ROLES.interviewer && (
       <div className="dvAddFeedback">
         <ButtonC
           label="Add Feedback"

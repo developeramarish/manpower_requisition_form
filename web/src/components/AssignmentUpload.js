@@ -10,11 +10,14 @@ import { removeSpaces } from "./constant";
 const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const toastRef = useRef(null);
+  const [submitBtnDisable, setSubmitBtnDisable] = useState(false);
+
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
 
   const handleSubmit = async () => {
+    setSubmitBtnDisable(true);
     const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
 
@@ -54,7 +57,7 @@ const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
             );
 onHide();
 refreshParent();
-            
+setSubmitBtnDisable(false);
           } else {
             console.error("Request failed with status:", response.status);
             if (response.status === 400) {
@@ -71,6 +74,7 @@ refreshParent();
           toastRef.current.showBadRequestMessage(
             "you have to upload Assignment!"
           );
+          setSubmitBtnDisable(false);
         }
         console.error("Request failed with status:", fileUploadResponse.status);
       }
@@ -91,6 +95,7 @@ refreshParent();
         <ButtonC
           label={"Submit"}
           className={"update_btn"}
+          disable={submitBtnDisable}
           onClick={() => handleSubmit()}
         />
       </Dialog>
