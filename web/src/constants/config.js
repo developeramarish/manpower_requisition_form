@@ -31,7 +31,7 @@ export const API_URL = {
   UPDATE_EMPLOYEE:`${APIPath}Employeedetails/Put/`,
   GET_ROLE:`${APIPath}Role`,
   GET_MYRESUME: `${APIPath}Candidatedetail/GetResumeDropdownlist`,
-  ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assign&FileName=`,
+  ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assignment&FileName=`,
   ASSIGNMENT_POST:`${APIPath}Attachment`,
 };
 
