@@ -1,6 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
 import ButtonC from "../components/Button";
 import { Button } from "primereact/button";
+import "../css/MyRequistionsBody.css";
 import { Toolbar } from "primereact/toolbar";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
@@ -62,13 +63,12 @@ export default function AllEmployees() {
   };
   const roleBodyTemplate = (rowData, options) => {
     const handleDropdownChange = (e) => {
-      let roleIdCopy = [...];
+      let roleIdCopy = [...roleId];
       let sv = [...saveBttn];
       sv[options.rowIndex] = true;
-      dataCopy[options.rowIndex].evalutionStatusId = e.target.value;
-      setData(dataCopy);
-     
-    
+      setSaveBttn(sv);
+      roleIdCopy[options.rowIndex] = e.target.value;
+      setRoleId(roleIdCopy);
   };
 
     return (
