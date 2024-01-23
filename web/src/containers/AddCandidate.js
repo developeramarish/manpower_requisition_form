@@ -3,9 +3,8 @@ import InputTextCp from "./../components/Textbox";
 import ButtonC from "./../components/Button";
 import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
-import { removeSpaces } from "./../components/constant";
 import { storageService } from "../constants/storage";
-import { getDataAPI, navigateTo, postData, putData } from "../constants/Utils";
+import { getDataAPI, navigateTo, removeSpaces ,postData, putData } from "../constants/Utils";
 import { InputMask } from "primereact/inputmask";
 import {
   API_URL,
@@ -132,6 +131,7 @@ const fectData=async()=>{
                 toastRef.current.showBadRequestMessage(
                   "Duplicate Candidate Name"
                 );
+                setSubmitBtnDisable(false);
               } else {
                 toastRef.current.showSuccessMessage(
                   "Form submitted successfully!"
@@ -146,6 +146,7 @@ const fectData=async()=>{
                 toastRef.current.showBadRequestMessage(
                   "Bad request: " + response.url
                 );
+                setSubmitBtnDisable(false);
               }
             }
           } catch (error) {
