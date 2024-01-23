@@ -50,7 +50,7 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null 
         setShowForm(false); // Close the form after submission
       };
 
-
+      console.log(feedData);
 
     const columns = [
         {
@@ -74,65 +74,70 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null 
     ];
 
     return (
-        <Dialog
-        header="Interview Feedback"
-        visible={visible}
-        onHide={onHide}
-        draggable={false}
-        dismissableMask
-        className="feed-popup"
-      >
-        {showForm ? (
-          <FeedbackForm
-          visible={true} 
+      <Dialog
+      header="Interview Feedback"
+      visible={visible}
+      onHide={onHide}
+      draggable={false}
+      dismissableMask
+      className="feed-popup"
+    >
+      {showForm ? (
+        <FeedbackForm
+          visible={true}
           onHide={() => setShowForm(false)}
           onSubmit={handleFormSubmit}
           count={count}
           candidateId={cId}
           refreshParent={refreshParentComponent}
         />
-        ) : (
-          <>
-            {feedData.length === 0 ? (
-              <p className="no-feed">No Feedback Yet</p>
-            ) : (
-              <div className="feed-table">
-                <DataTable
-                  value={feedData}
-                  paginator={feedData.length > 10}
-                  removableSort
-                  rows={10}
-                  scrollable
-                  scrollHeight="flex"
-                >
-                  {columns.map((col, index) => (
-                    <Column
-                      key={index}
-                      field={col.field}
-                      header={col.header}
-                      bodyClassName={"feed-col " + col.bodyClassName}
-                      sortable={col.sortable}
-                    />
-                  ))}
-                </DataTable>
-              </div>
-            )}
-          
-    {buttonDisplayed && roleId===ROLES.interviewer && (
-      <div className="dvAddFeedback">
-        <ButtonC
-          label="Add Feedback"
-          className="w-15 bg-red-600 border-red-600 BtnAddFeedback"
-          onClick={() => handleAddFeedbackClick()}  // Pass index or any identifier you need
-          outlined="true"
-        />
-      </div>
-    )}
-  
+      ) : (
+        <>
+          {feedData.length === 0 ? (
+            <p className="no-feed">No Feedback Yet</p>
+          ) : (
+            <div className="feed-table">
+              {feedData.map((dataItem, index) => (
+                <div key={index} className="round-container">
+                  <lable className="lableRound">Round: {dataItem.interviewRound}</lable>
+                  {dataItem.resultGroups && Array.isArray(dataItem.resultGroups) && dataItem.resultGroups.length > 0 ? (
+                    <table className="viewfeedback-table">
+                      <thead>
+                        <tr>
+                          <th>Type</th>
+                          <th>Comment</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dataItem.resultGroups.map((group, i) => (
+                          <tr key={i}>
+                            <td>{group.feedBack}</td>
+                            <td>{group.comment}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <p>No Feedback for this round.</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
 
-          </>
-        )}
-      </Dialog>
+          {buttonDisplayed && roleId === ROLES.interviewer && (
+            <div className="dvAddFeedback">
+              <ButtonC
+                label="Add Feedback"
+                className="w-15 bg-red-600 border-red-600 BtnAddFeedback"
+                onClick={() => handleAddFeedbackClick()}
+                outlined="true"
+              />
+            </div>
+          )}
+        </>
+      )}
+    </Dialog>
     );
 };
 

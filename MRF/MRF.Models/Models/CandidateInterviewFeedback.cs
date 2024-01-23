@@ -17,10 +17,21 @@ namespace MRF.Models.Models
 
         public int? FeedbackAsDraft { get; set; }
         public int InterviewRound { get; set; }        
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
         public int CreatedByEmployeeId { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public int UpdatedByEmployeeId { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
+        [NotMapped]
+        public List<RGroup> ResultGroups { get; set; }
     }
+
+    public class RGroup
+    {
+        public string? FeedBack { get; set; }
+        public string? Comment { get; set; }
+    }
+
+    
+
 }
