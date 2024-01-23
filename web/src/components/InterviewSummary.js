@@ -255,19 +255,19 @@ const InterviewSummary = ({
 		
 			if (fileExtension === 'pdf' || fileExtension === 'docx') {
 				attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
+				
 				return (
-					<a href={attachmentLink} target="_blank" className="int-link-cell">
+					<a href={attachmentLink} target="_blank"  className="int-link-cell">
 						View Attachment
 					</a>
 				);
 			} else {
 				attachmentLink = interview.attachment;
 				return (
-					// <a href={attachmentLink} target="_blank" className="int-link-cell">
-					// 	View Attachment
-					// </a>
-					<InputTextareaComponent value={attachmentLink} rows={1}
-					cols={25}   />
+					<a href={attachmentLink} target="_blank"  className="int-link-cell">
+						View URLs
+					</a>
+					
 				);
 			}
 		} else if (roleId === ROLES.hr && interview.interviewevaluationId != 0) {
