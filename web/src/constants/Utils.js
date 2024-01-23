@@ -203,3 +203,8 @@ export const formatDateToYYYYMMDD= (date) => {
  
   return `${year}-${month}-${day}`;
 }
+
+
+export const removeSpaces = (str) => {
+  return str.replace(/\s/g, ""); // This regular expression replaces all spaces globally
+};

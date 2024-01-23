@@ -97,3 +97,11 @@
 	color: #ffffff;
 	background-color: #c5c5c5;
   }
+
+  .int-header{
+	border-bottom: 0 none;
+    background: #ffffff;
+    color: #495057;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+  }

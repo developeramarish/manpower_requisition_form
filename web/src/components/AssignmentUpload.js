@@ -4,9 +4,8 @@ import ButtonC from "./Button";
 import { storageService } from "../constants/storage";
 import SingleFileUpload from "./FileUpload";
 import { API_URL } from "../constants/config";
-import { navigateTo, postData } from "../constants/Utils";
+import { navigateTo, removeSpaces, postData } from "../constants/Utils";
 import ToastMessages from "./../components/ToastMessages";
-import { removeSpaces } from "./constant";
 import { Divider } from "primereact/divider";
 import InputTextareaComponent from "./InputTextarea";
 const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
@@ -30,17 +29,13 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
     fileUploadData.append("file", selectedFile);
 
     console.log(fileUploadData);
-    let fileName = removeSpaces(data.candidateName) + "_assign";
+    let fileName = removeSpaces(data.candidateName) + "assign";
     const interviewEvaluationIDD = data.interviewevaluationId;
 
     if (!disableUrlTextBox) {
       fileName = urlValue;
     } else {
-      if (selectedFile.type === "application/pdf") {
-        fileName = fileName + ".pdf";
-      } else {
         fileName = fileName + ".docx";
-      }
     }
     try {
       let fileUploadResponse = false;
@@ -49,6 +44,7 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
           method: "POST",
           body: fileUploadData,
         });
+        // fileUploadResponse = await postData(`${API_URL.ASSIGNMENT_UPLOAD}${fileName}`,fileUploadData)
       }
 
       if (fileUploadResponse.ok || !disableUrlTextBox) {
@@ -97,6 +93,7 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
           setSubmitBtnDisable(false);
         }
         console.error("Request failed with status:", fileUploadResponse.status);
+        setSubmitBtnDisable(false);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -127,7 +124,7 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
         <div className="mt-3 mb-5">
           <SingleFileUpload
             onChange={handleFileChange}
-            fileExtension={"pdf , docx"}
+            fileExtension={"docx"}
             disable={disableUploadFile}
           />
         </div>

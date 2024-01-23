@@ -64,6 +64,18 @@ const SingleFileUpload = ({ onChange, fileExtension, disable }) => {
         accept={fileExtension}
         onChange={onFileSelect}
         disabled={disable}
+        style={{
+          // Add your CSS styles here
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '5px',
+          width: '400px',
+          backgroundColor: 'var(--gray-100)',
+          color: '#495057',
+          fontweight: '400',
+          fontsize: '1rem',
+          // Add more styles as needed
+        }}
       /> 
       {/* <button onClick={handleReset} disabled={disable}>
             X
