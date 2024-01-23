@@ -26,6 +26,7 @@ import {
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 import AssignmentUpload from "./AssignmentUpload";
+import InputTextareaComponent from "./InputTextarea";
 
 //const roleId = 3;
 
@@ -246,15 +247,29 @@ const InterviewSummary = ({
 	};
 
 	const attachmentBodyTemplate = (interview) => {
-		console.log(interview);
+		
+
 		if (interview.attachment) {
-			let attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
-			return (
-				<a href={attachmentLink} target="_blank" className="int-link-cell">
-					{/* You can also display the attachment name or any other details */}
-					View Attachment
-				</a>
-			);
+			let attachmentLink;
+			const fileExtension = interview.attachment.split('.').pop().toLowerCase();
+		
+			if (fileExtension === 'pdf' || fileExtension === 'docx') {
+				attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
+				return (
+					<a href={attachmentLink} target="_blank" className="int-link-cell">
+						View Attachment
+					</a>
+				);
+			} else {
+				attachmentLink = interview.attachment;
+				return (
+					// <a href={attachmentLink} target="_blank" className="int-link-cell">
+					// 	View Attachment
+					// </a>
+					<InputTextareaComponent value={attachmentLink} rows={1}
+					cols={25}   />
+				);
+			}
 		} else if (roleId === ROLES.hr && interview.interviewevaluationId != 0) {
 			return (
 				<div>
