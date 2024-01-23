@@ -294,7 +294,7 @@ const fectData=async()=>{
                   Resume
                   <RedAsterisk />
                 </label>
-                <SingleFileUpload onChange={handleFileChange} />
+                <SingleFileUpload onChange={handleFileChange} fileExtension={"pdf"} />
               </div>
             </section>
 

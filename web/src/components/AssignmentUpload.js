@@ -7,13 +7,21 @@ import { API_URL } from "../constants/config";
 import { navigateTo, postData } from "../constants/Utils";
 import ToastMessages from "./../components/ToastMessages";
 import { removeSpaces } from "./constant";
-const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
+import { Divider } from "primereact/divider";
+import InputTextareaComponent from "./InputTextarea";
+const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const toastRef = useRef(null);
-  const [submitBtnDisable, setSubmitBtnDisable] = useState(false);
+  const [submitBtnDisable, setSubmitBtnDisable] = useState(true);
+  const [urlValue, setUrlValue] = useState("");
+  const [disableUploadFile, setDisableUploadFile] = useState(false);
+  const [disableUrlTextBox, setDisableUrlTextBox] = useState(false);
 
   const handleFileChange = (event) => {
     setSelectedFile(event);
+    console.log(selectedFile);
+    setDisableUrlTextBox(true);
+    setSubmitBtnDisable(false);
   };
 
   const handleSubmit = async () => {
@@ -21,29 +29,39 @@ const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
     const fileUploadData = new FormData();
     fileUploadData.append("file", selectedFile);
 
-    const fileName = removeSpaces(data.candidateName) + "_assign";
+    console.log(fileUploadData);
+    let fileName = removeSpaces(data.candidateName) + "_assign";
     const interviewEvaluationIDD = data.interviewevaluationId;
-    
+
+    if (!disableUrlTextBox) {
+      fileName = urlValue;
+    } else {
+      if (selectedFile.type === "application/pdf") {
+        fileName = fileName + ".pdf";
+      } else {
+        fileName = fileName + ".docx";
+      }
+    }
     try {
-      const fileUploadResponse = await fetch(
-        API_URL.ASSIGNMENT_UPLOAD + fileName,
-        {
+      let fileUploadResponse = false;
+      if (!disableUploadFile) {
+        fileUploadResponse = await fetch(API_URL.ASSIGNMENT_UPLOAD + fileName, {
           method: "POST",
           body: fileUploadData,
-        }
-      );
-      if (fileUploadResponse.ok) {
+        });
+      }
+
+      if (fileUploadResponse.ok || !disableUrlTextBox) {
         const uploadData = {
           id: 0,
           interviewEvaluationId: interviewEvaluationIDD,
-          filePath: fileName + ".pdf",
+          filePath: fileName,
           createdByEmployeeId: storageService.getData("profile").employeeId,
           createdOnUtc: new Date().toISOString(),
           updatedByEmployeeId: storageService.getData("profile").employeeId,
           updatedOnUtc: new Date().toISOString(),
         };
 
-        console.log(uploadData);
         try {
           const response = await postData(
             `${API_URL.ASSIGNMENT_POST}`,
@@ -55,15 +73,17 @@ const AssignmentUpload = ({ visible, data, onHide,refreshParent }) => {
             toastRef.current.showSuccessMessage(
               "Assignment submitted successfully!"
             );
-onHide();
-refreshParent();
-setSubmitBtnDisable(false);
+            onHide();
+            refreshParent();
+            handleReset();
+            setSubmitBtnDisable(false);
           } else {
             console.error("Request failed with status:", response.status);
             if (response.status === 400) {
               toastRef.current.showBadRequestMessage(
                 "Bad request: " + response.url
               );
+              setSubmitBtnDisable(false);
             }
           }
         } catch (error) {
@@ -83,20 +103,59 @@ setSubmitBtnDisable(false);
     }
   };
 
+  const handleTextBox = (e) => {
+    setUrlValue(e.target.value);
+    setDisableUploadFile(true);
+    setSubmitBtnDisable(false);
+  };
+  const handleReset = () => {
+    setUrlValue("");
+    setSelectedFile(null);
+    setDisableUploadFile(false);
+    setDisableUrlTextBox(false);
+    setSubmitBtnDisable(true);
+  };
+
   return (
     <>
-      <Dialog header={"Upload Assignment"} visible={visible} onHide={onHide} className="w-4 h-17rem">
-       
-
-        <div className="mt-3 mb-8">
-          <SingleFileUpload onChange={handleFileChange} />
+      <Dialog
+        header={"Upload Assignment / Add URL"}
+        visible={visible}
+        onHide={onHide}
+        className="w-6 h-23rem"
+      >
+        <div className="mt-3 mb-5">
+          <SingleFileUpload
+            onChange={handleFileChange}
+            fileExtension={"pdf , docx"}
+            disable={disableUploadFile}
+          />
         </div>
-
+        <Divider align="center">
+          <b>OR</b>
+        </Divider>
+        <label className="font-bold text-base">Add URL:</label>
+        <br></br>
+        <InputTextareaComponent
+          rows={2}
+          cols={60}
+          onChange={handleTextBox}
+          disable={disableUrlTextBox}
+          // placeholder=
+          value={urlValue}
+        />
+        <br />
+        <br />
         <ButtonC
           label={"Submit"}
           className={"update_btn"}
           disable={submitBtnDisable}
           onClick={() => handleSubmit()}
+        />
+        <ButtonC
+          label={"Reset"}
+          className={"cancel_btn ml-2"}
+          onClick={handleReset}
         />
       </Dialog>
       <ToastMessages ref={toastRef} />
