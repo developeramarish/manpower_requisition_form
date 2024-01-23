@@ -324,7 +324,7 @@ const ResumeSummary = ({
 
   return (
     <>
-      {(roleId === ROLES.hr || roleId === ROLES.mrfOwner) && (
+      {(roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.interviewer) && (
         <>
           <Dialog
             header={
