@@ -1,12 +1,10 @@
 import React, { useEffect, useState,useRef } from "react";
-import ButtonC from "../components/Button";
 import { Button } from "primereact/button";
 import "../css/MyRequistionsBody.css";
-import { Toolbar } from "primereact/toolbar";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { API_URL } from "../constants/config";
-import { getData, navigateTo, postData } from "../constants/Utils";
+import { getData, navigateTo, postData, putData } from "../constants/Utils";
 import ToastMessages from "../components/ToastMessages";
 import DropdownComponent from "../components/Dropdown";
 export default function AllEmployees() {
@@ -14,9 +12,7 @@ export default function AllEmployees() {
   const [editMode, setEditMode] = useState(false);
   const [roleId, setRoleId] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
-  
   const [roleOptions, roleOptionchange] = useState([]);
- 
   const [editData, setEditData] = useState();
   const toastRef = useRef(null);
   //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means
@@ -80,7 +76,6 @@ export default function AllEmployees() {
              options={roleOptions}
               onChange={handleDropdownChange}
             />
-    
     );
   };
   const update = async (data, roleId) => {
@@ -99,31 +94,72 @@ export default function AllEmployees() {
       "updatedByEmployeeId": 1,
       "updatedOnUtc": "2024-01-19T10:21:19.001Z"
     };
+  
     try {
-
-    let response = await postData(API_URL.CREATE_EMPLOYEE,empdata);
-
-    if (response.ok) {
-      const responseData =await response.json();
-      if (responseData.statusCode === 409) {
-        toastRef.current.showConflictMessage(responseData.message);
-      } else {         
-        toastRef.current.showSuccessMessage(
-          "Role assigned successfully!"
-        );
-      
+      let checkEmp = await getData(API_URL.GET_EMPLOYEE_BY_EMP_CODE +"/" + data.employeeId);
+   
+      if(checkEmp.result.length > 0)
+      { 
+          const  empdataNew = {
+          "id":checkEmp.result[0].id,
+          "name": checkEmp.result[0].name,
+          "email": checkEmp.result[0].email,
+          "contactNo": checkEmp.result[0].contactNo,
+          "employeeCode": data.employeeId,
+          "isDeleted": checkEmp.result[0].isDeleted,
+          "roleId": roleId,
+          "isAllowed": checkEmp.result[0].isAllowed,
+          "allowedByEmployeeId": 1,
+          "createdByEmployeeId": 1,
+          "createdOnUtc": checkEmp.result[0].createdOnUtc,
+          "updatedByEmployeeId": 1,
+          "updatedOnUtc": new Date().toISOString()
+        };        
+        let upEmp = await putData(`${API_URL.UPDATE_EMPLOYEE + checkEmp.result[0].id}`,empdataNew);
+        if (upEmp.ok) {
+          const responseData =await upEmp.json();
+          if (responseData.statusCode === 409) {
+            toastRef.current.showConflictMessage(responseData.message);
+          } else {         
+            toastRef.current.showSuccessMessage(
+              "Role assigned/updated successfully!"
+            );
+          
+          }
+        } else {
+          console.error("Request failed with status:", upEmp.status);
+          if (upEmp.status === 400) {
+            toastRef.current.showBadRequestMessage(
+              "Bad request: " + upEmp.url
+            );
+          }
+        }
       }
-    } else {
-      console.error("Request failed with status:", response.status);
-      const errorData = await response.text();
-      console.error("Error Data:", errorData);
-      if (response.status === 400) {
-        toastRef.current.showBadRequestMessage(
-          "Bad request: " + response.url
-        );
+      else
+      {
+        let response = await postData(API_URL.CREATE_EMPLOYEE,empdata);
+
+        if (response.ok) {
+          const responseData =await response.json();
+          if (responseData.statusCode === 409) {
+            toastRef.current.showConflictMessage(responseData.message);
+          } else {         
+            toastRef.current.showSuccessMessage(
+              "Role assigned/updated successfully!"
+            );
+          
+          }
+        } else {
+          console.error("Request failed with status:", response.status);
+          const errorData = await response.text();
+          console.error("Error Data:", errorData);
+          if (response.status === 400) {
+            toastRef.current.showBadRequestMessage(
+              "Bad request: " + response.url
+            );
+          }
+        }
       }
-    }
-    
   } catch (error) {
     console.error("Error:", error);
   }
@@ -198,6 +234,7 @@ export default function AllEmployees() {
           
 				</DataTable>
 			</div>
+      <ToastMessages ref={toastRef} />
       </>
       )}
     

@@ -7,6 +7,7 @@ namespace MRF.DataAccess.Repository.IRepository
         public void Update(Employeedetails employeedetail);
 
         public List<Employeedetails> GetEmployee(int id);
+        public List<Employeedetails> GetEmployeeByEmpCode(int empcode);
     }
 }
 
