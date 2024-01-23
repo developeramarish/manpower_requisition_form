@@ -67,6 +67,29 @@ namespace MRF.API.Controllers
             return _response;
         }
 
+        [HttpGet("{empid}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Employeerolemap))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public ResponseDTO GetRoleIdFromEmpId(int empid)
+        {
+            _logger.LogInfo($"Fetching All Employee rolemap List by Id: {empid}");
+            Employeerolemap employeerolemap = _unitOfWork.Employeerolemap.GetRoleIdFromEmpId(empid);
+            if (employeerolemap == null)
+            { _logger.LogError($"No result found by this Id:{empid}"); }
+            ////Employeerolemap Employeerolemap = _unitOfWork.Employeerolemap.Get(u => u.EmployeeCode == empid);
+            //if (Employeerolemap == null)
+            //{
+            //    _logger.LogError($"No result found by this Id:{empid}");
+            //}
+            _response.Result = employeerolemap;
+            return _response;
+        }
+
         // POST api/<EmployeerolemapController>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status201Created, Description = "Item created successfully", Type = typeof(EmployeerolemapResponseModel))]
