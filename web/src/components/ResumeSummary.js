@@ -324,7 +324,8 @@ const ResumeSummary = ({
 
   return (
     <>
-      {(roleId === ROLES.hr || roleId === ROLES.mrfOwner) && (
+      {/* if roleId is equal to this then it will show dialog box otherwise show data table*/}
+      {(roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.interviewer) && (
         <>
           <Dialog
             header={
