@@ -8,7 +8,7 @@ import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "./multiselectDropdown";
 import { API_URL, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
-import { changeDateFormat, putData, strToArray } from "../constants/Utils";
+import { changeDateFormat, getDataAPI, putData, strToArray } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import InputTextareaComponent from "./InputTextarea";
 
@@ -26,38 +26,38 @@ const ResumeSummary = ({
   const toastRef = useRef(null);
 
   useEffect(() => {
-    fetchData();
-  }, [mrfId]);
-
-  const fetchData = async() => {
+    
+    const fetchData = async() => {
     try {
-      fetch(
-        `${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
+
+      let result=await getDataAPI(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`)
+let response=await result.json();
+console.log(response)
+     
           if (roleId === ROLES.interviewer) {
             var filterInterviewerResumtSumData = [];
-            data.result.resumeDetails.map((res) => {
+            response.result.resumeDetails.map((res) => {
               if (res.candidatestatus === "Shortlisted") {
                 filterInterviewerResumtSumData.push(res);
               }
             });
             setdata(filterInterviewerResumtSumData);
           } else {
-            setdata(data.result.resumeDetails);
+            setdata(response.result.resumeDetails);
           }
-          setResumeReviewer(data.result.employeeRoleMap);
-          let array = new Array(data.result.resumeDetails.length).fill(false);
+          setResumeReviewer(response.result.employeeRoleMap);
+          let array = new Array(response.result.resumeDetails.length).fill(false);
           setSaveBttn(array);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
+        
+        
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  fetchData();
+  }, [mrfId]);
+
+  
 
   // if (data.length < 1) {
   //   return (

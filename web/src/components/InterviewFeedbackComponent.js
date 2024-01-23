@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { API_URL, ROLES } from "../constants/config";
-import { getData } from "../constants/Utils";
+import { getData, getDataAPI } from "../constants/Utils";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ButtonC from "./../components/Button";
@@ -13,15 +13,15 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null 
     const [buttonDisplayed, setButtonDisplayed] = useState(true);
     const [count, setCount] = useState(0);
     const RedAsterisk = () => <span className="text-red-500">*</span>;
-    const onLoad = () => {
-        fetch(API_URL.INTERVIEW_FEEDBACK + "/" + cId)
-		.then((response) => {
-				return response.json();
-			  })
-			  .then((json) => {
-				setFeedData(json["result"]);
+    const onLoad = async() => {
+
+const result=await getDataAPI(`${API_URL.INTERVIEW_FEEDBACK}/${cId}`)
+const response=await result.json();
+
+        
+				setFeedData(response.result);
                 
-				const updatedResult = json.result.map(dataItem => {
+				const updatedResult = response.result.map(dataItem => {
                      if (dataItem.interviewRound === 3) {
                         setButtonDisplayed(false) ;
                        
@@ -29,9 +29,9 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null 
                     
                     setCount(dataItem.interviewRound);
                 });
-			  })
+			 
 		
-			  .catch((error) => console.log(error));
+			 
 		  
     };
     const refreshParentComponent = () => {
@@ -49,7 +49,6 @@ const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null 
         // Add logic to handle form submission (e.g., saving data, updating state)
         setShowForm(false); // Close the form after submission
       };
-
 
 
     const columns = [
