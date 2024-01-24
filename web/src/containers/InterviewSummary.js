@@ -3,8 +3,8 @@ import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
-import DropdownComponent from "./Dropdown";
-import MultiSelectDropdown from "./multiselectDropdown";
+import DropdownComponent from "../components/Dropdown";
+import MultiSelectDropdown from "../components/multiselectDropdown";
 import InterviewFeedbackComponent from "../containers/InterviewFeedbackComponent";
 import {
 	API_URL,
@@ -13,7 +13,7 @@ import {
 	ROLES,
 } from "../constants/config";
 import { storageService } from "../constants/storage";
-import ToastMessages from "./ToastMessages";
+import ToastMessages from "../components/ToastMessages";
 import {
 	changeDateFormat,
 	arrayToObj,

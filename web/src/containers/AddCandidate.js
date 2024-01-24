@@ -103,6 +103,10 @@ const fectData=async()=>{
             body: fileUploadData,
           }
         );
+// const fileUploadResponse = await postData(
+//           API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
+//           fileUploadData
+//         );
 
         if (fileUploadResponse.ok) {
           const data = {

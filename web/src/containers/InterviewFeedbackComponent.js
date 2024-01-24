@@ -6,7 +6,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ButtonC from "./../components/Button";
 import "../css/InterviewFeedback.css";
-import FeedbackForm from '../Pages/FeedbackForm';
+import FeedbackForm from './FeedbackForm';
 const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null }) => {
     const [feedData, setFeedData] = useState([{}]);
 	const [showForm, setShowForm] = useState(false);
