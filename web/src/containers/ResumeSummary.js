@@ -3,14 +3,13 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import ToastMessages from "./ToastMessages";
+import ToastMessages from "../components/ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
-import MultiSelectDropdown from "./multiselectDropdown";
+import MultiSelectDropdown from "../components/multiselectDropdown";
 import { API_URL, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
 import { changeDateFormat, getDataAPI, putData, strToArray } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
-import InputTextareaComponent from "./InputTextarea";
 
 const ResumeSummary = ({
   roleId = null,
