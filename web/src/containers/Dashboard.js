@@ -3,9 +3,9 @@ import "./../css/Dashboard.css";
 import { getData } from "../constants/Utils";
 import { API_URL, ROLES } from "../constants/config";
 import { storageService } from "../constants/storage";
-import InterviewSummary from "../components/InterviewSummary";
+import InterviewSummary from "../containers/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
-import ResumeSummary from "../components/ResumeSummary";
+import ResumeSummary from "../containers/ResumeSummary";
 import DashBoardDataTable from "../components/DashBoardDataTable";
  
 import {

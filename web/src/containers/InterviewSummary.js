@@ -3,9 +3,9 @@ import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
-import DropdownComponent from "./Dropdown";
-import MultiSelectDropdown from "./multiselectDropdown";
-import InterviewFeedbackComponent from "./InterviewFeedbackComponent";
+import DropdownComponent from "../components/Dropdown";
+import MultiSelectDropdown from "../components/multiselectDropdown";
+import InterviewFeedbackComponent from "../containers/InterviewFeedbackComponent";
 import {
 	API_URL,
 	FILE_URL,
@@ -13,7 +13,7 @@ import {
 	ROLES,
 } from "../constants/config";
 import { storageService } from "../constants/storage";
-import ToastMessages from "./ToastMessages";
+import ToastMessages from "../components/ToastMessages";
 import {
 	changeDateFormat,
 	arrayToObj,
@@ -25,8 +25,8 @@ import {
 	getDataAPI,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
-import AssignmentUpload from "./AssignmentUpload";
-import InputTextareaComponent from "./InputTextarea";
+import AssignmentUpload from "../containers/AssignmentUpload";
+
 
 //const roleId = 3;
 
@@ -253,7 +253,9 @@ const InterviewSummary = ({
 			let attachmentLink;
 			const fileExtension = interview.attachment.split('.').pop().toLowerCase();
 		
-			if (fileExtension === 'pdf' || fileExtension === 'docx') {
+			if ( fileExtension === 'docx') {
+				// attachmentLink = `ms-word:ofe|u|${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
+				// attachmentLink = `https://docs.google.com/viewer?url=${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
 				attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
 				
 				return (

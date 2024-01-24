@@ -1,5 +1,5 @@
 import SearchHeader from "./../components/SearchHeader";
-import CreateRequisitionBody from "./CreateRequisitionBody";
+import CreateRequisitionBody from "../containers/CreateRequistionBody";
 import "../css/CreateRequistion.css";
 
 export default function CreateRequisition({reqId=null,reqRoleId,reqstatus=null,roleId=null,reqstatusId=null}) {

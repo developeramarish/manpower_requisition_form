@@ -4,13 +4,13 @@ import ButtonC from "./../components/Button";
 import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
 import { storageService } from "../constants/storage";
-import { getDataAPI, navigateTo, removeSpaces ,postData, putData } from "../constants/Utils";
+import { getDataAPI, navigateTo, removeSpaces ,postData, isFormDataEmptyForAddCandidate, } from "../constants/Utils";
 import { InputMask } from "primereact/inputmask";
 import {
   API_URL,
   COUNTRIES,
   emailRegex,
-  isFormDataEmptyForAddCandidate,
+  
 } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
 
@@ -103,6 +103,10 @@ const fectData=async()=>{
             body: fileUploadData,
           }
         );
+// const fileUploadResponse = await postData(
+//           API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
+//           fileUploadData
+//         );
 
         if (fileUploadResponse.ok) {
           const data = {

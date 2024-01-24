@@ -4,23 +4,19 @@ import { Column } from "primereact/column";
 import "../css/Candidate.css";
 import "../css/MyRequisitions.css";
 import { API_URL, FILE_URL } from "../constants/config";
+import { getDataAPI } from "../constants/Utils";
 function ViewCandidate() {
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
    const apiUrl = API_URL.GET_CANDIDATE_DETAILS;
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((response) => {
-        if (Array.isArray(response.result)) {
-          const data = response.result;
-          setReqData(data);
-        } else {
-          console.error("API response result is not an array:", response);
-        }
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
+const fetch=async()=>{
+let results=await getDataAPI(apiUrl);
+let response=await results.json();
+
+ setReqData(response.result);
+}
+fetch();
+
   }, []);
 
   const createdOnBodyTemplate = (mrf) => {
