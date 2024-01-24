@@ -1,4 +1,5 @@
-﻿using MRF.DataAccess.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
 
 namespace MRF.DataAccess.Repository
@@ -44,22 +45,23 @@ namespace MRF.DataAccess.Repository
 
         public List<Employeedetails> GetEmployeeByEmpCode(int empcode)
         {
-            IQueryable<Employeedetails> query = from empdetails in _db.Employeedetails
-
-                                                where (empdetails.EmployeeCode == empcode)
-                                                select new Employeedetails
-                                                {
-                                                    Id = empdetails.Id,
-                                                    Name = empdetails.Name,
-                                                    Email = empdetails.Email,
-                                                    ContactNo = empdetails.ContactNo,
-                                                    EmployeeCode = empdetails.EmployeeCode,
-                                                    IsAllowed = empdetails.IsAllowed,
-                                                    IsDeleted = empdetails.IsDeleted,
-                                                    AllowedByEmployeeId = empdetails.AllowedByEmployeeId,
-                                                    CreatedByEmployeeId = empdetails.CreatedByEmployeeId,
-                                                    UpdatedOnUtc = empdetails.UpdatedOnUtc,
-                                                };
+            IQueryable<Employeedetails> query = from er in _db.Employeerolemap
+                        join ed in _db.Employeedetails on er.EmployeeId equals ed.Id
+                        where ed.EmployeeCode == empcode
+                        select new Employeedetails
+                        {
+                            Id = ed.Id,
+                            Name = ed.Name,
+                            Email = ed.Email,
+                            RoleId = er.RoleId,
+                            ContactNo = ed.ContactNo,
+                            EmployeeCode = ed.EmployeeCode,
+                            IsAllowed = ed.IsAllowed,
+                            IsDeleted = ed.IsDeleted,
+                            AllowedByEmployeeId = ed.AllowedByEmployeeId,
+                            CreatedByEmployeeId = ed.CreatedByEmployeeId,
+                            UpdatedOnUtc = ed.UpdatedOnUtc,
+                        };
             return query.ToList();
 
         }

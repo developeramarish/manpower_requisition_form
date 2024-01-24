@@ -337,14 +337,8 @@ namespace MRF.API.Controllers
             {
                 _logger.LogError("No record is found");
             }
-            _response.Result = obj;
-            var r = from l in obj
-                    where l.IsDeleted == false
-                    select l;
-            _response.Result = r;
+            _response.Result = obj;            
             return _response;
-
-
         }
     }
 }
