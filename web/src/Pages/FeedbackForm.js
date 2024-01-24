@@ -2,7 +2,7 @@ import { useEffect, useState,useRef } from "react";
 import { Dialog } from 'primereact/dialog';
 import DropdownComponent from "./../components/Dropdown";
 import "../css/InterviewFeedback.css";
-import { postData,getData } from "../constants/Utils";
+import { postData,getData, getDataAPI } from "../constants/Utils";
 import InputTextareaComponent from "./../components/InputTextarea";
 import { API_URL } from "../constants/config";
 import ButtonC from "./../components/Button";
@@ -37,21 +37,17 @@ const FeedbackForm = ({ visible, onHide, onSubmit, count,candidateId=null, refre
 const closePopup = () => {
   setPopupVisible(false);
 };
+
   const RedAsterisk = () => <span className="text-red-500">*</span>;
+
   const toastRef = useRef(null);
-  const onLoad = () => {
-    fetch(API_URL.INTERVIEW_FEEDBACK_MASTER)
-    .then((response) => {
-        console.log(response);
-            return response.json();
-          })
-          .then((json) => {
-            setFeedData(json["result"]);
-            
-          })
-    
-          .catch((error) => console.log(error));
-      
+  
+  const onLoad =async () => {
+
+    let result=await getDataAPI(API_URL.INTERVIEW_FEEDBACK_MASTER);
+let response=await result.json();
+   
+            setFeedData(response.result);
 };
 
 useEffect(() => {

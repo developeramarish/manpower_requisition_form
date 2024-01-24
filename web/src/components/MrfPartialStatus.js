@@ -3,11 +3,11 @@ import {
   API_URL,
   MRF_STATUS,
   REQUISITION_TYPE,
-  isFormDataEmptyForSaveasDraft,
-  isFormDataEmptyForSubmit,
+  
 } from "../constants/config";
 import { storageService } from "../constants/storage";
-import { formatDateToYYYYMMDD, navigateTo, postData, putData } from "../constants/Utils";
+import { formatDateToYYYYMMDD, navigateTo, postData, putData ,isFormDataEmptyForSaveasDraft,
+  isFormDataEmptyForSubmit } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
 import InputTextareaComponent from "./InputTextarea";
@@ -34,6 +34,7 @@ const MrfPartialStatus = ({
   const [note, setNote] = useState("");
   const toastRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const buttonRef = useRef(null);
 
   const strToArray = (s) => {
     s = s ?? "";
@@ -52,6 +53,7 @@ const MrfPartialStatus = ({
             label="Yes"
             className="w-2 bg-red-600 border-red-600 p-2 mr-3"
             onClick={() => {
+              
               handleSubmit(value);
               setVisible(false);
             }}
@@ -305,6 +307,7 @@ const MrfPartialStatus = ({
         <>
           <ButtonC
             label={label}
+            ref={buttonRef}
             className={className}
             // className="w-2 bg-red-600 border-red-600"
             onClick={() => setVisible(true)}
