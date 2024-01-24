@@ -1,4 +1,3 @@
-import SearchHeader from "./../components/SearchHeader";
 import CreateRequisitionBody from "../containers/CreateRequistionBody";
 import "../css/CreateRequistion.css";
 
