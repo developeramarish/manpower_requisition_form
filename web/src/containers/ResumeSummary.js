@@ -72,10 +72,7 @@ console.log(response)
   //   );
   // }
 
-  console.log(roleId);
-  console.log(mrfId);
-  console.log(visible);
-  console.log(roleId);
+
 
   const MultiSelectDrop = (rowData, options) => {
  
@@ -303,8 +300,8 @@ console.log(response)
         paginator={value.length > 5}
         rows={10}
         scrollable
-        scrollHeight="400px"
         draggable={false}
+        scrollHeight="flex"
       >
         {columns.map((col) => (
           <Column
@@ -345,7 +342,24 @@ console.log(response)
             draggable={false}
             className="resume-card"
           >
-            <DataTableResume value={data} columns={columns} />
+           <DataTable
+        value={data}
+        paginator={data.length > 5}
+        rows={10}
+        scrollable
+        draggable={false}
+        scrollHeight="flex"
+      >
+        {columns.map((col) => (
+          <Column
+            field={col.field}
+            header={col.header}
+            body={col.body}
+            bodyClassName={"resume-col" + col.bodyClassName}
+            sortable={col.sortable}
+          />
+        ))}
+      </DataTable>
           </Dialog>
         </>
       )}
