@@ -1,13 +1,13 @@
 import { Dialog } from "primereact/dialog";
 import React, { useRef, useState } from "react";
-import ButtonC from "./Button";
+import ButtonC from "./../components/Button";
 import { storageService } from "../constants/storage";
-import SingleFileUpload from "./FileUpload";
+import SingleFileUpload from "./../components/FileUpload";
 import { API_URL } from "../constants/config";
 import { navigateTo, removeSpaces, postData } from "../constants/Utils";
 import ToastMessages from "./../components/ToastMessages";
 import { Divider } from "primereact/divider";
-import InputTextareaComponent from "./InputTextarea";
+import InputTextareaComponent from "../components/InputTextarea";
 const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const toastRef = useRef(null);
@@ -35,16 +35,22 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
     if (!disableUrlTextBox) {
       fileName = urlValue;
     } else {
-        fileName = fileName + ".docx";
+      fileName = fileName + ".docx";
     }
     try {
+      // console.log(API_URL.ASSIGNMENT_UPLOAD + fileName)
+      // console.log(`${API_URL.ASSIGNMENT_UPLOAD}${fileName}`)
+
       let fileUploadResponse = false;
       if (!disableUploadFile) {
         fileUploadResponse = await fetch(API_URL.ASSIGNMENT_UPLOAD + fileName, {
           method: "POST",
           body: fileUploadData,
         });
-        // fileUploadResponse = await postData(`${API_URL.ASSIGNMENT_UPLOAD}${fileName}`,fileUploadData)
+        // fileUploadResponse = await postData(
+        //   `${API_URL.ASSIGNMENT_UPLOAD}${fileName}`,
+        //   fileUploadData
+        // );
       }
 
       if (fileUploadResponse.ok || !disableUrlTextBox) {
@@ -124,7 +130,7 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
         <div className="mt-3 mb-5">
           <SingleFileUpload
             onChange={handleFileChange}
-            fileExtension={"docx"}
+            fileExtension={"docx "}
             disable={disableUploadFile}
           />
         </div>

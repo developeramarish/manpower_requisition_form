@@ -31,7 +31,7 @@ import Sidebar from "./components/Sidebar";
 import { PAGE_ACTIONS, Page } from "./reducers/Page_r";
 import Dashboard from "./containers/Dashboard";
 import MyRequisitions from "./containers/MyRequisitions";
-import CreateRequisition from "./Pages/CreateRequisition";
+import CreateRequisition from "./containers/CreateRequisition";
 import AddCandidate from "./containers/AddCandidate";
 import Footer from "./components/Footer";
 import EmployeDetails from "./Pages/EmployeDetails";
