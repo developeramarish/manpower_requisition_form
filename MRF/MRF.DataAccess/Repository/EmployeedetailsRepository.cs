@@ -43,11 +43,10 @@ namespace MRF.DataAccess.Repository
 
         }
 
-        public List<Employeedetails> GetEmployeeByEmpCode(int empcode)
+        public List<Employeedetails> GetAllEmpRoleWithEmpoCode()
         {
             IQueryable<Employeedetails> query = from er in _db.Employeerolemap
-                        join ed in _db.Employeedetails on er.EmployeeId equals ed.Id
-                        where ed.EmployeeCode == empcode
+                        join ed in _db.Employeedetails on er.EmployeeId equals ed.Id                      
                         select new Employeedetails
                         {
                             Id = ed.Id,
