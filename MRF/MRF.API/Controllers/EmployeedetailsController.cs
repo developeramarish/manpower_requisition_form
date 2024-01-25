@@ -319,7 +319,7 @@ namespace MRF.API.Controllers
 
         }
 
-        [HttpGet("{empcode}")]
+        [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<Employeedetails>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
@@ -327,24 +327,18 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO GetEmployeeByEmpCode(int empcode)
+        public ResponseDTO GetAllEmpRoleWithEmpoCode()
         {
 
             _logger.LogInfo("Fetching Employee details");
-            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetEmployeeByEmpCode(empcode);
+            List<Employeedetails> obj = _unitOfWork.Employeedetails.GetAllEmpRoleWithEmpoCode();
 
             if (obj.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
-            _response.Result = obj;
-            var r = from l in obj
-                    where l.IsDeleted == false
-                    select l;
-            _response.Result = r;
+            _response.Result = obj;            
             return _response;
-
-
         }
     }
 }
