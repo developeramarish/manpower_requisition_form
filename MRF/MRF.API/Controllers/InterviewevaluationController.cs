@@ -147,7 +147,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public InterviewevaluationResponseModel Put(int id, [FromBody] InterviewevaluationRequestModel request)
         {
-
+            
             List<Interviewevaluation> record = _unitOfWork.Interviewevaluation.GetA(u => u.CandidateId == request.CandidateId).ToList();
 
             if (record.Count > 0)
@@ -156,6 +156,22 @@ namespace MRF.API.Controllers
                 {
 
                     var existingRecord = record[i];
+                    var interviewevaluationHistory = new InterviewevaluationHistory
+                    {
+                        InterviewerId = existingRecord.InterviewerId,
+                        CandidateId = existingRecord.CandidateId,
+                        EvaluationDateUtc = existingRecord.EvaluationDateUtc,
+                        FromTimeUtc = existingRecord.FromTimeUtc,
+                        EvalutionStatusId = existingRecord.EvalutionStatusId,
+                        ToTimeUtc = existingRecord.ToTimeUtc,
+                        CreatedByEmployeeId = existingRecord.CreatedByEmployeeId,
+                        CreatedOnUtc = existingRecord.CreatedOnUtc,
+                        UpdatedByEmployeeId = existingRecord.UpdatedByEmployeeId,
+                        UpdatedOnUtc = existingRecord.UpdatedOnUtc,
+                    };
+                    _unitOfWork.InterviewevaluationHistory.Add(interviewevaluationHistory);
+                    _unitOfWork.Save();
+
                     if (existingRecord != null)
                     {
                         existingRecord.CandidateId = request.CandidateId == 0 ? existingRecord.CandidateId : request.CandidateId;
@@ -172,21 +188,7 @@ namespace MRF.API.Controllers
                         _unitOfWork.Save();
 
                         _responseModel.Id = existingRecord.Id;
-                        var interviewevaluationHistory = new InterviewevaluationHistory
-                        {
-                            InterviewerId = request.InterviewerId,
-                            CandidateId = request.CandidateId,
-                            EvaluationDateUtc = request.EvaluationDateUtc,
-                            FromTimeUtc = request.FromTimeUtc,
-                            EvalutionStatusId = request.EvalutionStatusId,
-                            ToTimeUtc = request.ToTimeUtc,
-                            CreatedByEmployeeId = request.CreatedByEmployeeId,
-                            CreatedOnUtc = request.CreatedOnUtc,
-                            UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                            UpdatedOnUtc = request.UpdatedOnUtc,
-                        };
-                        _unitOfWork.InterviewevaluationHistory.Add(interviewevaluationHistory);
-                        _unitOfWork.Save();
+                      
                     }
                     else
                     {

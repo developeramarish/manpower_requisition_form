@@ -80,57 +80,23 @@ namespace MRF.API.Controllers
         public InterviewevaluationHistoryResponseModel Post([FromBody] InterviewevaluationHistoryRequestModel request)
 
         {
-            var interviewevaluation = new InterviewevaluationHistory();
+            var interviewevaluation = new InterviewevaluationHistory {
+              InterviewerId = request.InterviewerId,
+             CandidateId = request.CandidateId,
+             EvaluationDateUtc = request.EvaluationDateUtc,
+             FromTimeUtc = request.FromTimeUtc,
+             EvalutionStatusId = request.EvalutionStatusId,
+             ToTimeUtc = request.ToTimeUtc,
+             CreatedByEmployeeId = request.CreatedByEmployeeId,
+             CreatedOnUtc = request.CreatedOnUtc,
+             UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+             UpdatedOnUtc = request.UpdatedOnUtc
 
-            if (!string.IsNullOrEmpty(request.interviewerEmployeeIds))
-            {
+        };
+            _unitOfWork.InterviewevaluationHistory.Add(interviewevaluation);
+            _unitOfWork.Save();
 
-                List<InterviewevaluationHistory>? obj = _unitOfWork.InterviewevaluationHistory.GetCandidateByCandidateid(request.CandidateId);
-                foreach (InterviewevaluationHistory inter in obj)
-                {
-                    _unitOfWork.InterviewevaluationHistory.Remove(inter);
-                    _unitOfWork.Save();
-                }
-
-                var employeeIds = request.interviewerEmployeeIds.Split(',');
-                foreach (var employeeId in employeeIds)
-                {
-                    var interviewevaluation1 = new Interviewevaluation();
-                    interviewevaluation1.InterviewerId = int.Parse(employeeId);
-                    interviewevaluation1.CandidateId = request.CandidateId;
-                    interviewevaluation1.EvalutionStatusId = request.EvalutionStatusId == 0 ? null : request.EvalutionStatusId;
-                    interviewevaluation1.EvaluationDateUtc = request.EvaluationDateUtc;
-                    interviewevaluation1.FromTimeUtc = request.FromTimeUtc;
-                    interviewevaluation1.ToTimeUtc = request.ToTimeUtc;
-                    interviewevaluation1.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                    interviewevaluation1.CreatedOnUtc = request.CreatedOnUtc;
-                    interviewevaluation1.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                    interviewevaluation1.UpdatedOnUtc = request.UpdatedOnUtc;
-                    _unitOfWork.Interviewevaluation.Add(interviewevaluation1);
-                    _unitOfWork.Save();
-                }
-            }
-
-            else
-            {
-
-                interviewevaluation.InterviewerId = request.InterviewerId;
-                interviewevaluation.CandidateId = request.CandidateId;
-                interviewevaluation.EvaluationDateUtc = request.EvaluationDateUtc;
-                interviewevaluation.FromTimeUtc = request.FromTimeUtc;
-                interviewevaluation.EvalutionStatusId = request.EvalutionStatusId;
-                interviewevaluation.EvaluationDateUtc = request.EvaluationDateUtc;
-                interviewevaluation.FromTimeUtc = request.FromTimeUtc;
-                interviewevaluation.ToTimeUtc = request.ToTimeUtc;
-                interviewevaluation.EvalutionStatusId = request.EvalutionStatusId;
-                interviewevaluation.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                interviewevaluation.CreatedOnUtc = request.CreatedOnUtc;
-                interviewevaluation.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                interviewevaluation.UpdatedOnUtc = request.UpdatedOnUtc;
-                _unitOfWork.InterviewevaluationHistory.Add(interviewevaluation);
-                _unitOfWork.Save();
-
-            }
+          
             _responseModel.Id = interviewevaluation.Id;
             return _responseModel;
         }
