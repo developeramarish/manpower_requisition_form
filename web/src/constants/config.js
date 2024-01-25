@@ -34,7 +34,8 @@ export const API_URL = {
   ASSIGNMENT_UPLOAD: `${APIPath}Upload?ResumeOrAssign=Assignment&FileName=`,
   ASSIGNMENT_POST:`${APIPath}Attachment`,
   CREATE_EMPLOYEE:`${APIPath}Employeedetails/Post/`,
-  GET_EMPLOYEE_BY_EMP_CODE: `${APIPath}Employeedetails/GetEmployeeByEmpCode`
+  GET_EMPLOYEE_BY_EMP_CODE: `${APIPath}Employeedetails/GetEmployeeByEmpCode`,
+  GET_EMPLOYEE:`${APIPath}Employeedetails/GetAllEmpRoleWithEmpCode`,
 };
 
 export const FILE_URL = {
