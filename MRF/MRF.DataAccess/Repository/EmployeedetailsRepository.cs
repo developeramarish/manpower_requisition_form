@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MRF.DataAccess.Repository.IRepository;
+﻿using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
 
 namespace MRF.DataAccess.Repository
@@ -43,26 +42,48 @@ namespace MRF.DataAccess.Repository
 
         }
 
-        public List<Employeedetails> GetAllEmpRoleWithEmpoCode()
+        public List<Employeedetails> GetAllEmpRoleWithEmpCode()
         {
             IQueryable<Employeedetails> query = from er in _db.Employeerolemap
-                        join ed in _db.Employeedetails on er.EmployeeId equals ed.Id                      
-                        select new Employeedetails
-                        {
-                            Id = ed.Id,
-                            Name = ed.Name,
-                            Email = ed.Email,
-                            RoleId = er.RoleId,
-                            ContactNo = ed.ContactNo,
-                            EmployeeCode = ed.EmployeeCode,
-                            IsAllowed = ed.IsAllowed,
-                            IsDeleted = ed.IsDeleted,
-                            AllowedByEmployeeId = ed.AllowedByEmployeeId,
-                            CreatedByEmployeeId = ed.CreatedByEmployeeId,
-                            UpdatedOnUtc = ed.UpdatedOnUtc,
-                        };
+                                                join ed in _db.Employeedetails on er.EmployeeId equals ed.Id
+                                                select new Employeedetails
+                                                {
+                                                    Id = ed.Id,
+                                                    Name = ed.Name,
+                                                    Email = ed.Email,
+                                                    RoleId = er.RoleId,
+                                                    ContactNo = ed.ContactNo,
+                                                    EmployeeCode = ed.EmployeeCode,
+                                                    IsAllowed = ed.IsAllowed,
+                                                    IsDeleted = ed.IsDeleted,
+                                                    AllowedByEmployeeId = ed.AllowedByEmployeeId,
+                                                    CreatedByEmployeeId = ed.CreatedByEmployeeId,
+                                                    UpdatedOnUtc = ed.UpdatedOnUtc,
+                                                };
             return query.ToList();
 
+        }
+
+        public List<Employeedetails> GetEmployeeByEmpCode(int empcode)
+        {
+            IQueryable<Employeedetails> query = from er in _db.Employeerolemap
+                                                join ed in _db.Employeedetails on er.EmployeeId equals ed.Id
+                                                where ed.EmployeeCode == empcode
+                                                select new Employeedetails
+                                                {
+                                                    Id = ed.Id,
+                                                    Name = ed.Name,
+                                                    Email = ed.Email,
+                                                    RoleId = er.RoleId,
+                                                    ContactNo = ed.ContactNo,
+                                                    EmployeeCode = ed.EmployeeCode,
+                                                    IsAllowed = ed.IsAllowed,
+                                                    IsDeleted = ed.IsDeleted,
+                                                    AllowedByEmployeeId = ed.AllowedByEmployeeId,
+                                                    CreatedByEmployeeId = ed.CreatedByEmployeeId,
+                                                    UpdatedOnUtc = ed.UpdatedOnUtc,
+                                                };
+            return query.ToList();
         }
     }
 }
