@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Checkbox } from "primereact/checkbox";
 
-const CheckboxComponent = ({ label, checked, onChange }) => {
+const CheckboxComponent = ({ label, checked, onChange,disable }) => {
   // const [isChecked, setIsChecked] = useState(false);
 
   // const handleCheckboxChange = () => {
@@ -17,6 +17,7 @@ const CheckboxComponent = ({ label, checked, onChange }) => {
         inputId="checkbox"
         onChange={onChange}
         checked={checked}
+        disabled={disable}
       />
       <label htmlFor="checkbox">{label}</label>
     </div>
