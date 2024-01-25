@@ -31,5 +31,22 @@ namespace MRF.DataAccess.Repository
             return query.ToList();
 
         }
+
+        public Employeerolemap GetRoleIdFromEmpId(int empCode)
+        {
+            Employeerolemap employeerolemap = (from emprole in _db.Employeerolemap
+                                               join empdetails in _db.Employeedetails on emprole.EmployeeId equals empdetails.Id
+                                               where empdetails.EmployeeCode == empCode
+                                               select new Employeerolemap
+                                               {
+                                                   EmployeeId = emprole.EmployeeId,
+                                                   name = empdetails.Name,
+                                                   RoleId = emprole.RoleId,
+                                                   EmployeeCode = empdetails.EmployeeCode,
+                                               }).FirstOrDefault();
+
+            return employeerolemap;
+        }
+
     }
 }

@@ -6,5 +6,6 @@ namespace MRF.DataAccess.Repository.IRepository
     {
         public void Update(Employeerolemap employeerolemap);
         public List<Employeerolemap> GetEmployeebyRole(int roleId);
+        public Employeerolemap GetRoleIdFromEmpId(int empCode);
     }
 }

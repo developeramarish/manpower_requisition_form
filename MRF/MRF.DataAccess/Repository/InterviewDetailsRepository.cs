@@ -80,22 +80,35 @@ namespace MRF.DataAccess.Repository
                                                                 {
                                                                     EvaluationFeedbackId= InterviewFeedback.Id,
                                                                 };
-            
 
-            /*IstatusGrouped contains only the latest status for each CandidateId.*/
-            var statusGrouped = from mrfDetails in _db.Mrfdetails
+
+            var IvaluationId = from mrfDetails in _db.Mrfdetails
                                 join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                 join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
-                                join status in _db.Evaluationstatusmaster on Ivaluation.EvalutionStatusId equals status.Id
                                 where mrfDetails.Id == mrfId
                                 select new InterviewStatus
-                                {
+                                {   
                                     CandidateId = Candidate.Id,
                                     EvalutionStatusId = Ivaluation.EvalutionStatusId,
                                     CandidateStatusChangedOnUtc = Ivaluation.UpdatedOnUtc,
-                                    EvalutionStatus = status.Status,
                                     InterviewevaluationId = Ivaluation.Id,
                                 };
+
+
+            /*IstatusGrouped contains only the latest status for each CandidateId.*/
+            var statusGrouped = from Ivaluation in IvaluationId
+                                join status in _db.Evaluationstatusmaster on Ivaluation.EvalutionStatusId equals status.Id
+                                into Evalstatus
+                                from i in Evalstatus.DefaultIfEmpty()
+                                select new InterviewStatus
+                                {
+                                    CandidateId = Ivaluation.CandidateId,
+                                    EvalutionStatusId = Ivaluation.EvalutionStatusId,
+                                    CandidateStatusChangedOnUtc = Ivaluation.CandidateStatusChangedOnUtc,
+                                    InterviewevaluationId = Ivaluation.InterviewevaluationId,
+                                    EvalutionStatus = i.Status==null?"": i.Status,
+                                };
+
             var IstatusGrouped = from status in statusGrouped
                                  group status by status.CandidateId into grouped
                                  select new InterviewStatus
