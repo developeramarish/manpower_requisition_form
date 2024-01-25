@@ -60,11 +60,12 @@ namespace MRF.Utility
         public bool IsValidUpdateValue(object value)
         {
             return value != null
-                && !(value is int intValue && intValue == 0)
-                && !(value is string stringValue && stringValue.Equals("string"))
-                && !string.IsNullOrEmpty(value.ToString())
-                && !(value is DateOnly dateOnlyValue && dateOnlyValue.Year == 1)
-                && !(value is bool boolValue && !boolValue);
+       && !(value is int intValue && intValue == 0)
+       && !(value is string stringValue && stringValue.Equals("string"))
+       && !string.IsNullOrEmpty(value.ToString())
+       && !((value is DateTime dateTimeValue && dateTimeValue == DateTime.MinValue)
+           || (value is DateOnly dateOnlyValue && dateOnlyValue == DateOnly.MinValue))
+       && !(value is bool boolValue && !boolValue);
         }
     }
 }

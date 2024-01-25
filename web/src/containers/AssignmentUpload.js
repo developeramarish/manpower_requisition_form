@@ -32,11 +32,11 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
     let fileName = removeSpaces(data.candidateName) + "assign";
     const interviewEvaluationIDD = data.interviewevaluationId;
 
-    if (!disableUrlTextBox) {
-      fileName = urlValue;
-    } else {
-      fileName = fileName + ".docx";
-    }
+    // if (!disableUrlTextBox) {
+    //   fileName = urlValue;
+    // } else {
+    //   fileName = fileName + ".docx";
+    // }
     try {
       // console.log(API_URL.ASSIGNMENT_UPLOAD + fileName)
       // console.log(`${API_URL.ASSIGNMENT_UPLOAD}${fileName}`)
@@ -57,7 +57,7 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
         const uploadData = {
           id: 0,
           interviewEvaluationId: interviewEvaluationIDD,
-          filePath: fileName,
+          filePath: disableUrlTextBox==false? urlValue:fileName+ ".docx",
           createdByEmployeeId: storageService.getData("profile").employeeId,
           createdOnUtc: new Date().toISOString(),
           updatedByEmployeeId: storageService.getData("profile").employeeId,

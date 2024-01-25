@@ -252,10 +252,12 @@ const InterviewSummary = ({
 		if (interview.attachment) {
 			let attachmentLink;
 			const fileExtension = interview.attachment.split('.').pop().toLowerCase();
+			
 			if ( fileExtension === 'docx') {
 				// attachmentLink = `ms-word:ofe|u|${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
 				// attachmentLink = `https://docs.google.com/viewer?url=${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
-				attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment+".docx";
+				attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
+				//alert(attachmentLink);
 				return (
 					<a href={attachmentLink} target="_blank"  className="int-link-cell">
 						View Attachment

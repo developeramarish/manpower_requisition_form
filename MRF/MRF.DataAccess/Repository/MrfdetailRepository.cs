@@ -64,6 +64,7 @@ namespace MRF.DataAccess.Repository
                                                      ReplaceJustification = replacement.Justification != null ? replacement.Justification:"",
                                                      AnnualCtc = replacement != null ? replacement.AnnualCtc : 0,
                                                      AnnualGross = replacement != null ? replacement.AnnualGross : 0,
+                                                     CreatedOnUtc= mrfDetails.CreatedOnUtc,
                                                  }).ToList();
 
 
