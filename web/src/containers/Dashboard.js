@@ -182,6 +182,7 @@ function Dashboard({ roleId, userId }) {
     resumeSummaryColums = resumeSummaryColums.filter(column => column.field !== "New" &&
     column.field !== "Rejected" && column.field !== "On Hold");
    };
+   
   return (
     <div className="dashboard_wrapper">
       <h3 className="dashboard_title">My Dashboard</h3>

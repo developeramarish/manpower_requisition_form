@@ -418,12 +418,12 @@ namespace MRF.API.Controllers
             var mrfDetailsStatusHistoryResponse = mrfDetailsStatusHistoryController.Post(MrfdetailRequestModelRequest);
         }
 
-        private void CallMrfHistory(MrfdetailRequestModel request, int mrfId, bool Update)
+        private void CallMrfHistory(MrfdetailRequestModel request, int mrfId, int StatusId)
         {
             var mrfDetailsStatusHistory = new mrfDetailsStatusHistoryRequestModel
             {
                 MrfId = mrfId,
-                mrfStatusId = request.MrfStatusId,
+                mrfStatusId = StatusId,
                 CreatedByEmployeeId = request.UpdatedByEmployeeId,
                 CreatedOnUtc = request.UpdatedOnUtc,
 
@@ -632,6 +632,7 @@ namespace MRF.API.Controllers
 
             if (existingStatus != null)
             {
+                int mrfstatus = existingStatus.MrfStatusId;
                 var entityType = existingStatus.GetType();
                 foreach (var propertyInfo in typeof(MrfdetailRequestModel).GetProperties())
                 {
@@ -655,7 +656,7 @@ namespace MRF.API.Controllers
                 
 
                 int employeeId=CallEmailApprovalController(request, id, false);
-                CallMrfHistory(request, id, false);
+                CallMrfHistory(request, id, mrfstatus);
 
                 CallGetMrfdetailsInEmailController(id, employeeId, request.MrfStatusId);
                 // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
@@ -809,7 +810,7 @@ namespace MRF.API.Controllers
             sw.InterviewReviewer = _unitOfWork.Employeerolemap.GetEmployeebyRole(6);
             sw.HiringManager = _unitOfWork.Employeerolemap.GetEmployeebyRole(3); // by default MRF owner
             sw.FunctionHead = _unitOfWork.Employeerolemap.GetEmployeebyRole(8);
-            sw.SiteHRSPOC = _unitOfWork.Employeerolemap.GetEmployeebyRole(9);
+            sw.SiteHRSPOC = _unitOfWork.Employeerolemap.GetEmployeebyRole(4);
             sw.FinanceHead = _unitOfWork.Employeerolemap.GetEmployeebyRole(10);
             sw.PresidentnCOO = _unitOfWork.Employeerolemap.GetEmployeebyRole(11);
             if (sw.Projects.Count == 0 || sw.Departments.Count == 0 || sw.Grades.Count == 0 || sw.Vaccancies.Count == 0 || sw.EmploymentTypes.Count == 0 || sw.location.Count == 0 || sw.Qualification.Count == 0 || sw.ReportingTo.Count == 0)
@@ -857,9 +858,9 @@ namespace MRF.API.Controllers
             public List<Employeedetails> ReportingTo { get; set; } = new List<Employeedetails>();
             public List<Employeerolemap> Resumereviewer { get; set; } = new List<Employeerolemap>();//5
             public List<Employeerolemap> InterviewReviewer { get; set; } = new List<Employeerolemap>();//6
-            public List<Employeerolemap> HiringManager { get; set; } = new List<Employeerolemap>();//7
+            public List<Employeerolemap> HiringManager { get; set; } = new List<Employeerolemap>();//3
             public List<Employeerolemap> FunctionHead { get; set; } = new List<Employeerolemap>();//8
-            public List<Employeerolemap> SiteHRSPOC { get; set; } = new List<Employeerolemap>();//9
+            public List<Employeerolemap> SiteHRSPOC { get; set; } = new List<Employeerolemap>();//4
             public List<Employeerolemap> FinanceHead { get; set; } = new List<Employeerolemap>();//10
 
             public List<Employeerolemap> PresidentnCOO { get; set; } = new List<Employeerolemap>();//11
