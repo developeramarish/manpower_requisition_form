@@ -5,6 +5,7 @@ using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MRF.API.Controllers
@@ -85,33 +86,63 @@ namespace MRF.API.Controllers
             if (!string.IsNullOrEmpty(request.interviewerEmployeeIds))
             {
 
-                List<Interviewevaluation>? obj = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(request.CandidateId);
-                foreach (Interviewevaluation inter in obj)
-                {
-                    _unitOfWork.Interviewevaluation.Remove(inter);
-                    _unitOfWork.Save();
-                }
-
+               
+              
                 var employeeIds = request.interviewerEmployeeIds.Split(',');
+               
+                 
                 foreach (var employeeId in employeeIds)
                 {
                     var interviewevaluation1 = new Interviewevaluation();
-                    interviewevaluation1.InterviewerId = int.Parse(employeeId);
-                    interviewevaluation1.CandidateId = request.CandidateId;
-                    interviewevaluation1.EvalutionStatusId = request.EvalutionStatusId == 0 ? null : request.EvalutionStatusId;
-                    interviewevaluation1.EvaluationDateUtc = request.EvaluationDateUtc;
-                    interviewevaluation1.FromTimeUtc = request.FromTimeUtc;
-                    interviewevaluation1.ToTimeUtc = request.ToTimeUtc;
-                    interviewevaluation1.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                    interviewevaluation1.CreatedOnUtc = request.CreatedOnUtc;
-                    interviewevaluation1.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
-                    interviewevaluation1.UpdatedOnUtc = request.UpdatedOnUtc;
-                    _unitOfWork.Interviewevaluation.Add(interviewevaluation1);
-                    _unitOfWork.Save();
+                    List<Interviewevaluation> record = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(request.CandidateId, int.Parse(employeeId));
+                    if (record.Count > 0)
+                    {
+                        _logger.LogError($"Already exist");
+                    }
+                    else
+                    {
+                        
+                        interviewevaluation1.InterviewerId = int.Parse(employeeId);
+                        interviewevaluation1.CandidateId = request.CandidateId;
+                        interviewevaluation1.EvalutionStatusId = request.EvalutionStatusId == 0 ? null : request.EvalutionStatusId;
+                        interviewevaluation1.EvaluationDateUtc = request.EvaluationDateUtc;
+                        interviewevaluation1.FromTimeUtc = request.FromTimeUtc;
+                        interviewevaluation1.ToTimeUtc = request.ToTimeUtc;
+                        interviewevaluation1.CreatedByEmployeeId = request.CreatedByEmployeeId;
+                        interviewevaluation1.CreatedOnUtc = request.CreatedOnUtc;
+                        interviewevaluation1.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
+                        interviewevaluation1.UpdatedOnUtc = request.UpdatedOnUtc;
+                        _unitOfWork.Interviewevaluation.Add(interviewevaluation1);
+                        _unitOfWork.Save();
+                    }
+                    try
+                    {
+                        List<Interviewevaluation> list = _unitOfWork.Interviewevaluation.GetA(u => u.CandidateId == request.CandidateId).ToList();
+                        string InterviewerEmployeeIds = string.Join(",", list.Select(l => l.InterviewerId));
+
+                        if (list.Count > 1 && InterviewerEmployeeIds != (request.interviewerEmployeeIds))
+                        {
+                            foreach (Interviewevaluation inter in list)
+                            {
+                                if (inter.InterviewerId != int.Parse(employeeId))
+                                {
+                                    _unitOfWork.Interviewevaluation.Remove(inter);
+                                    _unitOfWork.Save();
+                                }
+                            }
+                        }
+                    }
+                         
+
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"we can not remove interviewer");
+                    }
+
                 }
             }
-
-            else
+          
+   else
             {
 
                 interviewevaluation.InterviewerId = request.InterviewerId;
@@ -129,7 +160,8 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
             }
-           
+          
+
             _responseModel.Id = interviewevaluation.Id;
             return _responseModel;
         }
