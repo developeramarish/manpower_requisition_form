@@ -31,7 +31,15 @@ const MyRequisitions = ({roleId,userId}) => {
 
 		if (roleId) {
 			getReqData();
-		}
+
+			const refreshInterval = setInterval(() => {
+				getReqData();
+			  }, 300000);
+		
+			  // Clean up interval when component unmounts
+			  return () => clearInterval(refreshInterval);
+			}
+		
 	}, [roleId]);
 
 	const columns = [
