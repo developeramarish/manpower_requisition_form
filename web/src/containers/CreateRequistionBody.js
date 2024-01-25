@@ -194,7 +194,7 @@ const CreateRequisitionBody = ({
       }
     }
     setFormData({ ...formData, minExperience: minExp });
-    setFormData({ ...formData, maxExperience: minExp });
+    //setFormData({ ...formData, maxExperience: minExp });
   };
 
   const handleMaxExpChange = (e) => {
