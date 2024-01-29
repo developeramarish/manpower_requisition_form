@@ -7,7 +7,8 @@ import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
 import InputTextareaComponent from "./InputTextarea";
 import ToastMessages from "./ToastMessages";
-
+import LoadingSpinner from "./LoadingSpinner";
+import {throttle} from "lodash";
 const MrfPartialStatus = ({
   mrfId = null,
   mrfStatusId = null,
@@ -30,11 +31,8 @@ const MrfPartialStatus = ({
   const [note, setNote] = useState("");
   const toastRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const buttonRef = useRef(null);
-
-  // const [disableBtn, setDisableBtn] = useState(false);
-  // setDisableBtn(disabled);
-  
+  const [isThrottle, setIsThrottle] = useState(false);
+  const buttonRef = useRef(null);  
   const strToArray = (s) => {
     s = s ?? "";
     if (s !== "" && typeof s === "string") {
@@ -44,6 +42,18 @@ const MrfPartialStatus = ({
   };
 
   const footerContent = (value) => {
+
+const throttleHandleSubmit=throttle(()=>{
+  setIsThrottle(true);
+  handleSubmit(value);
+
+},500)
+
+const throttleHandlePartialSubmit=throttle(()=>{
+  setIsThrottle(true);
+  submitPartial(value);
+},500)
+
     return (
       <div>
         {(roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
@@ -52,8 +62,9 @@ const MrfPartialStatus = ({
             label="Yes"
             className="w-2 bg-red-600 border-red-600 p-2 mr-3"
             onClick={() => {
-              handleSubmit(value);
-              setVisible(false);
+              if(!isThrottle){
+                throttleHandleSubmit();
+              }
             }}
           />
         ) : (
@@ -61,9 +72,10 @@ const MrfPartialStatus = ({
             label="Yes"
             className="w-2 bg-red-600  px-2 mr-3"
             onClick={() => {
-              submitPartial(value);
-             
-              setVisible(false);
+              if(!isThrottle){
+                throttleHandlePartialSubmit();
+              }
+              
             }}
           />
         )}
@@ -87,22 +99,31 @@ const MrfPartialStatus = ({
       ", "
     )}`;
     toastRef.current.showBadRequestMessage(errorMessage);
+    setIsLoading(false);
+    setVisible(false);
   };
 
   const handleSubmit = async (mrfStatusId) => {
     if(emailErrors){
       toastRef.current.showWarrningMessage("Invalid Email format");
+      setIsThrottle(false);
+      setVisible(false);
+    
       return 
     }
     if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
       const emptyFields = isFormDataEmptyForSubmit(formData);
       formatAndShowErrorMessage(emptyFields);
+      setIsThrottle(false);
+      setVisible(false);
     } else if (
       mrfStatusId == 1 &&
       isFormDataEmptyForSaveasDraft(formData).length > 0
     ) {
       const emptyFields = isFormDataEmptyForSaveasDraft(formData);
       formatAndShowErrorMessage(emptyFields);
+      setIsThrottle(false);
+      setVisible(false);
     } else {
       console.log("Form data is valid. Submitting...");
      
@@ -177,13 +198,23 @@ const MrfPartialStatus = ({
           const responseData = await response.json();
           console.log("Response Data:", responseData);
           if (responseData.statusCode === 409) {
+            setVisible(false);
+              setIsLoading(false);
+              setIsThrottle(false);
             toastRef.current.showConflictMessage(responseData.message);
           } else {
             if (mrfStatusId == 1) {
+              setVisible(false);
+              setIsLoading(false);
+              setIsThrottle(false);
               toastRef.current.showSuccessMessage(
                 "The MRF has been saved as Draft!"
               );
             } else {
+              setVisible(false);
+              setIsLoading(false);
+              setIsThrottle(false);
+
               toastRef.current.showSuccessMessage(
                 "Form submitted successfully!"
               );
@@ -197,6 +228,9 @@ const MrfPartialStatus = ({
           const errorData = await response.text();
           console.error("Error Data:", errorData);
           if (response.status === 400) {
+            setVisible(false);
+              setIsLoading(false);
+              setIsThrottle(false);
             toastRef.current.showBadRequestMessage(
               "Bad request: " + response.url
             );
@@ -205,7 +239,9 @@ const MrfPartialStatus = ({
       } catch (error) {
         console.error("Error:", error);
       } finally {
-        setIsLoading(false);
+        setVisible(false);
+              setIsLoading(false);
+              setIsThrottle(false);
       }
     }
   };
@@ -230,6 +266,7 @@ const MrfPartialStatus = ({
     } else {
       fiApprovalDate = formatDateToYYYYMMDD(formData.fiApprovalDate);
     }
+    setIsLoading(true);
     const partialsUpdate = {
       mrfStatusId,
       note: note || null,
@@ -255,6 +292,7 @@ const MrfPartialStatus = ({
     };
 
     try {
+      console.log("Form data is valid. Submitting.4444444..");
       let response = await putData(
         `${API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId}`,
         partialsUpdate
@@ -262,8 +300,15 @@ const MrfPartialStatus = ({
       if (response.ok) {
         const responseData = await response.json();
         if (responseData.statusCode === 409) {
+          setVisible(false);
+              setIsLoading(false);
+              setIsThrottle(false);
           toastRef.current.showConflictMessage(responseData.message);
         } else {
+          setVisible(false);
+          setIsLoading(false);
+          setIsThrottle(false);
+
           toastRef.current.showSuccessMessage("Action Submitted");
 
           if (updatedClick) {
@@ -279,13 +324,25 @@ const MrfPartialStatus = ({
         const errorData = await response.text();
         console.error("Error Data:", errorData);
         if (response.status === 400) {
+          setVisible(false);
+              setIsLoading(false);
+              setIsThrottle(false);
+
           toastRef.current.showBadRequestMessage(
             "Bad request: " + response.url
           );
         }
       }
     } catch (error) {
+      setVisible(false);
+      setIsLoading(false);
+      setIsThrottle(false);
+
       console.error("Error:", error);
+    }finally {
+      setVisible(false);
+            setIsLoading(false);
+            setIsThrottle(false);
     }
   };
 
@@ -346,7 +403,8 @@ const MrfPartialStatus = ({
             )}
 
             {message && <h3>{message}</h3>}
-          </Dialog>
+            {isLoading && <LoadingSpinner />}   
+                  </Dialog> 
         </>
       )}
       <ToastMessages ref={toastRef} />
