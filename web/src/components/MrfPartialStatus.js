@@ -1,10 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  API_URL,
-  MRF_STATUS,
-  REQUISITION_TYPE,
-  
-} from "../constants/config";
+import { API_URL, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
 import { storageService } from "../constants/storage";
 import { formatDateToYYYYMMDD, navigateTo, postData, putData ,isFormDataEmptyForSaveasDraft,
   isFormDataEmptyForSubmit } from "../constants/Utils";
@@ -29,6 +24,7 @@ const MrfPartialStatus = ({
   hiringManagerUpdateClick = false,
   bypassClicked=false,
   className,
+  emailErrors
 }) => {
   const [visible, setVisible] = useState(false);
   const [note, setNote] = useState("");
@@ -36,6 +32,9 @@ const MrfPartialStatus = ({
   const [isLoading, setIsLoading] = useState(false);
   const buttonRef = useRef(null);
 
+  // const [disableBtn, setDisableBtn] = useState(false);
+  // setDisableBtn(disabled);
+  
   const strToArray = (s) => {
     s = s ?? "";
     if (s !== "" && typeof s === "string") {
@@ -53,7 +52,6 @@ const MrfPartialStatus = ({
             label="Yes"
             className="w-2 bg-red-600 border-red-600 p-2 mr-3"
             onClick={() => {
-              
               handleSubmit(value);
               setVisible(false);
             }}
@@ -64,6 +62,7 @@ const MrfPartialStatus = ({
             className="w-2 bg-red-600  px-2 mr-3"
             onClick={() => {
               submitPartial(value);
+             
               setVisible(false);
             }}
           />
@@ -91,6 +90,10 @@ const MrfPartialStatus = ({
   };
 
   const handleSubmit = async (mrfStatusId) => {
+    if(emailErrors){
+      toastRef.current.showWarrningMessage("Invalid Email format");
+      return 
+    }
     if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
       const emptyFields = isFormDataEmptyForSubmit(formData);
       formatAndShowErrorMessage(emptyFields);
@@ -102,7 +105,7 @@ const MrfPartialStatus = ({
       formatAndShowErrorMessage(emptyFields);
     } else {
       console.log("Form data is valid. Submitting...");
-
+     
       setIsLoading(true);
       const data = {
         referenceNo: formData.referenceNo,
@@ -166,8 +169,10 @@ const MrfPartialStatus = ({
       };
       console.log(data);
       try {
-
-        let response=await postData(`${API_URL.POST_CREATE_REQUISITION}`,data);
+        let response = await postData(
+          `${API_URL.POST_CREATE_REQUISITION}`,
+          data
+        );
         if (response.ok) {
           const responseData = await response.json();
           console.log("Response Data:", responseData);
@@ -206,8 +211,11 @@ const MrfPartialStatus = ({
   };
 
   const submitPartial = async () => {
-    let hiringManagerId, hiringManagerEmpId, siteHRSPOCId, siteHRSPOCEmpId,fiApprovalDate;
-
+    let hiringManagerId,
+      hiringManagerEmpId,
+      siteHRSPOCId,
+      siteHRSPOCEmpId,
+      fiApprovalDate;
     if (siteHRUpdateClick) {
       siteHRSPOCId = formData.siteHRSPOCId;
       siteHRSPOCEmpId = formData.siteHRSPOCEmpId;
@@ -217,11 +225,10 @@ const MrfPartialStatus = ({
       hiringManagerEmpId = formData.hiringManagerEmpId;
     }
 
-    if(bypassClicked){
-      fiApprovalDate=formatDateToYYYYMMDD(new Date);
-    }
-    else{
-      fiApprovalDate= formatDateToYYYYMMDD(formData.fiApprovalDate);
+    if (bypassClicked) {
+      fiApprovalDate = formatDateToYYYYMMDD(new Date());
+    } else {
+      fiApprovalDate = formatDateToYYYYMMDD(formData.fiApprovalDate);
     }
     const partialsUpdate = {
       mrfStatusId,
@@ -247,10 +254,11 @@ const MrfPartialStatus = ({
       spApprovalDate: formatDateToYYYYMMDD(formData.spApprovalDate),
     };
 
-   
     try {
-   
-    let response = await putData(`${API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId}`,partialsUpdate)
+      let response = await putData(
+        `${API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId}`,
+        partialsUpdate
+      );
       if (response.ok) {
         const responseData = await response.json();
         if (responseData.statusCode === 409) {
