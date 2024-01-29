@@ -15,10 +15,10 @@ namespace MRF.API.Controllers
     public class EmailController : ControllerBase
     {
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IEmailService _emailService;
+        private readonly ISmtpEmailService _emailService;
         private readonly ILoggerService _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public EmailController(IEmailService emailService, ILoggerService logger, IUnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment)
+        public EmailController(ISmtpEmailService emailService, ILoggerService logger, IUnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment)
         {
             _emailService = emailService;
             _logger = logger;
@@ -42,7 +42,7 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == Status);
                 if (emailRequest != null)
                 {
-                    await _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                     _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     _logger.LogInfo("Email sent successfully.");
                     return Ok("Email sent successfully.");
                 }
