@@ -211,7 +211,7 @@ namespace MRF.API.Controllers
                         EvalutionStatusId = existingRecord.EvalutionStatusId,
                         ToTimeUtc = existingRecord.ToTimeUtc,
                         CreatedByEmployeeId = existingRecord.CreatedByEmployeeId,
-                        CreatedOnUtc = existingRecord.CreatedOnUtc,
+                        CreatedOnUtc = DateTime.Now,
                         UpdatedByEmployeeId = existingRecord.UpdatedByEmployeeId,
                         UpdatedOnUtc = existingRecord.UpdatedOnUtc,
                     };
