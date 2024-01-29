@@ -6,7 +6,7 @@ namespace MRF.DataAccess.Repository.IRepository
     {
         public void Update(InterviewevaluationHistory interviewevaluation);
 
-        
+        public List<InterviewevaluationHistory> GetCandidateByCandidateid(int candidateId);
 
 
     }
