@@ -6,6 +6,8 @@ using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
 
 
+
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MRF.API.Controllers
@@ -82,26 +84,21 @@ namespace MRF.API.Controllers
 
         {
             var interviewevaluation = new Interviewevaluation();
+            bool flag = true;
 
             if (!string.IsNullOrEmpty(request.interviewerEmployeeIds))
             {
 
-               
-              
-                var employeeIds = request.interviewerEmployeeIds.Split(',');
-               
                  
+                List<Interviewevaluation> re = _unitOfWork.Interviewevaluation.GetA(u => u.CandidateId == request.CandidateId).ToList();
+ 
+                var employeeIds = request.interviewerEmployeeIds.Split(',');
+
                 foreach (var employeeId in employeeIds)
                 {
+                     
+ 
                     var interviewevaluation1 = new Interviewevaluation();
-                    List<Interviewevaluation> record = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(request.CandidateId, int.Parse(employeeId));
-                    if (record.Count > 0)
-                    {
-                        _logger.LogError($"Already exist");
-                    }
-                    else
-                    {
-                        
                         interviewevaluation1.InterviewerId = int.Parse(employeeId);
                         interviewevaluation1.CandidateId = request.CandidateId;
                         interviewevaluation1.EvalutionStatusId = request.EvalutionStatusId == 0 ? null : request.EvalutionStatusId;
@@ -114,32 +111,32 @@ namespace MRF.API.Controllers
                         interviewevaluation1.UpdatedOnUtc = request.UpdatedOnUtc;
                         _unitOfWork.Interviewevaluation.Add(interviewevaluation1);
                         _unitOfWork.Save();
-                    }
-                    try
-                    {
-                        List<Interviewevaluation> list = _unitOfWork.Interviewevaluation.GetA(u => u.CandidateId == request.CandidateId).ToList();
-                        string InterviewerEmployeeIds = string.Join(",", list.Select(l => l.InterviewerId));
-
-                        if (list.Count > 1 && InterviewerEmployeeIds != (request.interviewerEmployeeIds))
-                        {
-                            foreach (Interviewevaluation inter in list)
-                            {
-                                if (inter.InterviewerId != int.Parse(employeeId))
-                                {
-                                    _unitOfWork.Interviewevaluation.Remove(inter);
-                                    _unitOfWork.Save();
-                                }
-                            }
-                        }
-                    }
-                         
-
-                    catch (Exception ex)
-                    {
-                        _logger.LogError($"we can not remove interviewer");
-                    }
-
+                    
                 }
+                try
+                {
+
+                    foreach (Interviewevaluation inter in re)
+                    {
+
+                        _unitOfWork.Interviewevaluation.Remove(inter);
+                        _unitOfWork.Save();
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (flag)
+                    {
+                        _logger.LogError($"we can not delete, interviewer in use");
+                    }
+                    else
+                    {
+                        /*throw ExceptionUtil.CreateException(e);*/
+                    }
+                }
+
+
             }
           
    else
@@ -160,7 +157,9 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
             }
+             
           
+            
 
             _responseModel.Id = interviewevaluation.Id;
             return _responseModel;
@@ -181,28 +180,15 @@ namespace MRF.API.Controllers
         {
             
             List<Interviewevaluation> record = _unitOfWork.Interviewevaluation.GetA(u => u.CandidateId == request.CandidateId).ToList();
-
+            InterviewevaluationHistoryController controller = new InterviewevaluationHistoryController(_unitOfWork, _logger);
+            controller.PostForInterview(record);
             if (record.Count > 0)
             {
                 for (int i = 0; i < record.Count; i++)
                 {
 
                     var existingRecord = record[i];
-                    var interviewevaluationHistory = new InterviewevaluationHistory
-                    {
-                        InterviewerId = existingRecord.InterviewerId,
-                        CandidateId = existingRecord.CandidateId,
-                        EvaluationDateUtc = existingRecord.EvaluationDateUtc,
-                        FromTimeUtc = existingRecord.FromTimeUtc,
-                        EvalutionStatusId = existingRecord.EvalutionStatusId,
-                        ToTimeUtc = existingRecord.ToTimeUtc,
-                        CreatedByEmployeeId = existingRecord.CreatedByEmployeeId,
-                        CreatedOnUtc = existingRecord.CreatedOnUtc,
-                        UpdatedByEmployeeId = existingRecord.UpdatedByEmployeeId,
-                        UpdatedOnUtc = existingRecord.UpdatedOnUtc,
-                    };
-                    _unitOfWork.InterviewevaluationHistory.Add(interviewevaluationHistory);
-                    _unitOfWork.Save();
+                   
 
                     if (existingRecord != null)
                     {

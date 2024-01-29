@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MRF.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class InterviewevaluationHistoryController : ControllerBase
     {
@@ -17,8 +17,10 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private InterviewevaluationHistoryResponseModel _responseModel;
         private readonly ILoggerService _logger;
+        
         public InterviewevaluationHistoryController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
+             
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new InterviewevaluationHistoryResponseModel();
@@ -178,6 +180,47 @@ namespace MRF.API.Controllers
             }
             _unitOfWork.InterviewevaluationHistory.Remove(obj);
             _unitOfWork.Save();
+        }
+        [HttpPost]
+        [SwaggerResponse(StatusCodes.Status201Created, Description = "Item created successfully"  )]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public  void PostForInterview(List<Interviewevaluation> record)
+
+        {
+            for (int i = 0; i < record.Count; i++)
+            {
+
+                var existingRecord = record[i];
+
+
+                if (existingRecord != null)
+                {
+
+                    
+                    var interviewevaluationHistory = new InterviewevaluationHistory
+                    {
+                        InterviewerId = existingRecord.InterviewerId,
+                        CandidateId = existingRecord.CandidateId,
+                        EvaluationDateUtc = existingRecord.EvaluationDateUtc,
+                        FromTimeUtc = existingRecord.FromTimeUtc,
+                        EvalutionStatusId = existingRecord.EvalutionStatusId,
+                        ToTimeUtc = existingRecord.ToTimeUtc,
+                        CreatedByEmployeeId = existingRecord.CreatedByEmployeeId,
+                        CreatedOnUtc = existingRecord.CreatedOnUtc,
+                        UpdatedByEmployeeId = existingRecord.UpdatedByEmployeeId,
+                        UpdatedOnUtc = existingRecord.UpdatedOnUtc,
+                    };
+                    _unitOfWork.InterviewevaluationHistory.Add(interviewevaluationHistory);
+                    _unitOfWork.Save();
+                }
+            }
+
+ 
         }
     }
 }
