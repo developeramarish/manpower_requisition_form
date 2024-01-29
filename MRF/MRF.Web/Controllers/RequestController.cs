@@ -8,9 +8,9 @@ namespace MRF.Web.Controllers
 {
     public class RequestController : Controller
     {
-        private readonly IEmailService _emailService;
+        private readonly ISmtpEmailService _emailService;
         private readonly IConfiguration _configuration;
-        public RequestController(IEmailService emailService, IConfiguration configuration)
+        public RequestController(ISmtpEmailService emailService, IConfiguration configuration)
         {
             _emailService = emailService;
             _configuration = configuration;
@@ -22,7 +22,7 @@ namespace MRF.Web.Controllers
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                    _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test", "Test");
+                    _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
                     return Ok("MRF has been approved successfully!");
                 }
                 else
@@ -108,7 +108,7 @@ namespace MRF.Web.Controllers
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                    _emailService.SendEmailAsync("manish.partey@kwglobal.com", "Test", "Test");
+                    _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
                     return Ok("MRF has been rejected successfully!");
                 }
                 else

@@ -28,10 +28,10 @@ namespace MRF.API.Controllers
         private MrfdetaiResponseModel _responseModel;
         private FreshmrfdetailResponseModel _responseModelf;
         private readonly ILoggerService _logger;
-        private readonly IEmailService _emailService;
+        private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -134,7 +134,7 @@ namespace MRF.API.Controllers
                     }
                 }
 
-                //_emailService.SendEmailAsync("Submit MRF");
+                //_emailService.SendEmail("Submit MRF");
 
                 return _responseModel;
             }
@@ -667,7 +667,7 @@ namespace MRF.API.Controllers
 
                       if (emailRequest != null)
                       {
-                          _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                          _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                       }
                   }*/
             }
