@@ -134,7 +134,7 @@ namespace MRF.API.Controllers
                     }
                 }
 
-                //_emailService.SendEmail("Submit MRF");
+               // _emailService.SendEmail("Submit MRF");
 
                 return _responseModel;
             }
@@ -661,7 +661,7 @@ namespace MRF.API.Controllers
                 CallGetMrfdetailsInEmailController(id, employeeId, request.MrfStatusId);
                 // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
 
-                /*  if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                  if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                   {
                       emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
@@ -669,7 +669,7 @@ namespace MRF.API.Controllers
                       {
                           _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                       }
-                  }*/
+                  }
             }
             else
             {
