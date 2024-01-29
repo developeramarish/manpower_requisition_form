@@ -133,8 +133,13 @@ namespace MRF.API.Controllers
 
                     }
                 }
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
-               // _emailService.SendEmail("Submit MRF");
+                if (emailRequest != null)
+                {
+                    _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
+                // _emailService.SendEmail("Submit MRF");
 
                 return _responseModel;
             }

@@ -115,15 +115,15 @@ namespace MRF.API.Controllers
             _responseModel.Id = employeedetails.Id;
 
 
-            //if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-            //{
+            if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+            {
 
-            //    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
-            //    if (emailRequest != null)
-            //    {
-            //        _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-            //    }
-            //}
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
+                if (emailRequest != null)
+                {
+                    _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
+            }
 
             if (employeedetails.Id != 0)
             {
