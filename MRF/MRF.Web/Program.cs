@@ -21,6 +21,7 @@ namespace MRF.Web
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
+            builder.Services.AddSingleton<ILoggerService, LoggerService>();
             builder.Services.AddTransient<ISmtpEmailService, SmtpEmailService>();
             var app = builder.Build();
 
