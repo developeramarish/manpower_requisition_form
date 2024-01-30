@@ -31,7 +31,6 @@ const MrfPartialStatus = ({
   const [note, setNote] = useState("");
   const toastRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isThrottle, setIsThrottle] = useState(false);
   const buttonRef = useRef(null);  
   const strToArray = (s) => {
     s = s ?? "";
@@ -42,18 +41,6 @@ const MrfPartialStatus = ({
   };
 
   const footerContent = (value) => {
-
-const throttleHandleSubmit=throttle(()=>{
-  setIsThrottle(true);
-  handleSubmit(value);
-
-},500)
-
-const throttleHandlePartialSubmit=throttle(()=>{
-  setIsThrottle(true);
-  submitPartial(value);
-},500)
-
     return (
       <div>
         {(roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
@@ -62,9 +49,7 @@ const throttleHandlePartialSubmit=throttle(()=>{
             label="Yes"
             className="w-2 bg-red-600 border-red-600 p-2 mr-3"
             onClick={() => {
-              if(!isThrottle){
-                throttleHandleSubmit();
-              }
+              handleSubmit(value);
             }}
           />
         ) : (
@@ -72,10 +57,7 @@ const throttleHandlePartialSubmit=throttle(()=>{
             label="Yes"
             className="w-2 bg-red-600  px-2 mr-3"
             onClick={() => {
-              if(!isThrottle){
-                throttleHandlePartialSubmit();
-              }
-              
+              submitPartial(value);
             }}
           />
         )}
@@ -106,15 +88,12 @@ const throttleHandlePartialSubmit=throttle(()=>{
   const handleSubmit = async (mrfStatusId) => {
     if(emailErrors){
       toastRef.current.showWarrningMessage("Invalid Email format");
-      setIsThrottle(false);
       setVisible(false);
-    
       return 
     }
     if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
       const emptyFields = isFormDataEmptyForSubmit(formData);
       formatAndShowErrorMessage(emptyFields);
-      setIsThrottle(false);
       setVisible(false);
     } else if (
       mrfStatusId == 1 &&
@@ -122,7 +101,6 @@ const throttleHandlePartialSubmit=throttle(()=>{
     ) {
       const emptyFields = isFormDataEmptyForSaveasDraft(formData);
       formatAndShowErrorMessage(emptyFields);
-      setIsThrottle(false);
       setVisible(false);
     } else {
       console.log("Form data is valid. Submitting...");
@@ -188,7 +166,6 @@ const throttleHandlePartialSubmit=throttle(()=>{
         presidentnCOOId: formData.presidentnCOOId,
         presidentnCOOEmpId: formData.presidentnCOOEmpId,
       };
-      console.log(data);
       try {
         let response = await postData(
           `${API_URL.POST_CREATE_REQUISITION}`,
@@ -200,21 +177,17 @@ const throttleHandlePartialSubmit=throttle(()=>{
           if (responseData.statusCode === 409) {
             setVisible(false);
               setIsLoading(false);
-              setIsThrottle(false);
             toastRef.current.showConflictMessage(responseData.message);
           } else {
             if (mrfStatusId == 1) {
               setVisible(false);
               setIsLoading(false);
-              setIsThrottle(false);
               toastRef.current.showSuccessMessage(
                 "The MRF has been saved as Draft!"
               );
             } else {
               setVisible(false);
               setIsLoading(false);
-              setIsThrottle(false);
-
               toastRef.current.showSuccessMessage(
                 "Form submitted successfully!"
               );
@@ -230,7 +203,6 @@ const throttleHandlePartialSubmit=throttle(()=>{
           if (response.status === 400) {
             setVisible(false);
               setIsLoading(false);
-              setIsThrottle(false);
             toastRef.current.showBadRequestMessage(
               "Bad request: " + response.url
             );
@@ -241,7 +213,6 @@ const throttleHandlePartialSubmit=throttle(()=>{
       } finally {
         setVisible(false);
               setIsLoading(false);
-              setIsThrottle(false);
       }
     }
   };
@@ -292,7 +263,7 @@ const throttleHandlePartialSubmit=throttle(()=>{
     };
 
     try {
-      console.log("Form data is valid. Submitting.4444444..");
+      console.log("Form data is valid. Submitting...");
       let response = await putData(
         `${API_URL.MRF_PARTIAL_STATUS_UPDATE + mrfId}`,
         partialsUpdate
@@ -302,13 +273,10 @@ const throttleHandlePartialSubmit=throttle(()=>{
         if (responseData.statusCode === 409) {
           setVisible(false);
               setIsLoading(false);
-              setIsThrottle(false);
           toastRef.current.showConflictMessage(responseData.message);
         } else {
           setVisible(false);
           setIsLoading(false);
-          setIsThrottle(false);
-
           toastRef.current.showSuccessMessage("Action Submitted");
 
           if (updatedClick) {
@@ -326,7 +294,6 @@ const throttleHandlePartialSubmit=throttle(()=>{
         if (response.status === 400) {
           setVisible(false);
               setIsLoading(false);
-              setIsThrottle(false);
 
           toastRef.current.showBadRequestMessage(
             "Bad request: " + response.url
@@ -336,13 +303,11 @@ const throttleHandlePartialSubmit=throttle(()=>{
     } catch (error) {
       setVisible(false);
       setIsLoading(false);
-      setIsThrottle(false);
 
       console.error("Error:", error);
     }finally {
       setVisible(false);
             setIsLoading(false);
-            setIsThrottle(false);
     }
   };
 
