@@ -130,7 +130,7 @@ export default function AllEmployees() {
   };
   const header = renderHeader();
   const update = async (data) => {
-  
+    setIsLoading(true);
     const empdata = {
       name: data.name,
       email: data.email,
@@ -181,11 +181,14 @@ export default function AllEmployees() {
             toastRef.current.showSuccessMessage(
               "Role assigned/updated successfully!"
             );
+            setIsLoading(false);
           }
         } else {
           console.error("Request failed with status:", upEmp.status);
           if (upEmp.status === 400) {
             toastRef.current.showBadRequestMessage("Bad request: " + upEmp.url);
+            setIsLoading(false);
+
           }
         }
       } else {
@@ -199,6 +202,8 @@ export default function AllEmployees() {
             toastRef.current.showSuccessMessage(
               "Role assigned/updated successfully!"
             );
+            setIsLoading(false);
+
           }
         } else {
           console.error("Request failed with status:", response.status);
@@ -208,11 +213,15 @@ export default function AllEmployees() {
             toastRef.current.showBadRequestMessage(
               "Bad request: " + response.url
             );
+            setIsLoading(false);
+
           }
         }
       }
     } catch (error) {
       console.error("Error:", error);
+      setIsLoading(false);
+
     }
   };
   const actionBodyTemplate = (rowData, options) => {
@@ -238,6 +247,7 @@ export default function AllEmployees() {
     {
       field: "empcode",
       header: "Emp ID",
+      sortable: true,
     },
     {
       field: "name",
@@ -257,7 +267,6 @@ export default function AllEmployees() {
     {
       header: "Action",
       body: actionBodyTemplate,
-      bodyClassName: "int-edit-col",
     },
   ];
   
