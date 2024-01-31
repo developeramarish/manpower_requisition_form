@@ -27,7 +27,7 @@ namespace MRF.Web.Controllers
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
+                   // _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
                     return Ok("MRF has been approved successfully!");
                 }
                 else
@@ -119,8 +119,29 @@ namespace MRF.Web.Controllers
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                    _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
+                   // _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
                     return Ok("MRF has been rejected successfully!");
+                }
+                else
+                {
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> Bypass([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
+        {
+            try
+            {
+                HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
+                if (response.IsSuccessStatusCode)
+                {
+                   // _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
+                    return Ok("MRF has been bypassed successfully!");
                 }
                 else
                 {
