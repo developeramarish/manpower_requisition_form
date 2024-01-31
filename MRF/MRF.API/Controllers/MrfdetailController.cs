@@ -10,6 +10,7 @@ using MRF.Models.ViewModels;
 using MRF.Utility;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Diagnostics;
 using System.Net;
 
@@ -31,6 +32,7 @@ namespace MRF.API.Controllers
         private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
+        private string url = string.Empty;
         public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
@@ -117,6 +119,7 @@ namespace MRF.API.Controllers
                     _unitOfWork.Save();
 
                     _responseModel.Id = mrfDetail.Id;
+                    url = string.Join("/", _configuration["MRFUrl"], mrfDetail.Id.ToString());
                     if (mrfDetail.Id != 0)
                     {
                         request.mrfID = mrfDetail.Id;
@@ -134,10 +137,15 @@ namespace MRF.API.Controllers
                     }
                 }
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+                
 
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    _emailService.SendEmail(emailRequest.emailTo,
+                        emailRequest.Subject,
+                        emailRequest.Content.Replace("##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
+                                             .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{url}'>click here</a></span>"));
+
                 }
                 // _emailService.SendEmail("Submit MRF");
 

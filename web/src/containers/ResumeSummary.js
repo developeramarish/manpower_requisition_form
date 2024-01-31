@@ -33,8 +33,6 @@ const ResumeSummary = ({
 
       let result=await getDataAPI(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`)
 let response=await result.json();
-console.log(response)
-     
           if (roleId === ROLES.interviewer) {
             var filterInterviewerResumtSumData = [];
             response.result.resumeDetails.map((res) => {
