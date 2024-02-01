@@ -255,7 +255,7 @@ namespace MRF.DataAccess.Repository
                                            join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                                            where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
                                                           || (Role == "interviewer" && interview.InterviewerId != 0
-                                               && interview.InterviewerId == userId) || (Role != "mrfowner" && Role != "interviewer"))
+                                               && interview.InterviewerId == userId && Candidate.CandidateStatusId==2) || (Role != "mrfowner" && Role != "interviewer"))
                                            group new { mrfD, Candidate, interview, status } by new
 
                                            {
