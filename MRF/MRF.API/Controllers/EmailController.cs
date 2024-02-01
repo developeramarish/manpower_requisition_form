@@ -20,16 +20,14 @@ namespace MRF.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
         private readonly bool _useSendGrid;
-        private readonly  IEmailConfig _emailConfig;
-        public EmailController(IEmailConfig emailConfig, ILoggerService logger, IUnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+        public EmailController(ISmtpEmailService smtpEmailService, ILoggerService logger, IUnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment, IConfiguration configuration, IEmailService sendGridEmailService)
         {
-            //_smtpEmailService = smtpEmailService;
-            _emailConfig = emailConfig;
+            _smtpEmailService = smtpEmailService;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
             _configuration = configuration;
-            //_sendGridEmailService = sendGridEmailService;
+            _sendGridEmailService = sendGridEmailService;
             _useSendGrid = _configuration.GetValue<bool>("FeatureToggles:UseSendGrid");
         }
 
@@ -50,17 +48,15 @@ namespace MRF.API.Controllers
 
                 if (emailRequest != null)
                 {
-                     _emailConfig.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                    /* if (_useSendGrid) 
-                     {
+                    if (_useSendGrid)
+                    {
                         await _sendGridEmailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                     }
-                     else
-                     {
-                         _smtpEmailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
-                     }
-                     _logger.LogInfo("Email sent successfully.");*/
-
+                    }
+                    else
+                    {
+                        _smtpEmailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                    _logger.LogInfo("Email sent successfully.");
                     return Ok("Email sent successfully.");
                 }
                 else
