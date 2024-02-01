@@ -1,6 +1,6 @@
 export const APP_KEY = "MRF_v1.0";
-const APP = "https://10.22.11.101:90";
-//const APP="https://localhost:7128";
+//const APP = "https://10.22.11.101:90";
+const APP="https://localhost:7128";
 const APIPath=`${APP}/api/`;
 export const API_URL = {
   MRF_STATUS_SUMMARY: `${APIPath}Dashboard/GetMrfStatusSummary`,
@@ -156,7 +156,7 @@ export const FORM_SCHEMA_CR = {
   maxTargetSalary: 0,
   employeeName: "",
   emailId: "",
-  employeeCode: "",
+  employeeCode: 0,
   lastWorkingDate: new Date(),
   annualCtc: 0,
   annualGross: 0,
