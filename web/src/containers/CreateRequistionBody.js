@@ -108,7 +108,7 @@ const CreateRequisitionBody = ({
     setFormData({ ...formData, minTargetSalary: minSalary });
     
   };
-
+ 
   const handleMaxSalaryChange = (e) => {
     const maxSalary = e.target.value;
   
@@ -1088,7 +1088,7 @@ const CreateRequisitionBody = ({
                   {(() => {
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
-                        case MRF_STATUS.submToHr:
+                        case MRF_STATUS.new:
                         // case MRF_STATUS.resubReq:
                         case MRF_STATUS.hodapproval:
                         case MRF_STATUS.awaitHodApproval:
@@ -1225,7 +1225,7 @@ const CreateRequisitionBody = ({
                   {(() => {
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
-                        case MRF_STATUS.submToHr:
+                        case MRF_STATUS.new:
                         // case MRF_STATUS.resubReq:
                         case MRF_STATUS.hodapproval:
                         case MRF_STATUS.awaitHodApproval:
@@ -1355,7 +1355,7 @@ const CreateRequisitionBody = ({
                   {(() => {
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
-                        case MRF_STATUS.submToHr:
+                        case MRF_STATUS.new:
                           case MRF_STATUS.onHold:
                           return (
                             <>
@@ -1772,7 +1772,7 @@ const CreateRequisitionBody = ({
                         />
                       </>
                     );
-                  case MRF_STATUS.submToHr:
+                  case MRF_STATUS.new:
                     return (
                       <>
                         <MrfPartialStatus
@@ -1857,7 +1857,7 @@ const CreateRequisitionBody = ({
                   default:
                     return (
                       <>
-                        {(mrfStatusId === MRF_STATUS.submToHr || mrfStatusId === MRF_STATUS.onHold)&& (
+                        {(mrfStatusId === MRF_STATUS.new || mrfStatusId === MRF_STATUS.onHold)&& (
                           <>
                             <MrfPartialStatus
                               mrfId={getReqId}
