@@ -7,7 +7,7 @@ import InterviewSummary from "../containers/InterviewSummary";
 import DashMrfStatus from "../components/DashMrfStatus";
 import ResumeSummary from "../containers/ResumeSummary";
 import DashBoardDataTable from "../components/DashBoardDataTable";
- 
+import InterviewSummaryAllStatus from "../containers/InterviewSummaryAllStatus";
 import {
   filterSelectedColumn,
   filterResultGroupByCandidatestatus,
@@ -25,7 +25,7 @@ function Dashboard({ roleId, userId }) {
   const [mrfStatusPopupId, setrfStatusPopupId] = useState(null);
   const [resumePopup, setResumePopup] = useState(false);
   const [resumePopupId, setResumePopupId] = useState(null);
- 
+  const [InterviewStatus, setInterviewStatusPopup] = useState(false);
   useEffect(() => {
     getSummaryData();
   }, []);
@@ -96,6 +96,10 @@ function Dashboard({ roleId, userId }) {
         </a>
       </div>
     );
+  };
+
+  const handlePopupOpen = () => {
+    setInterviewStatusPopup(true);
   };
    let resumeSummaryColums = [
     {
@@ -251,7 +255,19 @@ function Dashboard({ roleId, userId }) {
               <DashBoardDataTable
                 value={interviewSummaryTableData}
                 column={interviewSummaryColums}
-                headerHeading={<h4 >Interview Status</h4>}
+                headerHeading={<>
+                  <h4 style={{ margin:"0px", marginLeft: "150px", padding:"0px"}}>
+         Interview Status
+         <span style={{ marginLeft: "120px" ,color:"#d32f2e"}}>
+           <a href="#" style={{ marginLeft: "120px" ,color:"#d32f2e"}} onClick={handlePopupOpen}>
+             More status<span style={{fontSize:"15px",}}>&gt;</span>
+           </a>
+         </span>
+       </h4> 
+                 </>}
+
+
+               
                 table_title={"Interview Summary"}
               />
               <InterviewSummary
@@ -261,11 +277,17 @@ function Dashboard({ roleId, userId }) {
                 roleId={roleId}
                 userId={userId}
               />
+              <InterviewSummaryAllStatus
+                visible={InterviewStatus}
+                onHide={() => setInterviewStatusPopup(false)}
+                roleId={roleId}
+                userId={userId}
+              />
 
               <DashBoardDataTable
                value={resumeSummary}
                column={resumeSummaryColums}
-               headerHeading={<h4 >Resume Status</h4>}
+               headerHeading={<h4 className="resume_status_dash_table_heading">Resume Status</h4>}
                table_title={"Resume Summary"}
              />
              <ResumeSummary  visible={resumePopup}
