@@ -43,7 +43,7 @@ const MrfPartialStatus = ({
   const footerContent = (value) => {
     return (
       <div>
-        {(roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
+        {(roleID == 3 && mrfStatusId == MRF_STATUS.new) ||
         mrfStatusId == MRF_STATUS.draft ? (
           <ButtonC
             label="Yes"
@@ -321,7 +321,7 @@ console.log(formData);
          </>
        )} */}
 
-      {((roleID == 3 && mrfStatusId == MRF_STATUS.submToHr) ||
+      {((roleID == 3 && mrfStatusId == MRF_STATUS.new) ||
         mrfStatusId == MRF_STATUS.draft) && (
         <Dialog
           className="w-3 "
