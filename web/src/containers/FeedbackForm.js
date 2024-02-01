@@ -77,26 +77,14 @@ useEffect(() => {
        
         return (data !== undefined && data !== "") ? data : false;
     }).join(';');
-    
+    const allTextboxesEmpty = comments.split(';').every(comment => comment === 'false');
+
     const isValid = evaluationFeedBack.includes(true);
     // if(!isValid){ alert('d');     }
  
 
-    function processData(comments) {  
-       const parts = comments.split(';');   
-       const falseCount = parts.filter(part => part.trim().toLowerCase() === 'false').length; 
-        return falseCount === 3 ? false : true; 
-         
-      }
-      const isValue=processData(comments);
-      console.log(isValue);
-  
-       
-    
     
   
-
- 
 const data = {
     id:0,
     candidateId:formData.candidateId,
@@ -109,7 +97,7 @@ const data = {
     updatedByEmployeeId: formData.createdByEmployeeId,
     updatedOnUtc:formData.createdOnUtc};
 		try {
-		if(data.evaluationFeedBack!='' && isValue){
+		if(data.evaluationFeedBack!='' && !allTextboxesEmpty){
 		let response = await postData(`${API_URL.INTERVIEW_FEEDBACK_POST}`,data);
 		
 		  if (response.ok) {
