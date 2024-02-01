@@ -209,8 +209,6 @@ const CreateRequisitionBody = ({
     setFormData({ ...formData, maxExperience: maxExp });
   };
 
- 
-
   const fetchSubDepartments = async(selectedDepartment) => {
 
     let result=await getDataAPI(API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment);
@@ -1101,6 +1099,7 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.bypassFinanceHeadApproval:
                         case MRF_STATUS.mrfTransferToNew:
                         case MRF_STATUS.open:
+                          case MRF_STATUS.onHold:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2">
@@ -1237,6 +1236,7 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.bypassFinanceHeadApproval:
                         case MRF_STATUS.mrfTransferToNew:
                         case MRF_STATUS.open:
+                          case MRF_STATUS.onHold:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2">
@@ -1356,6 +1356,7 @@ const CreateRequisitionBody = ({
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
                         case MRF_STATUS.submToHr:
+                          case MRF_STATUS.onHold:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2 ">
@@ -1818,29 +1819,6 @@ const CreateRequisitionBody = ({
                 }
               } else if (getReqRoleId == 4) {
                 switch (formData.mrfStatusId) {
-                  case MRF_STATUS.onHold:
-                    return (
-                      <>
-                        <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={8}
-                          label={"Reject"}
-                          formData={formData}
-                          className={"w-20 px-7 bg-red-600 border-red-600"}
-                          message={"Do you want to Reject this MRF?"}
-                        />
-
-                        <MrfPartialStatus
-                          mrfId={getReqId}
-                          mrfStatusId={11}
-                          formData={formData}
-                          className={"w-15 px-4 bg-red-600 border-red-600"}
-                          label={"Send to HOD approval"}
-                          message={"Do you want to submit it for HOD approval?"}
-                        />
-                      </>
-                    );
-
                   case MRF_STATUS.cooapproval:
                     return (
                       <>
@@ -1879,7 +1857,7 @@ const CreateRequisitionBody = ({
                   default:
                     return (
                       <>
-                        {mrfStatusId === MRF_STATUS.submToHr && (
+                        {(mrfStatusId === MRF_STATUS.submToHr || mrfStatusId === MRF_STATUS.onHold)&& (
                           <>
                             <MrfPartialStatus
                               mrfId={getReqId}
@@ -1906,7 +1884,7 @@ const CreateRequisitionBody = ({
                                 }
                                 message={"Do you want to Reject this MRF?"}
                               />
-                              <MrfPartialStatus
+                              { mrfStatusId !== MRF_STATUS.onHold   && (<MrfPartialStatus
                                 mrfId={getReqId}
                                 mrfStatusId={7}
                                 label={"On Hold"}
@@ -1915,7 +1893,8 @@ const CreateRequisitionBody = ({
                                   "w-20 px-7 bg-red-600 border-red-600"
                                 }
                                 message={"Do you want to hold on this MRF?"}
-                              />
+                              />)}
+                              
                             </>
                           )}
                       </>
