@@ -116,29 +116,25 @@ namespace MRF.DataAccess.Repository
         public List<ResultViewModel> GetCountfromCandidateStatus(int count,bool resume, int roleId, int userId)
         {
             List<Candidatestatusmaster> CStatus = new List<Candidatestatusmaster>();
-            if (resume)
-            {
+            //if (resume)
+            //{
                  CStatus = (from s in _db.Candidatestatusmaster
-                               //where s.Status.Contains("resume")
                                select new Candidatestatusmaster
                                {
                                    Id = s.Id,
                                    Status = s.Status,
                                }).ToList();
-            }
-            //else
-            //{
-            //    CStatus = (from s in _db.Candidatestatusmaster
-            //               where !s.Status.Contains("resume")
-            //               select s).ToList();
             //}
+            IQueryable<MrfResumeSummaryViewModel> mrfDetails = null;
             string Role = _Utility.GetRole(roleId);
-            var mrfDetails = from mrfD in _db.Mrfdetails
-                             join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId join position in _db.PositionTitlemaster
-                             on mrfD.PositionTitleId equals position.Id
-                             where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
-                             || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds!=null 
-                             && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer"))
+
+            if (Role == "interviewer")
+            {
+                mrfDetails = from mrfD in _db.Mrfdetails
+                             join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
+                             join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                             join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
+                             where evaluation.InterviewerId== userId
                              group new { mrfD, Candidate } by new
                              {
                                  mrfD.Id,
@@ -147,16 +143,44 @@ namespace MRF.DataAccess.Repository
                                  position.Name,
 
                              }
-                     into grouped
+                         into grouped
                              select new MrfResumeSummaryViewModel
                              {
                                  MrfId = grouped.Key.Id,
                                  ReferenceNo = grouped.Key.ReferenceNo,
                                  statusID = grouped.Key.CandidateStatusId,
                                  TotalCount = grouped.Count(),
-                                 PositionTitle=grouped.Key.Name,
+                                 PositionTitle = grouped.Key.Name,
                              };
 
+            }
+            else
+            {
+                 mrfDetails = from mrfD in _db.Mrfdetails
+                                 join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                                 join position in _db.PositionTitlemaster
+                                 on mrfD.PositionTitleId equals position.Id
+                                 where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                                 || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds != null
+                                 && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer"))
+                                 group new { mrfD, Candidate } by new
+                                 {
+                                     mrfD.Id,
+                                     Candidate.CandidateStatusId,
+                                     mrfD.ReferenceNo,
+                                     position.Name,
+
+                                 }
+                         into grouped
+                                 select new MrfResumeSummaryViewModel
+                                 {
+                                     MrfId = grouped.Key.Id,
+                                     ReferenceNo = grouped.Key.ReferenceNo,
+                                     statusID = grouped.Key.CandidateStatusId,
+                                     TotalCount = grouped.Count(),
+                                     PositionTitle = grouped.Key.Name,
+                                 };
+            }
             var result = new List<ResultViewModel>();
             
             bool valid = false;
