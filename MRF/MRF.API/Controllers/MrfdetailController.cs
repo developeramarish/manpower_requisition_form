@@ -141,16 +141,23 @@ namespace MRF.API.Controllers
 
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmail(emailRequest.emailTo,
+                    _emailService.SendEmail(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
                                              .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{url}'>click here</a></span>"));
 
                 }
-                // _emailService.SendEmail("Submit MRF");
 
                 return _responseModel;
             }
+        }
+        private string getEmail(int id)
+        {
+            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+
+            if (Employeedetail != null)
+                return Employeedetail.Email;
+            return string.Empty;
         }
 
         private Mrfdetails Mrfdetail(MrfdetailRequestModel request, string ReferenceNo)
