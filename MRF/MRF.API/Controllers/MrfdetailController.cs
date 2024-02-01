@@ -143,7 +143,7 @@ namespace MRF.API.Controllers
                 {
                     _emailService.SendEmail(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
-                        emailRequest.Content.Replace("##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
+                        emailRequest.Content.Replace("MRD ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
                                              .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{url}'>click here</a></span>"));
 
                 }
