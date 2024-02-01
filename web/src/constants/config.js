@@ -62,7 +62,7 @@ export const ROUTES = {
 
 export const MRF_STATUS = {
   draft: 1,
-  submToHr: 2,
+  new: 2,
   resubReq: 3,
   hodapproval: 4,
   cooapproval: 5,
