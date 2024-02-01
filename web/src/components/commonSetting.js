@@ -54,7 +54,7 @@ export function applySettingsBasedOnRoleAndStatus(
       }
       break;
     case 4: //HR
-      if (mrfStatusId == MRF_STATUS.submToHr) {
+      if (mrfStatusId == MRF_STATUS.new || mrfStatusId==MRF_STATUS.onHold) {
         applyCommonSettings({
           setReadOnly: true,
           setHiringManager: false,
