@@ -144,7 +144,7 @@ const MrfPartialStatus = ({
         employeeName: formData.employeeName,
         emailId: formData.emailId,
         note: formData.note,
-        employeeCode: formData.employeeCode != "" ? formData.employeeCode : 0,
+        employeeCode: formData.employeeCode ,
         lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
         annualCtc: formData.annualCtc,
         annualGross: formData.annualGross,
@@ -166,7 +166,9 @@ const MrfPartialStatus = ({
         presidentnCOOId: formData.presidentnCOOId,
         presidentnCOOEmpId: formData.presidentnCOOEmpId,
       };
+      
       try {
+        console.log(data);
         let response = await postData(
           `${API_URL.POST_CREATE_REQUISITION}`,
           data
@@ -216,7 +218,7 @@ const MrfPartialStatus = ({
       }
     }
   };
-
+console.log(formData);
   const submitPartial = async () => {
     let hiringManagerId,
       hiringManagerEmpId,

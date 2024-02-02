@@ -74,13 +74,17 @@ useEffect(() => {
  
     const comments = Array.from({ length: FeedData.length }, (_, index) => {
         const data = formData[`comments${index + 1}`];
+       
         return (data !== undefined && data !== "") ? data : false;
     }).join(';');
-    
+    const allTextboxesEmpty = comments.split(';').every(comment => comment === 'false');
+
     const isValid = evaluationFeedBack.includes(true);
-   // if(!isValid){ alert('d');     }
+    // if(!isValid){ alert('d');     }
+ 
 
-
+    
+  
 const data = {
     id:0,
     candidateId:formData.candidateId,
@@ -93,7 +97,7 @@ const data = {
     updatedByEmployeeId: formData.createdByEmployeeId,
     updatedOnUtc:formData.createdOnUtc};
 		try {
-		if(data.evaluationFeedBack!=''){
+		if(data.evaluationFeedBack!='' && !allTextboxesEmpty){
 		let response = await postData(`${API_URL.INTERVIEW_FEEDBACK_POST}`,data);
 		
 		  if (response.ok) {
@@ -101,6 +105,7 @@ const data = {
 			if (responseData.statusCode === 409) {
 			  toastRef.current.showConflictMessage(responseData.message);
         setDisablebtn(false);
+        
 			} else {
 				
 			  toastRef.current.showSuccessMessage(
@@ -125,6 +130,11 @@ const data = {
       setIsLoading(false);
       setDisablebtn(false);
 		  }}
+      else{
+        toastRef.current.showWarrningMessage("At least one field required");
+        setIsLoading(false);
+        setDisablebtn(false);
+      }
 		} catch (error) {
 		  console.error("Error:", error);
       setIsLoading(false);
@@ -134,6 +144,7 @@ const data = {
       if (!FeedData || FeedData.length === 0) {
         return <p>No data available.</p>; // You can customize this message
       }
+      
   return (
     <Dialog header="Interview Feedback" visible={visible} onHide={onHide} draggable={false} className="feed-popup feedback-popup">
 	
@@ -174,7 +185,10 @@ const data = {
     </div>
       
       <div className="dvAddFeedback">
+       
         <ButtonC label="Submit Feedback" disable={disablebtn} className="submit_btn_feedback" onClick={handleSubmit} outlined="true" />
+         
+        
       </div>
       <ToastMessages ref={toastRef} />
     </form>
