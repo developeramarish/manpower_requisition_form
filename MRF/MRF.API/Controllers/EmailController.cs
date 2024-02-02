@@ -48,9 +48,9 @@ namespace MRF.API.Controllers
 
                 if (emailRequest != null)
                 {
-                    if (_useSendGrid) 
+                    if (_useSendGrid)
                     {
-                       await _sendGridEmailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                        await _sendGridEmailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                     else
                     {

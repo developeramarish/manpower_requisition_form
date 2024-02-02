@@ -156,7 +156,7 @@ export const FORM_SCHEMA_CR = {
   maxTargetSalary: 0,
   employeeName: "",
   emailId: "",
-  employeeCode: "",
+  employeeCode: 0,
   lastWorkingDate: new Date(),
   annualCtc: 0,
   annualGross: 0,
