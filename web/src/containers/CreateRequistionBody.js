@@ -954,7 +954,7 @@ const CreateRequisitionBody = ({
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      resumeReviewerEmployeeIds: objToArray(e.value),
+                      resumeReviewerEmployeeIds: objToArray(e.value).toString(),
                     })
                   }
                   optionLabel="name"
@@ -976,7 +976,7 @@ const CreateRequisitionBody = ({
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      interviewerEmployeeIds: objToArray(e.value),
+                      interviewerEmployeeIds: objToArray(e.value).toString(),
                     })
                   }
                   disable={commonSettings.setReadOnly}
