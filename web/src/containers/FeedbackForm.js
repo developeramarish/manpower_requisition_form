@@ -131,7 +131,7 @@ const data = {
       setDisablebtn(false);
 		  }}
       else{
-        toastRef.current.showWarrningMessage("Atleast one filed required");
+        toastRef.current.showWarrningMessage("At least one field required");
         setIsLoading(false);
         setDisablebtn(false);
       }
