@@ -19,7 +19,7 @@ namespace MRF.API.Test.Controllers
         public MrfdetailControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new MrfdetailController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object,fixture.MockHostEnvironment.Object, fixture.Mockconfiguration.Object, fixture.GetEmailId.Object);
+            Controller = new MrfdetailController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object,fixture.MockHostEnvironment.Object, fixture.Mockconfiguration.Object);
 
         }
 

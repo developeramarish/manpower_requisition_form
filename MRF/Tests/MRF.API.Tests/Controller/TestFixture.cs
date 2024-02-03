@@ -18,7 +18,7 @@ namespace MRF.API.Test.Controllers
         public Mock<IHostEnvironment> MockHostEnvironment { get; }
         public Mock<IUserService> MockUserService { get; }
         public Mock<IConfiguration> Mockconfiguration { get; }
-        public Mock<GetEmailId> GetEmailId { get; }
+        
          
         public TestFixture()
         {
@@ -28,7 +28,7 @@ namespace MRF.API.Test.Controllers
             MockHostEnvironment = new Mock<IHostEnvironment>();
             MockUserService = new Mock<IUserService>();
             Mockconfiguration = new Mock<IConfiguration>();
-            GetEmailId = new Mock<GetEmailId>();
+          
 
             Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object,MockHostEnvironment.Object);
         }

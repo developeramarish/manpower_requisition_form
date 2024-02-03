@@ -22,9 +22,8 @@ namespace MRF.API.Controllers
         private readonly ISmtpEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
-        private readonly GetEmailId _getEmail;
         private string url = string.Empty;
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration, GetEmailId getEmail)
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -33,8 +32,7 @@ namespace MRF.API.Controllers
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
-            _configuration = configuration;
-            _getEmail = getEmail;
+            _configuration = configuration;           
         }
 
         // GET: api/<MrfdetailController>
@@ -133,7 +131,7 @@ namespace MRF.API.Controllers
 
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmail(_getEmail.getUserEmail(request.CreatedByEmployeeId),
+                    _emailService.SendEmail(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("MRD ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
                                              .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{url}'>click here</a></span>"));
@@ -143,14 +141,14 @@ namespace MRF.API.Controllers
                 return _responseModel;
             }
         }
-        //private string getEmail(int id)
-        //{
-        //    Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+        private string getEmail(int id)
+        {
+            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
 
-        //    if (Employeedetail != null)
-        //        return Employeedetail.Email;
-        //    return string.Empty;
-        //}
+            if (Employeedetail != null)
+                return Employeedetail.Email;
+            return string.Empty;
+        }
 
         private Mrfdetails Mrfdetail(MrfdetailRequestModel request, string ReferenceNo)
         {
