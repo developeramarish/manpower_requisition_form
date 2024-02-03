@@ -1,61 +1,115 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NLog;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Net.Mail;
 
 namespace MRF.Utility
 {
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger<EmailService> _logger;
+        private readonly string senderEmail;
+        private readonly string smtpServer;
+        private readonly int smtpPort;
+        private readonly SmtpClient smtpClient;
         private readonly ISendGridClient _sendGridClient;
-        private readonly string FromEmail;
-        private readonly string SenderName;
-        public EmailService(IConfiguration configuration)
+        private readonly string sendGridFromEmail;
+        private readonly string sendGridSenderName;
+        public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
         {
             _configuration = configuration;
+            _logger = logger;
+
+            // Initialize SMTP settings
+            senderEmail = _configuration["SMTP:senderEmail"];
+            smtpServer = _configuration["SMTP:Server"];
+            smtpPort = Convert.ToInt32(_configuration["SMTP:Port"]);
+            smtpClient = new SmtpClient(smtpServer, smtpPort);
+            smtpClient.UseDefaultCredentials = false;
+
+            // Initialize SendGrid settings
             string sendGridApiKey = _configuration["SendGridSettings:ApiKey"];
             _sendGridClient = new SendGridClient(sendGridApiKey);
-            FromEmail = _configuration["SendGridSettings:FromEmail"];
-            SenderName = _configuration["SendGridSettings:SenderName"];
+            sendGridFromEmail = _configuration["SendGridSettings:FromEmail"];
+            sendGridSenderName = _configuration["SendGridSettings:SenderName"];
         }
         public async Task SendEmailAsync(string toEmail, string subject, string htmlContent, string attachmentPath = null)
         {
             try
             {
-                string[] emailTo = toEmail.Split(',');
-
-                for (int i = 0; i < emailTo.Length; i++)
+                if (IsSendGridEnabled())
                 {
-                    var msg = new SendGridMessage
-                    {
-                        From = new EmailAddress(FromEmail, SenderName),
-                        Subject = subject,
-                        HtmlContent = htmlContent
-                    };
-
-                    msg.AddTo(emailTo[i]);
-
-                    if (attachmentPath != null)
-                    {
-                        byte[] fileBytes = File.ReadAllBytes(attachmentPath);
-                        msg.AddAttachment(Path.GetFileName(attachmentPath), Convert.ToBase64String(fileBytes));
-                    }
-
-                    var response = await _sendGridClient.SendEmailAsync(msg);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        throw new Exception($"Failed to send email. Status code: {response.StatusCode}");
-                    }
+                    await SendEmailSendGrid(toEmail, subject, htmlContent, attachmentPath);
+                }
+                else
+                {
+                    SendEmailSMTP(toEmail, subject, htmlContent, attachmentPath);
                 }
             }
             catch (Exception e)
             {
-                // Log the exception or handle it accordingly
-                Console.WriteLine($"Exception occurred while sending email: {e.Message}");
-                throw; // Re-throw the exception to maintain the flow
+                _logger.LogError($"Exception occurred while sending email: {e.Message}");
+                throw;
             }
         }
 
+        private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string attachmentPath)
+        {
+            var msg = new SendGridMessage
+            {
+                From = new EmailAddress(sendGridFromEmail, sendGridSenderName),
+                Subject = subject,
+                HtmlContent = htmlContent
+            };
+
+            msg.AddTo(toEmail);
+
+            if (!string.IsNullOrEmpty(attachmentPath))
+            {
+                byte[] fileBytes = File.ReadAllBytes(attachmentPath);
+                msg.AddAttachment(Path.GetFileName(attachmentPath), Convert.ToBase64String(fileBytes));
+            }
+
+            var response = await _sendGridClient.SendEmailAsync(msg);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to send email using SendGrid. Status code: {response.StatusCode}");
+            }
+        }
+
+        private void SendEmailSMTP(string receiverEmail, string subject, string body, string? attachmentPath = null)
+        {
+            try
+            {
+                using (MailMessage mailMessage = new MailMessage(senderEmail, receiverEmail, subject, body))
+                {
+                    mailMessage.IsBodyHtml = true;
+                    if (!string.IsNullOrEmpty(attachmentPath))
+                    {
+                        System.Net.Mail.Attachment attachment = new System.Net.Mail.Attachment(attachmentPath);
+                        mailMessage.Attachments.Add(attachment);
+                    }
+                    smtpClient.Send(mailMessage);
+                    _logger.LogInformation("Email sent successfully using SMTP.");
+                }
+            }
+            catch (SmtpException ex)
+            {
+                _logger.LogError($"SMTP ERROR: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"EMAIL ERROR: {ex.Message}");
+            }
+        }
+
+        private bool IsSendGridEnabled()
+        {   
+            return bool.Parse(_configuration["FeatureToggles:UseSendGrid"]);
+        }
 
         public bool IsValidUpdateValue(object value)
         {
