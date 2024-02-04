@@ -1,9 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MRF.DataAccess.Repository.IRepository;
+using MRF.Models.Models;
 using NLog;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using SendGrid.Helpers.Mail.Model;
 using System.Net.Mail;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace MRF.Utility
 {
@@ -18,11 +22,12 @@ namespace MRF.Utility
         private readonly ISendGridClient _sendGridClient;
         private readonly string sendGridFromEmail;
         private readonly string sendGridSenderName;
-        public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+        private readonly IUnitOfWork _unitOfWork;
+        public EmailService(IConfiguration configuration, ILogger<EmailService> logger, IUnitOfWork unitOfWork)
         {
             _configuration = configuration;
             _logger = logger;
-
+            _unitOfWork=unitOfWork;
             // Initialize SMTP settings
             senderEmail = _configuration["SMTP:senderEmail"];
             smtpServer = _configuration["SMTP:Server"];
@@ -56,7 +61,7 @@ namespace MRF.Utility
             }
         }
 
-        private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string attachmentPath)
+        private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath=null)
         {
             var msg = new SendGridMessage
             {
@@ -120,6 +125,44 @@ namespace MRF.Utility
        && !((value is DateTime dateTimeValue && dateTimeValue == DateTime.MinValue)
            || (value is DateOnly dateOnlyValue && dateOnlyValue == DateOnly.MinValue))
        && !(value is bool boolValue && !boolValue);
+        }
+
+        public async Task SendEmailAsync(int senderId, string subject, string htmlContent,  int mrfId)
+        {
+            try
+            {
+                if (IsSendGridEnabled())
+                {
+                    await SendEmailSendGrid(getUserEmail(senderId), subject, htmlContent);
+                }
+                else
+                {
+                    SendEmailSMTP(getUserEmail(senderId), subject, htmlContent);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Exception occurred while sending email: {e.Message}");
+                throw;
+            }
+        }
+
+        private string getMRFRefNoFromMRFId(int id)
+        {
+            Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
+
+            if (mrfdetails != null)
+                return mrfdetails.ReferenceNo;
+            return string.Empty;
+        }
+
+        private string getUserEmail(int id)
+        {
+            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
+
+            if (Employeedetail != null)
+                return Employeedetail.Email;
+            return string.Empty;
         }
     }
 }
