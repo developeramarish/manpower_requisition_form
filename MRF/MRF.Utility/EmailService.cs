@@ -83,7 +83,6 @@ namespace MRF.Utility
                 throw;
             }
         }
-
         private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath=null)
         {
             var msg = new SendGridMessage

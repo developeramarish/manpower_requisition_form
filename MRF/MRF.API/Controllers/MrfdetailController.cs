@@ -128,12 +128,23 @@ namespace MRF.API.Controllers
                 }
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
                 
-
                 if (emailRequest != null)
                 {
+                    //Send Email to HR
+                    List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmailRecipient(request.MrfStatusId);
+                    foreach (var emailReq in emailList)
+                    {
+                        _emailService.SendEmailAsync(emailReq.Email,
+                            emailRequest.Subject,
+                            emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
+                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
+                    }
+
+
+                    //Send Email to MRF Owner
                     _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
-                        emailRequest.Content.Replace("MRD ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
+                        emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
                                              .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
 
                 }
