@@ -1,8 +1,10 @@
-﻿using MRF.DataAccess.Repository.IRepository;
+﻿using MRF.DataAccess.Data;
+using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -13,14 +15,15 @@ namespace MRF.DataAccess.Repository
 {
     public class InterviewDetailsRepository : Repository<InterviewDetailsViewModel>, IInterviewDetailsRepository
     {
-        private readonly Data.MRFDBContext _db;
+        private readonly Data.MRFDBContext _db; private readonly Data.Utility _Utility;
         public InterviewDetailsRepository(Data.MRFDBContext db) : base(db)
         {
-            _db = db;
+            _db = db; _Utility = new Data.Utility();
         }
 
         public List<InterviewDetailsViewModel> GetInterviewDetails(int mrfId,int roleId,int userId)
         {
+            string Role = _Utility.GetRole(roleId);
             /* take list from Interview reviewer assigned to mrfId   */
             IQueryable<InterviewDetailsViewModel> Mrfinterviewmap =
      _db.Mrfdetails
@@ -85,7 +88,9 @@ namespace MRF.DataAccess.Repository
             var IvaluationId = from mrfDetails in _db.Mrfdetails
                                 join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                 join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
-                                where mrfDetails.Id == mrfId
+                                where mrfDetails.Id == mrfId &&
+                                (Role != "interviewer" || (Role == "interviewer" && Ivaluation.InterviewerId != 0
+            && Ivaluation.InterviewerId == userId && Candidate.CandidateStatusId == 2))
                                 select new InterviewStatus
                                 {   
                                     CandidateId = Candidate.Id,
@@ -140,6 +145,11 @@ namespace MRF.DataAccess.Repository
                                                                   CandidateName = Candidate.Name,
                                                                   mrfStatusId = mrfDetails.MrfStatusId,
                                                               };
+
+            if(Role == "interviewer")
+            {
+                firstlist = firstlist.Where(candidate => IvaluationId.Any(iv => iv.CandidateId == candidate.CandidateId));
+            }
 
             IQueryable<InterviewDetailsViewModel> secondmerge = from q in firstlist
                                                                 join i in Mrfinterviewmap on q.MrfId equals i.MrfId into interviewResults

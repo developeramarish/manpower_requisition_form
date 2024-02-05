@@ -52,12 +52,10 @@ const CreateRequisitionBody = ({
   const toastRef = useRef(null);
   const [formData, setFormData] = useState();
   const [emailError, setEmailError] = useState(false);
-
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
     const dropDowndata = await result.json();
     setDropdownData(dropDowndata.result);
-    
   };
   useEffect(() => {
     setFormData(FORM_SCHEMA_CR);
@@ -66,16 +64,17 @@ const CreateRequisitionBody = ({
   useEffect(() => {
     // Fetch the data for all the dropdowns
     OnLoad();
-    const GetData=async()=>{
-      if(getReqId) {
-        let result=await getDataAPI(API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId);
-        let response=await result.json();
+    const GetData = async () => {
+      if (getReqId) {
+        let result = await getDataAPI(
+          API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId
+        );
+        let response = await result.json();
         setFormData({ ...formData, ...response });
-      } else{
+      } else {
         setFormData(FORM_SCHEMA_CR);
       }
-
-    }
+    };
     GetData();
     applySettingsBasedOnRoleAndStatus(
       getReqRoleId,
@@ -94,7 +93,6 @@ const CreateRequisitionBody = ({
   const handleMinSalaryChange = (e) => {
     const minSalary = e.target.value;
     if (formData.maxTargetSalary !== 0) {
-      
       if (minSalary > formData.maxTargetSalary) {
         toastRef.current.showWarrningMessage(
           "Min Target Salary is Greater than Max Target salary"
@@ -102,37 +100,39 @@ const CreateRequisitionBody = ({
         setMinSal(minSalary);
         return;
       }
-      
     }
-   
+
     setFormData({ ...formData, minTargetSalary: minSalary });
-    
   };
- 
+  console.log(formData);
+
   const handleMaxSalaryChange = (e) => {
     const maxSalary = e.target.value;
-  
-    setFormData(prevFormData => {
+
+    setFormData((prevFormData) => {
       if (minSal !== 0) {
         if (maxSalary < minSal) {
           toastRef.current.showWarrningMessage(
             "Max Target Salary is Less than Min Target salary"
           );
-          return prevFormData; 
+          return prevFormData;
         } else {
-          return { ...prevFormData, minTargetSalary: minSal,maxTargetSalary: maxSalary };
+          return {
+            ...prevFormData,
+            minTargetSalary: minSal,
+            maxTargetSalary: maxSalary,
+          };
         }
       } else if (maxSalary < prevFormData.minTargetSalary) {
         toastRef.current.showWarrningMessage(
           "Max Target Salary is Less than Min Target salary"
         );
-        return prevFormData; 
+        return prevFormData;
       }
-  
+
       return { ...prevFormData, maxTargetSalary: maxSalary };
     });
   };
-  
 
   const handleMinGradeChange = (e) => {
     // setFormData({ ...formData, minGradeId: e.target.value });
@@ -171,14 +171,13 @@ const CreateRequisitionBody = ({
   };
 
   const handleEmail = (e) => {
-    const emailValue=formData.emailId;
+    const emailValue = formData.emailId;
     if (!emailRegex.test(emailValue)) {
       toastRef.current.showWarrningMessage("Invalid Email format");
       setEmailError(true);
-    }else{
+    } else {
       setEmailError(false);
     }
-    
   };
 
   const handleMinExpChange = (e) => {
@@ -196,11 +195,10 @@ const CreateRequisitionBody = ({
   };
 
   const handleMaxExpChange = (e) => {
-    console.log(e.target.value)
+    console.log(e.target.value);
     const maxExp = e.target.value;
 
     if (maxExp < formData.minExperience) {
-      
       toastRef.current.showWarrningMessage(
         "Max Experience is Less than Min Experience"
       );
@@ -209,10 +207,11 @@ const CreateRequisitionBody = ({
     setFormData({ ...formData, maxExperience: maxExp });
   };
 
-  const fetchSubDepartments = async(selectedDepartment) => {
-
-    let result=await getDataAPI(API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment);
-    let response=await result.json();
+  const fetchSubDepartments = async (selectedDepartment) => {
+    let result = await getDataAPI(
+      API_URL.GET_CREATE_REQUISITION_DEPARTMENT + selectedDepartment
+    );
+    let response = await result.json();
     setSubDepartments(response.result);
   };
 
@@ -271,7 +270,6 @@ const CreateRequisitionBody = ({
     return s;
   };
 
-
   const renderHeader = () => {
     return (
       <span className="ql-formats">
@@ -303,6 +301,8 @@ const CreateRequisitionBody = ({
           <option value="yellow"></option>
         </select>
         <button className="ql-clean" aria-label="Clean"></button>
+
+        <span></span>
       </span>
     );
   };
@@ -574,7 +574,7 @@ const CreateRequisitionBody = ({
                 />
               </div>
 
-              <div className="flex flex-column w-6 gap-2">
+              <div className="flex flex-column w-6 gap-2 ">
                 <label htmlFor="mingrade" className="font-bold text-sm">
                   Grade of the proposed employee
                   <RedAsterisk />
@@ -650,7 +650,8 @@ const CreateRequisitionBody = ({
             <div className="flex justify-content-between gap-5 ">
               <div className="flex flex-column w-5 gap-2">
                 <label htmlFor="experience" className="font-bold text-sm">
-                  Experience<RedAsterisk />
+                  Experience
+                  <RedAsterisk />
                 </label>
                 <div className="p-col-7">
                   <label className="font-bold text-sm label-with-padding-right">
@@ -682,7 +683,8 @@ const CreateRequisitionBody = ({
               </div>
               <div className="flex flex-column w-6 row-gap-2">
                 <label htmlFor="gender" className="font-bold text-sm">
-                  Gender<RedAsterisk />
+                  Gender
+                  <RedAsterisk />
                 </label>
                 <DropdownComponent
                   optionLabel="label"
@@ -698,7 +700,8 @@ const CreateRequisitionBody = ({
               </div>
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="qualification" className="font-bold text-sm">
-                  Qualification<RedAsterisk />
+                  Qualification
+                  <RedAsterisk />
                 </label>
                 <DropdownComponent
                   optionLabel="type"
@@ -736,7 +739,8 @@ const CreateRequisitionBody = ({
                 <div className="flex justify-content-between gap-5">
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="employeeName" className="font-bold text-sm">
-                      Employee Name<RedAsterisk />
+                      Employee Name
+                      <RedAsterisk />
                     </label>
                     <InputTextCp
                       id="employeeName"
@@ -756,7 +760,8 @@ const CreateRequisitionBody = ({
                       htmlFor="lastworkingDate"
                       className="font-bold text-sm"
                     >
-                      Last Working Date<RedAsterisk />
+                      Last Working Date
+                      <RedAsterisk />
                     </label>
                     <CalendarComponent
                       id="lastworkingDate"
@@ -778,7 +783,8 @@ const CreateRequisitionBody = ({
                       htmlFor="EmployeeEmail"
                       className="font-bold text-sm"
                     >
-                      Employee Email<RedAsterisk />
+                      Employee Email
+                      <RedAsterisk />
                     </label>
                     <InputTextCp
                       id="EmployeeEmail"
@@ -793,7 +799,8 @@ const CreateRequisitionBody = ({
 
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="EmployeeCode" className="font-bold text-sm">
-                      Employee Code<RedAsterisk />
+                      Employee Code
+                      <RedAsterisk />
                     </label>
                     <InputNumberComponent
                       id="EmployeeCode"
@@ -813,7 +820,8 @@ const CreateRequisitionBody = ({
                 <div className="flex justify-content-between gap-5">
                   <div className="flex flex-column w-6 gap-2">
                     <label htmlFor="AnnualCTC" className="font-bold text-sm">
-                      Annual CTC (in LPA)<RedAsterisk />
+                      Annual CTC (in LPA)
+                      <RedAsterisk />
                     </label>
                     <InputNumberamount
                       id="AnnualCTC"
@@ -825,7 +833,8 @@ const CreateRequisitionBody = ({
                     />
 
                     <label htmlFor="AnnualGross" className="font-bold text-sm">
-                      Annual Gross (in LPA)<RedAsterisk />
+                      Annual Gross (in LPA)
+                      <RedAsterisk />
                     </label>
                     <InputNumberamount
                       id="AnnualGross"
@@ -845,7 +854,8 @@ const CreateRequisitionBody = ({
                       htmlFor="ReplaceJustification"
                       className="font-bold text-sm"
                     >
-                      Replacement Justification<RedAsterisk />
+                      Replacement Justification
+                      <RedAsterisk />
                     </label>
                     <InputTextareaComponent
                       id="ReplaceJustification"
@@ -879,7 +889,8 @@ const CreateRequisitionBody = ({
 
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="skills" className="font-bold text-sm">
-                  Skills<RedAsterisk />
+                  Skills
+                  <RedAsterisk />
                 </label>
                 <EditorComponent
                   value={formData.skills}
@@ -913,7 +924,8 @@ const CreateRequisitionBody = ({
                     htmlFor="MinTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Min Target Salary (in LPA)<RedAsterisk />
+                    Min Target Salary (in LPA)
+                    <RedAsterisk />
                   </label>
                   <InputNumberamount
                     id="MinTargetSalary"
@@ -927,7 +939,8 @@ const CreateRequisitionBody = ({
                     htmlFor="MaxTargetSalary"
                     className="font-bold text-sm"
                   >
-                    Max Target Salary (in LPA)<RedAsterisk />
+                    Max Target Salary (in LPA)
+                    <RedAsterisk />
                   </label>
                   <InputNumberamount
                     id="MaxTargetSalary"
@@ -941,7 +954,8 @@ const CreateRequisitionBody = ({
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="resumeReviewer" className="font-bold text-sm">
-                  Resume Reviewer<RedAsterisk />
+                  Resume Reviewer
+                  <RedAsterisk />
                 </label>
 
                 <MultiSelectDropdown
@@ -963,7 +977,8 @@ const CreateRequisitionBody = ({
               </div>
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="interviewer" className="font-bold text-sm">
-                  Interviewer/Panel<RedAsterisk />
+                  Interviewer
+                  <RedAsterisk />
                 </label>
 
                 <MultiSelectDropdown
@@ -1099,7 +1114,7 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.bypassFinanceHeadApproval:
                         case MRF_STATUS.mrfTransferToNew:
                         case MRF_STATUS.open:
-                          case MRF_STATUS.onHold:
+                        case MRF_STATUS.onHold:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2">
@@ -1236,7 +1251,7 @@ const CreateRequisitionBody = ({
                         case MRF_STATUS.bypassFinanceHeadApproval:
                         case MRF_STATUS.mrfTransferToNew:
                         case MRF_STATUS.open:
-                          case MRF_STATUS.onHold:
+                        case MRF_STATUS.onHold:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2">
@@ -1356,7 +1371,7 @@ const CreateRequisitionBody = ({
                     if (getReqRoleId == 4) {
                       switch (formData.mrfStatusId) {
                         case MRF_STATUS.new:
-                          case MRF_STATUS.onHold:
+                        case MRF_STATUS.onHold:
                           return (
                             <>
                               <div className="flex flex-column gap-2 w-2 ">
@@ -1503,7 +1518,7 @@ const CreateRequisitionBody = ({
                                   mrfStatusId={13}
                                   formData={formData}
                                   className={"finance_btn"}
-                                  label={"Send to Finance Head approval"}
+                                  label={"Send for Finance Head approval"}
                                   disabled={
                                     formData.financeHeadId != 0 ? false : true
                                   }
@@ -1558,13 +1573,13 @@ const CreateRequisitionBody = ({
                               <div className="flex flex-column gap-2 w-2">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
-                                  mrfStatusId={14}
+                                  mrfStatusId={13}
                                   formData={formData}
                                   className={"finance_btn"}
-                                  label={"Received Finance Head approval"}
+                                  label={"Send for Finance Head approval"}
                                   disabled={true}
                                   message={
-                                    "Do you want to submit it as Received Finance Head approval?"
+                                    "Do you want to submit it for Finance Head approval?"
                                   }
                                 />
                               </div>
@@ -1670,7 +1685,7 @@ const CreateRequisitionBody = ({
                                   mrfId={getReqId}
                                   mrfStatusId={12}
                                   formData={formData}
-                                  label={"Send to COO approval"}
+                                  label={"Send for COO approval"}
                                   cooClick={true}
                                   className={"coo_btn"}
                                   disabled={
@@ -1712,7 +1727,7 @@ const CreateRequisitionBody = ({
                                   mrfStatusId={12}
                                   formData={formData}
                                   className={"coo_btn"}
-                                  label={"Send to COO approval"}
+                                  label={"Send for COO approval"}
                                   // cooClick={true}
                                   disabled={true}
                                   message={
@@ -1857,7 +1872,8 @@ const CreateRequisitionBody = ({
                   default:
                     return (
                       <>
-                        {(mrfStatusId === MRF_STATUS.new || mrfStatusId === MRF_STATUS.onHold)&& (
+                        {(mrfStatusId === MRF_STATUS.new ||
+                          mrfStatusId === MRF_STATUS.onHold) && (
                           <>
                             <MrfPartialStatus
                               mrfId={getReqId}
@@ -1884,17 +1900,18 @@ const CreateRequisitionBody = ({
                                 }
                                 message={"Do you want to Reject this MRF?"}
                               />
-                              { mrfStatusId !== MRF_STATUS.onHold   && (<MrfPartialStatus
-                                mrfId={getReqId}
-                                mrfStatusId={7}
-                                label={"On Hold"}
-                                formData={formData}
-                                className={
-                                  "w-20 px-7 bg-red-600 border-red-600"
-                                }
-                                message={"Do you want to hold on this MRF?"}
-                              />)}
-                              
+                              {mrfStatusId !== MRF_STATUS.onHold && (
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={7}
+                                  label={"On Hold"}
+                                  formData={formData}
+                                  className={
+                                    "w-20 px-7 bg-red-600 border-red-600"
+                                  }
+                                  message={"Do you want to hold on this MRF?"}
+                                />
+                              )}
                             </>
                           )}
                       </>

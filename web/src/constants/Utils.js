@@ -30,7 +30,6 @@ export const isTouchDevice = () => {
 
 export async function getData(url) {
   const accessToken = storageService.getData("token");
-  
   const headers = new Headers();
   const bearer = `Bearer ${accessToken}`;
 
@@ -40,17 +39,18 @@ export async function getData(url) {
     method: "GET",
     headers: headers,
   };
- 
-  return fetch(url, options)
-    .then((response) => response.json())
-    // .then((response) => response)
-    .catch((error) => error);
-}
 
+  return (
+    fetch(url, options)
+      .then((response) => response.json())
+      // .then((response) => response)
+      .catch((error) => error)
+  );
+}
 
 export async function getDataAPI(url) {
   const accessToken = storageService.getData("token");
-  
+
   const headers = new Headers();
   const bearer = `Bearer ${accessToken}`;
 
@@ -60,11 +60,13 @@ export async function getDataAPI(url) {
     method: "GET",
     headers: headers,
   };
- 
-  return fetch(url, options)
-    // .then((response) => response.json())
-    .then((response) => response)
-    .catch((error) => error);
+
+  return (
+    fetch(url, options)
+      // .then((response) => response.json())
+      .then((response) => response)
+      .catch((error) => error)
+  );
 }
 
 export async function postData(url, data) {
@@ -79,13 +81,13 @@ export async function postData(url, data) {
   const options = {
     method: "POST",
     headers: headers,
-    body: JSON.stringify(data), 
+    body: JSON.stringify(data),
   };
 
   return fetch(url, options)
     .then((response) => response)
     .catch((error) => error);
-};
+}
 
 export async function putData(url, data) {
   const accessToken = storageService.getData("token");
@@ -102,9 +104,9 @@ export async function putData(url, data) {
     body: JSON.stringify(data), // Convert data to JSON format
   };
   return fetch(url, options)
-  .then((response) => response)
-  .catch((error) => error);
-};
+    .then((response) => response)
+    .catch((error) => error);
+}
 
 export async function deleteData(url) {
   const accessToken = storageService.getData("token");
@@ -119,9 +121,9 @@ export async function deleteData(url) {
     headers: headers,
   };
   return fetch(url, options)
-  .then((response) => response.json())
-  .catch((error) => error);
-};
+    .then((response) => response.json())
+    .catch((error) => error);
+}
 
 export const getKeyFromLocation = () => {
   return window.location.hash.split("#/")[1];
@@ -161,7 +163,6 @@ export const salaryInLPA = (value) => {
 };
 
 export const filterSelectedColumn = (rowData, selectedColum) => {
-  
   const filterData = rowData.resultGroups.find(
     (obj) => obj.candidatestatus == selectedColum
   );
@@ -172,10 +173,11 @@ export const filterSelectedColumn = (rowData, selectedColum) => {
 
 export const filterResultGroupByCandidatestatus = (data, targetColumn) => {
   const filteredData = data.map((item) => {
-    const { mrfId, referenceno,positionTitle, resultGroups } = item;
+    const { mrfId, referenceno, positionTitle, resultGroups } = item;
 
-    const filteredResultGroup = resultGroups
-      .filter((result) => targetColumn.includes(result.candidatestatus));
+    const filteredResultGroup = resultGroups.filter((result) =>
+      targetColumn.includes(result.candidatestatus)
+    );
     return {
       mrfId,
       referenceno,
@@ -187,23 +189,20 @@ export const filterResultGroupByCandidatestatus = (data, targetColumn) => {
   return filteredData;
 };
 
-
-export const formatDateToYYYYMMDD= (date) => {
- 
+export const formatDateToYYYYMMDD = (date) => {
   // Check if the date is already in "YYYY-MM-DD" format
   if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return date; // Return the input date as it is
   }
- 
-  const localDate = new Date(date.toISOString());
- 
-  const year = localDate.getFullYear();
-  const month = String(localDate.getMonth() + 1).padStart(2, '0');
-  const day = String(localDate.getDate()).padStart(2, '0');
- 
-  return `${year}-${month}-${day}`;
-}
 
+  const localDate = new Date(date.toISOString());
+
+  const year = localDate.getFullYear();
+  const month = String(localDate.getMonth() + 1).padStart(2, "0");
+  const day = String(localDate.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
 
 export const removeSpaces = (str) => {
   return str.replace(/\s/g, ""); // This regular expression replaces all spaces globally
@@ -219,15 +218,28 @@ export const isFormDataEmptyForSubmit = (formData) => {
 
     // Check specific condition for certain fields, and general check for others
     if (
-      (value === "" || value === 0 || value === null ) &&
+      (value === "" || value === 0 || value === null) &&
       [
-        "positionTitleId", "departmentId", 
-        "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
-        "reportsToEmployeeId", "genderId", "minGradeId", "maxGradeId",
-        "locationId", "qualificationId", "justification",
-        "minTargetSalary", "maxTargetSalary","vacancyTypeId",
-         "jobDescription","resumeReviewerEmployeeIds","interviewerEmployeeIds",
-        "skills"
+        "positionTitleId",
+        "departmentId",
+        "projectId",
+        "vacancyNo",
+        "requisitionDateUtc",
+        "employmentTypeId",
+        "reportsToEmployeeId",
+        "genderId",
+        "minGradeId",
+        "maxGradeId",
+        "locationId",
+        "qualificationId",
+        "justification",
+        "minTargetSalary",
+        "maxTargetSalary",
+        "vacancyTypeId",
+        "jobDescription",
+        "resumeReviewerEmployeeIds",
+        "interviewerEmployeeIds",
+        "skills",
       ].includes(key)
     ) {
       return true;
@@ -236,9 +248,16 @@ export const isFormDataEmptyForSubmit = (formData) => {
     // Additional check for fields related to replacements
     if (formData.isReplacement) {
       if (
-        ["replaceJustification", "employeeName","emailId","employeeCode","lastWorkingDate",
-        "annualCtc","annualGross"].includes(key) &&
-        value === ""
+        [
+          "replaceJustification",
+          "employeeName",
+          "emailId",
+          "employeeCode",
+          "lastWorkingDate",
+          "annualCtc",
+          "annualGross",
+        ].includes(key) &&
+        (value === "" || value === null)
       ) {
         return true;
       }
@@ -252,7 +271,7 @@ export const isFormDataEmptyForSubmit = (formData) => {
 export const isFormDataEmptyForSaveasDraft = (formData) => {
   if (formData === undefined) {
     return true; // Treat it as empty if undefined
-  }   
+  }
 
   return Object.keys(formData).filter((key) => {
     const value = formData[key];
@@ -261,10 +280,17 @@ export const isFormDataEmptyForSaveasDraft = (formData) => {
     if (
       (value === "" || value === 0 || value === null) &&
       [
-        "positionTitleId", "departmentId", 
-        "projectId", "vacancyNo", "requisitionDateUtc", "employmentTypeId",
-        "reportsToEmployeeId",  "minGradeId", "maxGradeId","vacancyTypeId",
-        "locationId"
+        "positionTitleId",
+        "departmentId",
+        "projectId",
+        "vacancyNo",
+        "requisitionDateUtc",
+        "employmentTypeId",
+        "reportsToEmployeeId",
+        "minGradeId",
+        "maxGradeId",
+        "vacancyTypeId",
+        "locationId",
       ].includes(key)
     ) {
       return true;
@@ -273,9 +299,16 @@ export const isFormDataEmptyForSaveasDraft = (formData) => {
     // Additional check for fields related to replacements
     if (formData.isReplacement) {
       if (
-        ["replaceJustification", "employeeName","emailId","employeeCode","lastWorkingDate",
-        "annualCtc","annualGross"].includes(key) &&
-        value === ""
+        [
+          "replaceJustification",
+          "employeeName",
+          "emailId",
+          "employeeCode",
+          "lastWorkingDate",
+          "annualCtc",
+          "annualGross",
+        ].includes(key) &&
+        (value === "" || value === null)
       ) {
         return true;
       }
@@ -285,22 +318,20 @@ export const isFormDataEmptyForSaveasDraft = (formData) => {
   });
 };
 
-
-export const isFormDataEmptyForAddCandidate=(formData)=>{
-  if(formData===undefined){
-    return true;
-  }
-  
-  return Object.keys(formData).filter((key)=>{
-    const value =formData[key];
-  if((value ==="" || value===0|| value===null) && [
-    "name","emailId","contactNo","sourceId","countrycode"
-  ].includes(key)
-  ){
+export const isFormDataEmptyForAddCandidate = (formData) => {
+  if (formData === undefined) {
     return true;
   }
 
-  return false;
-  })
+  return Object.keys(formData).filter((key) => {
+    const value = formData[key];
+    if (
+      (value === "" || value === 0 || value === null) &&
+      ["name", "emailId", "contactNo", "sourceId", "countrycode"].includes(key)
+    ) {
+      return true;
+    }
 
-}
+    return false;
+  });
+};

@@ -123,6 +123,10 @@ namespace MRF.API.Controllers
             if (id == 0)
             {
                 existingStatus = _unitOfWork.Replacementmrfdetail.Get(u => u.MrfId == request.MrfId);
+                if (existingStatus == null)
+                {
+                    var ReplacementmrfdetailResponse = Post(request);
+                }
             }
             else
             {
