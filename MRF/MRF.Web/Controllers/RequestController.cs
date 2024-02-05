@@ -8,10 +8,10 @@ namespace MRF.Web.Controllers
 {
     public class RequestController : Controller
     {
-        private readonly ISmtpEmailService _emailService;
+        private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly ILoggerService _logger;
-        public RequestController(ISmtpEmailService emailService, IConfiguration configuration, ILoggerService logger)
+        public RequestController(IEmailService emailService, IConfiguration configuration, ILoggerService logger)
         {
             _emailService = emailService;
             _configuration = configuration;

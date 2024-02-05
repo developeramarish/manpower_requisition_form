@@ -12,21 +12,23 @@ namespace MRF.API.Test.Controllers
     {
         public Mock<IUnitOfWork> MockUnitOfWork { get; }
         public Mock<ILoggerService> MockLogger { get; }
-        public Mock<ISmtpEmailService> MockEmailService { get; }
+        public Mock<IEmailService> MockEmailService { get; }
         public CandidatedetailController Controller { get; }
 
         public Mock<IHostEnvironment> MockHostEnvironment { get; }
         public Mock<IUserService> MockUserService { get; }
         public Mock<IConfiguration> Mockconfiguration { get; }
+        
          
         public TestFixture()
         {
             MockUnitOfWork = new Mock<IUnitOfWork>();
             MockLogger = new Mock<ILoggerService>();
-            MockEmailService = new Mock<ISmtpEmailService>();
+            MockEmailService = new Mock<IEmailService>();
             MockHostEnvironment = new Mock<IHostEnvironment>();
             MockUserService = new Mock<IUserService>();
             Mockconfiguration = new Mock<IConfiguration>();
+          
 
             Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object,MockHostEnvironment.Object);
         }

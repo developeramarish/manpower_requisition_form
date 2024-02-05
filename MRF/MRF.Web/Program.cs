@@ -22,7 +22,7 @@ namespace MRF.Web
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
             builder.Services.AddSingleton<ILoggerService, LoggerService>();
-            builder.Services.AddTransient<ISmtpEmailService, SmtpEmailService>();
+            builder.Services.AddTransient<IEmailService, EmailService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

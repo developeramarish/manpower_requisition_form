@@ -1,20 +1,10 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using MRF.DataAccess.Repository;
+﻿using Microsoft.AspNetCore.Mvc;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Diagnostics;
-using System.Net;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,11 +19,11 @@ namespace MRF.API.Controllers
         private MrfdetaiResponseModel _responseModel;
         private FreshmrfdetailResponseModel _responseModelf;
         private readonly ILoggerService _logger;
-        private readonly ISmtpEmailService _emailService;
+        private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
         private string url = string.Empty;
-        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
+        public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -42,7 +32,7 @@ namespace MRF.API.Controllers
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
-            _configuration = configuration;
+            _configuration = configuration;           
         }
 
         // GET: api/<MrfdetailController>
@@ -141,7 +131,7 @@ namespace MRF.API.Controllers
 
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmail(getEmail(request.CreatedByEmployeeId),
+                    _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("MRD ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
                                              .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{url}'>click here</a></span>"));
@@ -687,7 +677,7 @@ namespace MRF.API.Controllers
 
                       if (emailRequest != null)
                       {
-                          _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                          _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                       }
                   }
             }

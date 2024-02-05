@@ -16,10 +16,10 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private EmployeedetailsResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        private readonly ISmtpEmailService _emailService;
+        private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public EmployeedetailsController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService, IHostEnvironment hostEnvironment)
+        public EmployeedetailsController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
 
         {
             _unitOfWork = unitOfWork;
@@ -121,7 +121,7 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                 }
             }
 
@@ -272,7 +272,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Delete User");
                     if (emailRequest != null)
                     {
-                        _emailService.SendEmail(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }
 
