@@ -490,14 +490,14 @@ namespace MRF.API.Controllers
         {
             if (string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
             {
-                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment,_configuration);
+                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
                 resumereviewermap.DeletebyMRFId(mrfId);
             }
 
             if (!string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
             {
                 request.ResumeReviewerEmployeeIds.Replace("0", "");
-                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
+                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
                 resumereviewermap.DeletebyMRFId(mrfId);
                 // Split the comma-separated string into an array of IDs
                 var employeeIds = request.ResumeReviewerEmployeeIds.Split(',');
@@ -525,14 +525,14 @@ namespace MRF.API.Controllers
             if (string.IsNullOrEmpty(request.InterviewerEmployeeIds))
             {
 
-                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
+                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
                 interviewermap.DeleteMRFInterview(mrfId);
             }
 
             if (!string.IsNullOrEmpty(request.InterviewerEmployeeIds))
             {
                 request.InterviewerEmployeeIds.Replace("0", "");
-                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
+                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
                 interviewermap.DeleteMRFInterview(mrfId);
 
                 var employeeIds = request.InterviewerEmployeeIds.Split(',');
