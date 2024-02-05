@@ -20,14 +20,13 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private AttachmentEvaluationResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        private readonly ISmtpEmailService _emailService;
-        public AttachmentController(IUnitOfWork unitOfWork, ILoggerService logger, ISmtpEmailService emailService)
+        
+        public AttachmentController(IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new AttachmentEvaluationResponseModel();
             _logger = logger;
-            _emailService = emailService;
         }
 
         // GET: api/<AttachmentController>

@@ -27,7 +27,6 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<ILoggerService, LoggerService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
-builder.Services.AddTransient<ISmtpEmailService, SmtpEmailService>();
 builder.Services.AddTransient<IHTMLtoPDF, HTMLtoPDF>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
