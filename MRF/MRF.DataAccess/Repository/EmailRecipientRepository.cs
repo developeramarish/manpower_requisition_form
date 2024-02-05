@@ -31,7 +31,7 @@ namespace MRF.DataAccess.Repository
             IQueryable<EmailRecipient> query = from MEA in _db.MrfEmailApproval
                                                join ERM in _db.Employeerolemap on MEA.EmployeeId equals ERM.EmployeeId
                                                join ED in _db.Employeedetails on MEA.EmployeeId equals ED.Id
-                                               where MEA.MrfId == 1 && RoleIds.Contains(ERM.RoleId)
+                                               where RoleIds.Contains(ERM.RoleId)
                                                select new EmailRecipient
                                                {
                                                    Email = ED.Email
