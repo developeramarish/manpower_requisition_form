@@ -108,11 +108,11 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmailAsync(request.ResumeReviewerEmployeeId, 
+                    _emailService.SendEmailAsync(Convert.ToInt32(request.ResumeReviewerEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"),
-                        request.MrfId);
-                    
+                        Convert.ToInt32(request.MrfId));
+
                 }
             }
             return _responseModel;

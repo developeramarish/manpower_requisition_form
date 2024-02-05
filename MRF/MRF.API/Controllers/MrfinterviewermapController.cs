@@ -110,10 +110,10 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmailAsync(request.InterviewerEmployeeId,
-                       emailRequest.Subject,
-                       emailRequest.Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"),
-                       request.MrfId);
+                    _emailService.SendEmailAsync(Convert.ToInt32(request.InterviewerEmployeeId),
+                      emailRequest.Subject,
+                      emailRequest.Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"),
+                      Convert.ToInt32(request.MrfId));
                 }
             }
            
