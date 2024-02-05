@@ -1,14 +1,20 @@
 import React, { useState, useRef } from "react";
 import { API_URL, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
 import { storageService } from "../constants/storage";
-import { formatDateToYYYYMMDD, navigateTo, postData, putData ,isFormDataEmptyForSaveasDraft,
-  isFormDataEmptyForSubmit } from "../constants/Utils";
+import {
+  formatDateToYYYYMMDD,
+  navigateTo,
+  postData,
+  putData,
+  isFormDataEmptyForSaveasDraft,
+  isFormDataEmptyForSubmit,
+} from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
 import InputTextareaComponent from "./InputTextarea";
 import ToastMessages from "./ToastMessages";
 import LoadingSpinner from "./LoadingSpinner";
-import {throttle} from "lodash";
+import { throttle } from "lodash";
 const MrfPartialStatus = ({
   mrfId = null,
   mrfStatusId = null,
@@ -23,15 +29,15 @@ const MrfPartialStatus = ({
   outlined,
   siteHRUpdateClick = false,
   hiringManagerUpdateClick = false,
-  bypassClicked=false,
+  bypassClicked = false,
   className,
-  emailErrors
+  emailErrors,
 }) => {
   const [visible, setVisible] = useState(false);
   const [note, setNote] = useState("");
   const toastRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const buttonRef = useRef(null);  
+  const buttonRef = useRef(null);
   const strToArray = (s) => {
     s = s ?? "";
     if (s !== "" && typeof s === "string") {
@@ -86,10 +92,10 @@ const MrfPartialStatus = ({
   };
 
   const handleSubmit = async (mrfStatusId) => {
-    if(emailErrors){
+    if (formData.isReplacement && emailErrors) {
       toastRef.current.showWarrningMessage("Invalid Email format");
       setVisible(false);
-      return 
+      return;
     }
     if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
       const emptyFields = isFormDataEmptyForSubmit(formData);
@@ -104,7 +110,7 @@ const MrfPartialStatus = ({
       setVisible(false);
     } else {
       console.log("Form data is valid. Submitting...");
-     
+
       setIsLoading(true);
       const data = {
         referenceNo: formData.referenceNo,
@@ -144,7 +150,7 @@ const MrfPartialStatus = ({
         employeeName: formData.employeeName,
         emailId: formData.emailId,
         note: formData.note,
-        employeeCode: formData.employeeCode ,
+        employeeCode: formData.employeeCode == null ? 0 : formData.employeeCode,
         lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
         annualCtc: formData.annualCtc,
         annualGross: formData.annualGross,
@@ -166,7 +172,7 @@ const MrfPartialStatus = ({
         presidentnCOOId: formData.presidentnCOOId,
         presidentnCOOEmpId: formData.presidentnCOOEmpId,
       };
-      
+
       try {
         console.log(data);
         let response = await postData(
@@ -178,7 +184,7 @@ const MrfPartialStatus = ({
           console.log("Response Data:", responseData);
           if (responseData.statusCode === 409) {
             setVisible(false);
-              setIsLoading(false);
+            setIsLoading(false);
             toastRef.current.showConflictMessage(responseData.message);
           } else {
             if (mrfStatusId == 1) {
@@ -204,7 +210,7 @@ const MrfPartialStatus = ({
           console.error("Error Data:", errorData);
           if (response.status === 400) {
             setVisible(false);
-              setIsLoading(false);
+            setIsLoading(false);
             toastRef.current.showBadRequestMessage(
               "Bad request: " + response.url
             );
@@ -214,11 +220,11 @@ const MrfPartialStatus = ({
         console.error("Error:", error);
       } finally {
         setVisible(false);
-              setIsLoading(false);
+        setIsLoading(false);
       }
     }
   };
-console.log(formData);
+
   const submitPartial = async () => {
     let hiringManagerId,
       hiringManagerEmpId,
@@ -274,7 +280,7 @@ console.log(formData);
         const responseData = await response.json();
         if (responseData.statusCode === 409) {
           setVisible(false);
-              setIsLoading(false);
+          setIsLoading(false);
           toastRef.current.showConflictMessage(responseData.message);
         } else {
           setVisible(false);
@@ -295,7 +301,7 @@ console.log(formData);
         console.error("Error Data:", errorData);
         if (response.status === 400) {
           setVisible(false);
-              setIsLoading(false);
+          setIsLoading(false);
 
           toastRef.current.showBadRequestMessage(
             "Bad request: " + response.url
@@ -307,9 +313,9 @@ console.log(formData);
       setIsLoading(false);
 
       console.error("Error:", error);
-    }finally {
+    } finally {
       setVisible(false);
-            setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -370,8 +376,8 @@ console.log(formData);
             )}
 
             {message && <h3>{message}</h3>}
-            {isLoading && <LoadingSpinner />}   
-                  </Dialog> 
+            {isLoading && <LoadingSpinner />}
+          </Dialog>
         </>
       )}
       <ToastMessages ref={toastRef} />
