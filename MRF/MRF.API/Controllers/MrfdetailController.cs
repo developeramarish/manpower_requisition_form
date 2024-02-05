@@ -22,7 +22,7 @@ namespace MRF.API.Controllers
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
-        private string url = string.Empty;
+        private string mrfUrl = string.Empty;
         public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
@@ -109,7 +109,7 @@ namespace MRF.API.Controllers
                     _unitOfWork.Save();
 
                     _responseModel.Id = mrfDetail.Id;
-                    url = string.Join("/", _configuration["MRFUrl"], mrfDetail.Id.ToString());
+                    mrfUrl = string.Join("/", _configuration["MRFUrl"], mrfDetail.Id.ToString());
                     if (mrfDetail.Id != 0)
                     {
                         request.mrfID = mrfDetail.Id;
@@ -128,13 +128,24 @@ namespace MRF.API.Controllers
                 }
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
                 
-
                 if (emailRequest != null)
                 {
+                    //Send Email to HR
+                    List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmailRecipient(request.MrfStatusId);
+                    foreach (var emailReq in emailList)
+                    {
+                        _emailService.SendEmailAsync(emailReq.Email,
+                            emailRequest.Subject,
+                            emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
+                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
+                    }
+
+
+                    //Send Email to MRF Owner
                     _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
-                        emailRequest.Content.Replace("MRD ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
-                                             .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{url}'>click here</a></span>"));
+                        emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
+                                             .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
 
                 }
 

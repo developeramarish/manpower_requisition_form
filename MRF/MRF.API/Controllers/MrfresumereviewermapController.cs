@@ -5,6 +5,7 @@ using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,7 +20,7 @@ namespace MRF.API.Controllers
         private MrfresumereviewermapResponseModel _responseModel;
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
-        private readonly IHostEnvironment _hostEnvironment;
+        private readonly IHostEnvironment _hostEnvironment;       
         public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
@@ -98,12 +99,17 @@ namespace MRF.API.Controllers
             _unitOfWork.Mrfresumereviewermap.Add(mrfresumereviewermap);
             _unitOfWork.Save();
             _responseModel.Id = mrfresumereviewermap.Id;
+            
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    _emailService.SendEmailAsync(Convert.ToInt32(request.ResumeReviewerEmployeeId),
+                        emailRequest.Subject,
+                        emailRequest.Content,
+                        Convert.ToInt32(request.MrfId));
+
                 }
             }
             return _responseModel;

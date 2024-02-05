@@ -21,6 +21,7 @@ namespace MRF.API.Controllers
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
+
         public MrfinterviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
@@ -29,6 +30,7 @@ namespace MRF.API.Controllers
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
+            
         }
         
         
@@ -101,12 +103,16 @@ namespace MRF.API.Controllers
             _unitOfWork.Mrfinterviewermap.Add(mrfinterviewermap);
             _unitOfWork.Save();
             _responseModel.Id = mrfinterviewermap.Id;
+            
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    _emailService.SendEmailAsync(Convert.ToInt32(request.InterviewerEmployeeId),
+                      emailRequest.Subject,
+                      emailRequest.Content,
+                      Convert.ToInt32(request.MrfId));
                 }
             }
            

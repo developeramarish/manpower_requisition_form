@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
@@ -61,6 +62,27 @@ namespace MRF.Utility
             }
         }
 
+        public async Task SendEmailAsync(int senderId, string subject, string htmlContent, int mrfId)
+        {
+            try
+            {
+                string mrfRefNo = getMRFRefNoFromMRFId(mrfId);
+                htmlContent = htmlContent.Replace("MRF#", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfRefNo}</span>");
+                if (IsSendGridEnabled())
+                {
+                    await SendEmailSendGrid(getUserEmail(senderId), subject, htmlContent);
+                }
+                else
+                {
+                    SendEmailSMTP(getUserEmail(senderId), subject, htmlContent);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Exception occurred while sending email: {e.Message}");
+                throw;
+            }
+        }
         private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath=null)
         {
             var msg = new SendGridMessage
@@ -126,27 +148,7 @@ namespace MRF.Utility
            || (value is DateOnly dateOnlyValue && dateOnlyValue == DateOnly.MinValue))
        && !(value is bool boolValue && !boolValue);
         }
-
-        public async Task SendEmailAsync(int senderId, string subject, string htmlContent,  int mrfId)
-        {
-            try
-            {
-                if (IsSendGridEnabled())
-                {
-                    await SendEmailSendGrid(getUserEmail(senderId), subject, htmlContent);
-                }
-                else
-                {
-                    SendEmailSMTP(getUserEmail(senderId), subject, htmlContent);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Exception occurred while sending email: {e.Message}");
-                throw;
-            }
-        }
-
+        
         private string getMRFRefNoFromMRFId(int id)
         {
             Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
