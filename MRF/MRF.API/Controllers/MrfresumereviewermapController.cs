@@ -5,6 +5,7 @@ using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,7 +21,9 @@ namespace MRF.API.Controllers
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
-        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
+        private string mrfUrl = string.Empty;
+        private readonly IConfiguration _configuration;
+        public MrfresumereviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
@@ -28,6 +31,7 @@ namespace MRF.API.Controllers
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
+            _configuration = configuration;
         }
         // GET: api/<MrfresumereviewermapController>
         [HttpGet]
@@ -98,12 +102,17 @@ namespace MRF.API.Controllers
             _unitOfWork.Mrfresumereviewermap.Add(mrfresumereviewermap);
             _unitOfWork.Save();
             _responseModel.Id = mrfresumereviewermap.Id;
+            mrfUrl = string.Join("/", _configuration["MRFUrl"], request.MrfId.ToString());
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
                 if (emailRequest != null)
                 {
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    _emailService.SendEmailAsync(request.ResumeReviewerEmployeeId, 
+                        emailRequest.Subject,
+                        emailRequest.Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"),
+                        request.MrfId);
+                    
                 }
             }
             return _responseModel;

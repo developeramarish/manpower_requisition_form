@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
@@ -131,6 +132,8 @@ namespace MRF.Utility
         {
             try
             {
+                string mrfRefNo = getMRFRefNoFromMRFId(mrfId);
+                htmlContent = htmlContent.Replace("MRF#", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfRefNo}</span>");
                 if (IsSendGridEnabled())
                 {
                     await SendEmailSendGrid(getUserEmail(senderId), subject, htmlContent);

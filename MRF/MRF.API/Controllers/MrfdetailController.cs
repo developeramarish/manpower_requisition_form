@@ -22,7 +22,7 @@ namespace MRF.API.Controllers
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
-        private string url = string.Empty;
+        private string mrfUrl = string.Empty;
         public MrfdetailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
@@ -109,7 +109,7 @@ namespace MRF.API.Controllers
                     _unitOfWork.Save();
 
                     _responseModel.Id = mrfDetail.Id;
-                    url = string.Join("/", _configuration["MRFUrl"], mrfDetail.Id.ToString());
+                    mrfUrl = string.Join("/", _configuration["MRFUrl"], mrfDetail.Id.ToString());
                     if (mrfDetail.Id != 0)
                     {
                         request.mrfID = mrfDetail.Id;
@@ -134,7 +134,7 @@ namespace MRF.API.Controllers
                     _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("MRD ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
-                                             .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{url}'>click here</a></span>"));
+                                             .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
 
                 }
 
@@ -490,14 +490,14 @@ namespace MRF.API.Controllers
         {
             if (string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
             {
-                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment,_configuration);
                 resumereviewermap.DeletebyMRFId(mrfId);
             }
 
             if (!string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
             {
                 request.ResumeReviewerEmployeeIds.Replace("0", "");
-                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+                MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
                 resumereviewermap.DeletebyMRFId(mrfId);
                 // Split the comma-separated string into an array of IDs
                 var employeeIds = request.ResumeReviewerEmployeeIds.Split(',');
@@ -525,14 +525,14 @@ namespace MRF.API.Controllers
             if (string.IsNullOrEmpty(request.InterviewerEmployeeIds))
             {
 
-                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
                 interviewermap.DeleteMRFInterview(mrfId);
             }
 
             if (!string.IsNullOrEmpty(request.InterviewerEmployeeIds))
             {
                 request.InterviewerEmployeeIds.Replace("0", "");
-                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
+                MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
                 interviewermap.DeleteMRFInterview(mrfId);
 
                 var employeeIds = request.InterviewerEmployeeIds.Split(',');
