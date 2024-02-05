@@ -96,44 +96,52 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public EmployeedetailsResponseModel Post([FromBody] EmployeedetailsRequestModel request)
         {
-            var employeedetails = new Employeedetails
+            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Email == request.Email );
+            if (Employeedetail == null)
             {
-                Name = request.Name,
-                Email = request.Email,
-                ContactNo = request.ContactNo,
-                RoleId = request.RoleId,
-                EmployeeCode = request.EmployeeCode,
-                IsAllowed = request.IsAllowed,
-                AllowedByEmployeeId = request.AllowedByEmployeeId,
-                CreatedByEmployeeId = request.CreatedByEmployeeId,
-                CreatedOnUtc = request.CreatedOnUtc,
-                UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                UpdatedOnUtc = request.UpdatedOnUtc
-            };
-            _unitOfWork.Employeedetails.Add(employeedetails);
-            _unitOfWork.Save();
-            _responseModel.Id = employeedetails.Id;
-
-
-            if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-            {
-
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
-                if (emailRequest != null)
+                var employeedetails = new Employeedetails
                 {
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    Name = request.Name,
+                    Email = request.Email,
+                    ContactNo = request.ContactNo,
+                    RoleId = request.RoleId,
+                    EmployeeCode = request.EmployeeCode,
+                    IsAllowed = request.IsAllowed,
+                    AllowedByEmployeeId = request.AllowedByEmployeeId,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc
+                };
+                _unitOfWork.Employeedetails.Add(employeedetails);
+                _unitOfWork.Save();
+                _responseModel.Id = employeedetails.Id;
+
+
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                {
+
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
+                    if (emailRequest != null)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                }
+
+                if (employeedetails.Id != 0)
+                {
+                    CallEmployeeRoleMapController(request, employeedetails.Id);
+                }
+                else
+                {
+                    _logger.LogError($"Unable to add mrf details");
+
                 }
             }
-
-            if (employeedetails.Id != 0)
-            {
-                CallEmployeeRoleMapController(request, employeedetails.Id);
+            else {
+                _logger.LogError("Already Exists");
             }
-            else
-            {
-                _logger.LogError($"Unable to add mrf details");
-
-            }
+           
 
             return _responseModel;
 
