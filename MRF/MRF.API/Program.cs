@@ -14,7 +14,7 @@ using Microsoft.Extensions.FileProviders;
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
 
-var environment = "Production";
+var environment = builder.Environment.EnvironmentName;
 var config = new ConfigurationBuilder()
        .AddJsonFile("appsettings." + environment + ".json", optional: false)
        .Build();

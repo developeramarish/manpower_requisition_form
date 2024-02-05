@@ -18,7 +18,7 @@ namespace MRF.API.Test.Controllers
         public MrfinterviewermapControllerTest()
         {
             fixture = new TestFixture();
-            Controller = new MrfinterviewermapController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object,fixture.MockHostEnvironment.Object);
+            Controller = new MrfinterviewermapController(fixture.MockUnitOfWork.Object, fixture.MockLogger.Object, fixture.MockEmailService.Object,fixture.MockHostEnvironment.Object, fixture.Mockconfiguration.Object);
         }
 
         [Fact]
