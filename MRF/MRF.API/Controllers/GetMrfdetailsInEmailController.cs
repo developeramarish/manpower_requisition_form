@@ -76,7 +76,7 @@ namespace MRF.API.Controllers
             var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
             try
             {
-                List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId);
+                List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId, MrfId);
                 foreach (var emailReq in emailList)
                 {
                     try
@@ -128,9 +128,9 @@ namespace MRF.API.Controllers
             return messageBody;
         }
         
-        private List<EmailRecipient> SendEmailOnStatus(int MrfStatusId)
+        private List<EmailRecipient> SendEmailOnStatus(int MrfStatusId, int MrfId)
         {
-            List<EmailRecipient> obj = _unitOfWork.EmailRecipient.GetEmailRecipient(MrfStatusId,null);
+            List<EmailRecipient> obj = _unitOfWork.EmailRecipient.GetEmailRecipient(MrfStatusId,null, MrfId);
             return obj;
         }
     }
