@@ -4,14 +4,15 @@ import ButtonC from "./../components/Button";
 import ToastMessages from "./../components/ToastMessages";
 import SingleFileUpload from "./../components/FileUpload";
 import { storageService } from "../constants/storage";
-import { getDataAPI, navigateTo, removeSpaces ,postData, isFormDataEmptyForAddCandidate, } from "../constants/Utils";
-import { InputMask } from "primereact/inputmask";
 import {
-  API_URL,
-  COUNTRIES,
-  emailRegex,
-  
-} from "../constants/config";
+  getDataAPI,
+  navigateTo,
+  removeSpaces,
+  postData,
+  isFormDataEmptyForAddCandidate,
+} from "../constants/Utils";
+import { InputMask } from "primereact/inputmask";
+import { API_URL, COUNTRIES, emailRegex } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -46,25 +47,23 @@ const AddCandidate = (reqId) => {
   const [dropdowns, setDropdownData] = useState();
 
   useEffect(() => {
-   fectData();
+    fectData();
   }, []);
 
-const fectData=async()=>{
-
-    const result=await getDataAPI(`${API_URL.ADD_SOURCE_NAME}`)
-     // Fetch the data for all the dropdowns
-     const response=await result.json();
-     setDropdownData(response.result);
-     
-}
+  const fectData = async () => {
+    const result = await getDataAPI(`${API_URL.ADD_SOURCE_NAME}`);
+    // Fetch the data for all the dropdowns
+    const response = await result.json();
+    setDropdownData(response.result);
+  };
 
   useEffect(() => {
-    if(formData.countrycode.code==="IN"){
-      setMask("99999-99999")
-    }else{
-      setMask("(999) 999-999")
+    if (formData.countrycode.code === "IN") {
+      setMask("99999-99999");
+    } else {
+      setMask("(999) 999-999");
     }
-    }, [formData]);
+  }, [formData]);
 
   const RedAsterisk = () => <span className="text-red-500">*</span>;
 
@@ -106,10 +105,10 @@ const fectData=async()=>{
             body: fileUploadData,
           }
         );
-// const fileUploadResponse = await postData(
-//           API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
-//           fileUploadData
-//         );
+        // const fileUploadResponse = await postData(
+        //           API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
+        //           fileUploadData
+        //         );
 
         if (fileUploadResponse.ok) {
           const data = {
@@ -118,7 +117,7 @@ const fectData=async()=>{
             name: formData.name,
             emailId: formData.emailId,
             contactNo: formData.contactNo,
-            resumePath: removeSpaces(formData.name) + ".pdf",
+            resumePath:(selectedFile.type==="application/pdf")?removeSpaces(formData.name) + ".pdf" :removeSpaces(formData.name) + ".docx",
             candidateStatusId: 1,
             reviewedByEmployeeIds: "",
             createdByEmployeeId: formData.createdByEmployeeId,
@@ -186,20 +185,20 @@ const fectData=async()=>{
     navigateTo("my_requisition");
   };
 
-  const handleMinimumContact=(e)=>{
-    const ConatctValue=e.target.value;
-    
-    if(formData.countrycode.code==="IN" && ConatctValue.length< 11){
-      toastRef.current.showWarrningMessage("Contact Number is less than 10 Digit");
-     
-    }else if(formData.countrycode.code==="US" && ConatctValue.length< 13){
-      toastRef.current.showWarrningMessage("Contact Number is less than 9 Digit");
+  const handleMinimumContact = (e) => {
+    const ConatctValue = e.target.value;
+
+    if (formData.countrycode.code === "IN" && ConatctValue.length < 11) {
+      toastRef.current.showWarrningMessage(
+        "Contact Number is less than 10 Digit"
+      );
+    } else if (formData.countrycode.code === "US" && ConatctValue.length < 13) {
+      toastRef.current.showWarrningMessage(
+        "Contact Number is less than 9 Digit"
+      );
     }
-  }
+  };
 
-  
-
-  
   return (
     <div>
       <div className="flex create_requistion">
@@ -256,25 +255,29 @@ const fectData=async()=>{
 
                   <div className="flex flex-row w-6 gap-2">
                     <div className="flex flex-column  ">
-
-<DropdownComponent  options={COUNTRIES}
+                      <DropdownComponent
+                        options={COUNTRIES}
                         optionLabel="name"
                         placeholder="Country code"
-                        value={formData.countrycode} 
-                         onChange={(e)=> setFormData({
-                          ...formData,
-                          countrycode: e.target.value,
-                        })} 
-                        className="w-full md:w-13rem" />
-
-                     
+                        value={formData.countrycode}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            countrycode: e.target.value,
+                          })
+                        }
+                        className="w-full md:w-13rem"
+                      />
                     </div>
                     <div className="flex flex-column  ">
                       <InputMask
                         mask={mask}
                         value={formData.contactNo}
-                          onChange={(e) =>
-                          setFormData({ ...formData, contactNo: e.target.value })
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            contactNo: e.target.value,
+                          })
                         }
                         onBlur={handleMinimumContact}
                         // autoClear={false}
@@ -306,7 +309,10 @@ const fectData=async()=>{
                   Resume
                   <RedAsterisk />
                 </label>
-                <SingleFileUpload onChange={handleFileChange} fileExtension={"pdf"} />
+                <SingleFileUpload
+                  onChange={handleFileChange}
+                  fileExtension={"pdf ,docx "}
+                />
               </div>
             </section>
 
@@ -324,7 +330,7 @@ const fectData=async()=>{
                 disable={submitBtnDisable}
                 onClick={() => handleSubmit()}
               />
-              {isLoading && <LoadingSpinner />}  
+              {isLoading && <LoadingSpinner />}
               <ToastMessages ref={toastRef} />
             </div>
           </div>

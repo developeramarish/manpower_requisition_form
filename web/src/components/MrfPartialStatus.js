@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { API_URL, MRF_STATUS, REQUISITION_TYPE } from "../constants/config";
 import { storageService } from "../constants/storage";
+import { Knob } from "primereact/knob";
 import {
   formatDateToYYYYMMDD,
   navigateTo,
@@ -38,6 +39,7 @@ const MrfPartialStatus = ({
   const toastRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const buttonRef = useRef(null);
+  const [maxCharacterCount, setMaxCharacterCount] = useState(500);
   const strToArray = (s) => {
     s = s ?? "";
     if (s !== "" && typeof s === "string") {
@@ -319,6 +321,15 @@ const MrfPartialStatus = ({
     }
   };
 
+  const handleChange = (e) => {
+    const value = e.target.value;
+    console.log(value);
+    if (value.length <= maxCharacterCount) {
+      setNote(value);
+    }
+  };
+
+  const remaingletter = maxCharacterCount - note.length;
   return (
     <>
       {/* {popupmessage &&(
@@ -354,7 +365,7 @@ const MrfPartialStatus = ({
           ></ButtonC>
 
           <Dialog
-            className="w-3 "
+            className="w-4 "
             visible={visible}
             header={header}
             draggable={false}
@@ -365,13 +376,39 @@ const MrfPartialStatus = ({
               <div>
                 <label className="font-bold text-sm">Add Note:</label>
                 <br />
-                <InputTextareaComponent
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  rows={3}
-                  cols={35}
-                  className="bg-gray-100"
-                />
+                <div
+                  style={{
+                    position: "relative",
+                    display: "inline-block",
+                  }}
+                >
+                  <InputTextareaComponent
+                    value={note}
+                    onChange={handleChange}
+                    rows={4}
+                    cols={62}
+                    className="bg-gray-100"
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "7px",
+                      right: "20px",
+                      zIndex: "100",
+                      textAlign: "right",
+                    }}
+                  >
+                    <Knob
+                      value={maxCharacterCount - remaingletter}
+                      max={maxCharacterCount}
+                      readOnly
+                      size={50}
+                      rangeColor="#aaaaaa"
+                      valueColor="#d32f2e"
+                      textColor="#000000"
+                    />
+                  </div>
+                </div>
               </div>
             )}
 
