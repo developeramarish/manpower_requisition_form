@@ -131,7 +131,7 @@ namespace MRF.API.Controllers
                 if (emailRequest != null)
                 {
                     //Send Email to HR
-                    List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmailRecipient(request.MrfStatusId);
+                    List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmailRecipient(request.MrfStatusId, null, Convert.ToInt32(request.mrfID));
                     foreach (var emailReq in emailList)
                     {
                         _emailService.SendEmailAsync(emailReq.Email,
@@ -225,7 +225,7 @@ namespace MRF.API.Controllers
 
 
 
-                //CallEmailApprovalController(request, mrfId, Update);
+                CallEmailApprovalController(request, mrfId, Update);
                 CallReplacementController(request, mrfId, Update);
                 CallreviewerController(request, mrfId, Update);
 
