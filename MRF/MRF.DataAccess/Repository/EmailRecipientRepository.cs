@@ -66,5 +66,18 @@ namespace MRF.DataAccess.Repository
                                                };
             return query.ToList();
         }
+
+        public List<EmailRecipient> GetAllHrEmail(string empRole)
+        {
+            IQueryable<EmailRecipient> query = from ed in _db.Employeedetails
+                                               join erm in _db.Employeerolemap on ed.Id equals erm.EmployeeId
+                                               where erm.RoleId == (from rm in _db.Rolemaster where rm.Name == empRole select rm.Id).FirstOrDefault()
+                                               select new EmailRecipient
+                                               {
+                                                   Email = ed.Email
+                                               };
+
+            return query.ToList();
+        }
     }
 }
