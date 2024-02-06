@@ -47,7 +47,7 @@ namespace MRF.DataAccess.Repository
             {
                 string Emailaddress = GetUser();
                 
-                Employeedetails Employeedetail = _employeedetailsRepository.Get(u => u.Email == Emailaddress);
+                Employeedetails Employeedetail = _employeedetailsRepository.Get(u => u.Email == Emailaddress && !u.IsDeleted);
                 if (Employeedetail == null)
                 {
                     return _response;

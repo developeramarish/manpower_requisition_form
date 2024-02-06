@@ -7,11 +7,18 @@ const EditorComponent = ({
   autoResize ,
   headerTemplate,
   disable,
+  max
 }) => {
   const [text, setText] = useState("");
   const onUpdate = (e) => {
     // console.log(e);
-    setText(e);
+    if(e && e.length<=max){
+     
+      setText(e);
+    }else{
+      return;
+    }
+    
   };
   useEffect(() => {
     onTextChanged(text);
@@ -24,6 +31,7 @@ const EditorComponent = ({
       readOnly={disable}
       onTextChange={(e) => onUpdate(e.htmlValue)}
       style={{ height: '170px' }}
+      max={max}
     />
   );
 };
