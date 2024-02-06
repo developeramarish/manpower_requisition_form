@@ -67,7 +67,7 @@ namespace MRF.DataAccess.Repository
             return query.ToList();
         }
 
-        public List<EmailRecipient> GetAllHrEmail(string empRole)
+        public List<EmailRecipient> GetEmployeeEmail(string empRole)
         {
             IQueryable<EmailRecipient> query = from ed in _db.Employeedetails
                                                join erm in _db.Employeerolemap on ed.Id equals erm.EmployeeId
