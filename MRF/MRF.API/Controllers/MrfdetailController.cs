@@ -131,7 +131,7 @@ namespace MRF.API.Controllers
                 if (emailRequest != null)
                 {
                     //Send Email to HR
-                    List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetAllHrEmail("HR");
+                    List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
 
                     foreach (var emailReq in emailList)
                     {
