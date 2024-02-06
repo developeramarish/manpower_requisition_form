@@ -34,6 +34,7 @@ import EditorComponent from "../components/EditorComponent";
 import InputNumberComponent from "../components/InputNumberComponent";
 import DropdownAddNew from "./../components/DropDownAddNew";
 import { Message } from "primereact/message";
+import { Knob } from "primereact/knob";
 
 const CreateRequisitionBody = ({
   getReqId = null,
@@ -52,6 +53,8 @@ const CreateRequisitionBody = ({
   const toastRef = useRef(null);
   const [formData, setFormData] = useState();
   const [emailError, setEmailError] = useState(false);
+  const [siteHrSpocBtnDisable,setSiteHrSpocBtnDisable]=useState(true);
+  const [hiringManagerBtnDisable,setHiringManagerBtnDisable]=useState(true);
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
     const dropDowndata = await result.json();
@@ -83,13 +86,8 @@ const CreateRequisitionBody = ({
       commonSettings
     );
   }, []);
-  const onTextChanged = (val) => {
-    setFormData({ ...formData, jobDescription: val });
-  };
+  
 
-  const onTextChangedSkill = (val) => {
-    setFormData({ ...formData, skills: val });
-  };
   const handleMinSalaryChange = (e) => {
     const minSalary = e.target.value;
     if (formData.maxTargetSalary !== 0) {
@@ -104,8 +102,6 @@ const CreateRequisitionBody = ({
 
     setFormData({ ...formData, minTargetSalary: minSalary });
   };
-  console.log(formData);
-
   const handleMaxSalaryChange = (e) => {
     const maxSalary = e.target.value;
 
@@ -180,6 +176,50 @@ const CreateRequisitionBody = ({
     }
   };
 
+  const maxCharacterCountJustification = 500;
+  const handleChangeJustification = (e) => {
+    const value = e.target.value;
+
+    if (value.length <= maxCharacterCountJustification) {
+      setFormData({ ...formData, justification: value });
+    }
+  };
+
+  let remaningCharacterJustification = 0;
+  if (formData) {
+    remaningCharacterJustification =
+      maxCharacterCountJustification - (formData.justification?.length || 0);
+  }
+
+
+  const maxCharacterSkills = 500
+ 
+  const onTextChangedSkill = (val) => {
+    console.log("skillfunc")
+    if (val && val.length <= maxCharacterSkills) {
+      console.log("fooo")
+      setFormData({ ...formData, skills: val });
+    }
+  };
+  let remaningCharacterSkills = 0;
+  if (formData) {
+    remaningCharacterSkills = maxCharacterSkills - formData.skills.length;
+  }
+
+
+  const maxCharacterJobDescription = 6000;
+ const onTextChangedJobDesc = (val) => {
+  const value = val;
+    if (value && value.length <= maxCharacterJobDescription) {
+      setFormData({ ...formData, jobDescription: value });
+    }
+  };
+
+  let remaningCharacterJobDescription = 0;
+  if (formData) {
+    remaningCharacterJobDescription =
+      maxCharacterJobDescription - (formData.jobDescription?.length || 0);
+  }
   const handleMinExpChange = (e) => {
     const minExp = e.target.value;
     if (formData.maxExperience !== 0) {
@@ -879,15 +919,92 @@ const CreateRequisitionBody = ({
                   Job Description
                   <RedAsterisk />
                 </label>
-                <EditorComponent
-                  value={formData.jobDescription}
-                  headerTemplate={header}
-                  onTextChanged={onTextChanged}
-                  disable={commonSettings.setReadOnly}
-                />
+                <div
+                  style={{
+                    // backgroundColor:"red",
+                    position: "relative",
+                    display: "inline-block",
+                    // width:"400px"
+                  }}
+                >
+                  <EditorComponent
+                    value={formData.jobDescription}
+                    headerTemplate={header}
+                    onTextChanged={onTextChangedJobDesc}
+                    disable={commonSettings.setReadOnly}
+                    max={maxCharacterJobDescription}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "7px",
+                      right: "20px",
+                      zIndex: "100",
+                      textAlign: "right",
+                    }}
+                  >
+                    <Knob
+                      value={
+                        maxCharacterJobDescription -
+                        remaningCharacterJobDescription
+                      }
+                      max={maxCharacterJobDescription}
+                      readOnly
+                      size={50}
+                      rangeColor="#aaaaaa"
+                      valueColor="#d32f2e"
+                      textColor="#000000"
+                    />
+                  </div>
+                </div>
+                
               </div>
 
               <div className="flex flex-column w-6 gap-2">
+                <label htmlFor="skills" className="font-bold text-sm">
+                  Skills
+                  <RedAsterisk />
+                </label>
+
+                <div
+                  style={{
+                    // backgroundColor:"red",
+                    position: "relative",
+                    display: "inline-block",
+                    // width:"400px"
+                  }}
+                >
+                  <EditorComponent
+                    value={formData.skills}
+                    headerTemplate={header}
+                    onTextChanged={onTextChangedSkill}
+                    disable={commonSettings.setReadOnly}
+                    max={maxCharacterSkills}
+                  />
+
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "7px",
+                      right: "20px",
+                      zIndex: "100",
+                      textAlign: "right",
+                    }}
+                  >
+                    <Knob
+                      // value={5}
+                      value={maxCharacterSkills - remaningCharacterSkills}
+                      max={maxCharacterSkills}
+                      readOnly
+                      size={50}
+                      rangeColor="#aaaaaa"
+                      valueColor="#d32f2e"
+                      textColor="#000000"
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="skills" className="font-bold text-sm">
                   Skills
                   <RedAsterisk />
@@ -898,25 +1015,54 @@ const CreateRequisitionBody = ({
                   onTextChanged={onTextChangedSkill}
                   disable={commonSettings.setReadOnly}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="flex justify-content-between gap-5 ">
-              <div className="flex flex-column w-6 gap-2">
+            <div className="flex flex-column relative inline-block w-6 gap-2">
                 <label htmlFor="Justification" className="font-bold text-sm">
                   Justification <RedAsterisk />
                 </label>
 
+                {/* <div
+                  style={{
+                    backgroundColor:"red",
+                    position: "relative",
+                    display: "inline-block",
+                    // width:"400px"
+                  }} 
+                >*/}
                 <InputTextareaComponent
                   id="Justification"
-                  className="bg-gray-100"
-                  rows={6}
-                  cols={10}
                   value={formData.justification}
-                  onChange={(e) =>
-                    setFormData({ ...formData, justification: e.target.value })
-                  }
-                  disable={commonSettings.setReadOnly}
+                  onChange={handleChangeJustification}
+                  rows={6}
+                  cols={90}
+                  readOnly={commonSettings.setReadOnly}
+                  className="w-100"
                 />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "7px",
+                    right: "20px",
+                    zIndex: "100",
+                    textAlign: "right",
+                  }}
+                >
+                  <Knob
+                    value={
+                      maxCharacterCountJustification -
+                      remaningCharacterJustification
+                    }
+                    max={maxCharacterCountJustification}
+                    readOnly
+                    size={50}
+                    rangeColor="#aaaaaa"
+                    valueColor="#d32f2e"
+                    textColor="#000000"
+                  />
+                  {/* </div> */}
+                </div>
               </div>
               <div className="flex flex-column gap-4 w-6">
                 <div className="flex flex-column gap-2">
@@ -1049,7 +1195,7 @@ const CreateRequisitionBody = ({
                             (manager) =>
                               manager.employeeId === selectedHiringManagerId
                           );
-
+setHiringManagerBtnDisable(false);
                         if (selectedHiringManager) {
                           setFormData({
                             ...formData,
@@ -1132,7 +1278,7 @@ const CreateRequisitionBody = ({
                                   className={"update_btn"}
                                   hiringManagerUpdateClick={true}
                                   disabled={
-                                    formData.hiringManagerId != 0 ? false : true
+                                    hiringManagerBtnDisable
                                   }
                                   message={"Are you sure you want to update?"}
                                 />
@@ -1195,7 +1341,7 @@ const CreateRequisitionBody = ({
                             (manager) =>
                               manager.employeeId === selectedsiteHRSPOCId
                           );
-
+                          setSiteHrSpocBtnDisable(false);
                         if (selectedsiteHRSPOCEmpId) {
                           setFormData({
                             ...formData,
@@ -1263,7 +1409,7 @@ const CreateRequisitionBody = ({
                                   className={"update_btn"}
                                   siteHRUpdateClick={true}
                                   disabled={
-                                    formData.siteHRSPOCId != 0 ? false : true
+                                   siteHrSpocBtnDisable
                                   }
                                   message={"Are you sure you want to update?"}
                                 />
