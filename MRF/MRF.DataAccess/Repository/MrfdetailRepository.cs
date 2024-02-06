@@ -142,7 +142,7 @@ namespace MRF.DataAccess.Repository
                     { r.FunctionHeadEmpId = e.HiringManagerEmpId; r.FunctionHeadId = e.HiringManagerId;
                         r.FHApprovalDate = (e.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : e.HMApprovalDate; }
                     
-                    e = emploeeyemailId.FirstOrDefault(e => e.roleId == 9);
+                    e = emploeeyemailId.FirstOrDefault(e => e.roleId == 4);
                     if (e != null)
                     { r.SiteHRSPOCEmpId = e.HiringManagerEmpId; r.SiteHRSPOCId = e.HiringManagerId;
                         r.SPApprovalDate = (e.HMApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : e.HMApprovalDate; }
