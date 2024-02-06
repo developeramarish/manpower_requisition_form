@@ -47,7 +47,7 @@ export default function EmployeDetails() {
     else{
       rowData.isDeleted=true;
       getDetails();
-      if (window.confirm("Do you want to remove?")) {
+       if (window.confirm("Do you want to remove?")) {
         toastRef.current.showSuccessMessage("Delete successfully!");
        window.location.reload();
       }
@@ -109,7 +109,7 @@ export default function EmployeDetails() {
           }}
         />
         <ButtonC
-          icon="pi pi-trash"
+          icon="pi pi-times"
           rounded
           outlined
           className="mr-2 text-white"
@@ -127,10 +127,11 @@ export default function EmployeDetails() {
       }
       {(rowData.isDeleted)  && (
              <ButtonC
-             style={{ marginLeft:'10px'}}
-             className={"w-20 px-7 bg-red-600 border-red-600"}
-             label="Enable" 
-             severity="primary"
+             style={{ marginLeft:'0px'}}
+             icon="pi pi-check"
+             className="mr-2 text-white w-2.2"
+             //label=" " 
+             severity="success"
              onClick={() => {
                Removefunction(rowData);
              }}
