@@ -6,7 +6,7 @@ import EmployeeDtailsEdit from "./EmployeeDtailsEdit";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { API_URL } from "../constants/config";
-import { navigateTo } from "../constants/Utils";
+import { getData, navigateTo } from "../constants/Utils";
 import ToastMessages from "./../components/ToastMessages";
 export default function EmployeDetails() {
   const [data, setData] = useState([{}]);
@@ -14,20 +14,13 @@ export default function EmployeDetails() {
   const [editData, setEditData] = useState();
   const toastRef = useRef(null);
   //if we pass id 0 then ge get all the data otherwise we get specific data like id=1 means
-  React.useEffect(() => {
-    const url = API_URL.GET_EMPLOYEE_DETAILS+"/0";
-    fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then((json) => {
-        setData(json["result"]);
-      })
-
-      .catch((error) => console.log(error));
+  useEffect(() => {
+    getEmployeeData();
   }, []);
-
- 
+  async function getEmployeeData() {
+    const empData=await getData(API_URL.GET_EMPLOYEE_DETAILS+"/0");
+      setData(empData.result);
+    }
   // const leftToolbarTemplate = () => {
   //   return (
   //     <div className="flex flex-wrap gap-2">
@@ -42,35 +35,52 @@ export default function EmployeDetails() {
   //   );
   // };
   const Removefunction = async (rowData) => {
-    rowData.isDeleted=true;
-    if (window.confirm("Do you want to remove?")) {
-    const response = await fetch(API_URL.UPDATE_EMPLOYEE + rowData.id, {
-      method: "Put",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(rowData),
-    })
     
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log("Response Data:", responseData);
-      toastRef.current.showSuccessMessage("Delete successfully!");
-      var oData = data.filter((row) => {
-                  return row.id !== rowData.id;
-                });
-                setData(oData);
-      setTimeout(() => {
-         navigateTo("employee");
-      }, 1000);
-      }
-      else {
-        console.error("Request failed with status:", response.status);
-        if (response.status === 400) {
-          toastRef.current.showBadRequestMessage(
-            "Bad request: " + response.url
-          );
-        }
+    if(rowData.isDeleted){
+      rowData.isDeleted=false;
+      getDetails();
+      if (window.confirm("Do you want to Enabled?")) {
+        toastRef.current.showSuccessMessage("Enbled successfully!");
+       window.location.reload();
       }
     }
+    else{
+      rowData.isDeleted=true;
+      getDetails();
+       if (window.confirm("Do you want to remove?")) {
+        toastRef.current.showSuccessMessage("Delete successfully!");
+       window.location.reload();
+      }
+    }
+     function getDetails(){
+       fetch(API_URL.UPDATE_EMPLOYEE + rowData.id, {
+        method: "Put",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(rowData),
+      })
+    }
+   
+   
+  
+    // if (window.confirm("Do you want to remove?")) {
+    // if (response.ok) {
+    //   const responseData = await response.json();
+    //   console.log("Response Data:", responseData);
+    //   toastRef.current.showSuccessMessage("Delete successfully!");
+    //   window.location.reload();
+    //   setTimeout(() => {
+    //      navigateTo("employee");
+    //   }, 1000);
+    //   }
+    //   else {
+    //     console.error("Request failed with status:", response.status);
+    //     if (response.status === 400) {
+    //       toastRef.current.showBadRequestMessage(
+    //         "Bad request: " + response.url
+    //       );
+    //     }
+    //   }
+    // }
 
   };
   const updateData = (p_BVal) => {
@@ -80,9 +90,15 @@ export default function EmployeDetails() {
     setEditData(id);
     setEditMode(true);
   };
-  const actionBodyTemplate = (rowData) => {
+  const actionBodyTemplate = (rowData,option) => {
+    //console.log(option);
+  
     return (
-      <React.Fragment>
+      <>
+      {(!rowData.isDeleted ) &&(
+        <>
+        <React.Fragment>
+       
         <ButtonC
           icon="pi pi-pencil"
           rounded
@@ -93,7 +109,7 @@ export default function EmployeDetails() {
           }}
         />
         <ButtonC
-          icon="pi pi-trash"
+          icon="pi pi-times"
           rounded
           outlined
           className="mr-2 text-white"
@@ -103,14 +119,36 @@ export default function EmployeDetails() {
           }}
         />
          <ToastMessages ref={toastRef} />
+        
       </React.Fragment>
+        </>
+      )
+
+      }
+      {(rowData.isDeleted)  && (
+             <ButtonC
+             style={{ marginLeft:'0px'}}
+             icon="pi pi-check"
+             className="mr-2 text-white w-2.2"
+             //label=" " 
+             severity="success"
+             onClick={() => {
+               Removefunction(rowData);
+             }}
+           />
+          )}
+     
+      </>
+      
+  
     );
+    
+    
   };
   const columns = [
 		{
 			field: "id",
 			header: "Sr No.",
-			//bodyClassName: "ref-col",
 		},
 		{
 			field: "name",
