@@ -130,7 +130,7 @@ namespace MRF.API.Controllers
         
         private List<EmailRecipient> SendEmailOnStatus(int MrfStatusId)
         {
-            List<EmailRecipient> obj = _unitOfWork.EmailRecipient.GetEmailRecipient(MrfStatusId);
+            List<EmailRecipient> obj = _unitOfWork.EmailRecipient.GetEmailRecipient(MrfStatusId,null);
             return obj;
         }
     }
