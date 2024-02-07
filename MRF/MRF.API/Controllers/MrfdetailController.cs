@@ -227,8 +227,8 @@ namespace MRF.API.Controllers
                 postMrfEmail(MrfdetailRequestModelRequest);
 
 
-
-                CallEmailApprovalController(request, mrfId, Update);
+                int nextMrfStatusId;
+                CallEmailApprovalController(request, mrfId, Update, out nextMrfStatusId);
                 CallReplacementController(request, mrfId, Update);
                 CallreviewerController(request, mrfId, Update);
 
@@ -267,11 +267,13 @@ namespace MRF.API.Controllers
             getMrfdetailsInEmailController.GetRequisition(MrfId, EmployeeId, MrfStatusId);
         }
 
-        private int CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update) 
+        private int CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update, out int nextMrfStatusId) 
         {
             int employeeId = 0;
+            nextMrfStatusId = request.MrfStatusId;
             if (request.FunctionHeadId != 0)
             {
+                nextMrfStatusId = 4;
                 employeeId = request.FunctionHeadId;
                 MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.FunctionHeadId);
                 if (MrfEmailApproval != null)
@@ -284,7 +286,6 @@ namespace MRF.API.Controllers
                     };
                     MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
                     controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-
                 }
                 else
                 {
@@ -298,8 +299,6 @@ namespace MRF.API.Controllers
 
                     postMrfEmail(MrfdetailRequestModelRequest);
                 }
-
-
             }
             if (request.HiringManagerId != 0)
             {
@@ -366,6 +365,7 @@ namespace MRF.API.Controllers
             if (request.FinanceHeadId != 0)
             {
                 employeeId = request.FinanceHeadId;
+                nextMrfStatusId = 14;
                 MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.FinanceHeadId);
                 if (MrfEmailApproval != null)
                 {
@@ -395,6 +395,7 @@ namespace MRF.API.Controllers
             if (request.PresidentnCOOId != 0)
             {
                 employeeId = request.PresidentnCOOId;
+                nextMrfStatusId = 5;
                 MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.PresidentnCOOId);
                 if (MrfEmailApproval != null)
                 {
@@ -417,10 +418,10 @@ namespace MRF.API.Controllers
                     };
 
                     postMrfEmail(MrfdetailRequestModelRequest);
-                }
-                
+                }               
 
             }
+            
             return employeeId;
         }
 
@@ -677,12 +678,12 @@ namespace MRF.API.Controllers
                 _unitOfWork.Save();
 
                 _responseModel.Id = existingStatus.Id;
-                
 
-                int employeeId=CallEmailApprovalController(request, id, false);
+                int nextMrfStatusId;
+                int employeeId=CallEmailApprovalController(request, id, false, out nextMrfStatusId);
                 CallMrfHistory(request, id, mrfstatus);
 
-                CallGetMrfdetailsInEmailController(id, employeeId, request.MrfStatusId);
+                CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId);
                 // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
 
                   if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
