@@ -109,7 +109,7 @@ namespace MRF.API.Controllers
                     _unitOfWork.Save();
 
                     _responseModel.Id = mrfDetail.Id;
-                    mrfUrl = string.Join("/", _configuration["MRFUrl"], mrfDetail.Id.ToString());
+                    mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfDetail.Id.ToString());
                     if (mrfDetail.Id != 0)
                     {
                         request.mrfID = mrfDetail.Id;
@@ -130,17 +130,19 @@ namespace MRF.API.Controllers
                 
                 if (emailRequest != null)
                 {
-                    //Send Email to HR
-                    List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
-
-                    foreach (var emailReq in emailList)
+                    //Send Email to HR - Skipping if MRF Status is Drafted : MRF Status Id = 1 (Drafted)
+                    if(request.MrfStatusId != 1)
                     {
-                        _emailService.SendEmailAsync(emailReq.Email,
-                            emailRequest.Subject,
-                            emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
-                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
-                    }
+                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
 
+                        foreach (var emailReq in emailList)
+                        {
+                            _emailService.SendEmailAsync(emailReq.Email,
+                                emailRequest.Subject,
+                                emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
+                                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
+                        }
+                    }
 
                     //Send Email to MRF Owner
                     _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
