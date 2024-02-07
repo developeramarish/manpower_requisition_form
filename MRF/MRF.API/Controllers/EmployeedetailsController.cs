@@ -283,8 +283,6 @@ namespace MRF.API.Controllers
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }
-
-
             }
             else
             {
