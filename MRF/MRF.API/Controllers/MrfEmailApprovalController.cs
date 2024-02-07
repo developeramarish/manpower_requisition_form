@@ -114,7 +114,9 @@ namespace MRF.API.Controllers
             var existingStatus = _unitOfWork.MrfEmailApproval.Get(u => u.Id == id);
             if (existingStatus != null)
             {
-                existingStatus.ApprovalDate = request.ApprovalDate;
+                existingStatus.EmployeeId = request.EmployeeId;
+                existingStatus.MrfId = request.MrfId;
+;                existingStatus.ApprovalDate = request.ApprovalDate;
                     _unitOfWork.MrfEmailApproval.Update(existingStatus);
                     _unitOfWork.Save();
                 _responseModel.Id = existingStatus.Id;
