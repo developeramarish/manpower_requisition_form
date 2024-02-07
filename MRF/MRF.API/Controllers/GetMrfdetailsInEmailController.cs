@@ -68,27 +68,27 @@ namespace MRF.API.Controllers
                 {
                     _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody); // TO DO : Discussion Required on Subject
                 }
-                //catch (Exception ex)
-                //{
-                //    _logger.LogError($"Error while sending email: {ex}");
-                //}
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while sending email: {ex}");
+                }
 
-            //var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
-            //try
-            //{
-            //    List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId, MrfId);
-            //    foreach (var emailReq in emailList)
-            //    {
-            //        try
-            //        {
-            //            _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailMaster.Content);
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            _logger.LogError($"Error while sending email: {ex}");
-            //        }
-            //    }
-            //}
+            var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
+            try
+            {
+                List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId, MrfId);
+                foreach (var emailReq in emailList)
+                {
+                    try
+                    {
+                        _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailMaster.Content);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error while sending email: {ex}");
+                    }
+                }
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"Error while sending email: {ex}");
