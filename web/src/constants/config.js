@@ -89,7 +89,16 @@ export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
   }
  return  false;
 }
-
+export const CANDIDATE_STATUS_FOR_DISABLE =(candidatestatusId)=>{
+    if( candidatestatusId===1 || candidatestatusId===3||candidatestatusId===4)
+  {
+    return  true;
+  }
+  else{
+    return  false;
+  }
+ 
+}
 export const COUNTRIES = [
   { name:<> <span><img src="./images/india_flag.png" width={"20px"} height={"12px"}/></span><span style={{ marginRight: '50px' }}> India </span><span>+91</span></>, code: 'IN' },
   { name:<><span><img src="./images/us_flag.png" width={"20px"} height={"12px"}/></span> <span style={{ marginRight: '75px' }}> US </span><span>+1</span></>, code: 'US' },

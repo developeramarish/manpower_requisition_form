@@ -37,11 +37,14 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Roles");
             List<Rolemaster> rolesList = _unitOfWork.Rolemaster.GetAll().ToList();
+            var r = from l in rolesList where
+                  l.Name != "Hiring Manager" && l.Name != "Site HR SPOC"
+                    select l;
             if (rolesList.Count == 0)
             {
                 _logger.LogError("No record is found");
             }
-            _response.Result = rolesList;
+            _response.Result =  r;
             _response.Count= rolesList.Count;
             _logger.LogInfo($"Total role  count: {rolesList.Count}");
             return _response;
