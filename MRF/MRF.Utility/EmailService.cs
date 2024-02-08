@@ -30,7 +30,7 @@ namespace MRF.Utility
         {
             _configuration = configuration;
             _logger = logger;
-            _unitOfWork=unitOfWork;
+            _unitOfWork = unitOfWork;
             // Initialize SMTP settings
             senderEmail = _configuration["SMTP:senderEmail"];
             smtpServer = _configuration["SMTP:Server"];
@@ -92,9 +92,20 @@ namespace MRF.Utility
             {
                 Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
 
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == mrfStatusId);
+                Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);
 
-                var roleIds = new List<int> { emailRequest.statusId };
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
+
+                string[] roleIdStrings = emailRequest.roleId.Split(',');
+                List<int> roleIds = new List<int>();
+
+                foreach (string roleIdString in roleIdStrings)
+                {
+                    if (int.TryParse(roleIdString, out int roleId))
+                    {
+                        roleIds.Add(roleId);
+                    }
+                }
 
                 mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
 
