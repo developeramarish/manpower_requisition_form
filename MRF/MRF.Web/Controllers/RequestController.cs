@@ -1,8 +1,9 @@
-﻿using MRF.Utility;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MRF.Utility;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text;
+
 
 namespace MRF.Web.Controllers
 {
@@ -11,7 +12,11 @@ namespace MRF.Web.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly ILoggerService _logger;
-        public RequestController(IEmailService emailService, IConfiguration configuration, ILoggerService logger)
+       
+       
+        public RequestController(IEmailService emailService,
+            IConfiguration configuration,
+            ILoggerService logger)
         {
             _emailService = emailService;
             _configuration = configuration;
@@ -22,12 +27,12 @@ namespace MRF.Web.Controllers
             try
             {
                 _logger.LogInfo("Entered into Approve method");
-                
+
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                   // _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
+                    _emailService.SendEmailAsync(mrfID, mrfStatusId);
                     return Ok("MRF has been approved successfully!");
                 }
                 else
@@ -40,6 +45,8 @@ namespace MRF.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+       
 
         private async Task<HttpResponseMessage> ChangeMrfStatusAsync(int mrfID, int mrfStatusId, int updatedByEmployeeId)
         {
@@ -119,7 +126,7 @@ namespace MRF.Web.Controllers
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                   // _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
+                    _emailService.SendEmailAsync(mrfID, mrfStatusId);
                     return Ok("MRF has been rejected successfully!");
                 }
                 else

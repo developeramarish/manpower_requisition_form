@@ -7,6 +7,7 @@ using NLog;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using SendGrid.Helpers.Mail.Model;
+using System.Net.Http;
 using System.Net.Mail;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
@@ -24,11 +25,12 @@ namespace MRF.Utility
         private readonly string sendGridFromEmail;
         private readonly string sendGridSenderName;
         private readonly IUnitOfWork _unitOfWork;
+        private string mrfUrl = string.Empty;
         public EmailService(IConfiguration configuration, ILogger<EmailService> logger, IUnitOfWork unitOfWork)
         {
             _configuration = configuration;
             _logger = logger;
-            _unitOfWork=unitOfWork;
+            _unitOfWork = unitOfWork;
             // Initialize SMTP settings
             senderEmail = _configuration["SMTP:senderEmail"];
             smtpServer = _configuration["SMTP:Server"];
@@ -83,7 +85,62 @@ namespace MRF.Utility
                 throw;
             }
         }
-        private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath=null)
+
+        public async Task SendEmailAsync(int mrfID, int mrfStatusId)
+        {
+            try
+            {
+                Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
+
+                Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);
+
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
+
+                string[] roleIdStrings = emailRequest.roleId.Split(',');
+                List<int> roleIds = new List<int>();
+
+                foreach (string roleIdString in roleIdStrings)
+                {
+                    if (int.TryParse(roleIdString, out int roleId))
+                    {
+                        roleIds.Add(roleId);
+                    }
+                }
+
+                mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
+
+                List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
+                                      where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
+                                             where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
+                                                    where mrfEmailApproval.MrfId == mrfID
+                                                    select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
+                                                   roleIds.Contains(employeeRoleMap.RoleId)
+                                             select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
+                                      select employeeDetails.Email).ToList();
+
+                foreach (string strEmail in email)
+                {
+                    string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                         .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+
+                    if (IsSendGridEnabled())
+                    {
+                        await SendEmailSendGrid(strEmail, emailRequest.Subject, htmlContent);
+                    }
+                    else
+                    {
+                        SendEmailSMTP(strEmail, emailRequest.Subject, htmlContent);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Exception occurred while sending email: {e.Message}");
+                throw;
+            }
+        }
+
+        private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath = null)
         {
             var msg = new SendGridMessage
             {
@@ -134,7 +191,7 @@ namespace MRF.Utility
         }
 
         private bool IsSendGridEnabled()
-        {   
+        {
             return bool.Parse(_configuration["FeatureToggles:UseSendGrid"]);
         }
 
@@ -148,7 +205,7 @@ namespace MRF.Utility
            || (value is DateOnly dateOnlyValue && dateOnlyValue == DateOnly.MinValue))
        && !(value is bool boolValue && !boolValue);
         }
-        
+
         private string getMRFRefNoFromMRFId(int id)
         {
             Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
