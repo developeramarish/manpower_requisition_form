@@ -64,11 +64,12 @@ namespace MRF.DataAccess.Repository
                                                                 join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                                                 join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
                                                                 join Attachment in _db.AttachmentEvaluation on Ivaluation.Id equals Attachment.InterviewEvaluationId
+                                                      
                                                                 where mrfDetails.Id == mrfId
                                                                 select new InterviewDetailsViewModel
                                                                 {
                                                                     CandidateId = Candidate.Id,
-                                                      
+                                                                     
                                                                     EvaluationId = Attachment.InterviewEvaluationId,
                                                                     Attachment = Attachment.FilePath,
                                                                 };
@@ -108,6 +109,7 @@ namespace MRF.DataAccess.Repository
                                 select new InterviewStatus
                                 {
                                     CandidateId = Ivaluation.CandidateId,
+
                                     EvalutionStatusId = Ivaluation.EvalutionStatusId,
                                     CandidateStatusChangedOnUtc = Ivaluation.CandidateStatusChangedOnUtc,
                                     InterviewevaluationId = Ivaluation.InterviewevaluationId,
@@ -131,6 +133,7 @@ namespace MRF.DataAccess.Repository
                                                               join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                                               join Emp in _db.Employeedetails on Candidate.CreatedByEmployeeId equals Emp.Id
                                                               join pos in _db.PositionTitlemaster on mrfDetails.PositionTitleId equals pos.Id
+                                                        
                                                               where mrfDetails.Id == mrfId
                                                               select new InterviewDetailsViewModel
                                                               {
@@ -144,6 +147,8 @@ namespace MRF.DataAccess.Repository
                                                                   PositionTitle = pos.Name,
                                                                   CandidateName = Candidate.Name,
                                                                   mrfStatusId = mrfDetails.MrfStatusId,
+                                                                  CandidateStatusId = Candidate.CandidateStatusId,
+                                                                  
                                                               };
 
             if(Role == "interviewer")
@@ -167,6 +172,8 @@ namespace MRF.DataAccess.Repository
                                                                     InterviewerEmployeeIds = i.InterviewerEmployeeIds,
                                                                     CandidateName=q.CandidateName,
                                                                     mrfStatusId = q.mrfStatusId,
+                                                                    CandidateStatusId = q.CandidateStatusId,
+                                                                    Candidatestatus =  q.Candidatestatus,
                                                                 };
 
 
@@ -186,7 +193,8 @@ namespace MRF.DataAccess.Repository
                                                                    CandidateName= q.CandidateName,
                                                                    InterviewerEmployeeIds = i.InterviewerEmployeeIds == "" ? q.InterviewerEmployeeIds : i.InterviewerEmployeeIds,
                                                                    mrfStatusId = q.mrfStatusId,
-
+                                                                   CandidateStatusId = q.CandidateStatusId,
+                                                                   Candidatestatus = q.Candidatestatus,
                                                                };
 
 
@@ -207,6 +215,8 @@ namespace MRF.DataAccess.Repository
                                                                    InterviewerEmployeeIds = q.InterviewerEmployeeIds,
                                                                    Attachment = i.Attachment == null ? "" : i.Attachment,
                                                                    mrfStatusId = q.mrfStatusId,
+                                                                   CandidateStatusId = q.CandidateStatusId,
+                                                                   Candidatestatus = q.Candidatestatus,
                                                                };
 
 
@@ -232,6 +242,8 @@ namespace MRF.DataAccess.Repository
                                                                    CandidateStatusChangedOnUtc = i == null ? DateTime.MinValue : i.CandidateStatusChangedOnUtc ?? DateTime.MinValue,
                                                                    InterviewevaluationId = i != null ? i.InterviewevaluationId ?? 0 : 0,
                                                                    mrfStatusId = q.mrfStatusId,
+                                                                   CandidateStatusId = q.CandidateStatusId,
+                                                                   Candidatestatus = q.Candidatestatus,
                                                                };
 
             List<InterviewDetailsViewModel> queryResults = finalmerge.ToList();
