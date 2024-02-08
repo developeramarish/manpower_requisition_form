@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from "react";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
@@ -8,6 +9,7 @@ import MultiSelectDropdown from "../components/multiselectDropdown";
 import InterviewFeedbackComponent from "../containers/InterviewFeedbackComponent";
 import {
 	API_URL,
+	CANDIDATE_STATUS_FOR_DISABLE,
 	FILE_URL,
 	MRF_STATUS_FOR_DISABLE,
 	ROLES,
@@ -71,7 +73,6 @@ const InterviewSummary = ({
 			API_URL.INTERVIEW_SUMMARY_POPUP +
 			`?id=${mrfId}&DashBoard=true&roleId=${roleId}&userId=${userId}`;
 		let response = await getData(apiUrl);
-
 		const data = response.result;
 		let arr = new Array(data.interviewDetails.length).fill(false);
 		setInterviewData(data.interviewDetails);
@@ -85,7 +86,7 @@ const InterviewSummary = ({
 			getIntData();
 		}
 	}, [mrfId]);
-
+console.log(interviewData);
 	const update = async (data) => {
 		setIsLoading(true);
 		const id = data.interviewevaluationId;
@@ -223,6 +224,7 @@ const InterviewSummary = ({
 					filterOption.push(opt);
 				}
 			}
+			 
 			return (
 				<DropdownComponent
 					optionLabel="status"
@@ -231,7 +233,8 @@ const InterviewSummary = ({
 					options={filterOption}
 					value={interview.evalutionStatusId}
 					onChange={handleDropdownChange}
-					disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)}
+					disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)||
+						CANDIDATE_STATUS_FOR_DISABLE(interview.candidateStatusId)}
 				/>
 			);
 		}
@@ -244,7 +247,8 @@ const InterviewSummary = ({
 				options={interviewStatus}
 				value={interview.evalutionStatusId}
 				onChange={handleDropdownChange}
-				disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)}
+				disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)
+					|| CANDIDATE_STATUS_FOR_DISABLE(interview.candidateStatusId)}
 			/>
 		);
 	};
@@ -275,7 +279,7 @@ const InterviewSummary = ({
 				attachmentLink = interview.attachment;
 				return (
 					<a href={attachmentLink} target="_blank"  className="int-link-cell">
-						View URLs
+						View URL
 					</a>
 					
 				);
@@ -312,7 +316,7 @@ const InterviewSummary = ({
 				setSaveBttn(sv);
 				setupdateField("interviewer"); //check if field is updated
 			};
-
+			
 			return (
 				<MultiSelectDropdown
 					
@@ -328,7 +332,9 @@ const InterviewSummary = ({
 					placeholder="Select Interviewer"
 					className="w-full md:w-20rem"
 					// optionValue="employeeId"
-					disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)}
+					disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)
+					|| CANDIDATE_STATUS_FOR_DISABLE(interview.candidateStatusId)}
+					 
 				/>
 			);
 		}
@@ -476,6 +482,7 @@ const InterviewSummary = ({
 						body={col.body}
 						bodyClassName={"int-col " + col.bodyClassName}
 						sortable={col.sortable}
+						
 					/>
 				))}
 			</DataTable>
@@ -485,6 +492,7 @@ const InterviewSummary = ({
 					data={candidateInterviewDetails}
 					onHide={() => setshowUploadAssignment(false)}
 					refreshParent={refreshParentComponent}
+					
 				/>
 			)}
 {isLoading && <LoadingSpinner />}  

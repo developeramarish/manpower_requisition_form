@@ -7,7 +7,7 @@ import ToastMessages from "../components/ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "../components/multiselectDropdown";
-import { API_URL, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
+import { API_URL, CANDIDATE_STATUS_FOR_DISABLE, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
 import { changeDateFormat, getDataAPI, putData, strToArray } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -111,7 +111,8 @@ let response=await result.json();
           filter
           placeholder="Select Reviewer"
           className="w-full md:w-20rem "
-          disable={MRF_STATUS_FOR_DISABLE(roleId,rowData.mrfStatus)}
+          disable={MRF_STATUS_FOR_DISABLE(roleId,rowData.mrfStatus)||
+             CANDIDATE_STATUS_FOR_DISABLE(rowData.candidateStatusId)}
            
         />
       </div>     
