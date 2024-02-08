@@ -1,11 +1,8 @@
-﻿using MRF.Utility;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MRF.Utility;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text;
-using MRF.Models.Models;
-using MRF.DataAccess.Repository.IRepository;
-using MRF.DataAccess.Repository;
 
 
 namespace MRF.Web.Controllers
