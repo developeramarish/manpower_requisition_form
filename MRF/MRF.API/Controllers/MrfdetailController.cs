@@ -301,10 +301,11 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = employeeId,
-                    ApprovalDate = request.FHApprovalDate
+                    ApprovalDate = request.HMApprovalDate
                 };
                 MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
                 MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 3).FirstOrDefault();
+
                 if (MrfEmailApproval == null)
                 {
                     postMrfEmail(MrfEmailApprovalRequestModel);
@@ -324,7 +325,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = employeeId,
-                    ApprovalDate = request.FHApprovalDate
+                    ApprovalDate = request.SPApprovalDate
                 };
                 MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
                 MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 4).FirstOrDefault();
@@ -348,7 +349,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = employeeId,
-                    ApprovalDate = request.FHApprovalDate
+                    ApprovalDate = request.FIApprovalDate
                 };
                 MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
                 MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 10).FirstOrDefault();
@@ -371,7 +372,7 @@ namespace MRF.API.Controllers
                 {
                     MrfId = mrfId,
                     EmployeeId = employeeId,
-                    ApprovalDate = request.FHApprovalDate
+                    ApprovalDate = request.PCApprovalDate
                 };
                 MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
                 MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 11).FirstOrDefault();
