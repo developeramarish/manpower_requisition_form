@@ -51,6 +51,7 @@ export const ROUTES = {
   my_requisition: "my_requisition",
   create_requisition: "create_requisition",
   edit_requisition: "edit_requisition",
+  mrf_details: "mrf_details",
   add_candidate: "add_candidate",
   view_candidate: "view_candidate",
   resume_summary:"resume_summary",

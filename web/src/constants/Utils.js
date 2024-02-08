@@ -126,9 +126,30 @@ export async function deleteData(url) {
 }
 
 export const getKeyFromLocation = () => {
-  return window.location.hash.split("#/")[1];
+  var aLocation = window.location.hash.split("#/"), 
+  sRouteKey = aLocation[1],
+  oParams = (aLocation[1].indexOf('?') > -1) ? getParameterFromLocation(aLocation[1].split('?')[1]) : [],
+  oData = {};
+  oData['key'] = sRouteKey;
+  if(oParams.length > 0){
+    oData['params'] = oParams;
+  }
+  return oData;
 };
 
+const getParameterFromLocation = (p_sPath) => {
+  var result = [],
+    tmp = [];
+    
+  var items = p_sPath.split("&");
+  for (var index = 0; index < items.length; index++) {
+    tmp = items[index].split("=");
+    var obj = {};
+    obj[tmp[0]] = decodeURIComponent(tmp[1]);
+    result.push(obj);
+  }
+  return result;
+}
 export const navigateTo = (sPageKey) => {
   window.location.hash = "#/" + sPageKey;
 };
@@ -218,7 +239,7 @@ export const isFormDataEmptyForSubmit = (formData) => {
 
     // Check specific condition for certain fields, and general check for others
     if (
-      (value === "" || value === 0 || value === null) &&
+      (value === "" || value === 0 || value === null || value===undefined) &&
       [
         "positionTitleId",
         "departmentId",
@@ -278,7 +299,7 @@ export const isFormDataEmptyForSaveasDraft = (formData) => {
 
     // Check specific condition for certain fields, and general check for others
     if (
-      (value === "" || value === 0 || value === null) &&
+      (value === "" || value === 0 || value === null || value===undefined) &&
       [
         "positionTitleId",
         "departmentId",
@@ -334,4 +355,9 @@ export const isFormDataEmptyForAddCandidate = (formData) => {
 
     return false;
   });
+};
+
+// Define a function to remove HTML tags from a string
+export const removeHtmlTags = (htmlString) => {
+  return htmlString.replace(/(<([^>]+)>)/gi, "");
 };

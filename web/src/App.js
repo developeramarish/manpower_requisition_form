@@ -35,19 +35,20 @@ import CreateRequisition from "./containers/CreateRequisition";
 import AddCandidate from "./containers/AddCandidate";
 import Footer from "./components/Footer";
 import EmployeDetails from "./Pages/EmployeDetails";
-import AllEmployees  from "./Pages/AllEmployees";
+import AllEmployees from "./Pages/AllEmployees";
 import EmployeeDtailsEdit from "./Pages/EmployeeDtailsEdit";
 import MyResume from "./containers/MyResume";
 import ViewCandidate from "./containers/ViewCandidate";
+import { Dialog } from "primereact/dialog";
+import LoginFail from "./components/LoginFail";
 function App() {
   const [token, setToken] = useState();
   const [profile, setProfile] = useState();
+  const [userData, setUserData] = useState("");
   const dispatch = useDispatch();
-  const { currentPageKey, params } = useSelector(
-    (state) => state.page
-  );
+  const { currentPageKey, params } = useSelector((state) => state.page);
   const { currentDevice, touchDevice } = useSelector((state) => state.device);
-
+  const { locationParams } = useSelector((state) => state.page);
   const { instance, accounts } = useMsal();
 
   useEffect(() => {
@@ -87,10 +88,12 @@ function App() {
 
   async function callLoginAPI() {
     const result = await getDataAPI(graphConfig.graphMeEndpoint);
-    const response=await result.json();
+    const response = await result.json();
+    console.log(response);
     var oData =
       response && response.hasOwnProperty("result") ? response.result : null;
     if (oData === null) {
+      setUserData(oData);
       return;
     }
     storageService.setData("profile", oData);
@@ -105,23 +108,34 @@ function App() {
       : "login";
     /* added window hash change event so we can detect browser next back*/
     window.onhashchange = function (e) {
-      let locationRouteKeyFrom = getKeyFromLocation(),
+      let oLocation = getKeyFromLocation(),
+        locationRouteKeyFrom = oLocation.key,
         routes = ROUTES,
         routeKeys =
           locationRouteKeyFrom && locationRouteKeyFrom.length > 0
             ? locationRouteKeyFrom.split("/")
             : [],
-        mainRouteKey = routeKeys[0],
+        mainRouteKey =
+          routeKeys[0].indexOf("?") > -1
+            ? routeKeys[0].split("?")[0]
+            : routeKeys[0],
+        sValidRouteKey = routeKeys[0],
         isValidRoute = routes.hasOwnProperty(mainRouteKey);
 
       mainRouteKey = !isValidRoute ? initialPageKey : mainRouteKey;
-
       dispatch(
         PAGE_ACTIONS.setCurrentPageKey({
           pageKey: mainRouteKey,
         })
       );
-      navigateTo(mainRouteKey);
+      dispatch(
+        PAGE_ACTIONS.setLocationParams({
+          locationParams: oLocation.hasOwnProperty("params")
+            ? oLocation.params
+            : [],
+        })
+      );
+      navigateTo(sValidRouteKey);
     };
 
     if (window.location.hash === "") {
@@ -132,6 +146,7 @@ function App() {
       window.dispatchEvent(new HashChangeEvent("hashchange"));
     }
   };
+
   let Comp = ROUTES[currentPageKey];
   return (
     <div className={"App " + currentDevice + " " + currentPageKey}>
@@ -147,7 +162,7 @@ function App() {
               }
             />
             <div className="content">
-              <Sidebar roleId={profile.roleId} sPageKey = {currentPageKey}/>
+              <Sidebar roleId={profile.roleId} sPageKey={currentPageKey} />
               <div className="content_right_wrapper">
                 {currentPageKey === "dashboard" && (
                   <Dashboard
@@ -161,62 +176,56 @@ function App() {
                     userId={profile.employeeId}
                   />
                 )}
-                {currentPageKey === "allemployees" && (
-                  <AllEmployees
-                  />
-                )}
-                {currentPageKey === "employee" && (
-                  <EmployeDetails
-                  />
-                )}
-                 {currentPageKey === "employee_edit" && (
-                  <EmployeeDtailsEdit
-                  />
-                )}
+                {currentPageKey === "allemployees" && <AllEmployees />}
+                {currentPageKey === "employee" && <EmployeDetails />}
+                {currentPageKey === "employee_edit" && <EmployeeDtailsEdit />}
                 {currentPageKey === "add_candidate" && (
-                  <AddCandidate 
-                  reqId={params.mrfId}
-                  referenceNo={params.referenceNo}
-                   />
+                  <AddCandidate
+                    reqId={params.mrfId}
+                    referenceNo={params.referenceNo}
+                  />
                 )}
                 {currentPageKey === "create_requisition" && (
-                  <CreateRequisition
-                  roleId={profile.roleId}
-                  />
+                  <CreateRequisition roleId={profile.roleId} />
                 )}
-                {currentPageKey === "view_candidate" && (
-                  <ViewCandidate/>
-                )}
+                {currentPageKey === "view_candidate" && <ViewCandidate />}
                 {currentPageKey === "my_resume" && (
                   <MyResume
-                  roleId={profile.roleId}
-                  userId={profile.employeeId}
+                    roleId={profile.roleId}
+                    userId={profile.employeeId}
                   />
                 )}
                 {currentPageKey === "edit_requisition" && (
                   <CreateRequisition
-                    reqId={params.id}
-                    reqstatus={params.statusForTitle}
-                    reqRoleId={params.roleId}
-                    reqstatusId={params.mrfstatusId}
+                    {...(params && params.id ? { reqId: params.id } : "")}
+                    // reqstatus={params.statusForTitle}
+                    {...(params && params.roleId
+                      ? { reqRoleId: params.roleId }
+                      : { roleId: profile.roleId })}
+                    // reqstatusId={params.mrfstatusId}
                   />
                 )}
-                <Footer/>
+                {currentPageKey === "mrf_details" && (
+                  <CreateRequisition
+                    reqId={locationParams[0].mrfid}
+                    reqRoleId={profile.roleId}
+                    reqstatus={true}
+                  />
+                )}
+                <Footer />
+               
               </div>
             </div>
           </>
         )}
       </AuthenticatedTemplate>
 
+      {userData === null && <LoginFail />}
       <UnauthenticatedTemplate>
         <Login />
         <div className="login-load">
-
-        <img src="./images/start_Logo.png" alt="mrf logo" />
+          <img src="./images/start_Logo.png" alt="mrf logo" />
         </div>
-        {/* <h5 className="card-title">
-          Please sign-in to see your profile information.
-        </h5> */}
       </UnauthenticatedTemplate>
     </div>
   );
