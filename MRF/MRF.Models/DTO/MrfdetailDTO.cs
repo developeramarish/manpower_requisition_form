@@ -74,6 +74,8 @@ namespace MRF.Models.DTO
 
         public string? Note { get; set; }
 
+        public string? MrfStatus { get; set; } 
+
     }
     public class MrfdetaiResponseModel
     {

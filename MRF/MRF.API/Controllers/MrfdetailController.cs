@@ -271,62 +271,49 @@ namespace MRF.API.Controllers
         {
             int employeeId = 0;
             nextMrfStatusId = request.MrfStatusId;
+            List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetList(mrfId);
             if (request.FunctionHeadId != 0)
             {
                 nextMrfStatusId = 4;
                 employeeId = request.FunctionHeadId;
-                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.FunctionHeadId);
-                if (MrfEmailApproval != null)
+                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
-                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.FunctionHeadId,
-                        ApprovalDate = request.FHApprovalDate
-                    };
-                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
+                    MrfId = mrfId,
+                    EmployeeId = employeeId,
+                    ApprovalDate = request.FHApprovalDate
+                };
+                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 8).FirstOrDefault();
+                if (MrfEmailApproval == null)
+                {
+                    postMrfEmail(MrfEmailApprovalRequestModel);
                 }
                 else
                 {
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
 
-                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.FunctionHeadId,
-                        ApprovalDate = request.FHApprovalDate
-                    };
-
-                    postMrfEmail(MrfdetailRequestModelRequest);
                 }
             }
             if (request.HiringManagerId != 0)
             {
                 employeeId = request.HiringManagerId;
-                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.HiringManagerId);
-                if (MrfEmailApproval != null)
+                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
-                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.HiringManagerId,
-                        ApprovalDate = request.HMApprovalDate
-                    };
-                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
+                    MrfId = mrfId,
+                    EmployeeId = employeeId,
+                    ApprovalDate = request.HMApprovalDate
+                };
+                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 3).FirstOrDefault();
+
+                if (MrfEmailApproval == null)
+                {
+                    postMrfEmail(MrfEmailApprovalRequestModel);
 
                 }
                 else
                 {
-
-                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.HiringManagerId,
-                        ApprovalDate = request.HMApprovalDate
-                    };
-
-                    postMrfEmail(MrfdetailRequestModelRequest);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
                 }
 
 
@@ -334,29 +321,21 @@ namespace MRF.API.Controllers
             if (request.SiteHRSPOCId != 0)
             {
                 employeeId = request.SiteHRSPOCId;
-                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.SiteHRSPOCId);
-                if (MrfEmailApproval != null)
+                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
-                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.SiteHRSPOCId,
-                        ApprovalDate = request.SPApprovalDate
-                    };
-                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-
+                    MrfId = mrfId,
+                    EmployeeId = employeeId,
+                    ApprovalDate = request.SPApprovalDate
+                };
+                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 4).FirstOrDefault();
+                if (MrfEmailApproval == null)
+                {
+                    postMrfEmail(MrfEmailApprovalRequestModel);
                 }
                 else
                 {
-                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.SiteHRSPOCId,
-                        ApprovalDate = request.SPApprovalDate
-                    };
-
-                    postMrfEmail(MrfdetailRequestModelRequest);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
 
                 }
                
@@ -366,28 +345,21 @@ namespace MRF.API.Controllers
             {
                 employeeId = request.FinanceHeadId;
                 nextMrfStatusId = 14;
-                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.FinanceHeadId);
-                if (MrfEmailApproval != null)
+                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
-                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.FinanceHeadId,
-                        ApprovalDate = request.FIApprovalDate
-                    };
-                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-
+                    MrfId = mrfId,
+                    EmployeeId = employeeId,
+                    ApprovalDate = request.FIApprovalDate
+                };
+                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 10).FirstOrDefault();
+                if (MrfEmailApproval == null)
+                {
+                    postMrfEmail(MrfEmailApprovalRequestModel);
                 }
                 else {
-                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.FinanceHeadId,
-                        ApprovalDate = request.FIApprovalDate
-                    };
 
-                    postMrfEmail(MrfdetailRequestModelRequest);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
                 }
                
 
@@ -396,28 +368,20 @@ namespace MRF.API.Controllers
             {
                 employeeId = request.PresidentnCOOId;
                 nextMrfStatusId = 5;
-                MrfEmailApproval MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetListBymrfIdandEmployeeId(mrfId, request.PresidentnCOOId);
-                if (MrfEmailApproval != null)
+                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
-                    var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.PresidentnCOOId,
-                        ApprovalDate = request.PCApprovalDate
-                    };
-                    MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-
+                    MrfId = mrfId,
+                    EmployeeId = employeeId,
+                    ApprovalDate = request.PCApprovalDate
+                };
+                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 11).FirstOrDefault();
+                if (MrfEmailApproval == null)
+                {
+                    postMrfEmail(MrfEmailApprovalRequestModel);
                 } else
                 {
-                    var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
-                    {
-                        MrfId = mrfId,
-                        EmployeeId = request.PresidentnCOOId,
-                        ApprovalDate = request.PCApprovalDate
-                    };
-
-                    postMrfEmail(MrfdetailRequestModelRequest);
+                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
                 }               
 
             }
