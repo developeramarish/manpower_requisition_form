@@ -23,6 +23,7 @@ namespace MRF.DataAccess.Repository
         public MrfdetailRequestModel GetRequisition(int MrfId)
         {
             List<MrfdetailRequestModel> query = (from mrfDetails in _db.Mrfdetails
+                                                 join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
                                                  join fr in _db.Freshmrfdetails on mrfDetails.Id equals fr.MrfId
                                                  join replacement in _db.Replacementmrfdetails on mrfDetails.Id equals replacement.MrfId into eGroup
                                                  from replacement in eGroup.DefaultIfEmpty()
@@ -65,6 +66,7 @@ namespace MRF.DataAccess.Repository
                                                      AnnualCtc = replacement != null ? replacement.AnnualCtc : 0,
                                                      AnnualGross = replacement != null ? replacement.AnnualGross : 0,
                                                      CreatedOnUtc= mrfDetails.CreatedOnUtc,
+                                                    MrfStatus= mrfStatus.Status,
                                                  }).ToList();
 
 
