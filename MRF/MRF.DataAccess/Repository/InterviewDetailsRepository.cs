@@ -64,13 +64,12 @@ namespace MRF.DataAccess.Repository
                                                                 join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                                                 join Ivaluation in _db.Interviewevaluation on Candidate.Id equals Ivaluation.CandidateId
                                                                 join Attachment in _db.AttachmentEvaluation on Ivaluation.Id equals Attachment.InterviewEvaluationId
-                                                                join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
+                                                      
                                                                 where mrfDetails.Id == mrfId
                                                                 select new InterviewDetailsViewModel
                                                                 {
                                                                     CandidateId = Candidate.Id,
-                                                                    CandidateStatusId = Candidate.CandidateStatusId,
-                                                                    Candidatestatus = status.Status,
+                                                                     
                                                                     EvaluationId = Attachment.InterviewEvaluationId,
                                                                     Attachment = Attachment.FilePath,
                                                                 };
@@ -134,7 +133,7 @@ namespace MRF.DataAccess.Repository
                                                               join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                                               join Emp in _db.Employeedetails on Candidate.CreatedByEmployeeId equals Emp.Id
                                                               join pos in _db.PositionTitlemaster on mrfDetails.PositionTitleId equals pos.Id
-                                                              join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
+                                                        
                                                               where mrfDetails.Id == mrfId
                                                               select new InterviewDetailsViewModel
                                                               {
@@ -149,7 +148,7 @@ namespace MRF.DataAccess.Repository
                                                                   CandidateName = Candidate.Name,
                                                                   mrfStatusId = mrfDetails.MrfStatusId,
                                                                   CandidateStatusId = Candidate.CandidateStatusId,
-                                                                  Candidatestatus = status.Status,
+                                                                  
                                                               };
 
             if(Role == "interviewer")
