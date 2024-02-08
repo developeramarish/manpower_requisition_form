@@ -19,7 +19,7 @@ const LoginFail = () => {
           <div className="reason_box">
             <h5>
               The email-id which you used is not in our DataBase.<br></br>
-              Please conatct support Team
+              Please contact support Team
             </h5>
           </div>
         </div>
