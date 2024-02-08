@@ -15,20 +15,15 @@ namespace MRF.Web.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly ILoggerService _logger;
-        private readonly MRFDBContext _db;
-        private readonly IUnitOfWork _unitOfWork;
-        private string mrfUrl = string.Empty;
+       
+       
         public RequestController(IEmailService emailService,
             IConfiguration configuration,
-            ILoggerService logger,
-            MRFDBContext db,
-            IUnitOfWork unitOfWork)
+            ILoggerService logger)
         {
             _emailService = emailService;
             _configuration = configuration;
             _logger = logger;
-            _db = db;
-            _unitOfWork = unitOfWork;
         }
         public async Task<IActionResult> Approve([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
         {
@@ -40,7 +35,7 @@ namespace MRF.Web.Controllers
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    SendEmail(mrfID, mrfStatusId);
+                    _emailService.SendEmailAsync(mrfID, mrfStatusId);
                     return Ok("MRF has been approved successfully!");
                 }
                 else
@@ -54,34 +49,7 @@ namespace MRF.Web.Controllers
             }
         }
 
-        private async Task SendEmail(int mrfID, int mrfStatusId)
-        {
-            Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
-
-            emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == mrfStatusId);
-
-            var roleIds = new List<int> { emailRequest.statusId };
-
-            mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
-
-            List<string> email = (from employeeDetails in _db.Employeedetails
-                                  where (from employeeRoleMap in _db.Employeerolemaps
-                                         where (from mrfEmailApproval in _db.MrfEmailApproval
-                                                where mrfEmailApproval.MrfId == mrfID
-                                                select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
-                                               roleIds.Contains(employeeRoleMap.RoleId)
-                                         select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
-                                  select employeeDetails.Email).ToList();
-
-            foreach (string strEmail in email)
-            {
-                _emailService.SendEmailAsync(strEmail, emailRequest.Subject, emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
-
-                
-
-            }
-        }
+       
 
         private async Task<HttpResponseMessage> ChangeMrfStatusAsync(int mrfID, int mrfStatusId, int updatedByEmployeeId)
         {
@@ -161,7 +129,7 @@ namespace MRF.Web.Controllers
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                    SendEmail(mrfID, mrfStatusId);
+                    _emailService.SendEmailAsync(mrfID, mrfStatusId);
                     return Ok("MRF has been rejected successfully!");
                 }
                 else
