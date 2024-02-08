@@ -17,7 +17,6 @@ export function applySettingsBasedOnRoleAndStatus(
   mrfStatusId,
   roleId
 ) {
-  
   switch (getReqRoleId) {
     case 3 /* MRFOwner */:
       if (
@@ -54,7 +53,7 @@ export function applySettingsBasedOnRoleAndStatus(
       }
       break;
     case 4: //HR
-      if (mrfStatusId == MRF_STATUS.new || mrfStatusId==MRF_STATUS.onHold) {
+      if (mrfStatusId == MRF_STATUS.new || mrfStatusId == MRF_STATUS.onHold) {
         applyCommonSettings({
           setReadOnly: true,
           setHiringManager: false,
@@ -110,7 +109,10 @@ export function applySettingsBasedOnRoleAndStatus(
           awatingFinance: true,
           recievedFinance: true,
         });
-      } else if (mrfStatusId == MRF_STATUS.cooapproval || mrfStatusId==MRF_STATUS.open) {
+      } else if (
+        mrfStatusId == MRF_STATUS.cooapproval ||
+        mrfStatusId == MRF_STATUS.open
+      ) {
         applyCommonSettings({
           setReadOnly: true,
           setHiringManager: false,
@@ -148,7 +150,7 @@ export function applySettingsBasedOnRoleAndStatus(
           setFinanceHeadApprovalName: true,
           setFinanceHeadApprovalDate: true,
         });
-      }else if (mrfStatusId == MRF_STATUS.bypassFinanceHeadApproval) {
+      } else if (mrfStatusId == MRF_STATUS.bypassFinanceHeadApproval) {
         applyCommonSettings({
           setReadOnly: true,
           setHiringManager: false,
@@ -160,8 +162,9 @@ export function applySettingsBasedOnRoleAndStatus(
           setFinanceHeadApprovalName: true,
           setFinanceHeadApprovalDate: true,
         });
-      }else {
-        applyCommonSettings({ setReadOnly: true,
+      } else {
+        applyCommonSettings({
+          setReadOnly: true,
           setHiringManager: true,
           setSiteHRSPOCApproval: true,
           setHodapprovalName: true,
@@ -169,7 +172,8 @@ export function applySettingsBasedOnRoleAndStatus(
           setCooapprovalName: true,
           setCooapprovalDate: true,
           setFinanceHeadApprovalName: true,
-          setFinanceHeadApprovalDate: true,});
+          setFinanceHeadApprovalDate: true,
+        });
       }
 
     default:

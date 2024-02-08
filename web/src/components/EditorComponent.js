@@ -4,21 +4,18 @@ import React, { useEffect, useState } from "react";
 const EditorComponent = ({
   value,
   onTextChanged,
-  autoResize ,
+  autoResize,
   headerTemplate,
   disable,
-  max
+  max,
 }) => {
   const [text, setText] = useState("");
   const onUpdate = (e) => {
-    // console.log(e);
-    if(e && e.length<=max){
-     
+    if (e && e.length <= max) {
       setText(e);
-    }else{
+    } else {
       return;
     }
-    
   };
   useEffect(() => {
     onTextChanged(text);
@@ -30,7 +27,7 @@ const EditorComponent = ({
       headerTemplate={headerTemplate}
       readOnly={disable}
       onTextChange={(e) => onUpdate(e.htmlValue)}
-      style={{ height: '170px' }}
+      style={{ height: "170px" }}
       max={max}
     />
   );

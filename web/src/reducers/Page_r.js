@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   prevPageKey: '',
   params: null,
+  locationParams: []
   // statusForTitle:null,
   // roleId:null,
 };
@@ -26,6 +27,9 @@ const pageSlice = createSlice({
       // state.statusForTitle = action.payload.statusForTitle;
       // state.roleId = action.payload.roleId;
 
+    },
+    setLocationParams: (state, action) =>{
+      state.locationParams = action.payload.locationParams;
     },
     onPageReady: (state, action) => {
       state.loading = false;
