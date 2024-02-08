@@ -92,6 +92,57 @@ namespace MRF.Utility
             {
                 Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
 
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == mrfStatusId);
+
+                var roleIds = new List<int> { emailRequest.statusId };
+
+                mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
+
+                List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
+                                      where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
+                                             where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
+                                                    where mrfEmailApproval.MrfId == mrfID
+                                                    select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
+                                                   roleIds.Contains(employeeRoleMap.RoleId)
+                                             select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
+                                      select employeeDetails.Email).ToList();
+
+                foreach (string strEmail in email)
+                {
+                    string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                         .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+                    
+
+                    if (IsSendGridEnabled())
+                    {
+                        await SendEmailSendGrid(strEmail, emailRequest.Subject, htmlContent);
+                    }
+                    else
+                    {
+                        SendEmailSMTP(strEmail, emailRequest.Subject, htmlContent);
+                    }
+
+
+
+                }
+
+
+
+                
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Exception occurred while sending email: {e.Message}");
+                throw;
+            }
+        }
+
+        public async Task SendEmailAsync(int mrfID, int mrfStatusId)
+        {
+            try
+            {
+                Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
+
                 Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);
 
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
