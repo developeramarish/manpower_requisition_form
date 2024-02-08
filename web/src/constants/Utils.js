@@ -335,3 +335,8 @@ export const isFormDataEmptyForAddCandidate = (formData) => {
     return false;
   });
 };
+
+// Define a function to remove HTML tags from a string
+export const removeHtmlTags = (htmlString) => {
+  return htmlString.replace(/(<([^>]+)>)/gi, "");
+};

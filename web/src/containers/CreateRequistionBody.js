@@ -14,7 +14,7 @@ import InputNumberamount from "./../components/InputNumberAmount";
 import { Editor } from "primereact/editor";
 import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
-import { getData1, getDataAPI, navigateTo } from "../constants/Utils";
+import { getData1, getDataAPI, navigateTo,removeHtmlTags } from "../constants/Utils";
 import {
   API_URL,
   FORM_SCHEMA_CR,
@@ -195,15 +195,15 @@ const CreateRequisitionBody = ({
   const maxCharacterSkills = 500
  
   const onTextChangedSkill = (val) => {
-    console.log("skillfunc")
-    if (val && val.length <= maxCharacterSkills) {
-      console.log("fooo")
+    const textWithoutTags = removeHtmlTags(val);
+    if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
+   
       setFormData({ ...formData, skills: val });
     }
   };
   let remaningCharacterSkills = 0;
   if (formData) {
-    remaningCharacterSkills = maxCharacterSkills - formData.skills.length;
+    remaningCharacterSkills = maxCharacterSkills - removeHtmlTags(formData.skills).length;
   }
 
 
