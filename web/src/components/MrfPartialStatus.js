@@ -94,6 +94,7 @@ const MrfPartialStatus = ({
   };
 
   const handleSubmit = async (mrfStatusId) => {
+    console.log(formData)
     if (formData.isReplacement && emailErrors) {
       toastRef.current.showWarrningMessage("Invalid Email format");
       setVisible(false);
@@ -337,20 +338,20 @@ const MrfPartialStatus = ({
          <Dialog dismissableMask >{popupmessage}</Dialog>
          </>
        )} */}
-
+{/* 
       {((roleID == 3 && mrfStatusId == MRF_STATUS.new) ||
         mrfStatusId == MRF_STATUS.draft) && (
         <Dialog
-          className="w-3 "
+          className="w-4 "
           visible={visible}
           header={header}
-          draggable={false}
+          // draggable={false}
           onHide={() => setVisible(false)}
           footer={footerContent(mrfStatusId)}
         >
           {message && <h3>{message}</h3>}
         </Dialog>
-      )}
+      )} */}
 
       {label && (
         <>

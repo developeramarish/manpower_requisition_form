@@ -14,7 +14,12 @@ import InputNumberamount from "./../components/InputNumberAmount";
 import { Editor } from "primereact/editor";
 import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
-import { getData1, getDataAPI, navigateTo,removeHtmlTags } from "../constants/Utils";
+import {
+  getData1,
+  getDataAPI,
+  navigateTo,
+  removeHtmlTags,
+} from "../constants/Utils";
 import {
   API_URL,
   FORM_SCHEMA_CR,
@@ -28,7 +33,7 @@ import {
 } from "../constants/config";
 import { storageService } from "../constants/storage";
 import MrfPartialStatus from "../components/MrfPartialStatus";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PAGE_ACTIONS } from "../reducers/Page_r";
 import EditorComponent from "../components/EditorComponent";
 import InputNumberComponent from "../components/InputNumberComponent";
@@ -39,8 +44,8 @@ import { Knob } from "primereact/knob";
 const CreateRequisitionBody = ({
   getReqId = null,
   getReqRoleId = null,
-  status = null,
-  mrfStatusId = null,
+  // status = null,
+  // mrfStatusId = null,
   roleId = null, // if we are directly coming to this page for creating mrf
 }) => {
   // State to hold all the dropdown data
@@ -53,40 +58,61 @@ const CreateRequisitionBody = ({
   const toastRef = useRef(null);
   const [formData, setFormData] = useState();
   const [emailError, setEmailError] = useState(false);
-  const [siteHrSpocBtnDisable,setSiteHrSpocBtnDisable]=useState(true);
-  const [hiringManagerBtnDisable,setHiringManagerBtnDisable]=useState(true);
+  const [siteHrSpocBtnDisable, setSiteHrSpocBtnDisable] = useState(true);
+  const [hiringManagerBtnDisable, setHiringManagerBtnDisable] = useState(true);
+
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
     const dropDowndata = await result.json();
-    setDropdownData(dropDowndata.result);
+    // setDropdownData(dropDowndata.result);
+    return dropDowndata.result;
   };
   useEffect(() => {
-    setFormData(FORM_SCHEMA_CR);
+    // setFormData(FORM_SCHEMA_CR);
   }, []);
 
   useEffect(() => {
     // Fetch the data for all the dropdowns
-    OnLoad();
-    const GetData = async () => {
-      if (getReqId) {
-        let result = await getDataAPI(
-          API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId
-        );
-        let response = await result.json();
-        setFormData({ ...formData, ...response });
-      } else {
-        setFormData(FORM_SCHEMA_CR);
+    setData();
+  }, []);
+  const setData = async () => {
+    const dropData = await OnLoad();
+    GetData(dropData);
+  };
+  const GetData = async (dropData) => {
+    if (getReqId) {
+      let result = await getDataAPI(
+        API_URL.GET_CREATE_REQUISITION_DEATILS + getReqId
+      );
+      let response = await result.json();
+      setDropdownData(dropData);
+      setFormData({ ...formData, ...response });
+    } else {
+      setDropdownData(dropData);
+      setFormData(FORM_SCHEMA_CR);
+      
+      if(roleId===4){
+        navigateTo("dashboard");
       }
-    };
-    GetData();
+
+    }
+  };
+  if (getReqId && formData) {
     applySettingsBasedOnRoleAndStatus(
       getReqRoleId,
-      mrfStatusId,
+      formData.mrfStatusId,
       roleId,
       commonSettings
     );
-  }, []);
-  
+  } else {
+    applySettingsBasedOnRoleAndStatus(
+      getReqRoleId,
+      null,
+      roleId,
+      commonSettings
+    );
+  }
+
 
   const handleMinSalaryChange = (e) => {
     const minSalary = e.target.value;
@@ -102,6 +128,7 @@ const CreateRequisitionBody = ({
 
     setFormData({ ...formData, minTargetSalary: minSalary });
   };
+
   const handleMaxSalaryChange = (e) => {
     const maxSalary = e.target.value;
 
@@ -188,37 +215,39 @@ const CreateRequisitionBody = ({
   let remaningCharacterJustification = 0;
   if (formData) {
     remaningCharacterJustification =
-      maxCharacterCountJustification - (formData.justification?.length || 0);
+      maxCharacterCountJustification - formData.justification.length;
   }
 
+  const maxCharacterSkills = 500;
 
-  const maxCharacterSkills = 500
- 
   const onTextChangedSkill = (val) => {
     const textWithoutTags = removeHtmlTags(val);
     if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
-   
       setFormData({ ...formData, skills: val });
     }
   };
   let remaningCharacterSkills = 0;
   if (formData) {
-    remaningCharacterSkills = maxCharacterSkills - removeHtmlTags(formData.skills).length;
+    remaningCharacterSkills =
+      maxCharacterSkills - removeHtmlTags(formData.skills).length;
   }
 
-
   const maxCharacterJobDescription = 6000;
- const onTextChangedJobDesc = (val) => {
-  const value = val;
-    if (value && value.length <= maxCharacterJobDescription) {
-      setFormData({ ...formData, jobDescription: value });
+  const onTextChangedJobDesc = (val) => {
+    const textWithoutTags = removeHtmlTags(val);
+    if (
+      textWithoutTags &&
+      textWithoutTags.length <= maxCharacterJobDescription
+    ) {
+      setFormData({ ...formData, jobDescription: val });
     }
   };
 
   let remaningCharacterJobDescription = 0;
   if (formData) {
     remaningCharacterJobDescription =
-      maxCharacterJobDescription - (formData.jobDescription?.length || 0);
+      maxCharacterJobDescription -
+      removeHtmlTags(formData.jobDescription).length;
   }
   const handleMinExpChange = (e) => {
     const minExp = e.target.value;
@@ -388,7 +417,7 @@ const CreateRequisitionBody = ({
                     <span className="text-red-600">
                       {formData.referenceNo}
                       {" - "}
-                      {`(${status})`}
+                      {`(${formData.mrfStatus})`}
                     </span>
                   </h4>
                 </div>
@@ -414,7 +443,6 @@ const CreateRequisitionBody = ({
             ) : (
               ""
             )}
-
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="RequisitionType" className="font-bold text-sm">
@@ -465,7 +493,6 @@ const CreateRequisitionBody = ({
                 />
               </div>
             </div>
-
             <div className="flex justify-content-between gap-5">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="department" className="font-bold text-sm">
@@ -931,7 +958,7 @@ const CreateRequisitionBody = ({
                     value={formData.jobDescription}
                     headerTemplate={header}
                     onTextChanged={onTextChangedJobDesc}
-                    disable={commonSettings.setReadOnly}
+                    disable={commonSettings.setReadOnly ? true : false}
                     max={maxCharacterJobDescription}
                   />
                   <div
@@ -957,7 +984,6 @@ const CreateRequisitionBody = ({
                     />
                   </div>
                 </div>
-                
               </div>
 
               <div className="flex flex-column w-6 gap-2">
@@ -981,7 +1007,6 @@ const CreateRequisitionBody = ({
                     disable={commonSettings.setReadOnly}
                     max={maxCharacterSkills}
                   />
-
                   <div
                     style={{
                       position: "absolute",
@@ -1018,7 +1043,7 @@ const CreateRequisitionBody = ({
               </div> */}
             </div>
             <div className="flex justify-content-between gap-5 ">
-            <div className="flex flex-column relative inline-block w-6 gap-2">
+              <div className="flex flex-column relative inline-block w-6 gap-2">
                 <label htmlFor="Justification" className="font-bold text-sm">
                   Justification <RedAsterisk />
                 </label>
@@ -1117,6 +1142,7 @@ const CreateRequisitionBody = ({
                       resumeReviewerEmployeeIds: objToArray(e.value).toString(),
                     })
                   }
+                  display={"chip"}
                   optionLabel="name"
                   disable={commonSettings.setReadOnly}
                 />
@@ -1140,6 +1166,7 @@ const CreateRequisitionBody = ({
                       interviewerEmployeeIds: objToArray(e.value).toString(),
                     })
                   }
+                  display={"chip"}
                   disable={commonSettings.setReadOnly}
                   optionLabel="name"
                   // optionValue="employeeId"
@@ -1148,8 +1175,8 @@ const CreateRequisitionBody = ({
             </div>
             {(getReqRoleId === 4 ||
               (getReqRoleId === 3 &&
-                mrfStatusId !== MRF_STATUS.draft &&
-                mrfStatusId !== MRF_STATUS.resubReq)) && (
+                formData.mrfStatusId !== MRF_STATUS.draft &&
+                formData.mrfStatusId !== MRF_STATUS.resubReq)) && (
               <>
                 <div className="flex justify-content-between">
                   <h1 className="my-2 ">
@@ -1195,7 +1222,7 @@ const CreateRequisitionBody = ({
                             (manager) =>
                               manager.employeeId === selectedHiringManagerId
                           );
-setHiringManagerBtnDisable(false);
+                        setHiringManagerBtnDisable(false);
                         if (selectedHiringManager) {
                           setFormData({
                             ...formData,
@@ -1272,14 +1299,12 @@ setHiringManagerBtnDisable(false);
                                 </label>
                                 <MrfPartialStatus
                                   mrfId={getReqId}
-                                  mrfStatusId={mrfStatusId}
+                                  mrfStatusId={formData.mrfStatusId}
                                   label={"Update"}
                                   formData={formData}
                                   className={"update_btn"}
                                   hiringManagerUpdateClick={true}
-                                  disabled={
-                                    hiringManagerBtnDisable
-                                  }
+                                  disabled={hiringManagerBtnDisable}
                                   message={"Are you sure you want to update?"}
                                 />
                               </div>
@@ -1298,7 +1323,7 @@ setHiringManagerBtnDisable(false);
                                 </label>
                                 <MrfPartialStatus
                                   mrfId={getReqId}
-                                  mrfStatusId={mrfStatusId}
+                                  mrfStatusId={formData.mrfStatusId}
                                   label={"Update"}
                                   formData={formData}
                                   className={"update_btn"}
@@ -1341,7 +1366,7 @@ setHiringManagerBtnDisable(false);
                             (manager) =>
                               manager.employeeId === selectedsiteHRSPOCId
                           );
-                          setSiteHrSpocBtnDisable(false);
+                        setSiteHrSpocBtnDisable(false);
                         if (selectedsiteHRSPOCEmpId) {
                           setFormData({
                             ...formData,
@@ -1403,14 +1428,12 @@ setHiringManagerBtnDisable(false);
                               <div className="flex flex-column gap-2 w-2">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
-                                  mrfStatusId={mrfStatusId}
+                                  mrfStatusId={formData.mrfStatusId}
                                   label={"Update"}
                                   formData={formData}
                                   className={"update_btn"}
                                   siteHRUpdateClick={true}
-                                  disabled={
-                                   siteHrSpocBtnDisable
-                                  }
+                                  disabled={siteHrSpocBtnDisable}
                                   message={"Are you sure you want to update?"}
                                 />
                               </div>
@@ -1423,7 +1446,7 @@ setHiringManagerBtnDisable(false);
                               <div className="flex flex-column gap-2 w-2">
                                 <MrfPartialStatus
                                   mrfId={getReqId}
-                                  mrfStatusId={mrfStatusId}
+                                  mrfStatusId={formData.mrfStatusId}
                                   label={"Update"}
                                   formData={formData}
                                   className={"update_btn"}
@@ -2018,8 +2041,8 @@ setHiringManagerBtnDisable(false);
                   default:
                     return (
                       <>
-                        {(mrfStatusId === MRF_STATUS.new ||
-                          mrfStatusId === MRF_STATUS.onHold) && (
+                        {(formData.mrfStatusId === MRF_STATUS.new ||
+                          formData.mrfStatusId === MRF_STATUS.onHold) && (
                           <>
                             <MrfPartialStatus
                               mrfId={getReqId}
@@ -2032,9 +2055,9 @@ setHiringManagerBtnDisable(false);
                             />
                           </>
                         )}
-                        {mrfStatusId !== MRF_STATUS.closed &&
-                          mrfStatusId !== MRF_STATUS.rejected &&
-                          mrfStatusId !== MRF_STATUS.withdrawn && (
+                        {formData.mrfStatusId !== MRF_STATUS.closed &&
+                          formData.mrfStatusId !== MRF_STATUS.rejected &&
+                          formData.mrfStatusId !== MRF_STATUS.withdrawn && (
                             <>
                               <MrfPartialStatus
                                 mrfId={getReqId}
@@ -2046,7 +2069,7 @@ setHiringManagerBtnDisable(false);
                                 }
                                 message={"Do you want to Reject this MRF?"}
                               />
-                              {mrfStatusId !== MRF_STATUS.onHold && (
+                              {formData.mrfStatusId !== MRF_STATUS.onHold && (
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={7}

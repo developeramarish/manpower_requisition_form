@@ -10,7 +10,8 @@ export default function MultiSelectDropdown({
   addFilter = false,
   className,
   maxSelectedLabels,
-  disable
+  disable,
+  display=false
 }) {
   return (
     <MultiSelect
@@ -24,6 +25,8 @@ export default function MultiSelectDropdown({
       maxSelectedLabels={maxSelectedLabels}
       className={className}
       disabled={disable}
+      display={display} 
     />
+
   );
 }
