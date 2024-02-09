@@ -86,66 +86,6 @@ namespace MRF.Utility
             }
         }
 
-        public async Task SendEmailAsync(int mrfID, int mrfStatusId)
-        {
-            try
-            {
-                _logger.LogDebug($"SendEmailAsync MRF ID: {mrfID}");
-                _logger.LogDebug($"SendEmailAsync mrfStatusId: {mrfStatusId}");
-                Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
-
-                Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);
-                _logger.LogDebug($"SendEmailAsync mrfstatusmaster.Status: {mrfstatusmaster.Status}");
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
-                _logger.LogDebug($"SendEmailAsync emailRequest.roleId: {emailRequest.roleId}");
-                string[] roleIdStrings = emailRequest.roleId.Split(',');
-                List<int> roleIds = new List<int>();
-
-                foreach (string roleIdString in roleIdStrings)
-                {
-                    if (int.TryParse(roleIdString, out int roleId))
-                    {
-                        roleIds.Add(roleId);
-                    }
-                }
-
-                mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
-                _logger.LogDebug($"SendEmailAsync mrfUrl: {mrfUrl}");
-                List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
-                                      where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
-                                             where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
-                                                    where mrfEmailApproval.MrfId == mrfID
-                                                    select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
-                                                   roleIds.Contains(employeeRoleMap.RoleId)
-                                             select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
-                                      select employeeDetails.Email).ToList();
-
-                foreach (string strEmail in email)
-                {
-                    _logger.LogDebug($"SendEmailAsync email: {email}");
-                    string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                         .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-
-                    if (IsSendGridEnabled())
-                    {
-                        await SendEmailSendGrid(strEmail, emailRequest.Subject, htmlContent);
-                    }
-                    else
-                    {
-                        _logger.LogDebug($"SendEmailAsync strEmail: {strEmail}");
-                        _logger.LogDebug($"SendEmailAsync emailRequest.Subject: {emailRequest.Subject}");
-                        _logger.LogDebug($"SendEmailAsync htmlContent: {htmlContent}");
-                        SendEmailSMTP(strEmail, emailRequest.Subject, htmlContent);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Exception occurred while sending email: {e.Message}");
-                throw;
-            }
-        }
-
         private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath = null)
         {
             var msg = new SendGridMessage
