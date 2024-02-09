@@ -630,7 +630,7 @@ namespace MRF.API.Controllers
                     {
 
                         var valueToUpdate = propertyInfo.GetValue(request);
-                        if (_emailService.IsValidUpdateValue(valueToUpdate))
+                        if ((valueToUpdate!=null) && _emailService.IsValidUpdateValue(valueToUpdate))
 
                         {
                             entityProperty.SetValue(existingStatus, valueToUpdate);
