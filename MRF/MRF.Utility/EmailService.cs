@@ -90,12 +90,14 @@ namespace MRF.Utility
         {
             try
             {
+                _logger.LogDebug($"SendEmailAsync MRF ID: {mrfID}");
+                _logger.LogDebug($"SendEmailAsync mrfStatusId: {mrfStatusId}");
                 Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
 
                 Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);
-
+                _logger.LogDebug($"SendEmailAsync mrfstatusmaster.Status: {mrfstatusmaster.Status}");
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
-
+                _logger.LogDebug($"SendEmailAsync emailRequest.roleId: {emailRequest.roleId}");
                 string[] roleIdStrings = emailRequest.roleId.Split(',');
                 List<int> roleIds = new List<int>();
 
@@ -108,7 +110,7 @@ namespace MRF.Utility
                 }
 
                 mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
-
+                _logger.LogDebug($"SendEmailAsync mrfUrl: {mrfUrl}");
                 List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
                                       where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
                                              where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
@@ -120,6 +122,7 @@ namespace MRF.Utility
 
                 foreach (string strEmail in email)
                 {
+                    _logger.LogDebug($"SendEmailAsync email: {email}");
                     string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                          .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
@@ -129,6 +132,9 @@ namespace MRF.Utility
                     }
                     else
                     {
+                        _logger.LogDebug($"SendEmailAsync strEmail: {strEmail}");
+                        _logger.LogDebug($"SendEmailAsync emailRequest.Subject: {emailRequest.Subject}");
+                        _logger.LogDebug($"SendEmailAsync htmlContent: {htmlContent}");
                         SendEmailSMTP(strEmail, emailRequest.Subject, htmlContent);
                     }
                 }
