@@ -649,8 +649,8 @@ namespace MRF.API.Controllers
 
                 CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId);
                 // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
-
-                  if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                   {
                       emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
