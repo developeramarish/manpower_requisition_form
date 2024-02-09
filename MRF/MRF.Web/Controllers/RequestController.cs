@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MRF.DataAccess.Repository.IRepository;
+using MRF.Models.Models;
 using MRF.Utility;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Text;
 
 
@@ -9,18 +13,28 @@ namespace MRF.Web.Controllers
 {
     public class RequestController : Controller
     {
-        private readonly IEmailService _emailService;
+        
         private readonly IConfiguration _configuration;
         private readonly ILoggerService _logger;
-       
-       
-        public RequestController(IEmailService emailService,
-            IConfiguration configuration,
-            ILoggerService logger)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly string smtpServer;
+        private readonly int smtpPort;
+        private readonly SmtpClient smtpClient;
+        private string mrfUrl = string.Empty;
+        private readonly string senderEmail;
+        public RequestController(IConfiguration configuration,
+            ILoggerService logger,
+            IUnitOfWork unitOfWork)
         {
-            _emailService = emailService;
             _configuration = configuration;
             _logger = logger;
+            _unitOfWork = unitOfWork;
+
+            senderEmail = _configuration["SMTP:senderEmail"];
+            smtpServer = _configuration["SMTP:Server"];
+            smtpPort = Convert.ToInt32(_configuration["SMTP:Port"]);
+            smtpClient = new SmtpClient(smtpServer, smtpPort);
+            smtpClient.UseDefaultCredentials = false;
         }
         public async Task<IActionResult> Approve([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
         {
@@ -32,7 +46,10 @@ namespace MRF.Web.Controllers
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    _emailService.SendEmailAsync(mrfID, mrfStatusId);
+                    _logger.LogInfo("Request Controller mrfID = "+ mrfID);
+                    _logger.LogInfo("Request Controller mrfStatusId = " + mrfStatusId);
+                    _logger.LogInfo("Entered into Approve method");
+                    await SendEmailAsync(mrfID, mrfStatusId);
                     return Ok("MRF has been approved successfully!");
                 }
                 else
@@ -46,7 +63,65 @@ namespace MRF.Web.Controllers
             }
         }
 
-       
+        private async Task SendEmailAsync(int mrfID, int mrfStatusId)
+        {
+            try
+            {
+                _logger.LogDebug($"SendEmailAsync MRF ID: {mrfID}");
+                _logger.LogDebug($"SendEmailAsync mrfStatusId: {mrfStatusId}");
+                Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
+
+                Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);
+                _logger.LogDebug($"SendEmailAsync mrfstatusmaster.Status: {mrfstatusmaster.Status}");
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
+                _logger.LogDebug($"SendEmailAsync emailRequest.roleId: {emailRequest.roleId}");
+                string[] roleIdStrings = emailRequest.roleId.Split(',');
+                List<int> roleIds = new List<int>();
+
+                foreach (string roleIdString in roleIdStrings)
+                {
+                    if (int.TryParse(roleIdString, out int roleId))
+                    {
+                        roleIds.Add(roleId);
+                    }
+                }
+
+                mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
+                _logger.LogDebug($"SendEmailAsync mrfUrl: {mrfUrl}");
+                List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
+                                      where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
+                                             where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
+                                                    where mrfEmailApproval.MrfId == mrfID
+                                                    select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
+                                                   roleIds.Contains(employeeRoleMap.RoleId)
+                                             select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
+                                      select employeeDetails.Email).ToList();
+
+                foreach (string strEmail in email)
+                {
+                    _logger.LogDebug($"SendEmailAsync email: {email}");
+                    string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                         .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+
+                   
+                        _logger.LogDebug($"SendEmailAsync strEmail: {strEmail}");
+                        _logger.LogDebug($"SendEmailAsync emailRequest.Subject: {emailRequest.Subject}");
+                        _logger.LogDebug($"SendEmailAsync htmlContent: {htmlContent}");
+                        
+
+                    using (MailMessage mailMessage = new MailMessage(senderEmail, strEmail, emailRequest.Subject, htmlContent))
+                    {
+                        mailMessage.IsBodyHtml = true;
+                        smtpClient.Send(mailMessage);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Exception occurred while sending email: {e.Message}");
+                throw;
+            }
+        }
 
         private async Task<HttpResponseMessage> ChangeMrfStatusAsync(int mrfID, int mrfStatusId, int updatedByEmployeeId)
         {
@@ -126,7 +201,7 @@ namespace MRF.Web.Controllers
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                    _emailService.SendEmailAsync(mrfID, mrfStatusId);
+                    await SendEmailAsync(mrfID, mrfStatusId);
                     return Ok("MRF has been rejected successfully!");
                 }
                 else
