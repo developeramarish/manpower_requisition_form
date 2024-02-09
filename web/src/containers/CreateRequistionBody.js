@@ -289,7 +289,7 @@ const CreateRequisitionBody = ({
     if (PosORPr === 1) {
       apiUrl = API_URL.ADD_POSITIONTITLE;
     } else {
-      alert(API_URL.ADD_PROJECT);
+      //alert(API_URL.ADD_PROJECT);
       apiUrl = API_URL.ADD_PROJECT;
     }
 
