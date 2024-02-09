@@ -12,5 +12,6 @@ namespace MRF.DataAccess.Repository.IRepository
         public List<Candidatedetails> GetForwardedTodata();
 
         public List<CandidatedetailRequestModel> GetReferenceNoAndPositiontitle();
+        public int GetStatusOfAllCandidateByMRF(int candidateId);
     }
 }

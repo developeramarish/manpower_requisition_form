@@ -90,11 +90,10 @@ const CreateRequisitionBody = ({
     } else {
       setDropdownData(dropData);
       setFormData(FORM_SCHEMA_CR);
-      
-      if(roleId===4){
+
+      if (roleId === 4) {
         navigateTo("dashboard");
       }
-
     }
   };
   if (getReqId && formData) {
@@ -112,7 +111,6 @@ const CreateRequisitionBody = ({
       commonSettings
     );
   }
-
 
   const handleMinSalaryChange = (e) => {
     const minSalary = e.target.value;
@@ -223,6 +221,8 @@ const CreateRequisitionBody = ({
   const onTextChangedSkill = (val) => {
     const textWithoutTags = removeHtmlTags(val);
     if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
+      setFormData({ ...formData, skills: val });
+    } else {
       setFormData({ ...formData, skills: val });
     }
   };
@@ -405,7 +405,7 @@ const CreateRequisitionBody = ({
 
           <section
             className="flex flex-column flex-nowrap gap-3 
-        border-y-2 border-gray-300 
+      
         py-3 px-1 overflow-y-scroll"
             style={{ height: "95%" }}
           >
@@ -1586,7 +1586,7 @@ const CreateRequisitionBody = ({
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={11}
-                                  label={"Send for HOD approval"}
+                                  label={"Received HOD approval"}
                                   formData={formData}
                                   className={"hod_btn"}
                                   disabled={true}
@@ -1704,6 +1704,38 @@ const CreateRequisitionBody = ({
                                   className={"bypass_btn"}
                                   label={"By Pass"}
                                   disabled={true}
+                                />
+                              </div>
+                            </>
+                          );
+                        case MRF_STATUS.cooapproval:
+                        case MRF_STATUS.awaitCooApproval:
+                        case MRF_STATUS.recivedfinanceHeadApproval:
+                          return (
+                            <>
+                              <div className="flex flex-column gap-2 w-2">
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={14}
+                                  formData={formData}
+                                  className={"finance_btn"}
+                                  label={"Received Finance Head approval"}
+                                  disabled={true}
+                                  message={
+                                    "Do you want to submit it as Received Finance Head approval?"
+                                  }
+                                />
+                              </div>
+                              <div className="flex flex-column gap-2 w-2">
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={15}
+                                  formData={formData}
+                                  className={"bypass_btn"}
+                                  label={"By Pass"}
+                                  disabled={true}
+                                  bypassClicked={true}
+                                  message={"Do you want to ByPass MRF?"}
                                 />
                               </div>
                             </>
@@ -1868,7 +1900,26 @@ const CreateRequisitionBody = ({
                               <div className=" w-2 "></div>
                             </>
                           );
-
+                        case MRF_STATUS.cooapproval:
+                        case MRF_STATUS.open:
+                          return (
+                            <>
+                              <div className="flex flex-column gap-2 w-2">
+                                <MrfPartialStatus
+                                  mrfId={getReqId}
+                                  mrfStatusId={5}
+                                  formData={formData}
+                                  className={"coo_btn "}
+                                  label={"Received COO approval"}
+                                  disabled={true}
+                                  message={
+                                    "Do you want to submit it as Received COO Approval?"
+                                  }
+                                />
+                              </div>
+                              <div className=" w-2 "></div>
+                            </>
+                          );
                         case MRF_STATUS.awaitCooApproval:
                           return (
                             <>
