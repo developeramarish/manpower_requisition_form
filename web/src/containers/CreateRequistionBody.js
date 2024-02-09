@@ -2008,6 +2008,14 @@ const CreateRequisitionBody = ({
                       </>
                     );
                   case MRF_STATUS.new:
+                  case MRF_STATUS.hodapproval:
+                  case MRF_STATUS.awaitHodApproval:
+                  case MRF_STATUS.cooapproval:
+                  case MRF_STATUS.awaitCooApproval:
+                  case MRF_STATUS.recivedfinanceHeadApproval:
+
+                  case MRF_STATUS.bypassFinanceHeadApproval:
+                  case MRF_STATUS.recivedfinanceHeadApproval:
                     return (
                       <>
                         <MrfPartialStatus
