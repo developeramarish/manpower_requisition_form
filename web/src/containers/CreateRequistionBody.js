@@ -289,7 +289,7 @@ const CreateRequisitionBody = ({
     if (PosORPr === 1) {
       apiUrl = API_URL.ADD_POSITIONTITLE;
     } else {
-      alert(API_URL.ADD_PROJECT);
+      //alert(API_URL.ADD_PROJECT);
       apiUrl = API_URL.ADD_PROJECT;
     }
 
@@ -1968,7 +1968,7 @@ const CreateRequisitionBody = ({
 
           <div className="flex flex-wrap justify-content-end gap-5 mt-3">
             <ButtonC
-              label="CANCEL"
+              label="Close"
               // className=" w-2 surface-hover border-red-600 text-red-600"
               className="cancel_btn"
               onClick={handleCancel}
