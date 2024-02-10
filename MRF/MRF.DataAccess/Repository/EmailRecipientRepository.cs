@@ -54,18 +54,26 @@ namespace MRF.DataAccess.Repository
 
             var roleId = emailMasterQuery.Select(mrfDetails => mrfDetails.roleId).FirstOrDefault();
 
-            List<int> RoleIds = roleId.Split(',').Select(int.Parse).ToList();
+            List<int> RoleIds = new List<int>();
+
+            if (!string.IsNullOrEmpty(roleId))
+            {
+                RoleIds = roleId.Split(',').Select(int.Parse).ToList();
+                RoleIds = RoleIds.Where(id => id != 4).ToList(); // Remove RoleId 4 as we have different method to send emails to hr
+            }
 
             IQueryable<EmailRecipient> query = from ed in _db.Employeedetails
                                                join erm in _db.Employeerolemap on ed.Id equals erm.EmployeeId
                                                join mea in _db.MrfEmailApproval on ed.Id equals mea.EmployeeId
-                                               where RoleIds.Contains(erm.RoleId) && mea.MrfId == MrfId
+                                               where (RoleIds.Count == 0 || RoleIds.Contains(erm.RoleId)) && mea.MrfId == MrfId
                                                select new EmailRecipient
                                                {
                                                    Email = ed.Email
                                                };
             return query.ToList();
         }
+
+
 
         public List<EmailRecipient> GetEmployeeEmail(string empRole)
         {
