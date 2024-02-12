@@ -14,7 +14,7 @@ namespace MRF.DataAccess.Repository
         {
             _db.Candidatedetails.Update(candidatedetail);
         }
-        
+
         public List<Candidatedetails> GetForwardedTodata()
         {
             IQueryable<Candidatedetails> query = from candidatedetails in _db.Candidatedetails
@@ -52,30 +52,62 @@ namespace MRF.DataAccess.Repository
 
         public List<CandidatedetailRequestModel> GetReferenceNoAndPositiontitle()
         {
-            IQueryable<CandidatedetailRequestModel> query = from candidatedetails in _db.Candidatedetails join mrfdetails in _db.Mrfdetails on 
-                                                 candidatedetails.MrfId equals mrfdetails.Id join position in _db.PositionTitlemaster on mrfdetails.PositionTitleId
+            IQueryable<CandidatedetailRequestModel> query = from candidatedetails in _db.Candidatedetails
+                                                            join mrfdetails in _db.Mrfdetails on
+                                                 candidatedetails.MrfId equals mrfdetails.Id
+                                                            join position in _db.PositionTitlemaster on mrfdetails.PositionTitleId
                                                 equals position.Id
-                                                 select new  CandidatedetailRequestModel{
-                                                     Id = candidatedetails.Id,  
-                                                     Name = candidatedetails.Name,
-                                                     EmailId= candidatedetails.EmailId,
-                                                     ContactNo = candidatedetails.ContactNo,
-                                                     Reason= candidatedetails.Reason,
-                                                     ResumePath= candidatedetails.ResumePath,
-                                                     CandidateStatusId= candidatedetails.CandidateStatusId,
-                                                     CreatedOnUtc = candidatedetails.CreatedOnUtc,
-                                                     UpdatedOnUtc = candidatedetails.UpdatedOnUtc,
-                                                     SourceId= candidatedetails.SourceId,
-                                                     referenceNo = mrfdetails.ReferenceNo,
-                                                     Positiontitle= position.Name,
-                
-            };
-            
+                                                            select new CandidatedetailRequestModel
+                                                            {
+                                                                Id = candidatedetails.Id,
+                                                                Name = candidatedetails.Name,
+                                                                EmailId = candidatedetails.EmailId,
+                                                                ContactNo = candidatedetails.ContactNo,
+                                                                Reason = candidatedetails.Reason,
+                                                                ResumePath = candidatedetails.ResumePath,
+                                                                CandidateStatusId = candidatedetails.CandidateStatusId,
+                                                                CreatedOnUtc = candidatedetails.CreatedOnUtc,
+                                                                UpdatedOnUtc = candidatedetails.UpdatedOnUtc,
+                                                                SourceId = candidatedetails.SourceId,
+                                                                referenceNo = mrfdetails.ReferenceNo,
+                                                                Positiontitle = position.Name,
+
+                                                            };
+
 
 
             return query.ToList();
 
 
+
+        }
+
+        public int GetStatusOfAllCandidateByMRF(int CandidateId)
+        {
+            
+            int MrfId = (from candidatedetails in _db.Candidatedetails
+                                      where candidatedetails.Id == CandidateId
+                                      select candidatedetails.MrfId).FirstOrDefault();
+
+
+            int getCountCandidates = (from candidatedetails in _db.Candidatedetails
+                                      where candidatedetails.MrfId == MrfId
+                                      select candidatedetails).Distinct().Count();
+
+            int getAllEvaluation = (from candidatedetails in _db.Candidatedetails
+                                                            join Interviewevaluation in _db.Interviewevaluation on
+                                                            candidatedetails.Id equals Interviewevaluation.Id
+                                                            where candidatedetails.MrfId == MrfId
+                                                           && (Interviewevaluation.EvalutionStatusId == 29 ||
+                                                               Interviewevaluation.EvalutionStatusId == 20 ||
+                                                               Interviewevaluation.EvalutionStatusId == 19)
+                                                             select candidatedetails).Distinct().Count();
+                                                    
+
+
+            if(getAllEvaluation != getCountCandidates) { MrfId = 0; }
+            
+            return MrfId;
 
         }
     }

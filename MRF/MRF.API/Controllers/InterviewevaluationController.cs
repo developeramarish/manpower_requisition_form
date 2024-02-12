@@ -3,7 +3,9 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 
 
@@ -20,12 +22,18 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private InterviewevaluationResponseModel _responseModel;
         private readonly ILoggerService _logger;
-        public InterviewevaluationController(IUnitOfWork unitOfWork, ILoggerService logger)
+        private readonly IEmailService _emailService;
+        private readonly IHostEnvironment _hostEnvironment;
+        private readonly IConfiguration _configuration;
+        public InterviewevaluationController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new InterviewevaluationResponseModel();
             _logger = logger;
+            _emailService = emailService;
+            _hostEnvironment = hostEnvironment;
+            _configuration = configuration;
         }
         // GET: api/<InterviewevaluationController>
         [HttpGet]
@@ -174,8 +182,11 @@ namespace MRF.API.Controllers
         {
 
             List<Interviewevaluation> record = _unitOfWork.Interviewevaluation.GetA(u => u.CandidateId == request.CandidateId).ToList();
-            InterviewevaluationHistoryController controller = new InterviewevaluationHistoryController(_unitOfWork, _logger);
-            controller.PostForInterview(record);
+            try
+            {
+                InterviewevaluationHistoryController controller = new InterviewevaluationHistoryController(_unitOfWork, _logger);
+                controller.PostForInterview(record);
+            }catch(Exception ex) { _logger.LogError($"No result updated for interviewHistory by this Id: {id}"); }
             if (record.Count > 0)
             {
                 for (int i = 0; i < record.Count; i++)
@@ -200,6 +211,29 @@ namespace MRF.API.Controllers
                         _unitOfWork.Save();
 
                         _responseModel.Id = existingRecord.Id;
+                        try
+                        {
+                            if (_responseModel.Id > 0)
+                            {
+                                CandidatedetailController controller = new CandidatedetailController(_unitOfWork, _logger, null, null);
+                                int MRFId = controller.GetStatusOfAllCandidateByMRF(existingRecord.CandidateId);
+                                if (MRFId>0)
+                                {
+                                    DateTime? updatedOnUtc = request.UpdatedOnUtc;
+
+                                    var Mrfdetail = new MrfdetailRequestModel
+                                    {
+                                        MrfStatusId = 10,
+                                        UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                                        UpdatedOnUtc = updatedOnUtc ?? DateTime.MinValue,
+                                    };
+                                    MrfdetailController Mcontroller = new MrfdetailController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
+                                    var Mrfdetails = Mcontroller.PartialUpdateMRFStatus(MRFId, Mrfdetail);
+
+                                }
+                            }
+                        }
+                        catch (Exception ex) { _logger.LogError($"No result updated for mrf by this Id: {id}"); }
 
                     }
                     else

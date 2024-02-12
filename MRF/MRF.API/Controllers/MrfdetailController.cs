@@ -260,11 +260,11 @@ namespace MRF.API.Controllers
 
         }
 
-        private void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int MrfStatusId)
+        private void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
         {
             GetMrfdetailsInEmailController getMrfdetailsInEmailController =
                 new GetMrfdetailsInEmailController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
-            getMrfdetailsInEmailController.GetRequisition(MrfId, EmployeeId, MrfStatusId);
+            getMrfdetailsInEmailController.GetRequisition(MrfId, EmployeeId, nextMrfStatusId, currentMrfStatusId);
         }
 
         private int CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update, out int nextMrfStatusId) 
@@ -630,7 +630,7 @@ namespace MRF.API.Controllers
                     {
 
                         var valueToUpdate = propertyInfo.GetValue(request);
-                        if (_emailService.IsValidUpdateValue(valueToUpdate))
+                        if ((valueToUpdate!=null) && _emailService.IsValidUpdateValue(valueToUpdate))
 
                         {
                             entityProperty.SetValue(existingStatus, valueToUpdate);
@@ -647,10 +647,10 @@ namespace MRF.API.Controllers
                 int employeeId=CallEmailApprovalController(request, id, false, out nextMrfStatusId);
                 CallMrfHistory(request, id, mrfstatus);
 
-                CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId);
+                CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
                 // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
-
-                  if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
+                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                   {
                       emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 

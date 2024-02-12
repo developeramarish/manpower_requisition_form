@@ -144,9 +144,12 @@ namespace MRF.API.Controllers
                         UpdatedByEmployeeId = request.UpdatedByEmployeeId,
                         UpdatedOnUtc = request.UpdatedOnUtc,
                     };
-                    InterviewevaluationController controller = new InterviewevaluationController(_unitOfWork, _logger);
 
-                    controller.Post(interviewevaluation);
+                    try
+                    {
+                        InterviewevaluationController controller = new InterviewevaluationController(_unitOfWork, _logger, _emailService, null, null);
+                        controller.Post(interviewevaluation);
+                    }catch (Exception ex) { }
                     _responseModel.Id = Candidatedetail.Id;
                     _responseModel.IsActive = true;
                 }
@@ -316,7 +319,27 @@ namespace MRF.API.Controllers
                 //_logger.LogInfo($"Total MRF Dropdown list  count: {Count}");
                 return _response;
             }
-            [HttpGet]
+
+        [HttpGet("{Id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(Candidatedetails))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Forbidden")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
+        public int GetStatusOfAllCandidateByMRF(int CandidateId)
+        {
+            _logger.LogInfo($"Fetching  Candidate detail by Id: {CandidateId}");
+            int Candidatedetail = _unitOfWork.Candidatedetail.GetStatusOfAllCandidateByMRF(CandidateId);
+           
+           
+
+            return Candidatedetail;
+        }
+
+
+        [HttpGet]
             [SwaggerResponse(StatusCodes.Status200OK, Description = "Successful response", Type = typeof(IEnumerable<CandidatedetailRequestModel>))]
             [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Bad Request")]
             [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Unauthorized")]
