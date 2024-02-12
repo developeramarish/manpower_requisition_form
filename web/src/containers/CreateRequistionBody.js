@@ -222,9 +222,7 @@ const CreateRequisitionBody = ({
     const textWithoutTags = removeHtmlTags(val);
     if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
       setFormData({ ...formData, skills: val });
-    } else {
-      setFormData({ ...formData, skills: val });
-    }
+    } 
   };
   let remaningCharacterSkills = 0;
   if (formData) {
