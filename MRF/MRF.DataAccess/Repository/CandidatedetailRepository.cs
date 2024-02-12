@@ -57,6 +57,7 @@ namespace MRF.DataAccess.Repository
                                                  candidatedetails.MrfId equals mrfdetails.Id
                                                             join position in _db.PositionTitlemaster on mrfdetails.PositionTitleId
                                                 equals position.Id
+                                                            orderby candidatedetails.UpdatedOnUtc descending
                                                             select new CandidatedetailRequestModel
                                                             {
                                                                 Id = candidatedetails.Id,
