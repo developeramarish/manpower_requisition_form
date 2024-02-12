@@ -10,14 +10,14 @@ const ToastMessages = (props, ref) => {
       toast.current.show({
         severity: "success",
         summary: "Success Message",
-        detail:message,
+        detail: message,
       });
     },
     showConflictMessage: (message) => {
       toast.current.show({
         severity: "error",
         summary: "Conflict Message",
-        detail: message, 
+        detail: message,
       });
     },
     showBadRequestMessage: (message) => {
@@ -41,12 +41,11 @@ const ToastMessages = (props, ref) => {
         detail: message,
       });
     },
-  
   }));
 
   return (
     <div>
-      <Toast ref={toast} />
+      <Toast ref={toast} position="bottom-center" />
     </div>
   );
 };

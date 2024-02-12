@@ -1,0 +1,10 @@
+.p-dropdown-filter-container:after {
+  content: "Add";
+  top: 10px;
+  position: absolute;
+  right: 10px;
+  background-color: #fff;
+}
+.p-dropdown-filter-container svg {
+  display: none;
+}

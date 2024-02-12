@@ -27,7 +27,7 @@ const EditorComponent = ({
       headerTemplate={headerTemplate}
       readOnly={disable}
       onTextChange={(e) => onUpdate(e.htmlValue)}
-      style={{ height: "170px" }}
+      style={{ height: "220px" }}
       max={max}
     />
   );

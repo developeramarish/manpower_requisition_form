@@ -271,6 +271,25 @@ function Dashboard({ roleId, userId }) {
           roleId === ROLES.mrfOwner ||
           roleId === ROLES.interviewer) && (
           <div className="dashboard_body_right">
+            
+            <DashBoardDataTable
+              value={resumeSummary}
+              column={resumeSummaryColums}
+              headerHeading={
+                <h4 className="resume_status_dash_table_heading">
+                  Resume Status
+                </h4>
+              }
+              table_title={"Resume Summary"}
+            />
+            <ResumeSummary
+              visible={resumePopup}
+              onHide={() => setResumePopup(false)}
+              mrfId={resumePopupId}
+              roleId={roleId}
+              userId={userId}
+            />
+
             <DashBoardDataTable
               value={interviewSummaryTableData}
               column={interviewSummaryColums}
@@ -284,11 +303,14 @@ function Dashboard({ roleId, userId }) {
                     }}
                   >
                     Interview Status
-                    <span style={{ marginLeft: "110px", textAlign:"left", color: "#d32f2e" }}>
-                      <a
-                        style={{  color: "#d32f2e" }}
-                        onClick={handlePopupOpen}
-                      >
+                    <span
+                      style={{
+                        marginLeft: "110px",
+                        textAlign: "left",
+                        color: "#d32f2e",
+                      }}
+                    >
+                      <a style={{ color: "#d32f2e" }} onClick={handlePopupOpen}>
                         More Status
                         <span style={{ fontSize: "15px" }}>&gt;</span>
                       </a>
@@ -308,24 +330,6 @@ function Dashboard({ roleId, userId }) {
             <InterviewSummaryAllStatus
               visible={InterviewStatus}
               onHide={() => setInterviewStatusPopup(false)}
-              roleId={roleId}
-              userId={userId}
-            />
-
-            <DashBoardDataTable
-              value={resumeSummary}
-              column={resumeSummaryColums}
-              headerHeading={
-                <h4 className="resume_status_dash_table_heading">
-                  Resume Status
-                </h4>
-              }
-              table_title={"Resume Summary"}
-            />
-            <ResumeSummary
-              visible={resumePopup}
-              onHide={() => setResumePopup(false)}
-              mrfId={resumePopupId}
               roleId={roleId}
               userId={userId}
             />

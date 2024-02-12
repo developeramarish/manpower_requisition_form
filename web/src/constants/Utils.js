@@ -361,3 +361,14 @@ export const isFormDataEmptyForAddCandidate = (formData) => {
 export const removeHtmlTags = (htmlString) => {
   return htmlString.replace(/(<([^>]+)>)/gi, "");
 };
+
+
+export const convertToDays=(mrf)=>{
+  const dateString = changeDateFormat(mrf.createdOnUtc);
+  const [year, month, day] = dateString.split("-").map(Number);
+  const createdDate = new Date(year, month - 1, day);
+  const today = new Date();
+  const timeDifference = today - createdDate;
+  const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+  return daysDifference;
+}
