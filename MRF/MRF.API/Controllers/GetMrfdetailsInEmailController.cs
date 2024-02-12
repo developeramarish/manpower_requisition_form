@@ -35,7 +35,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public MrfdetailsEmailRequestModel GetRequisition(int MrfId, int EmployeeId, int MrfStatusId)
+        public MrfdetailsEmailRequestModel GetRequisition(int MrfId, int EmployeeId,int nextMrfStatusId,int currentMrfStatusId)
         {
             var mrfdetail = _unitOfWork.MrfdetailsEmailRepository.GetRequisition(MrfId);
             if (mrfdetail == null)
@@ -51,7 +51,7 @@ namespace MRF.API.Controllers
             {
                 var builder = new BodyBuilder();
                 builder.HtmlBody = sourceReader.ReadToEnd();
-                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetail, EmployeeId, MrfStatusId);
+                htmlBody = GetHtmlTemplateBody(builder.HtmlBody, mrfdetail, EmployeeId, nextMrfStatusId);
             }
 
             //Commented code to convert html to pdf
@@ -60,7 +60,7 @@ namespace MRF.API.Controllers
             var EmpDetails = _unitOfWork.Employeedetails.Get(u => u.Id == EmployeeId);
 
             //Get MRF Status
-            var MrfStatus = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == MrfStatusId);
+            var MrfStatus = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == currentMrfStatusId);
 
 
             if (MrfStatus != null && EmpDetails != null)
@@ -73,10 +73,10 @@ namespace MRF.API.Controllers
                     _logger.LogError($"Error while sending email: {ex}");
                 }
 
-            var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == MrfStatusId);
+            var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == currentMrfStatusId);
             try
             {
-                List<EmailRecipient> emailList = SendEmailOnStatus(MrfStatusId, MrfId);
+                List<EmailRecipient> emailList = SendEmailOnStatus(currentMrfStatusId, MrfId);
                 foreach (var emailReq in emailList)
                 {
                     try
@@ -111,8 +111,8 @@ namespace MRF.API.Controllers
             string messageBody = htmlBody
               .Replace("{ReferenceNo}", mrfdetailemail.ReferenceNo)
               .Replace("{NumberOfVacancies}", Convert.ToString(mrfdetailemail.NumberOfVacancies))
-              .Replace("{MaxTargetSalary}", Convert.ToString((mrfdetailemail.MaxTargetSalary) / 100000))
-              .Replace("{TotalTargetSalary}", Convert.ToString((mrfdetailemail.MaxTargetSalary * mrfdetailemail.NumberOfVacancies) / 100000))
+              .Replace("{MaxTargetSalary}", Convert.ToString(mrfdetailemail.MaxTargetSalary))
+              .Replace("{TotalTargetSalary}", Convert.ToString(mrfdetailemail.MaxTargetSalary * mrfdetailemail.NumberOfVacancies))
               .Replace("{GradeMin}", mrfdetailemail.GradeMin)
               .Replace("{GradeMax}", mrfdetailemail.GradeMax)
               .Replace("{PositionName}", mrfdetailemail.PositionName)
