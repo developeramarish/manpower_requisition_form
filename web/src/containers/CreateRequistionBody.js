@@ -222,9 +222,7 @@ const CreateRequisitionBody = ({
     const textWithoutTags = removeHtmlTags(val);
     if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
       setFormData({ ...formData, skills: val });
-    } else {
-      setFormData({ ...formData, skills: val });
-    }
+    } 
   };
   let remaningCharacterSkills = 0;
   if (formData) {
@@ -1968,7 +1966,7 @@ const CreateRequisitionBody = ({
 
           <div className="flex flex-wrap justify-content-end gap-5 mt-3">
             <ButtonC
-              label="Close"
+              label="Back"
               // className=" w-2 surface-hover border-red-600 text-red-600"
               className="cancel_btn"
               onClick={handleCancel}
