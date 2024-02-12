@@ -1262,7 +1262,7 @@ const CreateRequisitionBody = ({
                       value={new Date(formData.hmApprovalDate)}
                       maxDate={new Date()}
                       className={"email_dropdown"}
-                      disable={commonSettings.setHiringManager}
+                      disable={hiringManagerBtnDisable}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -1394,7 +1394,7 @@ const CreateRequisitionBody = ({
                       id="ApprovalDate"
                       inputClassName="bg-gray-100"
                       value={new Date(formData.spApprovalDate)}
-                      disable={commonSettings.setSiteHRSPOCApproval}
+                      disable={siteHrSpocBtnDisable}
                       maxDate={new Date()}
                       className={"email_dropdown"}
                       onChange={(e) =>
