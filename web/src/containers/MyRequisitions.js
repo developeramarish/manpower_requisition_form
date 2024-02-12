@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   changeDateFormat,
+  convertToDays,
   formatDateToYYYYMMDD,
   getData,
   getDataAPI,
@@ -15,15 +16,8 @@ import { legacy_createStore } from "redux";
 
 // const roleId = 4
 
-const convertToDays = (mrf) => {
-  const dateString = changeDateFormat(mrf.createdOnUtc);
-  const [year, month, day] = dateString.split("-").map(Number);
-  const createdDate = new Date(year, month - 1, day);
-  const today = new Date();
-  const timeDifference = today - createdDate;
-  const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
-
-  return <>{daysDifference} Days</>;
+const convertToDayBodytemplate = (mrf) => {
+  return <>{convertToDays(mrf)} Days</>;
 };
 
 const createdOnBodyTemplate = (mrf) => {
@@ -93,7 +87,7 @@ const MyRequisitions = ({ roleId, userId }) => {
     {
       field: "createdOnUtc",
       header: "MRF Open since",
-      body: convertToDays,
+      body: convertToDayBodytemplate,
       sortable: true,
     },
     {
