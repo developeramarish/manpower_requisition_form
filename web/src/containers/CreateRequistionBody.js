@@ -1966,7 +1966,7 @@ const CreateRequisitionBody = ({
 
           <div className="flex flex-wrap justify-content-end gap-5 mt-3">
             <ButtonC
-              label="Close"
+              label="Back"
               // className=" w-2 surface-hover border-red-600 text-red-600"
               className="cancel_btn"
               onClick={handleCancel}
