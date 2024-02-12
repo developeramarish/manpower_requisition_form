@@ -1,8 +1,8 @@
 .feed-popup {
 	font-weight: 500;
 	color: #0b1016;
-	width: 65%;
-    height: 50%;
+	width: 90%;
+    height: 88vh;
 }
 .feed-popup .p-dialog-content {
 	padding: 0;
@@ -14,6 +14,7 @@
 
 .no-feed {
 	width: 300px;
+	padding-top: 20px;
 	padding-bottom: 20px;
 	text-align: center;
 }
@@ -43,7 +44,10 @@
 	border-radius: 0.5rem;
 	background-color: white;
 	padding: 0.5rem;
-	/*height: 77vh;*/
+	width: 95%;
+	margin-left: 2%;
+	margin-right: 2%;
+	
 }
 
 
@@ -51,6 +55,7 @@
 .feed-table th {
 	font-size: 14px;
 	color: black;
+	background-color: rgb(14, 190, 132);
 	padding: 10px;
 	/* text-align: center; */
 }
@@ -83,16 +88,20 @@
 }
 
 .feed-col-round {
-	width: 10%;
+	width: 12%;
 }
 
 .feed-col-comments {
-	width: 90%;
+	width: 80%;
+	height: 10vh;
+	/* background-color: aqua; */
+	padding-right: 50%;
+	min-width: max-content;
 }
 
 .dvAddFeedback
-{
-	padding: 10px;
+{	
+	padding-left: 80px;
 }
 
 .dvinputFeedback
@@ -116,7 +125,7 @@
 
 
 .feedback-popup {
-	height: 70%;
+	height: 88vh;
 }
 
 .feedback-table {
@@ -156,6 +165,7 @@
 
   .viewfeedback-table {
 	width: 100%;
+	
 	border-collapse: collapse;
 	margin-top: 10px;
 	margin-left: 20px;
