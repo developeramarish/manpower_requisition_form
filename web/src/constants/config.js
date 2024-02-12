@@ -90,7 +90,7 @@ export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
  return  false;
 }
 export const CANDIDATE_STATUS_FOR_DISABLE =(candidatestatusId)=>{
-    if(candidatestatusId===3||candidatestatusId===4)
+    if( candidatestatusId===1 || candidatestatusId===3||candidatestatusId===4)
   {
     return  true;
   }
