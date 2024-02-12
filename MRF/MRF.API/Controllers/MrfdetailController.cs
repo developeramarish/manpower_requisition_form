@@ -674,9 +674,7 @@ namespace MRF.API.Controllers
                         string mrfOwerEmail = getEmail(request.UpdatedByEmployeeId);
                         string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-                        _emailService.SendEmailAsync(mrfOwerEmail,
-                            emailRequest.Subject, emailContent
-                           );
+                        _emailService.SendEmailAsync(mrfOwerEmail,emailRequest.Subject, emailContent);
                     }
                 }
             }
