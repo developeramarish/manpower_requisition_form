@@ -651,11 +651,11 @@ namespace MRF.API.Controllers
                 // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
                 mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-                  {
-                      emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+                {
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
-                      if (emailRequest != null)
-                      {
+                    if (emailRequest != null)
+                    {
                         //Send Email to HR
                         List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
 
@@ -671,12 +671,12 @@ namespace MRF.API.Controllers
 
 
                         //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(getEmail(request.UpdatedByEmployeeId),
-                            emailRequest.Subject,
-                            emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
+                        string mrfOwerEmail = getEmail(request.UpdatedByEmployeeId);
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+                        _emailService.SendEmailAsync(mrfOwerEmail,emailRequest.Subject, emailContent);
                     }
-                  }
+                }
             }
             else
             {

@@ -18,6 +18,7 @@ namespace MRF.API.Controllers
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
+        private string mrfUrl = string.Empty;
         public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment,  IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
@@ -81,6 +82,9 @@ namespace MRF.API.Controllers
                 {
                     try
                     {
+                        mrfUrl = _configuration["MRFUrl"].Replace("ID", MrfId.ToString());
+                        string emailContent = emailMaster.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetail.ReferenceNo}</span>")
+                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                         _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailMaster.Content);
                     }
                     catch (Exception ex)
