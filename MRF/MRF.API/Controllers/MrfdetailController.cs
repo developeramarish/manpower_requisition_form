@@ -648,7 +648,7 @@ namespace MRF.API.Controllers
                 CallMrfHistory(request, id, mrfstatus);
 
                 CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
-                // mrfid=id, empId=employeeId,currentStatus=request.MrfStatusId
+                
                 mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
