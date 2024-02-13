@@ -44,13 +44,13 @@ namespace MRF.Utility
             sendGridFromEmail = _configuration["SendGridSettings:FromEmail"];
             sendGridSenderName = _configuration["SendGridSettings:SenderName"];
         }
-        public async Task SendEmailAsync(string toEmail, string subject, string htmlContent, string attachmentPath = null)
+        public void SendEmailAsync(string toEmail, string subject, string htmlContent, string attachmentPath = null)
         {
             try
             {
                 if (IsSendGridEnabled())
                 {
-                    await SendEmailSendGrid(toEmail, subject, htmlContent, attachmentPath);
+                    SendEmailSendGrid(toEmail, subject, htmlContent, attachmentPath);
                 }
                 else
                 {
@@ -64,7 +64,7 @@ namespace MRF.Utility
             }
         }
 
-        public async Task SendEmailAsync(int senderId, string subject, string htmlContent, int mrfId)
+        public void SendEmailAsync(int senderId, string subject, string htmlContent, int mrfId)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace MRF.Utility
                 htmlContent = htmlContent.Replace("MRF#", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfRefNo}</span>");
                 if (IsSendGridEnabled())
                 {
-                    await SendEmailSendGrid(getUserEmail(senderId), subject, htmlContent);
+                    SendEmailSendGrid(getUserEmail(senderId), subject, htmlContent);
                 }
                 else
                 {
@@ -86,7 +86,7 @@ namespace MRF.Utility
             }
         }
 
-        private async Task SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath = null)
+        private void SendEmailSendGrid(string toEmail, string subject, string htmlContent, string? attachmentPath = null)
         {
             var msg = new SendGridMessage
             {
@@ -103,12 +103,13 @@ namespace MRF.Utility
                 msg.AddAttachment(Path.GetFileName(attachmentPath), Convert.ToBase64String(fileBytes));
             }
 
-            var response = await _sendGridClient.SendEmailAsync(msg);
+            var response = _sendGridClient.SendEmailAsync(msg).GetAwaiter().GetResult();
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Failed to send email using SendGrid. Status code: {response.StatusCode}");
             }
         }
+
 
         private void SendEmailSMTP(string receiverEmail, string subject, string body, string? attachmentPath = null)
         {
