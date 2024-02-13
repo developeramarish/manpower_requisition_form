@@ -67,7 +67,8 @@ namespace MRF.API.Controllers
             if (MrfStatus != null && EmpDetails != null)
                 try
                 {
-                    _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody); // TO DO : Discussion Required on Subject
+                    _logger.LogInfo("Sending Email to HOD / Finance Head /COO");
+                    _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody); 
                 }
                 catch (Exception ex)
                 {
