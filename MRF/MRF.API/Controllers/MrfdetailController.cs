@@ -644,7 +644,7 @@ namespace MRF.API.Controllers
                 _responseModel.Id = existingStatus.Id;
 
                 int nextMrfStatusId;
-                int employeeId=CallEmailApprovalController(request, id, false, out nextMrfStatusId);
+                int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId);
                 CallMrfHistory(request, id, mrfstatus);
 
                 CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
