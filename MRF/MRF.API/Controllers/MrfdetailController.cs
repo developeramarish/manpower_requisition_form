@@ -620,7 +620,7 @@ namespace MRF.API.Controllers
         public MrfdetaiResponseModel PartialUpdateMRFStatus(int id, [FromBody] MrfdetailRequestModel request)
         {
             var existingStatus = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
-
+            mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
             if (existingStatus != null)
             {
                 int mrfstatus = existingStatus.MrfStatusId;
@@ -649,23 +649,36 @@ namespace MRF.API.Controllers
                 int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId);
                 CallMrfHistory(request, id, mrfstatus);
 
-                CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
-                
-                mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
-                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
+
+                if (request.MrfStatusId == 8) // If MRF is rejected
                 {
+                    Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == 8);
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
+
+                    if (emailRequest != null)
+                    {   
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
+                    }
+                }
+                else
+                {
+                    
+                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
+                    
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
                     if (emailRequest != null)
                     {
                         //Send Email to HR
                         List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
-
-                        MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
-
                         foreach (var emailReq in emailList)
-                        {   
+                        {
                             _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 1");
+
+                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus = " + emailReq.Email);
+
                             _emailService.SendEmailAsync(emailReq.Email,
                                 emailRequest.Subject,
                                 emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
@@ -678,9 +691,16 @@ namespace MRF.API.Controllers
                         string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                         _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 2");
-                        _emailService.SendEmailAsync(mrfOwerEmail,emailRequest.Subject, emailContent);
+
+                        _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus = " + mrfOwerEmail);
+                        _emailService.SendEmailAsync(mrfOwerEmail, emailRequest.Subject, emailContent);
                     }
                 }
+
+                
+              
+                   
+                
             }
             else
             {

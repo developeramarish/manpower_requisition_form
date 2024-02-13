@@ -76,29 +76,32 @@ namespace MRF.API.Controllers
                     _logger.LogError($"Error while sending email: {ex}");
                 }
 
-            //var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == currentMrfStatusId);
-            //try
-            //{
-            //    List<EmailRecipient> emailList = SendEmailOnStatus(currentMrfStatusId, MrfId);
-            //    foreach (var emailReq in emailList)
-            //    {
-            //        try
-            //        {
-            //            mrfUrl = _configuration["MRFUrl"].Replace("ID", MrfId.ToString());
-            //            string emailContent = emailMaster.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetail.ReferenceNo}</span>")
-            //                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-            //            _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailMaster.Content);
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            _logger.LogError($"Error while sending email: {ex}");
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError($"Error while sending email: {ex}");
-            //}
+            var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == currentMrfStatusId);
+            try
+            {
+                List<EmailRecipient> emailList = SendEmailOnStatus(currentMrfStatusId, MrfId);
+                foreach (var emailReq in emailList)
+                {
+                    try
+                    {
+                        mrfUrl = _configuration["MRFUrl"].Replace("ID", MrfId.ToString());
+                        
+                        string emailContent = emailMaster.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetail.ReferenceNo}</span>")
+                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+                        _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition emailReq.Email = " + emailReq.Email);
+                        _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition  emailContent = " + emailContent);
+                        _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailContent);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error while sending email: {ex}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while sending email: {ex}");
+            }
 
             return mrfdetail;
         }
