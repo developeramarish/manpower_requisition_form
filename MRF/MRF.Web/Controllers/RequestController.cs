@@ -46,11 +46,12 @@ namespace MRF.Web.Controllers
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogInfo("Request Controller mrfID = "+ mrfID);
+                    _logger.LogInfo("Request Controller mrfID = " + mrfID);
                     _logger.LogInfo("Request Controller mrfStatusId = " + mrfStatusId);
                     _logger.LogInfo("Entered into Approve method");
                     await SendEmailAsync(mrfID, mrfStatusId);
-                    return Ok("MRF has been approved successfully!");
+                    ViewData["Message"] = "MRF has been approved successfully!";
+                    return View();
                 }
                 else
                 {
@@ -62,6 +63,7 @@ namespace MRF.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         private async Task SendEmailAsync(int mrfID, int mrfStatusId)
         {
@@ -99,15 +101,15 @@ namespace MRF.Web.Controllers
 
                 foreach (string strEmail in email)
                 {
-                    _logger.LogDebug($"SendEmailAsync email: {email}");
+                    _logger.LogDebug($"SendEmailAsync email: {strEmail}");
                     string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                          .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
-                   
-                        _logger.LogDebug($"SendEmailAsync strEmail: {strEmail}");
-                        _logger.LogDebug($"SendEmailAsync emailRequest.Subject: {emailRequest.Subject}");
-                        _logger.LogDebug($"SendEmailAsync htmlContent: {htmlContent}");
-                        
+
+                    _logger.LogDebug($"SendEmailAsync strEmail: {strEmail}");
+                    _logger.LogDebug($"SendEmailAsync emailRequest.Subject: {emailRequest.Subject}");
+                    _logger.LogDebug($"SendEmailAsync htmlContent: {htmlContent}");
+
 
                     using (MailMessage mailMessage = new MailMessage(senderEmail, strEmail, emailRequest.Subject, htmlContent))
                     {
@@ -202,7 +204,8 @@ namespace MRF.Web.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     await SendEmailAsync(mrfID, mrfStatusId);
-                    return Ok("MRF has been rejected successfully!");
+                    ViewData["Message"] = "MRF has been rejected successfully!";
+                    return View();
                 }
                 else
                 {

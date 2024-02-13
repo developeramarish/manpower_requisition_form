@@ -1,8 +1,31 @@
 ﻿
 @{
-    ViewData["Title"] = "Reject";
+    ViewData["Title"] = "Rejected";
 }
 
 <h1>Reject</h1>
 
-<div style="color:red">Rejected!</div>
+@if (ViewData["Message"] != null)
+{
+    <div class="container center-content">
+        <div class="row">
+            <div class="col text-center mt-5">
+                <img src="~/images/Rejected.png" class="img-fluid" alt="Rejected">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-center">
+                <div role="alert" style="font-weight: bold; font-family: Arial, sans-serif;">
+                    MRF has been rejected successfully!
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <div role="alert" style="font-weight: bold; font-family: Arial, sans-serif;">
+                    Confirmation has been sent to concerned persons!
+                </div>
+            </div>
+        </div>
+    </div>
+}
