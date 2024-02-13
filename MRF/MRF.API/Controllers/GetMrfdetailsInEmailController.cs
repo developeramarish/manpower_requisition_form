@@ -90,7 +90,7 @@ namespace MRF.API.Controllers
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                         _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition emailReq.Email = " + emailReq.Email);
                         _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition  emailContent = " + emailContent);
-                        _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailMaster.Content);
+                        _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailContent);
                     }
                     catch (Exception ex)
                     {
