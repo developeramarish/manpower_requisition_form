@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -656,11 +658,25 @@ namespace MRF.API.Controllers
                     Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == 8);
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
 
-                    if (emailRequest != null)
-                    {   
-                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                    List<int> RoleIds = new List<int>();
+                    RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
+
+                    List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+
+                    foreach (var emailReq in rejectedEmailList)
+                    {  
+                        _emailService.SendEmailAsync(emailReq.Email,
+                            emailRequest.Subject,
+                            emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                      .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
                     }
+
+                    //Send Email to MRF Owner
+                    string mrfOwerEmail = getEmail(request.UpdatedByEmployeeId);
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+
+                    _emailService.SendEmailAsync(mrfOwerEmail, emailRequest.Subject, emailContent);
                 }
                 else
                 {
@@ -690,9 +706,7 @@ namespace MRF.API.Controllers
                         string mrfOwerEmail = getEmail(request.UpdatedByEmployeeId);
                         string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-                        _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 2");
-
-                        _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus = " + mrfOwerEmail);
+                       
                         _emailService.SendEmailAsync(mrfOwerEmail, emailRequest.Subject, emailContent);
                     }
                 }
