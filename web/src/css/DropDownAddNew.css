@@ -1,10 +1,19 @@
 .p-dropdown-filter-container:after {
-  content: "Add";
-  top: 10px;
+  top: 7px;
   position: absolute;
   right: 10px;
-  background-color: #fff;
+  /* background-color: #d32f2e; */
 }
-.p-dropdown-filter-container svg {
+
+
+.p-dropdown-filter-container.add-enabled:after {
+  content: "Add";
+  background-color: #d32f2e;
+  color: rgb(255, 255, 255);
+  padding: 1px 3px 1px 3px;
+  border-radius: 3px;
+
+}
+.p-dropdown-filter-container.add-enabled svg {
   display: none;
 }
