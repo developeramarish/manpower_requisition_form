@@ -106,7 +106,7 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Feedback Submission");
                 if (emailRequest != null)
                 {
-                    _logger.LogInfo(ControllerContext.ActionDescriptor.ControllerName);
+                    _logger.LogInfo("Sending Email from MrffeedbackResponseModel Post");
                     _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                 }
             }
