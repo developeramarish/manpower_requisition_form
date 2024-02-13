@@ -661,22 +661,19 @@ namespace MRF.API.Controllers
                     List<int> RoleIds = new List<int>();
                     RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
 
+                    string emailSubject = emailRequest.Subject.Replace("#", $" Id {mrfdetails.ReferenceNo}");
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                      .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+
                     List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
 
                     foreach (var emailReq in rejectedEmailList)
-                    {  
-                        _emailService.SendEmailAsync(emailReq.Email,
-                            emailRequest.Subject,
-                            emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
+                    {
+                        _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
                     }
 
                     //Send Email to MRF Owner
-                    string mrfOwerEmail = getEmail(request.UpdatedByEmployeeId);
-                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-
-                    _emailService.SendEmailAsync(mrfOwerEmail, emailRequest.Subject, emailContent);
+                    _emailService.SendEmailAsync(getEmail(request.UpdatedByEmployeeId), emailSubject, emailContent);
                 }
                 else
                 {
