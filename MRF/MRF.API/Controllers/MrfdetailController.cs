@@ -137,6 +137,7 @@ namespace MRF.API.Controllers
 
                         foreach (var emailReq in emailList)
                         {
+                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel Post");
                             _emailService.SendEmailAsync(emailReq.Email,
                                 emailRequest.Subject,
                                 emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
@@ -145,6 +146,7 @@ namespace MRF.API.Controllers
                     }
 
                     //Send Email to MRF Owner
+                    _logger.LogInfo("Sending Email from MrfdetaiResponseModel Post 1");
                     _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
@@ -662,7 +664,8 @@ namespace MRF.API.Controllers
                         MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
 
                         foreach (var emailReq in emailList)
-                        {
+                        {   
+                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 1");
                             _emailService.SendEmailAsync(emailReq.Email,
                                 emailRequest.Subject,
                                 emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
@@ -674,6 +677,7 @@ namespace MRF.API.Controllers
                         string mrfOwerEmail = getEmail(request.UpdatedByEmployeeId);
                         string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+                        _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 2");
                         _emailService.SendEmailAsync(mrfOwerEmail,emailRequest.Subject, emailContent);
                     }
                 }

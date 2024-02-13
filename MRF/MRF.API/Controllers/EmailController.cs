@@ -43,7 +43,7 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == Status);
 
                 if (emailRequest != null)
-                {
+                {   
                     _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     _logger.LogInfo("Email sent successfully.");
                     return Ok("Email sent successfully.");
