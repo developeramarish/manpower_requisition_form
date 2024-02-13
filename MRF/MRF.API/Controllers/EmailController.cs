@@ -44,6 +44,7 @@ namespace MRF.API.Controllers
 
                 if (emailRequest != null)
                 {
+                    _logger.LogInfo(ControllerContext.ActionDescriptor.ControllerName);
                     _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     _logger.LogInfo("Email sent successfully.");
                     return Ok("Email sent successfully.");

@@ -124,6 +124,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
                     if (emailRequest != null)
                     {
+                        _logger.LogInfo(ControllerContext.ActionDescriptor.ControllerName);
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }
@@ -280,6 +281,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Delete User");
                     if (emailRequest != null)
                     {
+                        _logger.LogInfo(ControllerContext.ActionDescriptor.ControllerName);
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }

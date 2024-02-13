@@ -100,6 +100,7 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "update MRF");
                 if (emailRequest != null)
                 {
+                    _logger.LogInfo(ControllerContext.ActionDescriptor.ControllerName);
                     _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                 }
             }

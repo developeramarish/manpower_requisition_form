@@ -68,6 +68,7 @@ namespace MRF.API.Controllers
                 try
                 {
                     _logger.LogInfo("Sending Email to HOD / Finance Head /COO");
+                    _logger.LogInfo(ControllerContext.ActionDescriptor.ControllerName);
                     _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody); 
                 }
                 catch (Exception ex)
