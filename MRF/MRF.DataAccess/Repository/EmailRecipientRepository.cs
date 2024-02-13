@@ -38,18 +38,19 @@ namespace MRF.DataAccess.Repository
                                                };
             return query.ToList();
         }
-
+    
         public List<EmailRecipient> GetEmailRecipient(int? MrfStatusId, string? MrfStatus, int? MrfId)
         {
             var emailMasterQuery = _db.emailmaster.AsQueryable();
 
             if (MrfStatusId.HasValue)
             {
-                emailMasterQuery = emailMasterQuery.Where(mrfDetails => mrfDetails.statusId == MrfStatusId);
+                Mrfstatusmaster mrfStatus = _db.Mrfstatusmaster.SingleOrDefault(e => e.Id == MrfStatusId);
+                emailMasterQuery = emailMasterQuery.Where(e => e.status == mrfStatus.Status);
             }
             else if (!string.IsNullOrEmpty(MrfStatus))
             {
-                emailMasterQuery = emailMasterQuery.Where(mrfDetails => mrfDetails.status == MrfStatus);
+                emailMasterQuery = emailMasterQuery.Where(e => e.status == MrfStatus);
             }
 
             var roleId = emailMasterQuery.Select(mrfDetails => mrfDetails.roleId).FirstOrDefault();
