@@ -74,7 +74,23 @@ namespace MRF.DataAccess.Repository
             return query.ToList();
         }
 
+        public List<EmailRecipient> GetEmployeeEmailByRoleIds(List<int> roleId)
+        {
 
+            IQueryable<EmailRecipient> query = from ed in _db.Employeedetails
+                                               where _db.Employeerolemap
+                                                         .Where(erm => roleId.Contains(erm.RoleId))
+                                                         .Select(erm => erm.EmployeeId)
+                                                         .Contains(ed.Id)
+                                               select new EmailRecipient
+                                               {
+                                                   Email = ed.Email
+                                               };
+
+            return query.ToList();
+
+
+        }
 
         public List<EmailRecipient> GetEmployeeEmail(string empRole)
         {
