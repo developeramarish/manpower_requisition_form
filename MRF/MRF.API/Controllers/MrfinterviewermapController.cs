@@ -109,6 +109,7 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");
                 if (emailRequest != null)
                 {
+                    _logger.LogInfo("Sending Email from MrfinterviewermapResponseModel Post");
                     _emailService.SendEmailAsync(Convert.ToInt32(request.InterviewerEmployeeId),
                       emailRequest.Subject,
                       emailRequest.Content,
@@ -178,6 +179,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
                     if (emailRequest != null)
                     {
+                        _logger.LogInfo("Sending Email from MrfinterviewermapController Delete");
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }
@@ -212,6 +214,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
                     if (emailRequest != null)
                     {
+                        _logger.LogInfo("Sending Email from MrfinterviewermapController DeleteMRFInterview");
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }

@@ -110,9 +110,9 @@ const response=await result.json();
                       </thead>
                       <tbody>
                         {dataItem.resultGroups.map((group, i) => (
-                          <tr key={i}>
-                            <td>{group.feedBack}</td>
-                            <td>{group.comment}</td>
+                          <tr  key={i}>
+                            <td className="feed-col-round">{group.feedBack}</td>
+                            <td className="feed-col-comments">{group.comment}</td>
                           </tr>
                         ))}
                       </tbody>

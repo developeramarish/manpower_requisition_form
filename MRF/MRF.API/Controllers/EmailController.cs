@@ -36,15 +36,15 @@ namespace MRF.API.Controllers
         [SwaggerOperation(Summary = "Sends an email.")]
         [SwaggerResponse(200, "Email sent successfully.")]
         [SwaggerResponse(500, "Internal server error.")]
-        public async Task<IActionResult> SendEmail(string Status)
+        public IActionResult SendEmail(string Status)
         {
             try
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == Status);
 
                 if (emailRequest != null)
-                {
-                    await _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                {   
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     _logger.LogInfo("Email sent successfully.");
                     return Ok("Email sent successfully.");
                 }

@@ -18,6 +18,7 @@ namespace MRF.API.Controllers
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
+        private string mrfUrl = string.Empty;
         public GetMrfdetailsInEmailController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment,  IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
@@ -66,7 +67,9 @@ namespace MRF.API.Controllers
             if (MrfStatus != null && EmpDetails != null)
                 try
                 {
-                    _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody); // TO DO : Discussion Required on Subject
+                    _logger.LogInfo("Sending Email to HOD / Finance Head /COO");
+                    _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition");
+                    _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody); 
                 }
                 catch (Exception ex)
                 {
@@ -81,7 +84,13 @@ namespace MRF.API.Controllers
                 {
                     try
                     {
-                        _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailMaster.Content);
+                        mrfUrl = _configuration["MRFUrl"].Replace("ID", MrfId.ToString());
+                        
+                        string emailContent = emailMaster.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetail.ReferenceNo}</span>")
+                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+                        _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition emailReq.Email = " + emailReq.Email);
+                        _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition  emailContent = " + emailContent);
+                        _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailContent);
                     }
                     catch (Exception ex)
                     {

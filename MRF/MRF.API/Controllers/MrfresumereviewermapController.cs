@@ -105,6 +105,7 @@ namespace MRF.API.Controllers
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
                 if (emailRequest != null)
                 {
+                    _logger.LogInfo("Sending Email from MrfresumereviewermapResponseModel Post");
                     _emailService.SendEmailAsync(Convert.ToInt32(request.ResumeReviewerEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content,
@@ -174,6 +175,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
                     if (emailRequest != null)
                     {
+                        _logger.LogInfo("Sending Email from MrfresumereviewermapController Delete");
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }
@@ -207,6 +209,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
                     if (emailRequest != null)
                     {
+                        _logger.LogInfo("Sending Email from MrfresumereviewermapController DeletebyMRFId");
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }
