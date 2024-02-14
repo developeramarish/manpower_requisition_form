@@ -222,7 +222,7 @@ const CreateRequisitionBody = ({
     const textWithoutTags = removeHtmlTags(val);
     if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
       setFormData({ ...formData, skills: val });
-    } 
+    }
   };
   let remaningCharacterSkills = 0;
   if (formData) {
@@ -2081,17 +2081,29 @@ const CreateRequisitionBody = ({
                           label="Add Resume"
                           className="w-2 bg-red-600 border-red-600"
                           onClick={() => {
-                            dispatch(
-                              PAGE_ACTIONS.setParams({
-                                params: {
-                                  mrfId: getReqId,
-                                  referenceNo: formData.referenceNo,
-                                },
-                              })
+                            // dispatch(
+                            //   PAGE_ACTIONS.setParams({
+                            //     params: {
+                            //       mrfId: getReqId,
+                            //       referenceNo: formData.referenceNo,
+                            //     },
+                            //   })
+                            // );
+
+                            let data = {
+                              mrfId: getReqId,
+                              mrfRefenceNo: formData.referenceNo,
+                            };
+
+                            let mrfDataAddcandidate = JSON.stringify(data);
+
+                            sessionStorage.setItem(
+                              "mrfAddcandidate",
+                              mrfDataAddcandidate
                             );
+
                             navigateTo("add_candidate");
                           }}
-                          // disable="true"
                         />
                       </>
                     );

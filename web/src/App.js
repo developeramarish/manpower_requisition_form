@@ -181,8 +181,8 @@ function App() {
                 {currentPageKey === "employee_edit" && <EmployeeDtailsEdit />}
                 {currentPageKey === "add_candidate" && (
                   <AddCandidate
-                    reqId={params.mrfId}
-                    referenceNo={params.referenceNo}
+                    // reqId={params.mrfId}
+                    // referenceNo={params.referenceNo}
                   />
                 )}
                 {currentPageKey === "create_requisition" && (
