@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import InputTextCp from "./../components/Textbox";
 import ButtonC from "./../components/Button";
 import ToastMessages from "./../components/ToastMessages";
-import SingleFileUpload from "./../components/FileUpload";
 import { storageService } from "../constants/storage";
+import "../css/FileUploads.css";
 import {
   getDataAPI,
   navigateTo,
@@ -15,6 +15,7 @@ import { InputMask } from "primereact/inputmask";
 import { API_URL, COUNTRIES, emailRegex } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
 import LoadingSpinner from "../components/LoadingSpinner";
+import FileUploads from "../components/FileUploads";
 
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
@@ -22,12 +23,18 @@ const AddCandidate = (reqId) => {
   const [submitBtnDisable, setSubmitBtnDisable] = useState(false);
   const [mask, setMask] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const fileUploadRef = useRef(null);
+
+  let Data = sessionStorage.getItem("mrfAddcandidate");
+
+  let mrfData = JSON.parse(Data);
+
   const handleFileChange = (event) => {
     setSelectedFile(event);
   };
   const formSchema = {
     id: 0,
-    mrfId: reqId.reqId,
+    mrfId: mrfData.mrfId,
     name: "",
     emailId: "",
     countrycode: 0,
@@ -76,7 +83,6 @@ const AddCandidate = (reqId) => {
     )}`;
     toastRef.current.showWarrningMessage(errorMessage);
   };
-
   const handleEmail = (e) => {
     const emailValue = formData.emailId;
     if (!emailRegex.test(emailValue)) {
@@ -117,7 +123,10 @@ const AddCandidate = (reqId) => {
             name: formData.name,
             emailId: formData.emailId,
             contactNo: formData.contactNo,
-            resumePath:(selectedFile.type==="application/pdf")?removeSpaces(formData.name) + ".pdf" :removeSpaces(formData.name) + ".docx",
+            resumePath:
+              selectedFile.type === "application/pdf"
+                ? removeSpaces(formData.name) + ".pdf"
+                : removeSpaces(formData.name) + ".docx",
             candidateStatusId: 1,
             reviewedByEmployeeIds: "",
             createdByEmployeeId: formData.createdByEmployeeId,
@@ -143,10 +152,12 @@ const AddCandidate = (reqId) => {
                 toastRef.current.showSuccessMessage(
                   "Form submitted successfully!"
                 );
-                setTimeout(() => {
-                  navigateTo("my_requisition");
-                }, 1000);
+                //here is succesfull full api call
                 setIsLoading(false);
+                setSubmitBtnDisable(false);
+                setFormData(formSchema);
+
+                fileUploadRef.current.clearSelectedFile();
               }
             } else {
               console.error("Request failed with status:", response.status);
@@ -214,7 +225,7 @@ const AddCandidate = (reqId) => {
             >
               <h4 className="text-xl my-2">
                 Reference Number :
-                <span className="text-red-600"> {reqId.referenceNo}</span>
+                <span className="text-red-600">{mrfData.mrfRefenceNo} </span>
               </h4>
               <div className="flex justify-content-between gap-5">
                 <div className="flex flex-column w-6 gap-2">
@@ -269,7 +280,7 @@ const AddCandidate = (reqId) => {
                         className="w-full md:w-13rem"
                       />
                     </div>
-                    <div className="flex flex-column  ">
+                    <div className="flex flex-column  gap-1 ">
                       <InputMask
                         mask={mask}
                         value={formData.contactNo}
@@ -309,7 +320,8 @@ const AddCandidate = (reqId) => {
                   Resume
                   <RedAsterisk />
                 </label>
-                <SingleFileUpload
+                <FileUploads
+                  ref={fileUploadRef}
                   onChange={handleFileChange}
                   fileExtension={"pdf ,docx "}
                 />
@@ -318,7 +330,7 @@ const AddCandidate = (reqId) => {
 
             <div className="flex flex-wrap justify-content-end gap-5 mt-3">
               <ButtonC
-                label="CANCEL"
+                label="Back"
                 outlined
                 className="cancel_btn"
                 onClick={handleCancel}
@@ -331,7 +343,7 @@ const AddCandidate = (reqId) => {
                 onClick={() => handleSubmit()}
               />
               {isLoading && <LoadingSpinner />}
-              <ToastMessages ref={toastRef} />
+              <ToastMessages ref={toastRef} position="bottom-center" />
             </div>
           </div>
         </div>

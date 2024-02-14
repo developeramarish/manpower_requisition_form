@@ -2,13 +2,13 @@ import { Dialog } from "primereact/dialog";
 import React, { useRef, useState } from "react";
 import ButtonC from "./../components/Button";
 import { storageService } from "../constants/storage";
-import SingleFileUpload from "./../components/FileUpload";
 import { API_URL } from "../constants/config";
 import { navigateTo, removeSpaces, postData } from "../constants/Utils";
 import ToastMessages from "./../components/ToastMessages";
 import { Divider } from "primereact/divider";
 import InputTextareaComponent from "../components/InputTextarea";
 import LoadingSpinner from "../components/LoadingSpinner";
+import FileUploads from "../components/FileUploads";
 
 const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -17,8 +17,8 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
   const [urlValue, setUrlValue] = useState("");
   const [disableUploadFile, setDisableUploadFile] = useState(false);
   const [disableUrlTextBox, setDisableUrlTextBox] = useState(false);
-const [isLoading,setIsLoading]=useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const fileUploadRef = useRef(null);
   const handleFileChange = (event) => {
     setSelectedFile(event);
     console.log(selectedFile);
@@ -53,7 +53,7 @@ const [isLoading,setIsLoading]=useState(false);
         const uploadData = {
           id: 0,
           interviewEvaluationId: interviewEvaluationIDD,
-          filePath: disableUrlTextBox==false? urlValue:fileName+ ".docx",
+          filePath: disableUrlTextBox == false ? urlValue : fileName + ".docx",
           createdByEmployeeId: storageService.getData("profile").employeeId,
           createdOnUtc: new Date().toISOString(),
           updatedByEmployeeId: storageService.getData("profile").employeeId,
@@ -82,8 +82,8 @@ const [isLoading,setIsLoading]=useState(false);
               toastRef.current.showBadRequestMessage(
                 "Bad request: " + response.url
               );
-                }
-               setSubmitBtnDisable(false);
+            }
+            setSubmitBtnDisable(false);
             setIsLoading(false);
           }
         } catch (error) {
@@ -104,7 +104,7 @@ const [isLoading,setIsLoading]=useState(false);
     } catch (error) {
       console.error("Error:", error);
       setSubmitBtnDisable(false);
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -115,6 +115,7 @@ const [isLoading,setIsLoading]=useState(false);
   };
   const handleReset = () => {
     setUrlValue("");
+    fileUploadRef.current.clearSelectedFile();
     setSelectedFile(null);
     setDisableUploadFile(false);
     setDisableUrlTextBox(false);
@@ -130,7 +131,8 @@ const [isLoading,setIsLoading]=useState(false);
         className="w-6 h-23rem"
       >
         <div className="mt-3 mb-5">
-          <SingleFileUpload
+          <FileUploads
+            ref={fileUploadRef}
             onChange={handleFileChange}
             fileExtension={"docx "}
             disable={disableUploadFile}
@@ -161,9 +163,10 @@ const [isLoading,setIsLoading]=useState(false);
           label={"Reset"}
           className={"cancel_btn ml-2"}
           onClick={handleReset}
-        /> {isLoading && <LoadingSpinner />}  
+        />
+        {isLoading && <LoadingSpinner />}
       </Dialog>
-     
+
       <ToastMessages ref={toastRef} />
     </>
   );
