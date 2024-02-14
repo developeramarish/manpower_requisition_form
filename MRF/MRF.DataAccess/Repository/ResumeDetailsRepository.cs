@@ -61,6 +61,7 @@ namespace MRF.DataAccess.Repository
                   on new { MrfId = mrfDetails.Id, IsEmptyReview = candidate.ReviewedByEmployeeIds == "" }
                   equals new { resume.MrfId, IsEmptyReview = true } into resumeJoin
              from resume in resumeJoin.DefaultIfEmpty()
+             orderby candidate.UpdatedOnUtc descending
              where mrfDetails.Id == mrfId
              select new ResumeDetailsViewModel
              {
@@ -108,6 +109,7 @@ namespace MRF.DataAccess.Repository
                              equals new { resume.MrfId, IsEmptyReview = true } into resumeJoin
                         from resume in resumeJoin.DefaultIfEmpty()
                         where candidate.ReviewedByEmployeeIds != "" && candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))
+                        orderby candidate.UpdatedOnUtc descending
                         select new ResumeDetailsViewModel
                         {
                             MrfId = mrfDetails.Id,
