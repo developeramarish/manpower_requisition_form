@@ -7,8 +7,19 @@ import ToastMessages from "../components/ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "../components/multiselectDropdown";
-import { API_URL, CANDIDATE_STATUS_FOR_DISABLE, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
-import { changeDateFormat, getDataAPI, putData, strToArray } from "../constants/Utils";
+import {
+  API_URL,
+  CANDIDATE_STATUS_FOR_DISABLE,
+  FILE_URL,
+  MRF_STATUS_FOR_DISABLE,
+  ROLES,
+} from "../constants/config";
+import {
+  changeDateFormat,
+  getDataAPI,
+  putData,
+  strToArray,
+} from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -27,36 +38,32 @@ const ResumeSummary = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    
-    const fetchData = async() => {
-    try {
-
-      let result=await getDataAPI(`${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`)
-let response=await result.json();
-          if (roleId === ROLES.interviewer) {
-            var filterInterviewerResumtSumData = [];
-            response.result.resumeDetails.map((res) => {
-              if (res.candidatestatus === "Shortlisted") {
-                filterInterviewerResumtSumData.push(res);
-              }
-            });
-            setdata(filterInterviewerResumtSumData);
-          } else {
-            setdata(response.result.resumeDetails);
-          }
-          setResumeReviewer(response.result.employeeRoleMap);
-          let array = new Array(response.result.resumeDetails.length).fill(false);
-          setSaveBttn(array);
-        
-        
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  fetchData();
+    const fetchData = async () => {
+      try {
+        let result = await getDataAPI(
+          `${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`
+        );
+        let response = await result.json();
+        if (roleId === ROLES.interviewer) {
+          var filterInterviewerResumtSumData = [];
+          response.result.resumeDetails.map((res) => {
+            if (res.candidatestatus === "Shortlisted") {
+              filterInterviewerResumtSumData.push(res);
+            }
+          });
+          setdata(filterInterviewerResumtSumData);
+        } else {
+          setdata(response.result.resumeDetails);
+        }
+        setResumeReviewer(response.result.employeeRoleMap);
+        let array = new Array(response.result.resumeDetails.length).fill(false);
+        setSaveBttn(array);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
   }, [mrfId]);
-
-  
 
   // if (data.length < 1) {
   //   return (
@@ -72,53 +79,57 @@ let response=await result.json();
   //   );
   // }
 
-
-
   const MultiSelectDrop = (rowData, options) => {
- 
-    if (roleId === ROLES.hr || roleId === ROLES.resumeReviwer || roleId === ROLES.interviewer ) {
-       if(!rowData.resumeReviewerName){
-        return (<div><p className="resume-col">To be Updated</p></div>)
-       }
-      
+    if (
+      roleId === ROLES.hr ||
+      roleId === ROLES.resumeReviwer ||
+      roleId === ROLES.interviewer
+    ) {
+      if (!rowData.resumeReviewerName) {
+        return (
+          <div>
+            <p className="resume-col">To be Updated</p>
+          </div>
+        );
+      }
+
       return (
         <div>
           <p className="resume-col">{rowData.resumeReviewerName}</p>
         </div>
       );
-    } 
-    else 
-    {
-    return (
-      <div>
-        <MultiSelectDropdown
-          id="resumeReviewerEmployeeIds"
-          value={arrayToObj(
-            resumeReviewer,
-            strToArray(rowData.resumeReviewerEmployeeIds)
-          )}
-          onChange={(e) => {
-            let resumeReviewers = JSON.parse(JSON.stringify(data));
-            let sv = [...saveBttn];
-            sv[options.rowIndex] = e.value.length > 0 ? true : false;
-            resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
-              objToArray(e.value);
-            setdata(resumeReviewers);
-            setSaveBttn(sv);
-          }}
-          options={resumeReviewer}
-          optionLabel="name"
-          filter
-          placeholder="Select Reviewer"
-          className="w-full md:w-20rem "
-          disable={MRF_STATUS_FOR_DISABLE(roleId,rowData.mrfStatus)||
-             CANDIDATE_STATUS_FOR_DISABLE(rowData.candidateStatusId)}
-           
-        />
-      </div>     
-    );
-  }
-};
+    } else {
+      return (
+        <div>
+          <MultiSelectDropdown
+            id="resumeReviewerEmployeeIds"
+            value={arrayToObj(
+              resumeReviewer,
+              strToArray(rowData.resumeReviewerEmployeeIds)
+            )}
+            onChange={(e) => {
+              let resumeReviewers = JSON.parse(JSON.stringify(data));
+              let sv = [...saveBttn];
+              sv[options.rowIndex] = e.value.length > 0 ? true : false;
+              resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
+                objToArray(e.value);
+              setdata(resumeReviewers);
+              setSaveBttn(sv);
+            }}
+            options={resumeReviewer}
+            optionLabel="name"
+            filter
+            placeholder="Select Reviewer"
+            className="w-full md:w-20rem "
+            disable={
+              MRF_STATUS_FOR_DISABLE(roleId, rowData.mrfStatus) ||
+              CANDIDATE_STATUS_FOR_DISABLE(rowData.candidateStatusId)
+            }
+          />
+        </div>
+      );
+    }
+  };
 
   const arrayToObj = (options = [], selectedOpt) => {
     if (Array.isArray(selectedOpt)) {
@@ -233,7 +244,7 @@ let response=await result.json();
       // <p className="resume-reason-col">{resume.reason}</p>
     );
   };
- 
+
   let columns = [
     {
       header: "Sr.No",
@@ -252,6 +263,12 @@ let response=await result.json();
       header: "Resume",
       body: resumeBodyTemplate,
       bodyClassName: " resume-col ",
+      sortable: true,
+    },
+    {
+      field: "createdName",
+      header: "Uploaded By",
+      bodyClassName: "resume-ref-col resume-col",
       sortable: true,
     },
     {
@@ -297,36 +314,35 @@ let response=await result.json();
   }
 
   const DataTableResume = ({ value, columns }) => {
-
-    return (<>
-      <DataTable
-        value={value}
-        paginator={value.length > 5}
-        rows={10}
-        scrollable
-        draggable={false}
-        scrollHeight="flex"
-      >
-        {columns.map((col) => (
-          <Column
-            field={col.field}
-            header={col.header}
-            body={col.body}
-            bodyClassName={"resume-col" + col.bodyClassName}
-            sortable={col.sortable}
-          />
-        ))}
-      </DataTable>
-      <ToastMessages ref={toastRef} />
+    return (
+      <>
+        <DataTable
+          value={value}
+          paginator={value.length > 5}
+          rows={10}
+          scrollable
+          draggable={false}
+          scrollHeight="flex"
+        >
+          {columns.map((col) => (
+            <Column
+              field={col.field}
+              header={col.header}
+              body={col.body}
+              bodyClassName={"resume-col" + col.bodyClassName}
+              sortable={col.sortable}
+            />
+          ))}
+        </DataTable>
+        <ToastMessages ref={toastRef} />
       </>
     );
   };
 
   return (
     <>
-    
       {/* if roleId is equal to this then it will show dialog box otherwise show data table*/}
-      {(roleId != ROLES.resumeReviwer) && (
+      {roleId != ROLES.resumeReviwer && (
         <>
           <Dialog
             header={
@@ -347,26 +363,26 @@ let response=await result.json();
             draggable={false}
             className="resume-card"
           >
-           <DataTable
-        value={data}
-        paginator={data.length > 5}
-        rows={10}
-        scrollable
-        draggable={false}
-        scrollHeight="flex"
-      >
-        {columns.map((col) => (
-          <Column
-            field={col.field}
-            header={col.header}
-            body={col.body}
-            bodyClassName={"resume-col" + col.bodyClassName}
-            sortable={col.sortable}
-          />
-        ))}
-      </DataTable>
-      {isLoading && <LoadingSpinner />}  
-      <ToastMessages ref={toastRef} />
+            <DataTable
+              value={data}
+              paginator={data.length > 5}
+              rows={10}
+              scrollable
+              draggable={false}
+              scrollHeight="flex"
+            >
+              {columns.map((col) => (
+                <Column
+                  field={col.field}
+                  header={col.header}
+                  body={col.body}
+                  bodyClassName={"resume-col" + col.bodyClassName}
+                  sortable={col.sortable}
+                />
+              ))}
+            </DataTable>
+            {isLoading && <LoadingSpinner />}
+            <ToastMessages ref={toastRef} />
           </Dialog>
         </>
       )}
@@ -375,7 +391,6 @@ let response=await result.json();
         <>
           <div className="resume-summary-table">
             <DataTableResume value={data} columns={columns} />
-
           </div>
         </>
       )}
