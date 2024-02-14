@@ -3,6 +3,7 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
 using MRF.Utility;
 using Newtonsoft.Json.Linq;
+using SendGrid.Helpers.Mail.Model;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
@@ -40,15 +41,10 @@ namespace MRF.Web.Controllers
         {
             try
             {
-                _logger.LogInfo("Entered into Approve method");
-
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogInfo("Request Controller mrfID = " + mrfID);
-                    _logger.LogInfo("Request Controller mrfStatusId = " + mrfStatusId);
-                    _logger.LogInfo("Entered into Approve method");
                     await SendEmailAsync(mrfID, mrfStatusId);
                     ViewData["Message"] = "MRF has been approved successfully!";
                     return View();
@@ -68,15 +64,10 @@ namespace MRF.Web.Controllers
         private async Task SendEmailAsync(int mrfID, int mrfStatusId)
         {
             try
-            {
-                _logger.LogDebug($"SendEmailAsync MRF ID: {mrfID}");
-                _logger.LogDebug($"SendEmailAsync mrfStatusId: {mrfStatusId}");
+            {              
                 Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
-
-                Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);
-                _logger.LogDebug($"SendEmailAsync mrfstatusmaster.Status: {mrfstatusmaster.Status}");
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
-                _logger.LogDebug($"SendEmailAsync emailRequest.roleId: {emailRequest.roleId}");
+                Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);              
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);            
                 string[] roleIdStrings = emailRequest.roleId.Split(',');
                 List<int> roleIds = new List<int>();
 
@@ -89,7 +80,7 @@ namespace MRF.Web.Controllers
                 }
 
                 mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
-                _logger.LogDebug($"SendEmailAsync mrfUrl: {mrfUrl}");
+                
                 List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
                                       where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
                                              where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
@@ -99,19 +90,24 @@ namespace MRF.Web.Controllers
                                              select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
                                       select employeeDetails.Email).ToList();
 
-                foreach (string strEmail in email)
-                {
-                    _logger.LogDebug($"SendEmailAsync email: {strEmail}");
-                    string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                          .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
-
-                    _logger.LogDebug($"SendEmailAsync strEmail: {strEmail}");
-                    _logger.LogDebug($"SendEmailAsync emailRequest.Subject: {emailRequest.Subject}");
-                    _logger.LogDebug($"SendEmailAsync htmlContent: {htmlContent}");
-
-
+                //Send Email to MRF Owner
+                foreach (string strEmail in email)
+                {   
                     using (MailMessage mailMessage = new MailMessage(senderEmail, strEmail, emailRequest.Subject, htmlContent))
+                    {
+                        mailMessage.IsBodyHtml = true;
+                     //   smtpClient.Send(mailMessage);
+                    }
+                }
+                //Send Email to HR
+                List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
+
+                foreach (var emailReq in emailList)
+                {
+                    using (MailMessage mailMessage = new MailMessage(senderEmail, emailReq.Email, emailRequest.Subject, htmlContent))
                     {
                         mailMessage.IsBodyHtml = true;
                         smtpClient.Send(mailMessage);
@@ -128,23 +124,15 @@ namespace MRF.Web.Controllers
         private async Task<HttpResponseMessage> ChangeMrfStatusAsync(int mrfID, int mrfStatusId, int updatedByEmployeeId)
         {
             try
-            {
-                _logger.LogInfo("mrfID = " + mrfID);
-                _logger.LogInfo("mrfStatusId = " + mrfStatusId);
-                _logger.LogInfo("updatedByEmployeeId = " + updatedByEmployeeId);
+            {               
                 using (var httpClientHandler = new HttpClientHandler())
-                {
-                    _logger.LogInfo("ServerCertificateCustomValidationCallback - Start");
+                { 
                     httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-                    _logger.LogInfo("ServerCertificateCustomValidationCallback - End");
                     using (var client = new HttpClient(httpClientHandler))
                     {
-                        _logger.LogInfo("GetAccessToken - Start");
                         var accessToken = GetAccessToken();
-                        _logger.LogInfo("GetAccessToken - End");
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);                        
                         var apiUrl = _configuration["AppUrl"] + mrfID;
-                        _logger.LogInfo("apiUrl = " + apiUrl);
                         var requestBody = new
                         {
                             mrfID = mrfID,
@@ -154,10 +142,8 @@ namespace MRF.Web.Controllers
                         };
 
                         string jsonPayloadString = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
-                        _logger.LogInfo("jsonPayloadString = " + jsonPayloadString);
                         StringContent content = new StringContent(jsonPayloadString, Encoding.UTF8, "application/json");
                         HttpResponseMessage response = await client.PutAsync(apiUrl, content);
-                        _logger.LogInfo("response = " + response);
                         return response;
                     }
                 }
@@ -217,7 +203,6 @@ namespace MRF.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
         public async Task<IActionResult> Bypass([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
         {
             try
