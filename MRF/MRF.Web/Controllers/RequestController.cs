@@ -99,7 +99,7 @@ namespace MRF.Web.Controllers
                     using (MailMessage mailMessage = new MailMessage(senderEmail, strEmail, emailRequest.Subject, htmlContent))
                     {
                         mailMessage.IsBodyHtml = true;
-                     //   smtpClient.Send(mailMessage);
+                        smtpClient.Send(mailMessage);
                     }
                 }
                 //Send Email to HR
