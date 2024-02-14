@@ -7,6 +7,7 @@ using MRF.Models.ViewModels;
 using MRF.Utility;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Runtime.Remoting;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -726,12 +727,31 @@ namespace MRF.API.Controllers
             try
             {
                 Mrfdetails? obj = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
-                Freshmrfdetails? freashmrf = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == id);
+                Freshmrfdetails?   freshMrf = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == id);
                 MrfEmailApproval email = _unitOfWork.MrfEmailApproval.Get(u => u.MrfId == id);
-                if (obj != null && freashmrf != null && email != null)
+                Mrfresumereviewermap resume = _unitOfWork.Mrfresumereviewermap.Get(u => u.MrfId == id);
+                Mrfinterviewermap interviewer = _unitOfWork.Mrfinterviewermap.Get(u => u.MrfId == id);
+                if (obj != null)
                 {
-                    _unitOfWork.Freshmrfdetail.Remove(freashmrf);
-                    _unitOfWork.MrfEmailApproval.Remove(email);
+                    if (freshMrf != null)
+                    {
+                        _unitOfWork.Freshmrfdetail.Remove(freshMrf);
+                    }
+                    if (email != null) {
+                        _unitOfWork.MrfEmailApproval.Remove(email);
+                    }
+                    if (obj.IsReplacement)
+                    {
+                        Replacementmrfdetails  replacement = _unitOfWork.Replacementmrfdetail.Get(u => u.Id == id);
+                        _unitOfWork.Replacementmrfdetail.Remove(replacement);
+
+                    }
+                    if (resume != null) { 
+                    _unitOfWork.Mrfresumereviewermap.Remove(resume);
+                    }
+                    if (interviewer != null) {
+                        _unitOfWork.Mrfinterviewermap.Remove(interviewer);
+                    }
                     _unitOfWork.Mrfdetail.Remove(obj);
                     _unitOfWork.Save();
 
