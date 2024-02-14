@@ -723,17 +723,29 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public void Delete(int id)
         {
-            Mrfdetails? obj = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
-            if (obj != null)
+            try
             {
-                _unitOfWork.Mrfdetail.Remove(obj);
-                _unitOfWork.Save();
+                Mrfdetails? obj = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
+                Freshmrfdetails? freashmrf = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == id);
+                MrfEmailApproval email = _unitOfWork.MrfEmailApproval.Get(u => u.MrfId == id);
+                if (obj != null && freashmrf != null && email != null)
+                {
+                    _unitOfWork.Freshmrfdetail.Remove(freashmrf);
+                    _unitOfWork.MrfEmailApproval.Remove(email);
+                    _unitOfWork.Mrfdetail.Remove(obj);
+                    _unitOfWork.Save();
 
+                }
+                else
+                {
+                    _logger.LogError($"No result found by this Id: {id}");
+                }
+
+            }catch(ArgumentNullException e){
+                _logger.LogError($"Error sending email: {e.Message}");
+                StatusCode(500, "An error occurred while deleting entry.");
             }
-            else
-            {
-                _logger.LogError($"No result found by this Id: {id}");
-            }
+            
 
         }
 

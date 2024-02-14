@@ -224,6 +224,7 @@ namespace MRF.DataAccess.Repository
                                                                join i in IstatusGrouped on q.CandidateId equals i.CandidateId
                                                                into interviewResults
                                                                from i in interviewResults.DefaultIfEmpty()
+                                                               orderby  q.CreatedOnUtc descending
                                                                select new InterviewDetailsViewModel
                                                                {
                                                                    MrfId = q.MrfId,
