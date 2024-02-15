@@ -23,6 +23,7 @@ function Dashboard({ roleId, userId }) {
   const [interviewPopupId, setInterviewPopupId] = useState(null);
   const [mrfStatusPopup, setMrfStatusPopup] = useState(false);
   const [mrfStatusPopupId, setrfStatusPopupId] = useState(null);
+  const [mrfstatusWordPopUp, setMrfstatusWordPopUp] = useState(null);
   const [resumePopup, setResumePopup] = useState(false);
   const [resumePopupId, setResumePopupId] = useState(null);
   const [InterviewStatus, setInterviewStatusPopup] = useState(false);
@@ -70,8 +71,10 @@ function Dashboard({ roleId, userId }) {
     ["Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
   );
 
-  const onMRFIdClicked = (e) => {
-    setrfStatusPopupId(e);
+  const onMRFIdClicked = (mrfStatusId,mrfStatusWord) => {
+  
+    setrfStatusPopupId(mrfStatusId);
+    setMrfstatusWordPopUp(mrfStatusWord)
     setMrfStatusPopup(true);
   };
 
@@ -83,7 +86,6 @@ function Dashboard({ roleId, userId }) {
     setResumePopupId(e);
     setResumePopup(true);
   };
-
   const mrfIdInterviewRefernceTemplate = (rowData) => {
     return (
       <div>
@@ -228,6 +230,7 @@ function Dashboard({ roleId, userId }) {
                   statusId={mrfStatusPopupId}
                   userId={userId}
                   roleId={roleId}
+                  dialogHeader={mrfstatusWordPopUp}
                 />
               </div>
               <table className="mrf_table">
@@ -251,7 +254,7 @@ function Dashboard({ roleId, userId }) {
                         >
                           {data.totalCount > 0 && (
                             <a
-                              onClick={(e) => onMRFIdClicked(data.mrfStatusId)}
+                              onClick={(e) => onMRFIdClicked(data.mrfStatusId,data.status)}
                             >
                               {data.totalCount}
                             </a>
