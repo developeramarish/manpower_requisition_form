@@ -1194,7 +1194,8 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 	   (23,"Feedback Submission","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Feedback submitted successully","Dear User, feedback has been submitted against resume.pdf. Please click her",0,"3,4,5,6"),
 	   (24,"Received HOD Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received HOD Approval","Dear User, status of MRF ## is changed to Received HOD approval. Please click here",11,"3,4"),
 	   (25,"Received COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received COO Approval","Dear User, status of MRF ## is changed to Received COO approval. Please click here",11,"3,4"),
-	   (26,"Received Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received Finance Head Approval","Dear User, status of MRF ## is changed to Received Finance Head Approval. Please click here",11,"3,4");
+	   (26,"Received Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received Finance Head Approval","Dear User, status of MRF ## is changed to Received Finance Head Approval. Please click here",11,"3,4"),
+	   (26,"Awaiting Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting Finance Head Approval","Dear User, status of MRF ## is changed to Received Finance Head Approval. Please click here",11,"3,4");
 	   
 --
 --
