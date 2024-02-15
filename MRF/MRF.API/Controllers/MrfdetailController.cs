@@ -676,7 +676,7 @@ namespace MRF.API.Controllers
                 }
                 else
                 {
-                    Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == 8);
+                    Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == request.MrfStatusId);
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
 
                     List<int> RoleIds = new List<int>();
