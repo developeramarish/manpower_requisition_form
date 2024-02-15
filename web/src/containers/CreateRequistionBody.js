@@ -1545,7 +1545,7 @@ const CreateRequisitionBody = ({
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={11}
-                                  label={"Send for HOD approval"}
+                                  label={"Send for HOD"}
                                   formData={formData}
                                   className={"hod_btn"}
                                   disabled={
@@ -1981,11 +1981,20 @@ const CreateRequisitionBody = ({
                       <>
                         <MrfPartialStatus
                           mrfId={getReqId}
+                          label={"Delete Draft"}
+                          className={"save_draft_btn"}
+                          message={"Do you want to Delete this MRF ?"}
+                          formData={formData}
+                          roleID={getReqRoleId}
+                          deleteApi={true}
+                        />
+
+                        <MrfPartialStatus
+                          mrfId={getReqId}
                           mrfStatusId={1}
                           emailErrors={emailError}
-                          label={"SAVE AS DRAFT"}
+                          label={"Save as Draft"}
                           className={"save_draft_btn"}
-                          // className={"w-20 px-7 bg-red-600 border-red-600"}
                           message={"Do you want to Submit this MRF as Draft?"}
                           formData={formData}
                           roleID={getReqRoleId}
@@ -1994,7 +2003,7 @@ const CreateRequisitionBody = ({
                         <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={2}
-                          label={"SUBMIT"}
+                          label={"Submit"}
                           className={"submit_btn"}
                           emailErrors={emailError}
                           message={

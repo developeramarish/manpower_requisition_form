@@ -9,6 +9,7 @@ import {
   putData,
   isFormDataEmptyForSaveasDraft,
   isFormDataEmptyForSubmit,
+  deleteData,
 } from "../constants/Utils";
 import { Dialog } from "primereact/dialog";
 import ButtonC from "./Button";
@@ -33,6 +34,7 @@ const MrfPartialStatus = ({
   bypassClicked = false,
   className,
   emailErrors,
+  deleteApi,
 }) => {
   const [visible, setVisible] = useState(false);
   const [note, setNote] = useState("");
@@ -51,24 +53,42 @@ const MrfPartialStatus = ({
   const footerContent = (value) => {
     return (
       <div>
-        {(roleID == 3 && mrfStatusId == MRF_STATUS.new) ||
-        mrfStatusId == MRF_STATUS.draft ? (
-          <ButtonC
-            label="Yes"
-            className="w-2 bg-red-600 border-red-600 p-2 mr-3"
-            onClick={() => {
-              handleSubmit(value);
-            }}
-          />
-        ) : (
-          <ButtonC
-            label="Yes"
-            className="w-2 bg-red-600  px-2 mr-3"
-            onClick={() => {
-              submitPartial(value);
-            }}
-          />
-        )}
+        {(() => {
+          if (
+            (roleID == 3 && mrfStatusId == MRF_STATUS.new) ||
+            mrfStatusId == MRF_STATUS.draft
+          ) {
+            return (
+              <ButtonC
+                label="Yes"
+                className="w-2 bg-red-600 border-red-600 p-2 mr-3"
+                onClick={() => {
+                  handleSubmit(value);
+                }}
+              />
+            );
+          } else if (deleteApi) {
+            return (
+              <ButtonC
+                label="Yes"
+                className="w-2 bg-red-600 border-red-600 p-2 mr-3"
+                onClick={() => {
+                  handleDeleteDraftMrf();
+                }}
+              />
+            );
+          } else {
+            return (
+              <ButtonC
+                label="Yes"
+                className="w-2 bg-red-600  px-2 mr-3"
+                onClick={() => {
+                  submitPartial(value);
+                }}
+              />
+            );
+          }
+        })()}
 
         <ButtonC
           label="No"
@@ -79,6 +99,37 @@ const MrfPartialStatus = ({
         />
       </div>
     );
+  };
+
+  const handleDeleteDraftMrf = async () => {
+    console.log(API_URL.DELETE_DRAFTED_MRF + mrfId);
+    setIsLoading(true);
+    try {
+      let response = await deleteData(`${API_URL.DELETE_DRAFTED_MRF + mrfId}`);
+
+      console.log(response);
+
+      if (response.ok) {
+        toastRef.current.showSuccessMessage("MRF Deleted successfully");
+        setVisible(false);
+        setIsLoading(false);
+      } else {
+        console.log(response);
+        console.error("Request failed with status:", response.status);
+        const errorData = await response.text();
+        console.error("Error Data:", errorData);
+        if (response.status === 400) {
+          toastRef.current.showBadRequestMessage(
+            "Bad request: " + response.url
+          );
+        }
+
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setIsLoading(false);
+    }
   };
 
   const formatAndShowErrorMessage = (emptyFields) => {
@@ -94,7 +145,7 @@ const MrfPartialStatus = ({
   };
 
   const handleSubmit = async (mrfStatusId) => {
-    console.log(formData)
+    console.log(formData);
     if (formData.isReplacement && emailErrors) {
       toastRef.current.showWarrningMessage("Invalid Email format");
       setVisible(false);
@@ -182,6 +233,8 @@ const MrfPartialStatus = ({
           `${API_URL.POST_CREATE_REQUISITION}`,
           data
         );
+        console.log(response)
+
         if (response.ok) {
           const responseData = await response.json();
           console.log("Response Data:", responseData);
@@ -289,14 +342,6 @@ const MrfPartialStatus = ({
           setVisible(false);
           setIsLoading(false);
           toastRef.current.showSuccessMessage("Action Submitted");
-
-          if (updatedClick) {
-            // window.location.reload();
-          } else {
-            setTimeout(() => {
-              navigateTo("my_requisition");
-            }, 1000);
-          }
         }
       } else {
         console.error("Request failed with status:", response.status);
@@ -338,7 +383,7 @@ const MrfPartialStatus = ({
          <Dialog dismissableMask >{popupmessage}</Dialog>
          </>
        )} */}
-{/* 
+      {/* 
       {((roleID == 3 && mrfStatusId == MRF_STATUS.new) ||
         mrfStatusId == MRF_STATUS.draft) && (
         <Dialog
