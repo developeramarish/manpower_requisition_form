@@ -5,7 +5,7 @@ import { Dialog } from "primereact/dialog";
 import "../css/DashMrfStatus.css";
 import ReferenceBodyTemplate from "./MrfRefStatus";
 import { API_URL } from "../constants/config";
-import { changeDateFormat, getDataAPI, salaryInLPA } from "../constants/Utils";
+import { changeDateFormat, convertToDays, getDataAPI, salaryInLPA } from "../constants/Utils";
 
 const DashMrfStatus = ({
   header,
@@ -14,6 +14,7 @@ const DashMrfStatus = ({
   roleId = null,
   userId = null,
   statusId = null,
+  dialogHeader
 }) => {
   const [mrfStatusData, setMrfStatusData] = useState([]);
   const [data, setdata] = useState([]);
@@ -40,7 +41,7 @@ const DashMrfStatus = ({
   if (data.length < 1) {
     return (
       <Dialog
-        header="MRF STATUS"
+        header={dialogHeader}
         visible={visible}
         onHide={onHide}
         draggable={false}
@@ -58,7 +59,9 @@ const DashMrfStatus = ({
   const SalaryTemplate = (mrf) => {
     return <h4 className="mrfdraft-col">{salaryInLPA(mrf.salary)}</h4>;
   };
-
+  const convertToDayBodytemplate = (mrf) => {
+    return <>{convertToDays(mrf)} Days</>;
+  };
   const columns = [
     {
       field: "referenceNo",
@@ -90,6 +93,13 @@ const DashMrfStatus = ({
       field: "updatedOnUtc",
       header: "Last Updated",
       body: uploadedOnBodyTemplate,
+      bodyClassName: "mrfdraft-col mrfdraft-ref-col ",
+      sortable: true,
+    },
+    {
+      field: "createdOnUtc",
+      header: "MRF Open since",
+      body: convertToDayBodytemplate,
       bodyClassName: "mrfdraft-col mrfdraft-ref-col ",
       sortable: true,
     },
@@ -128,7 +138,7 @@ const DashMrfStatus = ({
 
   return (
     <Dialog
-      header={"MRF STATUS "}
+    header={dialogHeader+" MRF"}
       visible={visible}
       onHide={onHide}
       draggable={false}

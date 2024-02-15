@@ -63,6 +63,7 @@ const MrfPartialStatus = ({
                 label="Yes"
                 className="w-2 bg-red-600 border-red-600 p-2 mr-3"
                 onClick={() => {
+
                   handleSubmit(value);
                 }}
               />
@@ -107,22 +108,20 @@ const MrfPartialStatus = ({
     try {
       let response = await deleteData(`${API_URL.DELETE_DRAFTED_MRF + mrfId}`);
 
-      console.log(response);
 
-      if (response.ok) {
+
+      if (response.id>0) {
         toastRef.current.showSuccessMessage("MRF Deleted successfully");
         setVisible(false);
+        
+        setTimeout(() => {
+          navigateTo("my_requisition");
+        }, 1000);
         setIsLoading(false);
       } else {
-        console.log(response);
-        console.error("Request failed with status:", response.status);
-        const errorData = await response.text();
-        console.error("Error Data:", errorData);
-        if (response.status === 400) {
           toastRef.current.showBadRequestMessage(
             "Bad request: " + response.url
           );
-        }
 
         setIsLoading(false);
       }

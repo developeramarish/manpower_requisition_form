@@ -207,7 +207,7 @@ const CreateRequisitionBody = ({
 
     if (value.length <= maxCharacterCountJustification) {
       setFormData({ ...formData, justification: value });
-    }
+    } 
   };
 
   let remaningCharacterJustification = 0;
@@ -310,9 +310,9 @@ const CreateRequisitionBody = ({
       });
 
       if (response.ok) {
-        OnLoad();
-        console.log("Item added successfully");
         toastRef.current.showSuccessMessage("Item added successfully!");
+        const dropdata = await OnLoad();
+        setDropdownData(dropdata);
       } else {
         console.error("Failed to add item");
         toastRef.current.showConflictMessage("Failed to add item");
@@ -1120,7 +1120,7 @@ const CreateRequisitionBody = ({
                 </div>
               </div>
             </div>
-            <div className="flex justify-content-between gap-5">
+            <div className="flex justify-content-between gap-4">
               <div className="flex flex-column w-6 gap-2">
                 <label htmlFor="resumeReviewer" className="font-bold text-sm">
                   Resume Reviewer
@@ -1171,6 +1171,39 @@ const CreateRequisitionBody = ({
                 />
               </div>
             </div>
+
+            {/* <div className="flex justify-content-between gap-3">
+              <div className="flex flex-column w-6 gap-2">
+                <label htmlFor="siteHRSPOCId" className="font-bold text-sm">
+                  Hr
+                  <RedAsterisk />
+                </label>
+
+                <DropdownComponent
+                  optionLabel="name"
+                  optionValue="employeeId"
+                  type="siteHRSPOCId"
+                  options={dropdownData.siteHRSPOC}
+                  value={formData.siteHRSPOCId}
+                  disable={commonSettings.setReadOnly}
+                  onChange={(e) => {
+                    const selectedsiteHRSPOCId = e.target.value;
+                    const selectedsiteHRSPOCEmpId =
+                      dropdownData.siteHRSPOC.find(
+                        (manager) => manager.employeeId === selectedsiteHRSPOCId
+                      );
+
+                    if (selectedsiteHRSPOCEmpId) {
+                      setFormData({
+                        ...formData,
+                        siteHRSPOCId: selectedsiteHRSPOCId,
+                        siteHRSPOCEmpId: selectedsiteHRSPOCEmpId.employeeCode,
+                      });
+                    }
+                  }}
+                />
+              </div>
+            </div> */}
             {(getReqRoleId === 4 ||
               (getReqRoleId === 3 &&
                 formData.mrfStatusId !== MRF_STATUS.draft &&
