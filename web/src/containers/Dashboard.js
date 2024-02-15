@@ -72,8 +72,7 @@ function Dashboard({ roleId, userId }) {
   );
 
   const onMRFIdClicked = (mrfStatusId,mrfStatusWord) => {
-    console.log(mrfStatusId)
-    console.log(mrfStatusWord)
+  
     setrfStatusPopupId(mrfStatusId);
     setMrfstatusWordPopUp(mrfStatusWord)
     setMrfStatusPopup(true);
