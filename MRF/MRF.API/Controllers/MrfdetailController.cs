@@ -715,7 +715,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public ResponseDTO Delete(int id)
+        public MrfdetaiResponseModel Delete(int id)
         {
             try
             {
@@ -766,19 +766,21 @@ namespace MRF.API.Controllers
                     }
                     _unitOfWork.Mrfdetail.Remove(obj);
                     _unitOfWork.Save();
-                    _response.Result = obj.Id;
-                    return _response;
+                    _responseModel.Id  = obj.Id ;
+                    return _responseModel;
                 }
                 else
                 {
                     _logger.LogError($"No result found by this Id: {id}");
-                    return _response;
+                    _responseModel.Id=0;
+                    return _responseModel;
                 }
 
             }catch(ArgumentNullException e){
                 _logger.LogError($"Error sending email: {e.Message}");
-               StatusCode(500, "An error occurred while deleting entry.");
-                return _response;
+                StatusCode(500, "An error occurred while deleting entry.");
+               _responseModel.Id=0;
+                return _responseModel;
             }
             
 
