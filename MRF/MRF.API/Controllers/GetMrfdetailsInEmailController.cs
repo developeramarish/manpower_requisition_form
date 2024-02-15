@@ -68,8 +68,7 @@ namespace MRF.API.Controllers
                 try
                 {
                     _logger.LogInfo("Sending Email to HOD / Finance Head /COO");
-                    _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition");
-                    _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody); 
+                    _emailService.SendEmailAsync(EmpDetails.Email, MrfStatus.Status, htmlBody);
                 }
                 catch (Exception ex)
                 {
@@ -88,8 +87,6 @@ namespace MRF.API.Controllers
                         
                         string emailContent = emailMaster.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetail.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-                        _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition emailReq.Email = " + emailReq.Email);
-                        _logger.LogInfo("Sending Email from MrfdetailsEmailRequestModel GetRequisition  emailContent = " + emailContent);
                         _emailService.SendEmailAsync(emailReq.Email, emailMaster.Subject, emailContent);
                     }
                     catch (Exception ex)
