@@ -655,7 +655,32 @@ namespace MRF.API.Controllers
 
                 MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
 
-                if (request.MrfStatusId == 8) // If MRF is rejected
+                if (new List<int> { 11, 12, 13 }.Contains(request.MrfStatusId)) 
+                {                    
+                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
+
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+
+                    if (emailRequest != null)
+                    {
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+                        //Send Email to HR
+                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
+                        foreach (var emailReq in emailList)
+                        {
+                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 1");
+
+                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus = " + emailReq.Email);
+
+                            _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailContent);
+                        }
+
+                        //Send Email to MRF Owner
+                        _emailService.SendEmailAsync(getEmail(request.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
+                    }
+                }
+                else
                 {
                     Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == 8);
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
@@ -676,32 +701,6 @@ namespace MRF.API.Controllers
 
                     //Send Email to MRF Owner
                     _emailService.SendEmailAsync(getEmail(request.UpdatedByEmployeeId), emailSubject, emailContent);
-                }
-                else
-                {
-                    
-                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
-                    
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
-                    
-                    if (emailRequest != null)
-                    {
-                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-                        //Send Email to HR
-                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
-                        foreach (var emailReq in emailList)
-                        {
-                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 1");
-
-                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus = " + emailReq.Email);
-
-                            _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailContent);
-                        }
-
-                        //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(getEmail(request.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
-                    }
                 }
             }
             else
