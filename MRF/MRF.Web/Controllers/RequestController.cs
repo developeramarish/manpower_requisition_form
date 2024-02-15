@@ -45,7 +45,7 @@ namespace MRF.Web.Controllers
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    await SendEmailAsync(mrfID, mrfStatusId);
+                    //await SendEmailAsync(mrfID, mrfStatusId);
                     ViewData["Message"] = "MRF has been approved successfully!";
                     return View();
                 }
@@ -61,65 +61,65 @@ namespace MRF.Web.Controllers
         }
 
 
-        private async Task SendEmailAsync(int mrfID, int mrfStatusId)
-        {
-            try
-            {              
-                Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
-                Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);              
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);            
-                string[] roleIdStrings = emailRequest.roleId.Split(',');
-                List<int> roleIds = new List<int>();
+        //private async Task SendEmailAsync(int mrfID, int mrfStatusId)
+        //{
+        //    try
+        //    {              
+        //        Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
+        //        Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);              
+        //        emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);            
+        //        string[] roleIdStrings = emailRequest.roleId.Split(',');
+        //        List<int> roleIds = new List<int>();
 
-                foreach (string roleIdString in roleIdStrings)
-                {
-                    if (int.TryParse(roleIdString, out int roleId))
-                    {
-                        roleIds.Add(roleId);
-                    }
-                }
+        //        foreach (string roleIdString in roleIdStrings)
+        //        {
+        //            if (int.TryParse(roleIdString, out int roleId))
+        //            {
+        //                roleIds.Add(roleId);
+        //            }
+        //        }
 
-                mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
+        //        mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
                 
-                List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
-                                      where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
-                                             where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
-                                                    where mrfEmailApproval.MrfId == mrfID
-                                                    select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
-                                                   roleIds.Contains(employeeRoleMap.RoleId)
-                                             select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
-                                      select employeeDetails.Email).ToList();
+        //        List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
+        //                              where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
+        //                                     where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
+        //                                            where mrfEmailApproval.MrfId == mrfID
+        //                                            select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
+        //                                           roleIds.Contains(employeeRoleMap.RoleId)
+        //                                     select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
+        //                              select employeeDetails.Email).ToList();
 
-                string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                         .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+        //        string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+        //                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
-                //Send Email to MRF Owner
-                foreach (string strEmail in email)
-                {   
-                    using (MailMessage mailMessage = new MailMessage(senderEmail, strEmail, emailRequest.Subject, htmlContent))
-                    {
-                        mailMessage.IsBodyHtml = true;
-                        smtpClient.Send(mailMessage);
-                    }
-                }
-                //Send Email to HR
-                List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
+        //        //Send Email to MRF Owner
+        //        foreach (string strEmail in email)
+        //        {   
+        //            using (MailMessage mailMessage = new MailMessage(senderEmail, strEmail, emailRequest.Subject, htmlContent))
+        //            {
+        //                mailMessage.IsBodyHtml = true;
+        //                smtpClient.Send(mailMessage);
+        //            }
+        //        }
+        //        //Send Email to HR
+        //        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
 
-                foreach (var emailReq in emailList)
-                {
-                    using (MailMessage mailMessage = new MailMessage(senderEmail, emailReq.Email, emailRequest.Subject, htmlContent))
-                    {
-                        mailMessage.IsBodyHtml = true;
-                        smtpClient.Send(mailMessage);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Exception occurred while sending email: {e.Message}");
-                throw;
-            }
-        }
+        //        foreach (var emailReq in emailList)
+        //        {
+        //            using (MailMessage mailMessage = new MailMessage(senderEmail, emailReq.Email, emailRequest.Subject, htmlContent))
+        //            {
+        //                mailMessage.IsBodyHtml = true;
+        //                smtpClient.Send(mailMessage);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.LogError($"Exception occurred while sending email: {e.Message}");
+        //        throw;
+        //    }
+        //}
 
         private async Task<HttpResponseMessage> ChangeMrfStatusAsync(int mrfID, int mrfStatusId, int updatedByEmployeeId)
         {
@@ -189,7 +189,7 @@ namespace MRF.Web.Controllers
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                    await SendEmailAsync(mrfID, mrfStatusId);
+                    //await SendEmailAsync(mrfID, mrfStatusId);
                     ViewData["Message"] = "MRF has been rejected successfully!";
                     return View();
                 }
