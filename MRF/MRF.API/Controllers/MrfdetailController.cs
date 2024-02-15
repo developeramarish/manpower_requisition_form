@@ -139,8 +139,7 @@ namespace MRF.API.Controllers
                         List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
 
                         foreach (var emailReq in emailList)
-                        {
-                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel Post");
+                        {   
                             _emailService.SendEmailAsync(emailReq.Email,
                                 emailRequest.Subject,
                                 emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
@@ -149,7 +148,6 @@ namespace MRF.API.Controllers
                     }
 
                     //Send Email to MRF Owner
-                    _logger.LogInfo("Sending Email from MrfdetaiResponseModel Post 1");
                     _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
@@ -668,16 +666,12 @@ namespace MRF.API.Controllers
                         //Send Email to HR
                         List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
                         foreach (var emailReq in emailList)
-                        {
-                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus 1");
-
-                            _logger.LogInfo("Sending Email from MrfdetaiResponseModel PartialUpdateMRFStatus = " + emailReq.Email);
-
+                        {  
                             _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailContent);
                         }
 
                         //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(getEmail(request.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
+                        _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId), emailRequest.Subject, emailContent);
                     }
                 }
                 else
@@ -700,7 +694,7 @@ namespace MRF.API.Controllers
                     }
 
                     //Send Email to MRF Owner
-                    _emailService.SendEmailAsync(getEmail(request.UpdatedByEmployeeId), emailSubject, emailContent);
+                    _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId), emailSubject, emailContent);
                 }
             }
             else
