@@ -721,48 +721,70 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public void Delete(int id)
+        public ResponseDTO Delete(int id)
         {
             try
             {
                 Mrfdetails? obj = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
-                Freshmrfdetails?   freshMrf = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == id);
-                MrfEmailApproval email = _unitOfWork.MrfEmailApproval.Get(u => u.MrfId == id);
-                Mrfresumereviewermap resume = _unitOfWork.Mrfresumereviewermap.Get(u => u.MrfId == id);
-                Mrfinterviewermap interviewer = _unitOfWork.Mrfinterviewermap.Get(u => u.MrfId == id);
+               Freshmrfdetails?   freshMrf = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == id);
+               List< MrfEmailApproval> email = _unitOfWork.MrfEmailApproval.GetA(u => u.MrfId == id).ToList();
+               Replacementmrfdetails replacement = _unitOfWork.Replacementmrfdetail.Get(u => u.MrfId == id);
+               List<Mrfresumereviewermap> resume = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == id).ToList();
+               List<Mrfinterviewermap> interviewer = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == id).ToList();
+
                 if (obj != null)
                 {
                     if (freshMrf != null)
                     {
                         _unitOfWork.Freshmrfdetail.Remove(freshMrf);
+                        _unitOfWork.Save();
                     }
                     if (email != null) {
-                        _unitOfWork.MrfEmailApproval.Remove(email);
+                        foreach (MrfEmailApproval email1 in email){
+                            _unitOfWork.MrfEmailApproval.Remove(email1);
+                            _unitOfWork.Save();
+                        }
+                       
                     }
-                    if (obj.IsReplacement)
-                    {
-                        Replacementmrfdetails  replacement = _unitOfWork.Replacementmrfdetail.Get(u => u.Id == id);
-                        _unitOfWork.Replacementmrfdetail.Remove(replacement);
+                     if (replacement != null)
+                        {
+                            _unitOfWork.Replacementmrfdetail.Remove(replacement);
+                        _unitOfWork.Save();
+                    }
 
+
+
+                    if (resume != null)
+                    {
+                        foreach (Mrfresumereviewermap res in resume) {
+                            _unitOfWork.Mrfresumereviewermap.Remove(res);
+                            _unitOfWork.Save();
+                        }
+                       
                     }
-                    if (resume != null) { 
-                    _unitOfWork.Mrfresumereviewermap.Remove(resume);
-                    }
-                    if (interviewer != null) {
-                        _unitOfWork.Mrfinterviewermap.Remove(interviewer);
+                    if (interviewer != null)
+                    {
+                        foreach (Mrfinterviewermap inter in interviewer) {
+                            _unitOfWork.Mrfinterviewermap.Remove(inter);
+                            _unitOfWork.Save();
+                        }
+                        
                     }
                     _unitOfWork.Mrfdetail.Remove(obj);
                     _unitOfWork.Save();
-
+                    _response.Result = obj.Id;
+                    return _response;
                 }
                 else
                 {
                     _logger.LogError($"No result found by this Id: {id}");
+                    return _response;
                 }
 
             }catch(ArgumentNullException e){
                 _logger.LogError($"Error sending email: {e.Message}");
-                StatusCode(500, "An error occurred while deleting entry.");
+               StatusCode(500, "An error occurred while deleting entry.");
+                return _response;
             }
             
 
