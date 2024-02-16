@@ -1178,7 +1178,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 	   (8,"Re-submission Required","ashutosh.tiwari@kwglobal.com","MRF Owner","Resubmission required for MRF ##","Dear User, MRF ## is re-opened and resubmission required. Please click here",3,"3"),
 	   (9,"Awaiting HOD Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting HOD Approval","Dear User, status of MRF ## is changed to Awaiting HOD approval. Please click here",11,"3,4"),
 	   (10,"Awaiting COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting COO Approval","Dear User, status of MRF ## is changed to Awaiting COO approval. Please click here",12,"3,4"),
-	   (11,"Open (i.e. Approved & WIP)","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF ## is open","Dear User, status of MRF ## is changed to open. Please click here",6,"3,4"),
+	   (11,"Open","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF ## is open","Dear User, status of MRF ## is changed to open. Please click here",6,"3,4"),
 		
 	   (12,"Rejected  MRF","ashutosh.tiwari@kwglobal.com","HR, HOD","MRF ## is rejected","Dear User, MRF ## is rejected. Please click here",8,"4,8"),
 	   (13,"On Hold","HR","ashutosh.tiwari@kwglobal.com","MRF ## is on hold","Dear User, status of MRF ## is changed to On Hold. Please click here",7,"4"),
