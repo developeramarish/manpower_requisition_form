@@ -331,8 +331,8 @@ CREATE TABLE `EvaluationStatusMaster` (
 INSERT INTO `EvaluationStatusMaster` (`Id`, `Status`,`RoleId`, `IsActive`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
 (1, 'Assignment Sent',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
 (2, 'Assignment Received',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(3, 'Assignment Shortlisted',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(4, 'Assignment Rejected',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(3, 'Assignment Shortlisted',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(4, 'Assignment Rejected',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
 (5, 'Video Interview Cleared',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
 (6, 'Video Interview Not Cleared',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
 (7, 'Coding Test Cleared',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
@@ -913,7 +913,7 @@ INSERT INTO `MrfStatusMaster` (`Id`, `Status`, `IsActive`, `CreatedByEmployeeId`
 
 (1, 'Drafted', 1, 1, '2023-08-06 17:19:04', 1, '2023-08-06 17:19:04'),
 (2, 'New', 1, 1, '2023-08-06 17:19:04', 1, '2023-08-06 17:19:04'),
-(3, 'Re-submission', 1, 1, '2023-08-06 17:19:04', 1, '2023-08-06 17:19:04'),
+(3, 'Re-submission Required', 1, 1, '2023-08-06 17:19:04', 1, '2023-08-06 17:19:04'),
 (4, 'Received HOD Approval', 1, 1, '2023-08-06 17:19:04', 1, '2023-08-06 17:19:04'),
 (5, 'Received COO Approval', 1, 1, '2023-08-06 17:19:04', 1, '2023-08-06 17:19:04'),
 (6, 'Open', 1, 1, '2023-08-06 17:19:04', 1, '2023-08-06 17:19:04'),
