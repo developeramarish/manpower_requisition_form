@@ -207,7 +207,7 @@ const CreateRequisitionBody = ({
 
     if (value.length <= maxCharacterCountJustification) {
       setFormData({ ...formData, justification: value });
-    } 
+    }
   };
 
   let remaningCharacterJustification = 0;
@@ -1578,7 +1578,7 @@ const CreateRequisitionBody = ({
                                 <MrfPartialStatus
                                   mrfId={getReqId}
                                   mrfStatusId={11}
-                                  label={"Send for HOD"}
+                                  label={"Send for HOD approval"}
                                   formData={formData}
                                   className={"hod_btn"}
                                   disabled={
