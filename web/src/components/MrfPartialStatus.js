@@ -341,6 +341,9 @@ const MrfPartialStatus = ({
           setVisible(false);
           setIsLoading(false);
           toastRef.current.showSuccessMessage("Action Submitted");
+          setTimeout(() => {
+            navigateTo("my_requisition");
+          }, 1000);
         }
       } else {
         console.error("Request failed with status:", response.status);
