@@ -720,6 +720,7 @@ CREATE TABLE `MrfDetails` (
   `JdDocPath` text  NULL,
   `LocationId` int(11) NOT NULL,
   `QualificationId` int(11)  NULL,
+  `HrId` int(11)  NULL,
    `Note` text  NULL,
   `CreatedByEmployeeId` int(11) NOT NULL,
   `CreatedOnUtc` datetime NOT NULL DEFAULT current_timestamp(),
@@ -1484,7 +1485,8 @@ ALTER TABLE `MrfDetails`
   ADD KEY `FK_VacancyTypeMasterMrfDetails` (`VacancyTypeId`),
   ADD KEY `FK_MrfStatusMasterMrfDetails` (`MrfStatusId`),
   ADD KEY `FK_LocationMasterMrfDetails` (`LocationId`),
-  ADD KEY `FK_QualificationMasterMrfDetails` (`QualificationId`);
+  ADD KEY `FK_QualificationMasterMrfDetails` (`QualificationId`),
+   ADD KEY `FK_EmployeeDetailsMrfDetails` (`QualificationId`);
 
 
 
