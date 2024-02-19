@@ -9,9 +9,9 @@ import MultiSelectDropdown from "../components/multiselectDropdown";
 import InterviewFeedbackComponent from "../containers/InterviewFeedbackComponent";
 import {
 	API_URL,
-	CANDIDATE_STATUS_FOR_DISABLE,
+	
 	FILE_URL,
-	MRF_STATUS_FOR_DISABLE,
+	
 	ROLES,
 } from "../constants/config";
 import { storageService } from "../constants/storage";
@@ -23,8 +23,11 @@ import {
 	getData,
 	strToArray,
 	putData,
+	CANDIDATE_STATUS_FOR_DISABLE,
+	MRF_STATUS_FOR_DISABLE,
 	postData,
 	getDataAPI,
+	INTERVIEW_EVALUATION_FOR_DISABLE,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 import AssignmentUpload from "../containers/AssignmentUpload";
@@ -75,7 +78,13 @@ const InterviewSummary = ({
 		let response = await getData(apiUrl);
 		const data = response.result;
 		let arr = new Array(data.interviewDetails.length).fill(false);
-		setInterviewData(data.interviewDetails);
+		var filterInterviewerResumtSumData = [];
+		data.interviewDetails.map(( res) => {
+          if (res.candidateStatusId === 2) {
+            filterInterviewerResumtSumData.push(res)
+          }
+      })
+		setInterviewData(filterInterviewerResumtSumData);
 		setInterviewStatus(data.interviewstatus);
 		setInterviewerData(data.interviewReviewer);
 		setSaveBttn(arr);
@@ -234,7 +243,9 @@ console.log(interviewData);
 					value={interview.evalutionStatusId}
 					onChange={handleDropdownChange}
 					disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)||
-						CANDIDATE_STATUS_FOR_DISABLE(interview.candidateStatusId)}
+						INTERVIEW_EVALUATION_FOR_DISABLE(roleId,interview.evalutionStatusId) 
+					}
+
 				/>
 			);
 		}
@@ -248,7 +259,9 @@ console.log(interviewData);
 				value={interview.evalutionStatusId}
 				onChange={handleDropdownChange}
 				disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)
-					|| CANDIDATE_STATUS_FOR_DISABLE(interview.candidateStatusId)}
+					|| INTERVIEW_EVALUATION_FOR_DISABLE(roleId,interview.evalutionStatusId)
+				}
+					
 			/>
 		);
 	};
@@ -316,7 +329,6 @@ console.log(interviewData);
 				setSaveBttn(sv);
 				setupdateField("interviewer"); //check if field is updated
 			};
-			
 			return (
 				<MultiSelectDropdown
 					
@@ -333,7 +345,8 @@ console.log(interviewData);
 					className="w-full md:w-20rem"
 					// optionValue="employeeId"
 					disable={MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId)
-					|| CANDIDATE_STATUS_FOR_DISABLE(interview.candidateStatusId)}
+					|| INTERVIEW_EVALUATION_FOR_DISABLE(roleId,interview.evalutionStatusId)
+				}
 					 
 				/>
 			);

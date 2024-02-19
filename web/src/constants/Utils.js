@@ -1,3 +1,4 @@
+import { INTERVIEW_EVALUATION, MRF_STATUS, RESUME_STATUS, ROLES } from "./config";
 import { storageService } from "./storage";
 
 /**** 
@@ -371,4 +372,49 @@ export const convertToDays=(mrf)=>{
   const timeDifference = today - createdDate;
   const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
   return daysDifference;
+}
+export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
+  if((roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.resumeReviwer)  && [
+    MRF_STATUS.closed,MRF_STATUS.rejected,MRF_STATUS.withdrawn
+  ].includes(mrfstatusId)
+  ){
+    return  true;
+  }
+ return  false;
+}
+export const CANDIDATE_STATUS_FOR_DISABLE =(roleId,candidatestatusId)=>{
+    if((roleId == ROLES.mrfOwner) && [
+       RESUME_STATUS.Shortlisted , RESUME_STATUS.Rejected,
+    ].includes(candidatestatusId))
+  {
+    return  true;
+  }
+  if((roleId == ROLES.hr) && [
+    RESUME_STATUS.Rejected, RESUME_STATUS.New
+  ].includes(candidatestatusId))
+{
+  return  true;
+}
+else{
+  return  false;
+}
+ 
+}
+export const INTERVIEW_EVALUATION_FOR_DISABLE =(roleId,evaluationID)=>{
+  if((roleId == ROLES.mrfOwner) && [
+    INTERVIEW_EVALUATION.AssignmentRejected, INTERVIEW_EVALUATION.VideoInterviewNotCleared,
+    INTERVIEW_EVALUATION.CodingTestNotCleared,INTERVIEW_EVALUATION.AptitudeTestNotCleared,
+    INTERVIEW_EVALUATION.TelephonicInterviewNotCleared, INTERVIEW_EVALUATION.FaceToFaceInterviewNotCleared,
+    INTERVIEW_EVALUATION.Selected, INTERVIEW_EVALUATION.NotSelected, INTERVIEW_EVALUATION.OfferRolledout,
+    INTERVIEW_EVALUATION.OfferAccepted,INTERVIEW_EVALUATION.OfferAcceptedAnddidnotjoin,
+    INTERVIEW_EVALUATION.OfferRejected,INTERVIEW_EVALUATION.OfferAcceptedandCountered,
+    INTERVIEW_EVALUATION.Onboarded
+  ].includes(evaluationID))
+{
+  return  true;
+}
+else{
+return  false;
+}
+
 }
