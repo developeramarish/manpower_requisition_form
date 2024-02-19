@@ -6,12 +6,13 @@ import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
 import { navigateTo, putData } from "../constants/Utils";
-import { API_URL, FILE_URL, MRF_STATUS_FOR_DISABLE, ROLES } from "../constants/config";
+import { API_URL, FILE_URL, ROLES } from "../constants/config";
 import {
   arrayToObj,
   objToIntArray,
   getData,
   strToArray,
+  MRF_STATUS_FOR_DISABLE,
 } from "../constants/Utils";
 import ToastMessages from "../components/ToastMessages";
 import InputTextareaComponent from "../components/InputTextarea";
