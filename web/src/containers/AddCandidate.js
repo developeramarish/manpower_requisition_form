@@ -144,7 +144,7 @@ const AddCandidate = (reqId) => {
               console.log("Response Data:", responseData);
               if (responseData.id === -1) {
                 toastRef.current.showBadRequestMessage(
-                  "Duplicate Candidate Name"
+                  "Duplicate Candidate  Email"
                 );
                 setIsLoading(false);
                 setSubmitBtnDisable(false);
