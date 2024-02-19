@@ -9,9 +9,9 @@ import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "../components/multiselectDropdown";
 import {
   API_URL,
-  CANDIDATE_STATUS_FOR_DISABLE,
+  
   FILE_URL,
-  MRF_STATUS_FOR_DISABLE,
+  
   ROLES,
 } from "../constants/config";
 import {
@@ -19,6 +19,8 @@ import {
   getDataAPI,
   putData,
   strToArray,
+  CANDIDATE_STATUS_FOR_DISABLE,
+  MRF_STATUS_FOR_DISABLE,
 } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -123,7 +125,7 @@ const ResumeSummary = ({
             className="w-full md:w-20rem "
             disable={
               MRF_STATUS_FOR_DISABLE(roleId, rowData.mrfStatus) ||
-              CANDIDATE_STATUS_FOR_DISABLE(rowData.candidateStatusId)
+              CANDIDATE_STATUS_FOR_DISABLE(roleId,rowData.candidateStatusId)
             }
           />
         </div>

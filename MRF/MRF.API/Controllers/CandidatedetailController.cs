@@ -92,10 +92,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatedetailResponseModel Post([FromBody] CandidatedetailRequestModel request)
         {
-            var existingCandidate = _unitOfWork.Candidatedetail
-           .Get(u => u.MrfId == request.MrfId && u.Name != null && u.Name.ToLower().Replace(" ", "") == request.Name.ToLower().Replace(" ", ""));
-            
-             
+            var existingCandidate = _unitOfWork.Candidatedetail.Get(u => u.MrfId == request.MrfId && u.EmailId != null && u.EmailId.ToLower().Replace
+            (" ", "") == request.EmailId.ToLower().Replace(" ", ""));
+
+
             if (existingCandidate == null)
 
             {

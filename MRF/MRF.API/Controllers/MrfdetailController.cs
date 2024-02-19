@@ -139,7 +139,7 @@ namespace MRF.API.Controllers
                         List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
 
                         foreach (var emailReq in emailList)
-                        {   
+                        {
                             _emailService.SendEmailAsync(emailReq.Email,
                                 emailRequest.Subject,
                                 emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
@@ -633,7 +633,7 @@ namespace MRF.API.Controllers
                     {
 
                         var valueToUpdate = propertyInfo.GetValue(request);
-                        if ((valueToUpdate!=null) && _emailService.IsValidUpdateValue(valueToUpdate))
+                        if ((valueToUpdate != null) && _emailService.IsValidUpdateValue(valueToUpdate))
 
                         {
                             entityProperty.SetValue(existingStatus, valueToUpdate);
@@ -653,8 +653,8 @@ namespace MRF.API.Controllers
 
                 MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
 
-                if (new List<int> { 11, 12, 13 }.Contains(request.MrfStatusId)) 
-                {                    
+                if (new List<int> { 11, 12, 13 }.Contains(request.MrfStatusId))
+                {
                     CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
 
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
@@ -666,7 +666,7 @@ namespace MRF.API.Controllers
                         //Send Email to HR
                         List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
                         foreach (var emailReq in emailList)
-                        {  
+                        {
                             _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailContent);
                         }
 
@@ -715,18 +715,16 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-
-        
         public MrfdetaiResponseModel Delete(int id)
         {
             try
             {
                 Mrfdetails? obj = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
-               Freshmrfdetails?   freshMrf = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == id);
-               List< MrfEmailApproval> email = _unitOfWork.MrfEmailApproval.GetA(u => u.MrfId == id).ToList();
-               Replacementmrfdetails replacement = _unitOfWork.Replacementmrfdetail.Get(u => u.MrfId == id);
-               List<Mrfresumereviewermap> resume = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == id).ToList();
-               List<Mrfinterviewermap> interviewer = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == id).ToList();
+                Freshmrfdetails? freshMrf = _unitOfWork.Freshmrfdetail.Get(u => u.MrfId == id);
+                List<MrfEmailApproval> email = _unitOfWork.MrfEmailApproval.GetA(u => u.MrfId == id).ToList();
+                Replacementmrfdetails replacement = _unitOfWork.Replacementmrfdetail.Get(u => u.MrfId == id);
+                List<Mrfresumereviewermap> resume = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == id).ToList();
+                List<Mrfinterviewermap> interviewer = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == id).ToList();
 
                 if (obj != null)
                 {
@@ -735,16 +733,18 @@ namespace MRF.API.Controllers
                         _unitOfWork.Freshmrfdetail.Remove(freshMrf);
                         _unitOfWork.Save();
                     }
-                    if (email != null) {
-                        foreach (MrfEmailApproval email1 in email){
+                    if (email != null)
+                    {
+                        foreach (MrfEmailApproval email1 in email)
+                        {
                             _unitOfWork.MrfEmailApproval.Remove(email1);
                             _unitOfWork.Save();
                         }
-                       
+
                     }
-                     if (replacement != null)
-                        {
-                            _unitOfWork.Replacementmrfdetail.Remove(replacement);
+                    if (replacement != null)
+                    {
+                        _unitOfWork.Replacementmrfdetail.Remove(replacement);
                         _unitOfWork.Save();
                     }
 
@@ -752,37 +752,41 @@ namespace MRF.API.Controllers
 
                     if (resume != null)
                     {
-                        foreach (Mrfresumereviewermap res in resume) {
+                        foreach (Mrfresumereviewermap res in resume)
+                        {
                             _unitOfWork.Mrfresumereviewermap.Remove(res);
                             _unitOfWork.Save();
                         }
-                       
+
                     }
                     if (interviewer != null)
                     {
-                        foreach (Mrfinterviewermap inter in interviewer) {
+                        foreach (Mrfinterviewermap inter in interviewer)
+                        {
                             _unitOfWork.Mrfinterviewermap.Remove(inter);
                             _unitOfWork.Save();
                         }
-                        
+
                     }
                     _unitOfWork.Mrfdetail.Remove(obj);
                     _unitOfWork.Save();
-                    _responseModel.Id  = obj.Id ;
-              
+                    _responseModel.Id = obj.Id;
+
                 }
                 else
                 {
                     _logger.LogError($"No result found by this Id: {id}");
-                    _responseModel.Id=0;
-                    
+                    _responseModel.Id = 0;
+
                 }
 
-            }catch(ArgumentNullException e){
+            }
+            catch (ArgumentNullException e)
+            {
                 _logger.LogError($"Error sending email: {e.Message}");
                 StatusCode(500, "An error occurred while deleting entry.");
-               _responseModel.Id=0;
-                
+                _responseModel.Id = 0;
+
             }
             return _responseModel;
 

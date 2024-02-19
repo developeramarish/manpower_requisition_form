@@ -80,26 +80,14 @@ export const MRF_STATUS = {
   bypassFinanceHeadApproval:15,
   mrfTransferToNew: 16,
 };
+export const RESUME_STATUS
+={
+  New : 1,
+  Shortlisted:2,
+  Rejected:3,
+  OnHold:4
+}
 
-export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
-  if((roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.resumeReviwer)  && [
-    MRF_STATUS.closed,MRF_STATUS.rejected,MRF_STATUS.withdrawn
-  ].includes(mrfstatusId)
-  ){
-    return  true;
-  }
- return  false;
-}
-export const CANDIDATE_STATUS_FOR_DISABLE =(candidatestatusId)=>{
-    if(candidatestatusId===3)
-  {
-    return  true;
-  }
-  else{
-    return  false;
-  }
- 
-}
 export const COUNTRIES = [
   { name:<> <span><img src="./images/india_flag.png" width={"20px"} height={"12px"}/></span><span style={{ marginRight: '50px' }}> India </span><span>+91</span></>, code: 'IN' },
   { name:<><span><img src="./images/us_flag.png" width={"20px"} height={"12px"}/></span> <span style={{ marginRight: '75px' }}> US </span><span>+1</span></>, code: 'US' },
@@ -194,6 +182,30 @@ export const FORM_SCHEMA_CR = {
 
   
 };
+export const INTERVIEW_EVALUATION={
+  AssignmentSent:1,
+  AssignmentReceived :2,
+  AssignmentShortlisted :3,
+  AssignmentRejected :4,
+  VideoInterviewCleared :5,
+  VideoInterviewNotCleared :6,
+  CodingTestCleared :7,
+  CodingTestNotCleared :8,
+  AptitudeTestCleared :9,
+  AptitudeTestNotCleared :10,
+  TelephonicInterviewCleared :11,
+  TelephonicInterviewNotCleared :12,
+  FaceToFaceInterviewCleared :13,
+  FaceToFaceInterviewNotCleared :14,
+  Selected:15,
+  NotSelected:16,
+  OfferRolledout : 17,
+  OfferAccepted :18,
+  OfferAcceptedAnddidnotjoin:19,
+  OfferRejected :20,
+  OfferAcceptedandCountered:21,
+  Onboarded:22,
+}
 
 export const emailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
