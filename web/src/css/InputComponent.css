@@ -178,7 +178,6 @@
   font-weight: 500;
   padding: 0px;
 }
-
 .finance_btn:disabled {
   color: #ffffff;
   width: 150px;
@@ -188,20 +187,22 @@
   padding: 0px;
 }
 
-.bypass_btn {
+.acknowledge_btn {
   color: #ffffff;
-  width: 140px;
+  width: 150px;
   background-color: #d32f2e;
   font-size: 14px;
   font-weight: 500;
+  padding: 10px;
 }
 
-.bypass_btn:disabled {
+.acknowledge_btn:disabled {
   color: #ffffff;
-  width: 140px;
+  width: 150px;
   font-size: 14px;
   font-weight: 500;
   background-color: #c5c5c5;
+  padding: 10px;
 }
 
 .coo_btn {
