@@ -50,7 +50,9 @@ public class Mrfdetails
 
     public DateTime UpdatedOnUtc { get; set; }
 
-    public string?  Note { get; set; } 
+    public string?  Note { get; set; }
+
+    public int?  HrId { get; set; }
 
 
 }
