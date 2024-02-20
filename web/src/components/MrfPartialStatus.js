@@ -204,6 +204,7 @@ const MrfPartialStatus = ({
         employeeName: formData.employeeName,
         emailId: formData.emailId,
         note: formData.note,
+        hrId:formData.hrId,
         employeeCode: formData.employeeCode == null ? 0 : formData.employeeCode,
         lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
         annualCtc: formData.annualCtc,

@@ -183,7 +183,7 @@ export const FORM_SCHEMA_CR = {
   spApprovalDate:new Date(),
   fhApprovalDate:new Date(),
   hmApprovalDate:new Date(),
- 
+  hrId:0,
  
 };
 export const INTERVIEW_EVALUATION={
