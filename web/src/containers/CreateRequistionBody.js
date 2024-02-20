@@ -1229,6 +1229,24 @@ const CreateRequisitionBody = ({
                 />
               </div>
             </div>
+            <div className="flex justify-content-between gap-3">
+              <div className="flex flex-column w-6 gap-2">
+                <label htmlFor="siteHRSPOCId" className="font-bold text-sm">
+                  HR
+                </label>
+                <DropdownComponent
+                  optionLabel="name"
+                  optionValue="employeeId"
+                  type="siteHRSPOCId"
+                  options={dropdownData.siteHRSPOC}
+                  value={formData.hrId}
+                  disable={commonSettings.setReadOnly}
+                  onChange={(e) => {
+                    setFormData({ ...formData, hrId: e.target.value });
+                  }}
+                />
+              </div>
+            </div>
 
             {(getReqRoleId === 4 ||
               (getReqRoleId === 3 &&
@@ -1741,7 +1759,6 @@ const CreateRequisitionBody = ({
                         default:
                           console.log(formData.functionHeadId);
                           if (formData.functionHeadId === 0) {
-                            console.log("rr");
                             return (
                               <>
                                 <div className="flex flex-column gap-2  w-2">

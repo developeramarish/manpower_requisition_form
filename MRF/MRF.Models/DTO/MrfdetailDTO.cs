@@ -76,7 +76,7 @@ namespace MRF.Models.DTO
 
         public string? MrfStatus { get; set; }
 
-        public int? HrId { get; set; }
+        public int HrId { get; set; }
 
     }
     public class MrfdetaiResponseModel
