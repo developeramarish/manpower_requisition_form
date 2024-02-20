@@ -21,7 +21,6 @@ namespace MRF.API.Controllers
         private readonly ILoggerService _logger;
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
-
         public MrfinterviewermapController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
@@ -30,7 +29,6 @@ namespace MRF.API.Controllers
             _logger = logger;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
-            
         }
         
         
@@ -177,19 +175,40 @@ namespace MRF.API.Controllers
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
+
+                    Mrfdetails mrfdetails = GetMrfDetails(obj.MrfId);
+                    Employeedetails employeedetails = GetInterviewer(id);
+
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
+                    string emailSubject = emailRequest.Subject.Replace("(Name)", employeedetails.Name);
+
                     if (emailRequest != null)
+                    {   
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailSubject, emailContent);
+                    }
+                    List<int> RoleIds = new List<int>();
+                    RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
+                    List<EmailRecipient> mrfEmailRecipient = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+                    foreach (var emailReq in mrfEmailRecipient)
                     {
-                        _logger.LogInfo("Sending Email from MrfinterviewermapController Delete");
-                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                        _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
                     }
                 }
-
             }
             else {
                 _logger.LogError($"No result found by this Id: {id}");
             }
-            
         }
+
+        private Employeedetails GetInterviewer(int InterviewerEmployeeId)
+        {
+            return _unitOfWork.Employeedetails.Get(u => u.Id == InterviewerEmployeeId);
+        }
+        private Mrfdetails GetMrfDetails(int MrfId)
+        {
+            return _unitOfWork.Mrfdetail.Get(u => u.Id == MrfId);
+        }
+
         // DELETE api/<MrfinterviewermapController>/5
         [HttpDelete("{id}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Item deleted successfully", Type = typeof(MrfinterviewermapResponseModel))]
@@ -210,12 +229,25 @@ namespace MRF.API.Controllers
                 _unitOfWork.Mrfinterviewermap.Remove(obj);
                 _unitOfWork.Save();
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
-                {
+                {  
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
+
+                    Mrfdetails mrfdetails = GetMrfDetails(obj.MrfId);
+                    Employeedetails employeedetails = GetInterviewer(id);
+
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
+                    string emailSubject = emailRequest.Subject.Replace("(Name)", employeedetails.Name);
+
                     if (emailRequest != null)
                     {
-                        _logger.LogInfo("Sending Email from MrfinterviewermapController DeleteMRFInterview");
-                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailSubject, emailContent);
+                    }
+                    List<int> RoleIds = new List<int>();
+                    RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
+                    List<EmailRecipient> mrfEmailRecipient = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+                    foreach (var emailReq in mrfEmailRecipient)
+                    {
+                        _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
                     }
                 }
 
