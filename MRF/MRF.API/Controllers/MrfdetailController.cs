@@ -148,7 +148,7 @@ namespace MRF.API.Controllers
                     }
 
                     //Send Email to MRF Owner
-                    _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId),
+                    _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId),
                         emailRequest.Subject,
                         emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
                                              .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
@@ -157,14 +157,6 @@ namespace MRF.API.Controllers
 
                 return _responseModel;
             }
-        }
-        private string getEmail(int id)
-        {
-            Employeedetails Employeedetail = _unitOfWork.Employeedetails.Get(u => u.Id == id);
-
-            if (Employeedetail != null)
-                return Employeedetail.Email;
-            return string.Empty;
         }
 
         private Mrfdetails Mrfdetail(MrfdetailRequestModel request, string ReferenceNo)
@@ -672,7 +664,7 @@ namespace MRF.API.Controllers
                         }
 
                         //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId), emailRequest.Subject, emailContent);
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailRequest.Subject, emailContent);
                     }
                 }
                 else
@@ -695,7 +687,7 @@ namespace MRF.API.Controllers
                     }
 
                     //Send Email to MRF Owner
-                    _emailService.SendEmailAsync(getEmail(request.CreatedByEmployeeId), emailSubject, emailContent);
+                    _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailSubject, emailContent);
                 }
             }
             else
