@@ -122,9 +122,17 @@ namespace MRF.API.Controllers
                 {
 
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Create User");
+
+                    List<int> RoleIds = new List<int>();
+                    RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
+                    List<EmailRecipient> mrfUserList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
                     if (emailRequest != null)
                     {   
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                    foreach (var emailReq in mrfUserList)
+                    {
+                        _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailRequest.Content);
                     }
                 }
 
@@ -276,11 +284,18 @@ namespace MRF.API.Controllers
 
                 if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
-
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Delete User");
+
+                    List<int> RoleIds = new List<int>();
+                    RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
+                    List<EmailRecipient> mrfUserList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
                     if (emailRequest != null)
-                    {   
+                    {
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+                    foreach (var emailReq in mrfUserList)
+                    {
+                        _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailRequest.Content);
                     }
                 }
             }
