@@ -174,8 +174,14 @@ namespace MRF.API.Controllers
                 {
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
                     if (emailRequest != null)
+                    {   
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
+
+                    //Get Email Recipients
+                    List<EmailRecipient> recipients = _unitOfWork.EmailRecipient.GetEmailRecipient(null, "Resume Reviewer deleted", id);
+                    foreach (EmailRecipient recipient in recipients)
                     {
-                        _logger.LogInfo("Sending Email from MrfresumereviewermapController Delete");
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
                 }

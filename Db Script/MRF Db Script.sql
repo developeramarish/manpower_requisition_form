@@ -1170,9 +1170,9 @@ CREATE TABLE `EmailMaster` (
 
 INSERT INTO emailmaster
 VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have successfully logged in" ,"Dear User, You have been logged in successfully. Please click here",0,"0"),
-	   (2,"Create User","ashutosh.tiwari@kwglobal.com","Admin","User is created successfully","Dear User, (User Name) is created successfully. Please click her",0,"2"),
-	   (3,"Delete User","ashutosh.tiwari@kwglobal.com","Admin","User is deleted successfully","Dear User, (User Name) is deleted successfully. Please click her",0,"2"),
-	   (4,"Update User","ashutosh.tiwari@kwglobal.com","Admin","User is Updated successfully","Dear User, (User Name)'s detail is updated successfully. Please click her",0,"2"),
+	   (2,"Create User","ashutosh.tiwari@kwglobal.com","Admin","User is created successfully","Dear User, (User Name) is created successfully. Please click here",0,"2"),
+	   (3,"Delete User","ashutosh.tiwari@kwglobal.com","Admin","User is deleted successfully","Dear User, (User Name) is deleted successfully. Please click here",0,"2"),
+	   (4,"Update User","ashutosh.tiwari@kwglobal.com","Admin","User is Updated successfully","Dear User, (User Name)'s detail is updated successfully. Please click here",0,"2"),
 	   (5,"Saved as Draft","ashutosh.tiwari@kwglobal.com","MRF Owner","Draft is saved successfully","Dear User, MRF ## is saved successfully. Please click here",1,"3"),
 	   (6,"Submit MRF","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF is submitted successfully","Dear User, MRF ## is submitted successfully. Please click here",2,"3,4"),
 	   (7,"Withdrawn MRF","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF is withdrawn successfully","Dear User, MRF ## is withdrawn successfully. Please click here",9,"3,4"),
@@ -1184,15 +1184,15 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 	   (12,"Rejected  MRF","ashutosh.tiwari@kwglobal.com","HR, HOD","MRF ## is rejected","Dear User, MRF ## is rejected. Please click here",8,"4,8"),
 	   (13,"On Hold","HR","ashutosh.tiwari@kwglobal.com","MRF ## is on hold","Dear User, status of MRF ## is changed to On Hold. Please click here",7,"4"),
 	   (14,"Closed (Onboarded)","ashutosh.tiwari@kwglobal.com","HR, HOD","MRF ## status is now onboarded","Dear User, status of MRF ## is changed to Onboarded. Please click here",10,"4,8"),
-	   (15,"Resume Reviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Resume Reviewer (Name)  added successfully","Dear user, You have been added as a resume reviewer successfully against MRF#.",0,"5"),
-	   (16,"Interviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Interviewer (Name) added successfully","Dear user, You have been added as a interviewer successfully against MRF#.",0,"5"),
-	   (17,"Resume Reviewer deleted","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer (Name) deleted successfully","Dear user, (Name) is deleted against MRF#.",0,"3"),
-	   (18,"Interviewer deleted","ashutosh.tiwari@kwglobal.com","HR","Interviewer (Name) deleted successfully","Dear user, (Name) is deleted against MRF#.",0,"4"),
+	   (15,"Resume Reviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Resume Reviewer (Name)  added successfully","Dear user, You have been added as a resume reviewer successfully against MRF ##.",0,"5"),
+	   (16,"Interviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Interviewer (Name) added successfully","Dear user, You have been added as a interviewer successfully against MRF ##.",0,"5"),
+	   (17,"Resume Reviewer deleted","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer (Name) deleted successfully","Dear user, (Name) is deleted against MRF ##.",0,"3"),
+	   (18,"Interviewer deleted","ashutosh.tiwari@kwglobal.com","HR","Interviewer (Name) deleted successfully","Dear user, (Name) is deleted against MRF ##.",0,"4"),
 	   (19,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(Has to forward)","Resume is forwarded successfully","Dear user, Resume has been forwarded to (User). ",0,"5"),
 	   (20,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(added as reviewer","Resume has been assigned","Dear user, You have been assigned for review Resume.",0,"5"),
 	   (21,"Interview Status","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Interview status is changed","Dear User, Interview status for Resume.pdf has been changed from (Assignment sent) to (Assignment received)",0,"3,4,6"),
 	   (22,"Resume Status","ashutosh.tiwari@kwglobal.com","MRF Owner, HR, Resume Reviewer & Interview Reviewer","Resume status is changed","Dear User, Resume.pdf is now (shortlisted). Please click here.",0,"3,4,5,6"),
-	   (23,"Feedback Submission","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Feedback submitted successully","Dear User, feedback has been submitted against resume.pdf. Please click her",0,"3,4,5,6"),
+	   (23,"Feedback Submission","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Feedback submitted successully","Dear User, feedback has been submitted against resume.pdf. Please click here",0,"3,4,5,6"),
 	   (24,"Received HOD Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received HOD Approval","Dear User, status of MRF ## is changed to Received HOD approval. Please click here",11,"3,4"),
 	   (25,"Received COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received COO Approval","Dear User, status of MRF ## is changed to Received COO approval. Please click here",11,"3,4"),
 	   (26,"Received Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received Finance Head Approval","Dear User, status of MRF ## is changed to Received Finance Head Approval. Please click here",11,"3,4"),
@@ -1936,13 +1936,19 @@ Values(1,1,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
 (31,1,1,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
 (32,13,4,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
 (33,14,4,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(34,15,4,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19');
- 
+(34,15,4,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
+ (35,4,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
+ (36,5,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
+ (37,11,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
+ (38,12,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
+ (39,13,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
+ (40,14,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
+ (41,15,3,1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19');
 
 ALTER TABLE `MrfStatusRoleMap`
   ADD PRIMARY KEY (`Id`);
 ALTER TABLE `MrfStatusRoleMap`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
   
 ALTER TABLE `MrfStatusRoleMap`
   ADD CONSTRAINT `FK_mrfstatusmasterStatusId` FOREIGN KEY (`StatusId`) REFERENCES `mrfstatusmaster` (`Id`),

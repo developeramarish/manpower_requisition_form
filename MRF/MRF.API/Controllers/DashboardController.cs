@@ -43,11 +43,14 @@ namespace MRF.API.Controllers
         {
             _logger.LogInfo("Fetching All Mrf resume reviewer map");
             List<MrfSummaryViewModel> MrfStatusSummary = _unitOfWork.Dashboard.GroupByMrfStatus(roleId, userId).ToList();
+            var r = from data in MrfStatusSummary where
+                 (data.MrfStatusId != 4 && data.MrfStatusId != 5 && data.MrfStatusId != 11 && data.MrfStatusId != 12 &&
+                 data.MrfStatusId != 13 && data.MrfStatusId != 14 && data.MrfStatusId != 15) select data;
             if (MrfStatusSummary == null)
             {
                 _logger.LogError("No record is found");
             }
-            _response.Result = MrfStatusSummary;
+            _response.Result = r;
 
             _logger.LogInfo($"Total Mrf resume reviewer map count: {MrfStatusSummary.Count}");
             return _response;
