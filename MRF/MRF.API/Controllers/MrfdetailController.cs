@@ -268,7 +268,7 @@ namespace MRF.API.Controllers
             int employeeId = 0;
             nextMrfStatusId = request.MrfStatusId;
             List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetList(mrfId);
-            if (request.HrId != 0)
+            if (request.HrId != null)
             {
                 //employeeId = request.HrId;
                 var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
