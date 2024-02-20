@@ -104,9 +104,20 @@ namespace MRF.API.Controllers
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Feedback Submission");
+              
+
                 if (emailRequest != null)
                 {
                     _logger.LogInfo("Sending Email from MrffeedbackResponseModel Post");
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                }
+
+                List<int> RoleIds = new List<int>();
+                RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
+                List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+
+                foreach (var emailReq in rejectedEmailList)
+                {
                     _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                 }
             }
