@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,17 +20,17 @@ namespace MRF.API.Controllers
         private ResponseDTO _response;
         private MrffeedbackResponseModel _responseModel;
         private readonly ILoggerService _logger;
- 
-         
+        private string mrfUrl = string.Empty;
+        private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IHostEnvironment _hostEnvironment;
-        public MrffeedbackController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment)
-         {
+        public MrffeedbackController(IUnitOfWork unitOfWork, ILoggerService logger, IEmailService emailService, IHostEnvironment hostEnvironment, IConfiguration configuration)
+        {
             _unitOfWork = unitOfWork;
             _response = new ResponseDTO();
             _responseModel = new MrffeedbackResponseModel();
             _logger = logger;
- 
+            _configuration = configuration;
             _emailService = emailService;
             _hostEnvironment = hostEnvironment;
  
@@ -104,21 +106,23 @@ namespace MRF.API.Controllers
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Feedback Submission");
-              
 
+                Mrfdetails mrfdetail = _unitOfWork.Mrfdetail.Get(u => u.Id == request.MrfId);
+                mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfdetail.Id.ToString());
+                string emailContent = emailRequest.Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                 if (emailRequest != null)
                 {
                     _logger.LogInfo("Sending Email from MrffeedbackResponseModel Post");
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailContent);
                 }
 
                 List<int> RoleIds = new List<int>();
                 RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
-                List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+                List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds, request.MrfId);
 
                 foreach (var emailReq in rejectedEmailList)
                 {
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailContent);
                 }
             }
             return _responseModel;

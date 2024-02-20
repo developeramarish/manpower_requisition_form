@@ -86,10 +86,22 @@ namespace MRF.DataAccess.Repository
                                                {
                                                    Email = ed.Email
                                                };
-
             return query.ToList();
+        }
 
+        // Get Email Recipients based on RoleId and MrfId
+        public List<EmailRecipient> GetEmployeeEmailByRoleIds(List<int> roleId, int mrfId)
+        {
 
+            IQueryable<EmailRecipient> query = (from ed in _db.Employeedetails
+                                               join erm in _db.Employeerolemap on ed.Id equals erm.EmployeeId
+                                               join mea in _db.MrfEmailApproval on ed.Id equals mea.EmployeeId
+                                               where roleId.Contains(erm.RoleId) && mea.MrfId == mrfId
+                                               select new EmailRecipient
+                                               {
+                                                   Email = ed.Email
+                                               }).Distinct();
+            return query.ToList();
         }
 
         public List<EmailRecipient> GetEmployeeEmail(string empRole)
@@ -103,6 +115,16 @@ namespace MRF.DataAccess.Repository
                                                };
 
             return query.ToList();
+        }
+
+        //Get Employee Email by Employee Id
+        public string getEmail(int id)
+        {
+            Employeedetails Employeedetail = _db.Employeedetails.FirstOrDefault(u => u.Id == id);
+
+            if (Employeedetail != null)
+                return Employeedetail.Email;
+            return string.Empty;
         }
     }
 }

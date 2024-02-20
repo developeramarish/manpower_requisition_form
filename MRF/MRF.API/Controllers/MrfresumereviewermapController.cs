@@ -177,6 +177,13 @@ namespace MRF.API.Controllers
                     {   
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
+
+                    //Get Email Recipients
+                    List<EmailRecipient> recipients = _unitOfWork.EmailRecipient.GetEmailRecipient(null, "Resume Reviewer deleted", id);
+                    foreach (EmailRecipient recipient in recipients)
+                    {
+                        _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
+                    }
                 }
             }
             else

@@ -8,5 +8,7 @@ namespace MRF.DataAccess.Repository.IRepository
         public List<EmailRecipient> GetEmailRecipient(int? MrfStatusId = null, string? MrfStatus = null, int? MrfId=null);
         public List<EmailRecipient> GetEmployeeEmail(string empRole);
         public List<EmailRecipient> GetEmployeeEmailByRoleIds(List<int> roleId);
+        public string getEmail(int id);
+        public List<EmailRecipient> GetEmployeeEmailByRoleIds(List<int> roleId, int mrfId);
     }
 }
