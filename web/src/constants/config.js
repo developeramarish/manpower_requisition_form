@@ -38,12 +38,12 @@ export const API_URL = {
   GET_EMPLOYEE:`${APIPath}Employeedetails/GetAllEmpRoleWithEmpCode`,
   DELETE_DRAFTED_MRF:`${APIPath}Mrfdetail/Delete/`,
 };
-
+ 
 export const FILE_URL = {
   RESUME: `${APP}/Resume/`,
   ASSIGNMENT: `${APP}/Assignment/`,
 };
-
+ 
 export const ROUTES = {
   /* DASHBOARD: "dashboard",
     CREATE_REQUISITION: "create_requisition",
@@ -61,7 +61,7 @@ export const ROUTES = {
   employee:"employee",
   allemployees:"allemployees",
 };
-
+ 
 export const MRF_STATUS = {
   draft: 1,
   new: 2,
@@ -87,12 +87,12 @@ export const RESUME_STATUS
   Rejected:3,
   OnHold:4
 }
-
+ 
 export const COUNTRIES = [
   { name:<> <span><img src="./images/india_flag.png" width={"20px"} height={"12px"}/></span><span style={{ marginRight: '50px' }}> India </span><span>+91</span></>, code: 'IN' },
   { name:<><span><img src="./images/us_flag.png" width={"20px"} height={"12px"}/></span> <span style={{ marginRight: '75px' }}> US </span><span>+1</span></>, code: 'US' },
 ];
-
+ 
 export const ROLES = {
   superAdmin: 1,
   admin: 2,
@@ -102,20 +102,20 @@ export const ROLES = {
   interviewer: 6,
   hiringManager: 7,
 };
-
+ 
 export const REQUISITION_TYPE = [
   { name: "FR", code: "FR" },
   { name: "RP", code: "RP" },
-
+ 
   // Add more options as needed
 ];
-
+ 
 export const GENDER = [
   { label: "Male", id: 1 },
   { label: "Female", id: 2 },
   { label: "Other", id: 3 },
 ];
-
+ 
 export const MIN_EXPERIENCE_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
   label: i.toString(),
   value: i,
@@ -124,7 +124,7 @@ export const MAX_EXPERIENCE_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
   label: i.toString(),
   value: i,
 }));
-
+ 
 export const FORM_SCHEMA_CR = {
   referenceNo: "",
   positionTitleId: "",
@@ -162,10 +162,14 @@ export const FORM_SCHEMA_CR = {
   replaceJustification: "",
   jobDescription: "",
   skills: "",
+  skillsText: "",
+  jobDescriptionText: "",
   resumeReviewerEmployeeIds:"",
   interviewerEmployeeIds: "",
   hiringManagerId: 0,
   hiringManagerEmpId: 0,
+  hiringManagerCheckValu:0,
+  siteHrSpocCheckValu:0,
   functionHeadId: 0,
   functionHeadEmpId: 0,
   siteHRSPOCId: 0,
@@ -179,8 +183,8 @@ export const FORM_SCHEMA_CR = {
   spApprovalDate:new Date(),
   fhApprovalDate:new Date(),
   hmApprovalDate:new Date(),
-
-  
+ 
+ 
 };
 export const INTERVIEW_EVALUATION={
   AssignmentSent:1,
@@ -206,7 +210,5 @@ export const INTERVIEW_EVALUATION={
   OfferAcceptedandCountered:21,
   Onboarded:22,
 }
-
+ 
 export const emailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-  
