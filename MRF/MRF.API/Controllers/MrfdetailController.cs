@@ -184,7 +184,7 @@ namespace MRF.API.Controllers
                 JdDocPath = request.JdDocPath ?? "",
                 LocationId = request.LocationId == 0 ? null : request.LocationId,
                 QualificationId = request.QualificationId == 0 ? null : request.QualificationId,
-                HrId=request.HrId == 0 ? 0 : request.HrId,
+                HrId=request.HrId == 0 ? null : request.HrId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -274,7 +274,7 @@ namespace MRF.API.Controllers
                 var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
                     MrfId = mrfId,
-                    EmployeeId = request.HrId,
+                    EmployeeId = (int)request.HrId,
                     //ApprovalDate = request.CreatedOnUtc,
                 };
                 MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
