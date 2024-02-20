@@ -52,7 +52,7 @@ public class Mrfdetails
 
     public string?  Note { get; set; }
 
-    public int  HrId { get; set; }
+    public int?  HrId { get; set; }
 
 
 }
