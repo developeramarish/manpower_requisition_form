@@ -10,6 +10,7 @@ import {
   removeSpaces,
   postData,
   isFormDataEmptyForAddCandidate,
+  formatDateToYYYYMMDD,
 } from "../constants/Utils";
 import { InputMask } from "primereact/inputmask";
 import { API_URL, COUNTRIES, emailRegex } from "../constants/config";
@@ -105,7 +106,10 @@ const AddCandidate = (reqId) => {
       fileUploadData.append("file", selectedFile);
       try {
         const fileUploadResponse = await fetch(
-          API_URL.RESUME_UPLOAD + removeSpaces(formData.name),
+          API_URL.RESUME_UPLOAD +
+            removeSpaces(
+              formData.name + "_" + mrfData.mrfRefenceNo.replace(/\//g, "_")
+            ),
           {
             method: "POST",
             body: fileUploadData,
@@ -125,8 +129,16 @@ const AddCandidate = (reqId) => {
             contactNo: formData.contactNo,
             resumePath:
               selectedFile.type === "application/pdf"
-                ? removeSpaces(formData.name) + ".pdf"
-                : removeSpaces(formData.name) + ".docx",
+                ? removeSpaces(
+                    formData.name +
+                      "_" +
+                      mrfData.mrfRefenceNo.replace(/\//g, "_")
+                  ) + ".pdf"
+                : removeSpaces(
+                    formData.name +
+                      "_" +
+                      mrfData.mrfRefenceNo.replace(/\//g, "_")
+                  ) + ".docx",
             candidateStatusId: 1,
             reviewedByEmployeeIds: "",
             createdByEmployeeId: formData.createdByEmployeeId,
