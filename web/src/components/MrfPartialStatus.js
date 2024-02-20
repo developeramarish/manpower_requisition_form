@@ -28,6 +28,7 @@ const MrfPartialStatus = ({
   disabled = null,
   updatedClick = null,
   roleID = null,
+  refreshParent,
   outlined,
   siteHRUpdateClick = false,
   hiringManagerUpdateClick = false,
@@ -341,9 +342,10 @@ const MrfPartialStatus = ({
           setVisible(false);
           setIsLoading(false);
           toastRef.current.showSuccessMessage("Action Submitted");
-          setTimeout(() => {
-            navigateTo("my_requisition");
-          }, 1000);
+          // setTimeout(() => {
+          //   navigateTo("my_requisition");
+          // }, 1000);
+          refreshParent();
         }
       } else {
         console.error("Request failed with status:", response.status);
