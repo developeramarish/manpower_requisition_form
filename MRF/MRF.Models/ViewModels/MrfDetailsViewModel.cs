@@ -27,7 +27,7 @@ namespace MRF.Models.ViewModels
         public string RequisitionType { get; set; } = null!;
         public string Salary { get; set; } = null!;
 
-
+        public int? hrId { get; set; }
 
     }
 }
