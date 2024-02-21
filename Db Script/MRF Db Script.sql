@@ -1258,7 +1258,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to Awaiting HOD approval.</p>
+        <p>Status of MRF ## is changed to Awaiting HOD approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1270,7 +1270,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to Awaiting COO approval.</p>
+        <p>Status of MRF ## is changed to Awaiting COO approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1282,7 +1282,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to open.</p>
+        <p>Status of MRF ## is changed to open.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1305,7 +1305,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to On Hold.</p>
+        <p>Status of MRF ## is changed to On Hold.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1317,7 +1317,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to Onboarded.</p>
+        <p>Status of MRF ## is changed to Onboarded.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1408,7 +1408,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to Received HOD approval.</p>
+        <p>Status of MRF ## is changed to Received HOD approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1418,7 +1418,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to Received COO approval.</p>
+        <p>Status of MRF ## is changed to Received COO approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1428,7 +1428,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to Received Finance Head Approval.</p>
+        <p>Status of MRF ## is changed to Received Finance Head Approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1438,7 +1438,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h2>Dear User,</h2>
-        <p>status of MRF ## is changed to Received Finance Head Approval.</p>
+        <p>Status of MRF ## is changed to Received Finance Head Approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
