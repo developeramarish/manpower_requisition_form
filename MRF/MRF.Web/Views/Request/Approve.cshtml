@@ -1,5 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Approved";
+    if (ViewData["Message"] != null)
+    {
+        ViewData["Title"] = "Approved";
+    }
+    if (ViewData["AlreadyApproved"] != null)
+    {
+        ViewData["Title"] = "Link Expired";
+    }
+    if (ViewData["AlreadyProcessed"] != null)
+    {
+        ViewData["Title"] = "Link Expired";
+    }
 }
 
 @if (ViewData["Message"] != null)
@@ -12,15 +23,56 @@
         </div>
         <div class="row mt-3">
             <div class="col text-center">
-                <div role="alert" style="font-weight: bold; font-family: Arial, sans-serif;">
+                <div role="alert" style="font-weight: bold; color: #333333; font-family: Arial, sans-serif;">
                     MRF has been approved successfully!
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col text-center">
-                <div role="alert" style="font-weight: bold; font-family: Arial, sans-serif;">
-                    Confirmation has been sent to concerned persons!
+                <div role="alert" style="font-weight: bold; color: #333333; font-family: Arial, sans-serif;">
+                    Confirmation has been sent to concerned people!
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewData["AlreadyApproved"] != null)
+{
+<div class="container center-content">
+   
+    <div class="row mt-3">
+        <div class="col text-center">
+            <div role="alert" style="font-weight: bold; color: #333333; font-family: Arial, sans-serif;">
+                MRF was already approved earlier and this link is expired!
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <div role="alert" style="font-weight: bold; color: #333333; font-family: Arial, sans-serif;">
+                Please contact HR!
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@if (ViewData["AlreadyProcessed"] != null)
+{
+    <div class="container center-content">
+
+        <div class="row mt-3">
+            <div class="col text-center">
+                <div role="alert" style="font-weight: bold; color: #333333; font-family: Arial, sans-serif;">
+                    MRF was already processed earlier and this link is expired!
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <div role="alert" style="font-weight: bold; color: #333333; font-family: Arial, sans-serif;">
+                    Please contact HR!
                 </div>
             </div>
         </div>

@@ -111,18 +111,17 @@ namespace MRF.API.Controllers
                 mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfdetail.Id.ToString());
                 string emailContent = emailRequest.Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                 if (emailRequest != null)
-                {
-                    _logger.LogInfo("Sending Email from MrffeedbackResponseModel Post");
+                {  
                     _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailContent);
                 }
 
                 List<int> RoleIds = new List<int>();
                 RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
-                List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds, request.MrfId);
+                List<EmailRecipient> mrfFeedbackEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds, request.MrfId);
 
-                foreach (var emailReq in rejectedEmailList)
-                {
-                    _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailContent);
+                foreach (var emailReq in mrfFeedbackEmailList)
+                {   
+                    _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailContent);
                 }
             }
             return _responseModel;

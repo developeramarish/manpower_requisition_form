@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Runtime.Remoting;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -154,7 +151,6 @@ namespace MRF.API.Controllers
                                              .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
 
                 }
-
                 return _responseModel;
             }
         }
@@ -190,10 +186,8 @@ namespace MRF.API.Controllers
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
                 UpdatedOnUtc = request.UpdatedOnUtc
             };
-
             return mrfDetail;
         }
-
 
         private void CallFreshmrfdetailController(MrfdetailRequestModel request, int mrfId, bool Update)
         {
@@ -212,7 +206,6 @@ namespace MRF.API.Controllers
 
             if (freshmrResponse.Id != 0)
             {
-
                 var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
                 {
                     MrfId = mrfId,
@@ -222,17 +215,14 @@ namespace MRF.API.Controllers
 
                 postMrfEmail(MrfdetailRequestModelRequest);
 
-
                 int nextMrfStatusId;
                 CallEmailApprovalController(request, mrfId, Update, out nextMrfStatusId);
                 CallReplacementController(request, mrfId, Update);
                 CallreviewerController(request, mrfId, Update);
-
             }
             else
             {
                 _logger.LogError($"Unable to add mrf details");
-
             }
         }
 
@@ -253,7 +243,6 @@ namespace MRF.API.Controllers
             };
 
             return freshmrRequest;
-
         }
 
         private void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
@@ -303,7 +292,6 @@ namespace MRF.API.Controllers
                 else
                 {
                     controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-
                 }
             }
             if (request.HiringManagerId != 0)
@@ -321,15 +309,13 @@ namespace MRF.API.Controllers
                 if (MrfEmailApproval == null)
                 {
                     postMrfEmail(MrfEmailApprovalRequestModel);
-
                 }
                 else
                 {
                     controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
                 }
-
-
             }
+
             if (request.SiteHRSPOCId != 0)
             {
                 employeeId = request.SiteHRSPOCId;
@@ -348,10 +334,7 @@ namespace MRF.API.Controllers
                 else
                 {
                     controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-
                 }
-               
-
             }
             if (request.FinanceHeadId != 0)
             {
@@ -369,13 +352,12 @@ namespace MRF.API.Controllers
                 {
                     postMrfEmail(MrfEmailApprovalRequestModel);
                 }
-                else {
-
+                else
+                {
                     controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
                 }
-               
-
             }
+
             if (request.PresidentnCOOId != 0)
             {
                 employeeId = request.PresidentnCOOId;
@@ -391,13 +373,12 @@ namespace MRF.API.Controllers
                 if (MrfEmailApproval == null)
                 {
                     postMrfEmail(MrfEmailApprovalRequestModel);
-                } else
+                }
+                else
                 {
                     controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }               
-
+                }
             }
-            
             return employeeId;
         }
 
@@ -427,9 +408,7 @@ namespace MRF.API.Controllers
                 mrfStatusId = StatusId,
                 CreatedByEmployeeId = request.UpdatedByEmployeeId,
                 CreatedOnUtc = request.UpdatedOnUtc,
-
             };
-
             postMrfHistory(mrfDetailsStatusHistory);
         }
         private void CallReplacementController(MrfdetailRequestModel request, int mrfId, bool Update)
@@ -442,16 +421,13 @@ namespace MRF.API.Controllers
                 {
                     ReplacementmrfdetailController freshmrController = new ReplacementmrfdetailController(_unitOfWork, _logger);
                     var ReplacementmrfdetailResponse = freshmrController.Put(0, ReplacementmrfdetailRequest);
-
                 }
                 else
                 {
                     ReplacementmrfdetailController freshmrController = new ReplacementmrfdetailController(_unitOfWork, _logger);
                     var ReplacementmrfdetailResponse = freshmrController.Post(ReplacementmrfdetailRequest);
                 }
-
             }
-
         }
 
         private ReplacementmrfdetailRequestModel Replacementmrfdetail(MrfdetailRequestModel request, int mrfId)
@@ -471,12 +447,8 @@ namespace MRF.API.Controllers
                 UpdatedOnUtc = request.UpdatedOnUtc,
                 Justification = request.ReplaceJustification,
             };
-
             return ReplacementmrfdetailRequest;
-
         }
-
-
         private void CallreviewerController(MrfdetailRequestModel request, int mrfId, bool Update)
         {
             if (string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
@@ -508,14 +480,11 @@ namespace MRF.API.Controllers
                     };
 
                     var resumereviewermapResponse = resumereviewermap.Post(mrfresumereviewermap);
-
-
                 }
             }
 
             if (string.IsNullOrEmpty(request.InterviewerEmployeeIds))
             {
-
                 MrfinterviewermapController interviewermap = new MrfinterviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
                 interviewermap.DeleteMRFInterview(mrfId);
             }
@@ -539,15 +508,10 @@ namespace MRF.API.Controllers
                         UpdatedByEmployeeId = request.UpdatedByEmployeeId,
                         UpdatedOnUtc = request.UpdatedOnUtc
                     };
-
-
-
                     var interviewermapResponse = interviewermap.Post(mrfinterviewermap);
-
                 }
             }
         }
-
 
         // PUT api/<MrfdetailController>/5
         [HttpPut("{id}")]
@@ -594,8 +558,6 @@ namespace MRF.API.Controllers
                 existingStatus.JdDocPath = request.JdDocPath;
                 existingStatus.LocationId = request.LocationId == 0 ? null : request.LocationId;
                 existingStatus.QualificationId = request.QualificationId == 0 ? null : request.QualificationId;
-                //existingStatus.CreatedByEmployeeId = request.CreatedByEmployeeId;
-                //existingStatus.CreatedOnUtc = request.CreatedOnUtc;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
 
@@ -605,7 +567,6 @@ namespace MRF.API.Controllers
                 request.mrfID = existingStatus.Id;
                 id = existingStatus.Id;
                 CallFreshmrfdetailController(request, id, true);
-
             }
             else
             {
@@ -640,10 +601,8 @@ namespace MRF.API.Controllers
                     var entityProperty = entityType.GetProperty(propertyInfo.Name);
                     if (entityProperty != null)
                     {
-
                         var valueToUpdate = propertyInfo.GetValue(request);
                         if ((valueToUpdate != null) && _emailService.IsValidUpdateValue(valueToUpdate))
-
                         {
                             entityProperty.SetValue(existingStatus, valueToUpdate);
                         }
@@ -657,7 +616,6 @@ namespace MRF.API.Controllers
 
                 int nextMrfStatusId;
                 int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId);
-                CallMrfHistory(request, id, mrfstatus);
                 CallMrfHistory(request, id, mrfstatus);
 
                 MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
@@ -749,16 +707,12 @@ namespace MRF.API.Controllers
                             _unitOfWork.MrfEmailApproval.Remove(email1);
                             _unitOfWork.Save();
                         }
-
                     }
                     if (replacement != null)
                     {
                         _unitOfWork.Replacementmrfdetail.Remove(replacement);
                         _unitOfWork.Save();
                     }
-
-
-
                     if (resume != null)
                     {
                         foreach (Mrfresumereviewermap res in resume)
@@ -766,7 +720,6 @@ namespace MRF.API.Controllers
                             _unitOfWork.Mrfresumereviewermap.Remove(res);
                             _unitOfWork.Save();
                         }
-
                     }
                     if (interviewer != null)
                     {
@@ -775,32 +728,25 @@ namespace MRF.API.Controllers
                             _unitOfWork.Mrfinterviewermap.Remove(inter);
                             _unitOfWork.Save();
                         }
-
                     }
                     _unitOfWork.Mrfdetail.Remove(obj);
                     _unitOfWork.Save();
                     _responseModel.Id = obj.Id;
-
                 }
                 else
                 {
                     _logger.LogError($"No result found by this Id: {id}");
                     _responseModel.Id = 0;
-
                 }
-
             }
             catch (ArgumentNullException e)
             {
                 _logger.LogError($"Error sending email: {e.Message}");
                 StatusCode(500, "An error occurred while deleting entry.");
                 _responseModel.Id = 0;
-
             }
             return _responseModel;
-
         }
-
 
         // GET api/<MrfdetailController>/5
         //[HttpGet("{statusId},{roleId}")]
@@ -832,14 +778,12 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfdetailRequestModel GetRequisition(int MrfId)
-
         {
             _logger.LogInfo($"Fetching All MRF Details by Id: {MrfId}");
             MrfdetailRequestModel mrfdetail = _unitOfWork.Mrfdetail.GetRequisition(MrfId);
             if (mrfdetail == null)
             {
                 _logger.LogError($"No result found by this Id:{MrfId}");
-
                 MrfdetailRequestModel blankData = new MrfdetailRequestModel();
                 return blankData;
             }
@@ -847,8 +791,6 @@ namespace MRF.API.Controllers
             {
                 return mrfdetail;
             }
-
-
         }
         /*
          Reference Number: [Format: No. of positions (in 2 digits) / Location Name (in 3 alphabets)/ 
@@ -875,7 +817,6 @@ namespace MRF.API.Controllers
 
             return (Reference, Number);
         }
-
 
         // GET: api/<ProjectController>
         [HttpGet]
@@ -931,7 +872,6 @@ namespace MRF.API.Controllers
                 sw.SiteHRSPOC,
                 sw.FinanceHead,
                 sw.PresidentnCOO
-
             };
 
             int Count = sw.Projects.Count + sw.Departments.Count + sw.Grades.Count + sw.Vaccancies.Count + sw.EmploymentTypes.Count + sw.location.Count + sw.Qualification.Count + sw.ReportingTo.Count;
@@ -958,12 +898,7 @@ namespace MRF.API.Controllers
             public List<Employeerolemap> FunctionHead { get; set; } = new List<Employeerolemap>();//8
             public List<Employeerolemap> SiteHRSPOC { get; set; } = new List<Employeerolemap>();//4
             public List<Employeerolemap> FinanceHead { get; set; } = new List<Employeerolemap>();//10
-
             public List<Employeerolemap> PresidentnCOO { get; set; } = new List<Employeerolemap>();//11
-
         }
-
-
-
     }
 }

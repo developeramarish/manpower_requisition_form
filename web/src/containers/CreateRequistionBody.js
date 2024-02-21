@@ -1757,7 +1757,6 @@ const CreateRequisitionBody = ({
                             </>
                           );
                         default:
-                          console.log(formData.functionHeadId);
                           if (formData.functionHeadId === 0) {
                             return (
                               <>
@@ -1781,7 +1780,6 @@ const CreateRequisitionBody = ({
                               </>
                             );
                           } else {
-                            console.log("opop");
                             return (
                               <>
                                 <div className="flex flex-column gap-2  w-2">
@@ -1909,30 +1907,30 @@ const CreateRequisitionBody = ({
                               </div>
                             </>
                           );
-                        case MRF_STATUS.cooapproval:
-                        case MRF_STATUS.awaitCooApproval:
-                        case MRF_STATUS.recivedfinanceHeadApproval:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={14}
-                                  formData={formData}
-                                  refreshParent={refreshParentComponent}
-                                  className={"acknowledge_btn"}
-                                  label={"Acknowledge"}
-                                  disabled={true}
-                                  message={
-                                    "Do you want to submit it as Received Finance Head approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3">
-                                <h4>Received Fin. Head Approval</h4>
-                              </div>
-                            </>
-                          );
+                        // case MRF_STATUS.cooapproval:
+                        // case MRF_STATUS.awaitCooApproval:
+                        // case MRF_STATUS.recivedfinanceHeadApproval:
+                        //   return (
+                        //     <>
+                        //       <div className="flex flex-column gap-2 w-2">
+                        //         <MrfPartialStatus
+                        //           mrfId={getReqId}
+                        //           mrfStatusId={14}
+                        //           formData={formData}
+                        //           refreshParent={refreshParentComponent}
+                        //           className={"acknowledge_btn"}
+                        //           label={"Acknowledge"}
+                        //           disabled={true}
+                        //           message={
+                        //             "Do you want to submit it as Received Finance Head approval?"
+                        //           }
+                        //         />
+                        //       </div>
+                        //       <div className=" w-3">
+                        //         <h4>Received Fin. Head Approval</h4>
+                        //       </div>
+                        //     </>
+                        //   );
                         case MRF_STATUS.awaitfinanceHeadApproval:
                           return (
                             <>
@@ -1952,33 +1950,77 @@ const CreateRequisitionBody = ({
                               <div className=" w-3">
                                 <h4>Awaiting Fin. Head approval</h4>
                               </div>
-                              {/* <div className=" w-2 ">
-                                {"Received HOD Approval"}
-                              </div> */}
                             </>
                           );
                         default:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={13}
-                                  formData={formData}
-                                  className={"finance_btn"}
-                                  label={"Send to Fin. Head Approval"}
-                                  refreshParent={refreshParentComponent}
-                                  disabled={true}
-                                  message={
-                                    "Do you want to submit it for Finance Head approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3">
-                                <h4>Not Approved</h4>
-                              </div>
-                            </>
-                          );
+                          if (formData.financeHeadId === 0) {
+                            return (
+                              <>
+                                <div className="flex flex-column gap-2  w-2">
+                                  <MrfPartialStatus
+                                    mrfId={getReqId}
+                                    mrfStatusId={13}
+                                    formData={formData}
+                                    refreshParent={refreshParentComponent}
+                                    className={"finance_btn"}
+                                    label={"Send to Fin. Head Approval"}
+                                    disabled={true}
+                                    // financeHeadClick={true}
+                                    message={
+                                      "Do you want to submit it for Finance Head approval?"
+                                    }
+                                  />
+                                </div>
+                                <div className=" w-3 ">
+                                  <h4>Not Approved</h4>
+                                </div>
+                              </>
+                            );
+                          } else {
+                            return (
+                              <>
+                                <div className="flex flex-column gap-2  w-2">
+                                  <MrfPartialStatus
+                                    mrfId={getReqId}
+                                    mrfStatusId={4}
+                                    formData={formData}
+                                    refreshParent={refreshParentComponent}
+                                    className={"acknowledge_btn"}
+                                    label={"Acknowledge"}
+                                    disabled={true}
+                                    message={
+                                      "Do you want to submit it as Received HOD Approval?"
+                                    }
+                                  />
+                                </div>
+                                <div className=" w-3 ">
+                                  <h4>Received Fin. Head Approval</h4>
+                                </div>
+                              </>
+                            );
+                          }
+
+                        // return (
+                        //   <>
+                        //     <div className="flex flex-column gap-2 w-2">
+                        //       <MrfPartialStatus
+                        //         mrfId={getReqId}
+                        //         mrfStatusId={13}
+                        //         formData={formData}
+                        //         className={"finance_btn"}
+                        //         label={"Send to Fin. Head Approval"}
+                        //         refreshParent={refreshParentComponent}
+                        //         disabled={true}
+                        //         message={
+                        //           "Do you want to submit it for Finance Head approval?"
+                        //         }
+                        //       />
+                        //     </div>
+                        //     <div className=" w-3">
+                        //       <h4>Not Approved</h4>
+                        //     </div>
+                        //   </>
+                        // );
                       }
                     }
                   })()}
@@ -2087,29 +2129,29 @@ const CreateRequisitionBody = ({
                               </div>
                             </>
                           );
-                        case MRF_STATUS.cooapproval:
-                        case MRF_STATUS.open:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={5}
-                                  formData={formData}
-                                  className={"acknowledge_btn"}
-                                  label={"Acknowledge"}
-                                  refreshParent={refreshParentComponent}
-                                  disabled={true}
-                                  message={
-                                    "Do you want to submit it as Received COO Approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3 ">
-                                <h4>Received COO Approval</h4>
-                              </div>
-                            </>
-                          );
+                        // case MRF_STATUS.cooapproval:
+                        // case MRF_STATUS.open:
+                        //   return (
+                        //     <>
+                        //       <div className="flex flex-column gap-2 w-2">
+                        //         <MrfPartialStatus
+                        //           mrfId={getReqId}
+                        //           mrfStatusId={5}
+                        //           formData={formData}
+                        //           className={"acknowledge_btn"}
+                        //           label={"Acknowledge"}
+                        //           refreshParent={refreshParentComponent}
+                        //           disabled={true}
+                        //           message={
+                        //             "Do you want to submit it as Received COO Approval?"
+                        //           }
+                        //         />
+                        //       </div>
+                        //       <div className=" w-3 ">
+                        //         <h4>Received COO Approval</h4>
+                        //       </div>
+                        //     </>
+                        //   );
                         case MRF_STATUS.awaitCooApproval:
                           return (
                             <>
@@ -2132,28 +2174,75 @@ const CreateRequisitionBody = ({
                             </>
                           );
                         default:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={12}
-                                  formData={formData}
-                                  className={"coo_btn"}
-                                  label={"Send to COO Approval"}
-                                  refreshParent={refreshParentComponent}
-                                  // cooClick={true}
-                                  disabled={true}
-                                  message={
-                                    "Do you want to submit it for COO approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3 ">
-                                <h4>Not Approved</h4>
-                              </div>
-                            </>
-                          );
+                          if (formData.presidentnCOOId === 0) {
+                            return (
+                              <>
+                                <div className="flex flex-column gap-2  w-2">
+                                  <MrfPartialStatus
+                                    mrfId={getReqId}
+                                    mrfStatusId={12}
+                                    formData={formData}
+                                    label={"Send to COO Approval"}
+                                    cooClick={true}
+                                    refreshParent={refreshParentComponent}
+                                    className={"coo_btn"}
+                                    disabled={true}
+                                    message={
+                                      "Do you want to submit it for COO approval?"
+                                    }
+                                  />
+                                </div>
+                                <div className=" w-3 ">
+                                  <h4>Not Approved</h4>
+                                </div>
+                              </>
+                            );
+                          } else {
+                            return (
+                              <>
+                                <div className="flex flex-column gap-2  w-2">
+                                  <MrfPartialStatus
+                                    mrfId={getReqId}
+                                    mrfStatusId={5}
+                                    formData={formData}
+                                    className={"acknowledge_btn "}
+                                    label={"Acknowledge"}
+                                    refreshParent={refreshParentComponent}
+                                    disabled={true}
+                                    message={
+                                      "Do you want to submit it as Received COO Approval?"
+                                    }
+                                  />
+                                </div>
+                                <div className=" w-3 ">
+                                  <h4>Received Fin. Head Approval</h4>
+                                </div>
+                              </>
+                            );
+                          }
+
+                        // return (
+                        //   <>
+                        //     <div className="flex flex-column gap-2 w-2">
+                        //       <MrfPartialStatus
+                        //         mrfId={getReqId}
+                        //         mrfStatusId={12}
+                        //         formData={formData}
+                        //         className={"coo_btn"}
+                        //         label={"Send to COO Approval"}
+                        //         refreshParent={refreshParentComponent}
+                        //         // cooClick={true}
+                        //         disabled={true}
+                        //         message={
+                        //           "Do you want to submit it for COO approval?"
+                        //         }
+                        //       />
+                        //     </div>
+                        //     <div className=" w-3 ">
+                        //       <h4>Not Approved</h4>
+                        //     </div>
+                        //   </>
+                        // );
                       }
                     }
                   })()}
