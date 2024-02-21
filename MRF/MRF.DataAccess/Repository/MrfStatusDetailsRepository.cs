@@ -33,7 +33,8 @@ namespace MRF.DataAccess.Repository
     from freshMrfDetail in freshMrfDetailsGroup.DefaultIfEmpty()
     where mrfRolemap.RoleId == roleId &&
           (statusId == 0 || (statusId != 0 && mrfStatus.Id == statusId)) &&
-          (Role != "mrfowner" || (Role == "mrfowner" && mrfDetails.CreatedByEmployeeId == userId))
+          (Role != "mrfowner" || (Role == "mrfowner" && mrfDetails.CreatedByEmployeeId == userId)) &&
+          (Role != "hr" || (Role == "hr" && mrfDetails.HrId == userId))
     orderby mrfDetails.UpdatedOnUtc descending
     select new MrfDetailsViewModel
     {
@@ -51,7 +52,8 @@ namespace MRF.DataAccess.Repository
         VacancyNo = mrfDetails.VacancyNo,
         RequisitionType = mrfDetails.RequisitionType,
         RoleId = mrfRolemap.RoleId,
-        positionTitle =position.Name,
+        positionTitle = position.Name,
+        hrId = mrfDetails.HrId,
     };
 
 
