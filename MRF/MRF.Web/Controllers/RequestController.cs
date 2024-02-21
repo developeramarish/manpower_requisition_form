@@ -3,26 +3,15 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
 using MRF.Utility;
 using Newtonsoft.Json.Linq;
-using SendGrid.Helpers.Mail.Model;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Mail;
 using System.Text;
-
-
 namespace MRF.Web.Controllers
 {
     public class RequestController : Controller
-    {
-        
+    {   
         private readonly IConfiguration _configuration;
         private readonly ILoggerService _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly string smtpServer;
-        private readonly int smtpPort;
-        private readonly SmtpClient smtpClient;
-        private string mrfUrl = string.Empty;
-        private readonly string senderEmail;
         public RequestController(IConfiguration configuration,
             ILoggerService logger,
             IUnitOfWork unitOfWork)
@@ -30,22 +19,28 @@ namespace MRF.Web.Controllers
             _configuration = configuration;
             _logger = logger;
             _unitOfWork = unitOfWork;
-
-            senderEmail = _configuration["SMTP:senderEmail"];
-            smtpServer = _configuration["SMTP:Server"];
-            smtpPort = Convert.ToInt32(_configuration["SMTP:Port"]);
-            smtpClient = new SmtpClient(smtpServer, smtpPort);
-            smtpClient.UseDefaultCredentials = false;
         }
         public async Task<IActionResult> Approve([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
         {
             try
             {
+                mrfDetailsStatusHistory mrfDetailsStatusHistory = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.mrfStatusId == mrfStatusId);
+                if(mrfDetailsStatusHistory != null)
+                {
+                    ViewData["AlreadyApproved"] = "AlreadyApproved";
+                    return View();
+                }
+                mrfDetailsStatusHistory mrfAlreadyProcessed = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.CreatedByEmployeeId == updatedByEmployeeId);
+                if (mrfAlreadyProcessed != null)
+                {
+                    ViewData["AlreadyProcessed"] = "AlreadyProcessed";
+                    return View();
+                }
+
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    //await SendEmailAsync(mrfID, mrfStatusId);
                     ViewData["Message"] = "MRF has been approved successfully!";
                     return View();
                 }
@@ -59,68 +54,6 @@ namespace MRF.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-        //private async Task SendEmailAsync(int mrfID, int mrfStatusId)
-        //{
-        //    try
-        //    {              
-        //        Mrfdetails mrfdetails = _unitOfWork.Mrfdetail.Get(u => u.Id == mrfID);
-        //        Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == mrfStatusId);              
-        //        emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);            
-        //        string[] roleIdStrings = emailRequest.roleId.Split(',');
-        //        List<int> roleIds = new List<int>();
-
-        //        foreach (string roleIdString in roleIdStrings)
-        //        {
-        //            if (int.TryParse(roleIdString, out int roleId))
-        //            {
-        //                roleIds.Add(roleId);
-        //            }
-        //        }
-
-        //        mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfID.ToString());
-                
-        //        List<string> email = (from employeeDetails in _unitOfWork.Employeedetails.GetAll()
-        //                              where (from employeeRoleMap in _unitOfWork.Employeerolemap.GetAll()
-        //                                     where (from mrfEmailApproval in _unitOfWork.MrfEmailApproval.GetAll()
-        //                                            where mrfEmailApproval.MrfId == mrfID
-        //                                            select mrfEmailApproval.EmployeeId).Contains(employeeRoleMap.EmployeeId) &&
-        //                                           roleIds.Contains(employeeRoleMap.RoleId)
-        //                                     select employeeRoleMap.EmployeeId).Contains(employeeDetails.Id)
-        //                              select employeeDetails.Email).ToList();
-
-        //        string htmlContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-        //                                                 .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-
-        //        //Send Email to MRF Owner
-        //        foreach (string strEmail in email)
-        //        {   
-        //            using (MailMessage mailMessage = new MailMessage(senderEmail, strEmail, emailRequest.Subject, htmlContent))
-        //            {
-        //                mailMessage.IsBodyHtml = true;
-        //                smtpClient.Send(mailMessage);
-        //            }
-        //        }
-        //        //Send Email to HR
-        //        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
-
-        //        foreach (var emailReq in emailList)
-        //        {
-        //            using (MailMessage mailMessage = new MailMessage(senderEmail, emailReq.Email, emailRequest.Subject, htmlContent))
-        //            {
-        //                mailMessage.IsBodyHtml = true;
-        //                smtpClient.Send(mailMessage);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogError($"Exception occurred while sending email: {e.Message}");
-        //        throw;
-        //    }
-        //}
-
         private async Task<HttpResponseMessage> ChangeMrfStatusAsync(int mrfID, int mrfStatusId, int updatedByEmployeeId)
         {
             try
@@ -153,7 +86,6 @@ namespace MRF.Web.Controllers
                 throw;
             }
         }
-
         public string GetAccessToken()
         {
             var client = new HttpClient();
@@ -186,32 +118,23 @@ namespace MRF.Web.Controllers
         {
             try
             {
-                HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
-                if (response.IsSuccessStatusCode)
+                mrfDetailsStatusHistory mrfDetailsStatusHistory = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.mrfStatusId == mrfStatusId);
+                if (mrfDetailsStatusHistory != null)
                 {
-                    //await SendEmailAsync(mrfID, mrfStatusId);
-                    ViewData["Message"] = "MRF has been rejected successfully!";
+                    ViewData["AlreadyRejected"] = "AlreadyRejected";
                     return View();
                 }
-                else
+                mrfDetailsStatusHistory mrfAlreadyProcessed = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.CreatedByEmployeeId == updatedByEmployeeId);
+                if (mrfAlreadyProcessed != null)
                 {
-                    return BadRequest(response);
+                    ViewData["AlreadyProcessed"] = "AlreadyProcessed";
+                    return View();
                 }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        public async Task<IActionResult> Bypass([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
-        {
-            try
-            {
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
-                   // _emailService.SendEmail("manish.partey@kwglobal.com", "Test", "Test");
-                    return Ok("MRF has been bypassed successfully!");
+                    ViewData["Message"] = "MRF has been rejected successfully!";
+                    return View();
                 }
                 else
                 {
