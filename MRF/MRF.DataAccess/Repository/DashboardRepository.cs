@@ -42,6 +42,7 @@ namespace MRF.DataAccess.Repository
             string Role = _Utility.GetRole(roleId);
             var mrf = from Mrfdetails in _db.Mrfdetails 
                              where (Role != "mrfowner" || (Role == "mrfowner" && Mrfdetails.CreatedByEmployeeId == userId))
+                             && (Role != "hr" || (Role =="hr" && Mrfdetails.HrId == userId))
                             select Mrfdetails;
 
 
@@ -161,8 +162,9 @@ namespace MRF.DataAccess.Repository
                                  join position in _db.PositionTitlemaster
                                  on mrfD.PositionTitleId equals position.Id
                                  where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                                 && (Role == "hr" && mrfD.HrId == userId)
                                  || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds != null
-                                 && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer"))
+                                 && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer" && Role != "hr"))
                                  group new { mrfD, Candidate } by new
                                  {
                                      mrfD.Id,
@@ -255,10 +257,11 @@ namespace MRF.DataAccess.Repository
                                        join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id into statusGroup
                                        from status in statusGroup.DefaultIfEmpty() // Perform left join
                                        join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
-                                       where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                                       where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)||
+                                       (Role == "hr" && mrfD.HrId == userId)
                                               || (Role == "interviewer" && interview != null && interview.InterviewerId != 0
                                                     && interview.InterviewerId == userId && Candidate.CandidateStatusId == 2)
-                                              || (Role != "mrfowner" && Role != "interviewer"))
+                                              || (Role != "mrfowner" && Role != "interviewer" && Role!= "hr"))
                                        group new { mrfD, Candidate, interview, status } by new
                                        {
                                            mrfD.Id,
@@ -286,6 +289,7 @@ namespace MRF.DataAccess.Repository
                                join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                                join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                                where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId) || Role != "mrfowner")
+                               && (Role != "hr" || (Role == "hr" && mrfD.CreatedByEmployeeId == userId))
                                select new MrfInterviewSummaryViewModel
                                {
                                    MrfId = mrfD.Id,
