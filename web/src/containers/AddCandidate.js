@@ -155,7 +155,7 @@ const AddCandidate = (reqId) => {
               const responseData = await response.json();
               console.log("Response Data:", responseData);
               if (responseData.id === -1) {
-                toastRef.current.showBadRequestMessage(
+                toastRef.current.showWarrningMessage(
                   "Duplicate Candidate  Email"
                 );
                 setIsLoading(false);
@@ -186,7 +186,7 @@ const AddCandidate = (reqId) => {
           }
         } else {
           if (fileUploadResponse.status === 400) {
-            toastRef.current.showBadRequestMessage(
+            toastRef.current.showWarrningMessage(
               "you have to upload Resume!"
             );
             setIsLoading(false);
