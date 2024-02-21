@@ -128,9 +128,9 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
         header={"Upload Assignment / Add URL"}
         visible={visible}
         onHide={onHide}
-        className="w-6 h-23rem"
+        className="w-6 h-25rem"
       >
-        <div className="mt-3 mb-5">
+        <div className="mt-2 mb-3">
           <FileUploads
             ref={fileUploadRef}
             onChange={handleFileChange}
