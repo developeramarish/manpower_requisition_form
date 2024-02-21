@@ -24,19 +24,18 @@ namespace MRF.Web.Controllers
         {
             try
             {
-                mrfDetailsStatusHistory mrfDetailsStatusHistory = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.mrfStatusId == mrfStatusId);
-                if(mrfDetailsStatusHistory != null)
-                {
-                    ViewData["AlreadyApproved"] = "AlreadyApproved";
-                    return View();
-                }
                 mrfDetailsStatusHistory mrfAlreadyProcessed = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.CreatedByEmployeeId == updatedByEmployeeId);
                 if (mrfAlreadyProcessed != null)
                 {
                     ViewData["AlreadyProcessed"] = "AlreadyProcessed";
                     return View();
                 }
-
+                mrfDetailsStatusHistory mrfDetailsStatusHistory = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.mrfStatusId == mrfStatusId && u.CreatedByEmployeeId == updatedByEmployeeId);
+                if(mrfDetailsStatusHistory != null)
+                {
+                    ViewData["AlreadyApproved"] = "AlreadyApproved";
+                    return View();
+                }
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 _logger.LogInfo("response code = " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
@@ -118,18 +117,20 @@ namespace MRF.Web.Controllers
         {
             try
             {
-                mrfDetailsStatusHistory mrfDetailsStatusHistory = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.mrfStatusId == mrfStatusId);
-                if (mrfDetailsStatusHistory != null)
-                {
-                    ViewData["AlreadyRejected"] = "AlreadyRejected";
-                    return View();
-                }
                 mrfDetailsStatusHistory mrfAlreadyProcessed = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.CreatedByEmployeeId == updatedByEmployeeId);
                 if (mrfAlreadyProcessed != null)
                 {
                     ViewData["AlreadyProcessed"] = "AlreadyProcessed";
                     return View();
                 }
+
+                mrfDetailsStatusHistory mrfDetailsStatusHistory = _unitOfWork.mrfDetailsStatusHistory.Get(u => u.MrfId == mrfID && u.mrfStatusId == mrfStatusId && u.CreatedByEmployeeId == updatedByEmployeeId);
+                if (mrfDetailsStatusHistory != null)
+                {
+                    ViewData["AlreadyRejected"] = "AlreadyRejected";
+                    return View();
+                }
+
                 HttpResponseMessage response = await ChangeMrfStatusAsync(mrfID, mrfStatusId, updatedByEmployeeId);
                 if (response.IsSuccessStatusCode)
                 {
