@@ -97,8 +97,7 @@ const CreateRequisitionBody = ({
       setHiringManagerValue(response.hiringManagerId);
       setFormData({ ...formData, ...response });
 
-      setSiteHrSpocBtnDisable(true);
-      setHiringManagerBtnDisable(true);
+    
     } else {
       setDropdownData(dropData);
       setFormData(FORM_SCHEMA_CR);
@@ -140,6 +139,8 @@ const CreateRequisitionBody = ({
   };
 
   const refreshParentComponent = () => {
+    setSiteHrSpocBtnDisable(true);
+    setHiringManagerBtnDisable(true);
     setData();
   };
 
@@ -1466,7 +1467,7 @@ const CreateRequisitionBody = ({
                               {hiringManagerValue > 0 ? (
                                 <h4>Updated</h4>
                               ) : (
-                                <h4>To be Updated</h4>
+                                <h4>Yet to be Updated</h4>
                               )}
                             </div>
                           </div>
@@ -1622,7 +1623,7 @@ const CreateRequisitionBody = ({
                               {siteHrSpocValue > 0 ? (
                                 <h4>Updated</h4>
                               ) : (
-                                <h4>To be Updated</h4>
+                                <h4>Yet to be Updated</h4>
                               )}
                             </div>
                           </div>
@@ -1731,7 +1732,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3 ">
-                                <h4>Not Approved</h4>
+                                <h4>Yet to be Approved</h4>
                               </div>
                             </>
                           );
@@ -1775,7 +1776,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Not Approved</h4>
+                                  <h4>Yet to be Approved</h4>
                                 </div>
                               </>
                             );
@@ -1903,7 +1904,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3">
-                                <h4>Not Approved</h4>
+                                <h4>Yet to be Approved</h4>
                               </div>
                             </>
                           );
@@ -1972,7 +1973,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Not Approved</h4>
+                                  <h4>Yet to be Approved</h4>
                                 </div>
                               </>
                             );
@@ -2125,7 +2126,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3 ">
-                                <h4>Not Approved</h4>
+                                <h4>Yet to be Approved</h4>
                               </div>
                             </>
                           );
@@ -2193,7 +2194,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Not Approved</h4>
+                                  <h4>Yet to be Approved</h4>
                                 </div>
                               </>
                             );
