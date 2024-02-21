@@ -1169,34 +1169,281 @@ CREATE TABLE `EmailMaster` (
 --
 
 INSERT INTO emailmaster
-VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have successfully logged in" ,"Dear User, You have been logged in successfully. Please click here",0,"0"),
-	   (2,"Create User","ashutosh.tiwari@kwglobal.com","Admin","User is created successfully","Dear User, (User Name) is created successfully. Please click here",0,"2"),
-	   (3,"Delete User","ashutosh.tiwari@kwglobal.com","Admin","User is deleted successfully","Dear User, (User Name) is deleted successfully. Please click here",0,"2"),
-	   (4,"Update User","ashutosh.tiwari@kwglobal.com","Admin","User is Updated successfully","Dear User, (User Name)'s detail is updated successfully. Please click here",0,"2"),
-	   (5,"Saved as Draft","ashutosh.tiwari@kwglobal.com","MRF Owner","Draft is saved successfully","Dear User, MRF ## is saved successfully. Please click here",1,"3"),
-	   (6,"Submit MRF","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF is submitted successfully","Dear User, MRF ## is submitted successfully. Please click here",2,"3,4"),
-	   (7,"Withdrawn MRF","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF is withdrawn successfully","Dear User, MRF ## is withdrawn successfully. Please click here",9,"3,4"),
-	   (8,"Re-submission Required","ashutosh.tiwari@kwglobal.com","MRF Owner","Resubmission required for MRF ##","Dear User, MRF ## is re-opened and resubmission required. Please click here",3,"3"),
-	   (9,"Awaiting HOD Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting HOD Approval","Dear User, status of MRF ## is changed to Awaiting HOD approval. Please click here",11,"3,4"),
-	   (10,"Awaiting COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting COO Approval","Dear User, status of MRF ## is changed to Awaiting COO approval. Please click here",12,"3,4"),
-	   (11,"Open","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF ## is open","Dear User, status of MRF ## is changed to open. Please click here",6,"3,4"),
+VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have successfully logged in" ,"<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>You have been logged in successfully.</p>
+    </div>
+</body>
+</html>",0,"0"),
+	   (2,"Create User","ashutosh.tiwari@kwglobal.com","Admin","User is created successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>(User Name) is created successfully.</p>
+    </div>
+</body>
+</html>",0,"2"),
+	   (3,"Delete User","ashutosh.tiwari@kwglobal.com","Admin","User is deleted successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>(User Name) is deleted successfully.</p>
+    </div>
+</body>
+</html>",0,"2"),
+	   (4,"Update User","ashutosh.tiwari@kwglobal.com","Admin","User is Updated successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>(User Name)'s detail is updated successfully.</p>
+    </div>
+</body>
+</html>",0,"2"),
+	   (5,"Saved as Draft","ashutosh.tiwari@kwglobal.com","MRF Owner","Draft is saved successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>MRF ## is saved successfully.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",1,"3"),
+	   (6,"Submit MRF","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF is submitted successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>MRF ## is submitted successfully.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",2,"3,4"),
+	   (7,"Withdrawn MRF","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF is withdrawn successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>MRF ## is withdrawn successfully.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",9,"3,4"),
+	   (8,"Re-submission Required","ashutosh.tiwari@kwglobal.com","MRF Owner","Resubmission required for MRF ##","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>MRF ## is re-opened and resubmission required.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",3,"3"),
+	   (9,"Awaiting HOD Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting HOD Approval","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to Awaiting HOD approval.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",11,"3,4"),
+	   (10,"Awaiting COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting COO Approval","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to Awaiting COO approval.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",12,"3,4"),
+	   (11,"Open","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","MRF ## is open","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to open.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",6,"3,4"),
 		
-	   (12,"Rejected  MRF","ashutosh.tiwari@kwglobal.com","HR, HOD","MRF ## is rejected","Dear User, MRF ## is rejected. Please click here",8,"4,8"),
-	   (13,"On Hold","HR","ashutosh.tiwari@kwglobal.com","MRF ## is on hold","Dear User, status of MRF ## is changed to On Hold. Please click here",7,"4"),
-	   (14,"Closed (Onboarded)","ashutosh.tiwari@kwglobal.com","HR, HOD","MRF ## status is now onboarded","Dear User, status of MRF ## is changed to Onboarded. Please click here",10,"4,8"),
-	   (15,"Resume Reviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Resume Reviewer (Name)  added successfully","Dear user, You have been added as a resume reviewer successfully against MRF ##.",0,"5"),
-	   (16,"Interviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Interviewer (Name) added successfully","Dear user, You have been added as a interviewer successfully against MRF ##.",0,"5"),
-	   (17,"Resume Reviewer deleted","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer (Name) deleted successfully","Dear user, (Name) is deleted against MRF ##.",0,"3"),
-	   (18,"Interviewer deleted","ashutosh.tiwari@kwglobal.com","HR","Interviewer (Name) deleted successfully","Dear user, (Name) is deleted against MRF ##.",0,"4"),
-	   (19,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(Has to forward)","Resume is forwarded successfully","Dear user, Resume has been forwarded to (User). ",0,"5"),
-	   (20,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(added as reviewer","Resume has been assigned","Dear user, You have been assigned for review Resume.",0,"5"),
-	   (21,"Interview Status","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Interview status is changed","Dear User, Interview status for Resume.pdf has been changed from (Assignment sent) to (Assignment received)",0,"3,4,6"),
-	   (22,"Resume Status","ashutosh.tiwari@kwglobal.com","MRF Owner, HR, Resume Reviewer & Interview Reviewer","Resume status is changed","Dear User, Resume.pdf is now (shortlisted). Please click here.",0,"3,4,5,6"),
-	   (23,"Feedback Submission","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Feedback submitted successully","Dear User, feedback has been submitted against resume.pdf. Please click here",0,"3,4,5,6"),
-	   (24,"Received HOD Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received HOD Approval","Dear User, status of MRF ## is changed to Received HOD approval. Please click here",11,"3,4"),
-	   (25,"Received COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received COO Approval","Dear User, status of MRF ## is changed to Received COO approval. Please click here",11,"3,4"),
-	   (26,"Received Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received Finance Head Approval","Dear User, status of MRF ## is changed to Received Finance Head Approval. Please click here",11,"3,4"),
-	   (27,"Awaiting Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting Finance Head Approval","Dear User, status of MRF ## is changed to Received Finance Head Approval. Please click here",11,"3,4");
+	   (12,"Rejected  MRF","ashutosh.tiwari@kwglobal.com","HR, HOD","MRF ## is rejected","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>MRF ## is rejected.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>",8,"4,8"),
+	   (13,"On Hold","HR","ashutosh.tiwari@kwglobal.com","MRF ## is on hold","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to On Hold.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>
+
+",7,"4"),
+	   (14,"Closed (Onboarded)","ashutosh.tiwari@kwglobal.com","HR, HOD","MRF ## status is now onboarded","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to Onboarded.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>",10,"4,8"),
+	   (15,"Resume Reviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Resume Reviewer (Name)  added successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>You have been added as a resume reviewer successfully against MRF ##.</p>
+    </div>
+</body>
+</html>",0,"5"),
+	   (16,"Interviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Interviewer (Name) added successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>You have been added as a interviewer successfully against MRF ##.</p>
+    </div>
+</body>
+</html>",0,"5"),
+	   (17,"Resume Reviewer deleted","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer (Name) deleted successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>(Name) is deleted against MRF ##.</p>
+    </div>
+</body>
+</html>",0,"3"),
+	   (18,"Interviewer deleted","ashutosh.tiwari@kwglobal.com","HR","Interviewer (Name) deleted successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>(Name) is deleted against MRF ##.</p>
+    </div>
+</body>
+</html>",0,"4"),
+	   (19,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(Has to forward)","Resume is forwarded successfully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>Resume has been forwarded to (User).</p>
+    </div>
+</body>
+</html> ",0,"5"),
+	   (20,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(added as reviewer","Resume has been assigned","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>You have been assigned for review Resume.</p>
+    </div>
+</body>
+</html>",0,"5"),
+	   (21,"Interview Status","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Interview status is changed","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>Interview status for Resume.pdf has been changed from (Assignment sent) to (Assignment received).</p>
+    </div>
+</body>
+</html>",0,"3,4,6"),
+	   (22,"Resume Status","ashutosh.tiwari@kwglobal.com","MRF Owner, HR, Resume Reviewer & Interview Reviewer","Resume status is changed","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>Resume.pdf is now (shortlisted).</p>
+    </div>
+</body>
+</html>",0,"3,4,5,6"),
+	   (23,"Feedback Submission","ashutosh.tiwari@kwglobal.com","MRF Owner, HR and Interview Reviewer","Feedback submitted successully","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>feedback has been submitted against resume.pdf.</p>
+    </div>
+</body>
+</html>",0,"3,4,5,6"),
+	   (24,"Received HOD Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received HOD Approval","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to Received HOD approval.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>",11,"3,4"),
+	   (25,"Received COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received COO Approval","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to Received COO approval.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>",11,"3,4"),
+	   (26,"Received Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received Finance Head Approval","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to Received Finance Head Approval.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>",11,"3,4"),
+	   (27,"Awaiting Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting Finance Head Approval","<!DOCTYPE html>
+<html lang='en'>
+<body>
+    <div style='padding: 20px;'>
+        <h2>Dear User,</h2>
+        <p>status of MRF ## is changed to Received Finance Head Approval.</p>
+        <p>Please <a href='#'>click here</a>.</p>
+    </div>
+</body>
+</html>",11,"3,4");
+
 	   
 --
 --
