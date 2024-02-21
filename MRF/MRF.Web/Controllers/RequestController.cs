@@ -3,26 +3,15 @@ using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.Models;
 using MRF.Utility;
 using Newtonsoft.Json.Linq;
-using SendGrid.Helpers.Mail.Model;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Mail;
 using System.Text;
-
-
 namespace MRF.Web.Controllers
 {
     public class RequestController : Controller
-    {
-        
+    {   
         private readonly IConfiguration _configuration;
         private readonly ILoggerService _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly string smtpServer;
-        private readonly int smtpPort;
-        private readonly SmtpClient smtpClient;
-        private string mrfUrl = string.Empty;
-        private readonly string senderEmail;
         public RequestController(IConfiguration configuration,
             ILoggerService logger,
             IUnitOfWork unitOfWork)
@@ -30,12 +19,6 @@ namespace MRF.Web.Controllers
             _configuration = configuration;
             _logger = logger;
             _unitOfWork = unitOfWork;
-
-            senderEmail = _configuration["SMTP:senderEmail"];
-            smtpServer = _configuration["SMTP:Server"];
-            smtpPort = Convert.ToInt32(_configuration["SMTP:Port"]);
-            smtpClient = new SmtpClient(smtpServer, smtpPort);
-            smtpClient.UseDefaultCredentials = false;
         }
         public async Task<IActionResult> Approve([FromQuery(Name = "MrfId")] int mrfID, [FromQuery(Name = "StatusId")] int mrfStatusId, [FromQuery(Name = "EmpId")] int updatedByEmployeeId)
         {
