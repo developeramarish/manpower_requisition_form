@@ -297,7 +297,7 @@ console.log(interviewData);
 					
 				);
 			}
-		} else if (roleId === ROLES.hr && interview.interviewevaluationId != 0) {
+		} else if ((roleId === ROLES.hr ||roleId === ROLES.mrfOwner ) && interview.interviewevaluationId != 0) {
 			return (
 				<div>
 					<a
