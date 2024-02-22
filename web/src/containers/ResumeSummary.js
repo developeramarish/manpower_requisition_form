@@ -40,33 +40,36 @@ const ResumeSummary = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let result = await getDataAPI(
-          `${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`
-        );
-        let response = await result.json();
-        if (roleId === ROLES.interviewer) {
-          var filterInterviewerResumtSumData = [];
-          response.result.resumeDetails.map((res) => {
-            if (res.candidatestatus === "Shortlisted") {
-              filterInterviewerResumtSumData.push(res);
-            }
-          });
-          setdata(filterInterviewerResumtSumData);
-        } else {
-          setdata(response.result.resumeDetails);
-        }
-        setResumeReviewer(response.result.employeeRoleMap);
-        let array = new Array(response.result.resumeDetails.length).fill(false);
-        setSaveBttn(array);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
+    if(mrfId || mrfId===0){ 
+      console.log("ss") 
+        fetchData();
+    }
   }, [mrfId]);
 
+  const fetchData = async () => {
+    try {
+      let result = await getDataAPI(
+        `${API_URL.RESUME_SUMMARY_POPUP}id=${mrfId}&DashBoard=${dashboard}&roleId=${roleId}&userId=${userId}`
+      );
+      let response = await result.json();
+      if (roleId === ROLES.interviewer) {
+        var filterInterviewerResumtSumData = [];
+        response.result.resumeDetails.map((res) => {
+          if (res.candidatestatus === "Shortlisted") {
+            filterInterviewerResumtSumData.push(res);
+          }
+        });
+        setdata(filterInterviewerResumtSumData);
+      } else {
+        setdata(response.result.resumeDetails);
+      }
+      setResumeReviewer(response.result.employeeRoleMap);
+      let array = new Array(response.result.resumeDetails.length).fill(false);
+      setSaveBttn(array);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   // if (data.length < 1) {
   //   return (
   //     <Dialog
@@ -326,8 +329,9 @@ const ResumeSummary = ({
           draggable={false}
           scrollHeight="flex"
         >
-          {columns.map((col) => (
+          {columns.map((col,index) => (
             <Column
+            key={index}
               field={col.field}
               header={col.header}
               body={col.body}
@@ -373,8 +377,9 @@ const ResumeSummary = ({
               draggable={false}
               scrollHeight="flex"
             >
-              {columns.map((col) => (
+              {columns.map((col,index) => (
                 <Column
+                key={index}
                   field={col.field}
                   header={col.header}
                   body={col.body}
