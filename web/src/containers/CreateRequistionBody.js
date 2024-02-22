@@ -62,8 +62,7 @@ const CreateRequisitionBody = ({
   const [hiringManagerBtnDisable, setHiringManagerBtnDisable] = useState(true);
   const [siteHrSpocValue, setSiteHrSpocValue] = useState(0);
   const [hiringManagerValue, setHiringManagerValue] = useState(0);
-  // const [remaningCharacterJobDescription, setRemaningCharacterJobDescription] = useState(0);
-  // const [remaningCharacterSkills, setRemaningCharacterSkills] = useState(0);
+ 
 
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
@@ -96,8 +95,6 @@ const CreateRequisitionBody = ({
       setSiteHrSpocValue(response.siteHRSPOCId);
       setHiringManagerValue(response.hiringManagerId);
       setFormData({ ...formData, ...response });
-
-    
     } else {
       setDropdownData(dropData);
       setFormData(FORM_SCHEMA_CR);
@@ -233,79 +230,19 @@ const CreateRequisitionBody = ({
       maxCharacterCountJustification - formData.justification.length;
   }
 
-  const maxCharacterSkills = 500;
-
-  const onTextChangedSkill = (val) => {
-    const textWithoutTags = removeHtmlTags(val);
-    if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
-      setFormData({ ...formData, skills: val });
-    }
+  const onTextChangedSkill = (oVal) => {
+   
+    setFormData({ ...formData, skills: oVal.htmlText, skillsText: oVal.text });
   };
-  let remaningCharacterSkills = 0;
-  if (formData) {
-    remaningCharacterSkills =
-      maxCharacterSkills - removeHtmlTags(formData.skills).length;
-  }
+  
 
-  const maxCharacterJobDescription = 6000;
-  const onTextChangedJobDesc = (val) => {
-    const textWithoutTags = removeHtmlTags(val);
-    if (
-      textWithoutTags &&
-      textWithoutTags.length <= maxCharacterJobDescription
-    ) {
-      setFormData({ ...formData, jobDescription: val });
-    }
+  const onTextChangedJobDesc = (oVal) => {
+    setFormData({
+      ...formData,
+      jobDescription: oVal.htmlText,
+      jobDescriptionText: oVal.text,
+    });
   };
-
-  let remaningCharacterJobDescription = 0;
-  if (formData) {
-    remaningCharacterJobDescription =
-      maxCharacterJobDescription -
-      removeHtmlTags(formData.jobDescription).length;
-  }
-
-  // const onTextChangedSkill = (oVal) => {
-  //   // console.log(oVal);
-
-  //   // const textWithoutTags = removeHtmlTags(val);
-  //   // if (textWithoutTags && textWithoutTags.length <= maxCharacterSkills) {
-  //   setFormData({ ...formData, skills: oVal.htmlText, skillsText: oVal.text });
-  //   // }
-  // };
-  // let remaningCharacterSkills = 0;
-  // if (formData) {
-  //   if (!formData.skillsText) {
-  //     remaningCharacterSkills = maxCharacterSkills;
-
-  //   } else {
-
-  //     remaningCharacterSkills = maxCharacterSkills - formData.skillsText.length;
-  //   }
-  // }
-  // const maxCharacterJobDescription = 6000;
-  // const onTextChangedJobDesc = (oVal) => {
-  //   // console.log(oVal);
-  //   setFormData({
-  //     ...formData,
-  //     jobDescription: oVal.htmlText,
-  //     jobDescriptionText: oVal.text,
-  //   });
-  // };
-  // let remaningCharacterJobDescription = 0;
-
-  // if (formData) {
-  //   if (!formData.jobDescriptionText) {
-  //     // setRemaningCharacterJobDescription(maxCharacterJobDescription);
-  //     remaningCharacterJobDescription = maxCharacterJobDescription;
-  //   } else {
-  //     // setRemaningCharacterJobDescription(
-  //     //   maxCharacterJobDescription - formData.jobDescriptionText.length
-  //     // );
-  //     remaningCharacterJobDescription =
-  //       maxCharacterJobDescription - formData.jobDescriptionText.length;
-  //   }
-  // }
 
   const handleMinExpChange = (e) => {
     const minExp = e.target.value;
@@ -1003,44 +940,15 @@ const CreateRequisitionBody = ({
                   Job Description
                   <RedAsterisk />
                 </label>
-                <div
-                  style={{
-                    // backgroundColor:"red",
-                    position: "relative",
-                    display: "inline-block",
-                    // width:"400px"
-                  }}
-                >
+               
                   <EditorComponent
                     value={formData.jobDescription}
                     headerTemplate={header}
                     onTextChanged={onTextChangedJobDesc}
                     disable={commonSettings.setReadOnly}
-                    max={maxCharacterJobDescription}
+                    max={6000}
                   />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "7px",
-                      right: "20px",
-                      zIndex: "100",
-                      textAlign: "right",
-                    }}
-                  >
-                    <Knob
-                      value={
-                        maxCharacterJobDescription -
-                        remaningCharacterJobDescription
-                      }
-                      max={maxCharacterJobDescription}
-                      readOnly
-                      size={50}
-                      rangeColor="#aaaaaa"
-                      valueColor="#d32f2e"
-                      textColor="#000000"
-                    />
-                  </div>
-                </div>
+                  
               </div>
 
               <div className="flex flex-column w-6 gap-2">
@@ -1048,56 +956,16 @@ const CreateRequisitionBody = ({
                   Skills
                   <RedAsterisk />
                 </label>
-
-                <div
-                  style={{
-                    // backgroundColor:"red",
-                    position: "relative",
-                    display: "inline-block",
-                    // width:"400px"
-                  }}
-                >
                   <EditorComponent
                     value={formData.skills}
                     headerTemplate={header}
                     onTextChanged={onTextChangedSkill}
                     disable={commonSettings.setReadOnly}
-                    max={maxCharacterSkills}
+                    max={500}
                   />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "7px",
-                      right: "20px",
-                      zIndex: "100",
-                      textAlign: "right",
-                    }}
-                  >
-                    <Knob
-                      // value={5}
-                      value={maxCharacterSkills - remaningCharacterSkills}
-                      max={maxCharacterSkills}
-                      readOnly
-                      size={50}
-                      rangeColor="#aaaaaa"
-                      valueColor="#d32f2e"
-                      textColor="#000000"
-                    />
-                  </div>
-                </div>
+                 
               </div>
-              {/* <div className="flex flex-column w-6 gap-2">
-                <label htmlFor="skills" className="font-bold text-sm">
-                  Skills
-                  <RedAsterisk />
-                </label>
-                <EditorComponent
-                  value={formData.skills}
-                  headerTemplate={header}
-                  onTextChanged={onTextChangedSkill}
-                  disable={commonSettings.setReadOnly}
-                />
-              </div> */}
+            
             </div>
             <div className="flex justify-content-between gap-5 ">
               <div className="flex flex-column relative inline-block w-6 gap-2">
@@ -1105,14 +973,7 @@ const CreateRequisitionBody = ({
                   Justification <RedAsterisk />
                 </label>
 
-                {/* <div
-                  style={{
-                    backgroundColor:"red",
-                    position: "relative",
-                    display: "inline-block",
-                    // width:"400px"
-                  }} 
-                >*/}
+              
                 <InputTextareaComponent
                   id="Justification"
                   value={formData.justification}
@@ -1143,7 +1004,6 @@ const CreateRequisitionBody = ({
                     valueColor="#d32f2e"
                     textColor="#000000"
                   />
-                  {/* </div> */}
                 </div>
               </div>
               <div className="flex flex-column gap-4 w-6">

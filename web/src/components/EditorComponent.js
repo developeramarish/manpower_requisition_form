@@ -1,4 +1,5 @@
 import { Editor } from "primereact/editor";
+import { Knob } from "primereact/knob";
 import React, { useEffect, useState } from "react";
 
 const EditorComponent = ({
@@ -9,27 +10,69 @@ const EditorComponent = ({
   disable,
   max,
 }) => {
-  const [text, setText] = useState("");
+  const [orgText, setOrgText] = useState({ txt: "", html: "" });
+  const [remainingChars, setRemainingChars] = useState(max);
   const onUpdate = (e) => {
-    if (e && e.length <= max) {
-      setText(e);
-    } else {
+    var oTarget = e.target ? e.target : e,
+      txtValue = oTarget.innerText,
+      htmlValue = oTarget.innerHTML;
+
+    if (txtValue.length > max) {
+      oTarget.innerHTML = orgText.html;
+      
       return;
     }
+    if (txtValue === "" || htmlValue === "<p><br></p>") {
+      oTarget.innerHTML = "";
+      htmlValue = "";
+      txtValue = "";
+    }
+    console.log(txtValue)
+    setOrgText({ txt: txtValue, html: htmlValue });
+    onTextChanged({ text: txtValue, htmlText: htmlValue });
+    setRemainingChars(max-txtValue.length)
   };
-  useEffect(() => {
-    onTextChanged(text);
-  }, [text]);
+  const onTextUpdate = (e) => {
+    console.log(e);
+  };
   return (
-    <Editor
-      value={value}
-      autoResize={autoResize}
-      headerTemplate={headerTemplate}
-      readOnly={disable}
-      onTextChange={(e) => onUpdate(e.htmlValue)}
-      style={{ height: "220px" }}
-      max={max}
-    />
+    <div
+    style={{
+      position: "relative",
+      // width:"685px"
+    }}>
+      <Editor
+        value={value}
+        autoResize={autoResize}
+        headerTemplate={headerTemplate}
+        readOnly={disable}
+        onKeyUp={(e) => onUpdate(e)}
+        onLoad={(e) => onUpdate(e.root)}
+        style={{ height: "220px" }}
+        max={max}
+      />
+       <div
+                    style={{
+                      position: "absolute",
+                      bottom: "7px",
+                      right: "10px",
+                      zIndex: "100",
+                      textAlign: "right",
+                    }}
+                  >
+                    <Knob
+                      value={
+                        max-remainingChars
+                      }
+                      max={max}
+                      readOnly
+                      size={50}
+                      rangeColor="#aaaaaa"
+                      valueColor="#d32f2e"
+                      textColor="#000000"
+                    />
+                  </div>
+    </div>
   );
 };
 
