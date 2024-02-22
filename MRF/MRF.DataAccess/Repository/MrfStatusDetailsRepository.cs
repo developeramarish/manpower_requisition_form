@@ -34,7 +34,7 @@ namespace MRF.DataAccess.Repository
     where mrfRolemap.RoleId == roleId &&
           (statusId == 0 || (statusId != 0 && mrfStatus.Id == statusId)) &&
           (Role != "mrfowner" || (Role == "mrfowner" && mrfDetails.CreatedByEmployeeId == userId)) &&
-          (Role != "hr" || (Role == "hr" && mrfDetails.HrId == userId))
+         (mrfDetails.HrId == null || (Role != "hr" || (Role == "hr" && mrfDetails.HrId == userId)))
     orderby mrfDetails.UpdatedOnUtc descending
     select new MrfDetailsViewModel
     {
