@@ -34,6 +34,7 @@ namespace MRF.DataAccess.Repository
                                                     AllowedByEmployeeId = empdetails.AllowedByEmployeeId,
                                                     CreatedByEmployeeId = empdetails.CreatedByEmployeeId,
                                                     UpdatedOnUtc = empdetails.UpdatedOnUtc,
+                                                    multipleRoleIds = emprole.multipleRoleIds,
 
                                                 };
 

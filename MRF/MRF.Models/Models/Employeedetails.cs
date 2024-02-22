@@ -33,4 +33,8 @@ public class Employeedetails
     public int UpdatedByEmployeeId { get; set; }
 
     public DateTime UpdatedOnUtc { get; set; }
+
+    [NotMapped]
+    public string? multipleRoleIds { get; set; } 
+
 }
