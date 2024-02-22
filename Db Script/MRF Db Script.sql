@@ -1173,7 +1173,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>You have been logged in successfully.</p>
     </div>
 </body>
@@ -1182,7 +1182,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>(User Name) is created successfully.</p>
     </div>
 </body>
@@ -1191,7 +1191,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>(User Name) is deleted successfully.</p>
     </div>
 </body>
@@ -1200,7 +1200,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>(User Name)'s detail is updated successfully.</p>
     </div>
 </body>
@@ -1209,7 +1209,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>MRF ## is saved successfully.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1221,7 +1221,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>MRF ## is submitted successfully.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1233,7 +1233,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>MRF ## is withdrawn successfully.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1245,7 +1245,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>MRF ## is re-opened and resubmission required.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1257,7 +1257,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to Awaiting HOD approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1269,7 +1269,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to Awaiting COO approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1281,7 +1281,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to open.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1294,7 +1294,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>MRF ## is rejected.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1304,7 +1304,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to On Hold.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1316,7 +1316,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to Onboarded.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1326,7 +1326,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>You have been added as a resume reviewer successfully against MRF ##.</p>
     </div>
 </body>
@@ -1335,7 +1335,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>You have been added as a interviewer successfully against MRF ##.</p>
     </div>
 </body>
@@ -1344,7 +1344,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>(Name) is deleted against MRF ##.</p>
     </div>
 </body>
@@ -1353,7 +1353,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>(Name) is deleted against MRF ##.</p>
     </div>
 </body>
@@ -1362,7 +1362,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Resume has been forwarded to (User).</p>
     </div>
 </body>
@@ -1371,7 +1371,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>You have been assigned for review Resume.</p>
     </div>
 </body>
@@ -1380,7 +1380,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Interview status for Resume.pdf has been changed from (Assignment sent) to (Assignment received).</p>
     </div>
 </body>
@@ -1389,7 +1389,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Resume.pdf is now (shortlisted).</p>
     </div>
 </body>
@@ -1398,7 +1398,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>feedback has been submitted against resume.pdf.</p>
     </div>
 </body>
@@ -1407,7 +1407,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to Received HOD approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1417,7 +1417,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to Received COO approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1427,7 +1427,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to Received Finance Head Approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
@@ -1437,7 +1437,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
-        <h2>Dear User,</h2>
+        <h4>Dear User,</h4>
         <p>Status of MRF ## is changed to Received Finance Head Approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
