@@ -1,0 +1,7 @@
+.p-multiselect-header:after{
+    content: "Select All Options";
+    top: 14px;
+    position: absolute;
+    right: 290px;
+    font-weight: 500;
+}
