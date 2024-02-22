@@ -1,4 +1,5 @@
 import { MultiSelect } from "primereact/multiselect";
+import "./../css/MultiselectDropdown.css";
 
 export default function MultiSelectDropdown({
   options,
