@@ -64,7 +64,6 @@ const MrfPartialStatus = ({
                 label="Yes"
                 className="w-2 bg-red-600 border-red-600 p-2 mr-3"
                 onClick={() => {
-
                   handleSubmit(value);
                 }}
               />
@@ -104,25 +103,20 @@ const MrfPartialStatus = ({
   };
 
   const handleDeleteDraftMrf = async () => {
-    console.log(API_URL.DELETE_DRAFTED_MRF + mrfId);
     setIsLoading(true);
     try {
       let response = await deleteData(`${API_URL.DELETE_DRAFTED_MRF + mrfId}`);
 
-
-
-      if (response.id>0) {
+      if (response.id > 0) {
         toastRef.current.showSuccessMessage("MRF Deleted successfully");
         setVisible(false);
-        
+
         setTimeout(() => {
           navigateTo("my_requisition");
         }, 1000);
         setIsLoading(false);
       } else {
-          toastRef.current.showBadRequestMessage(
-            "Bad request: " + response.url
-          );
+        toastRef.current.showBadRequestMessage("Bad request: " + response.url);
 
         setIsLoading(false);
       }
@@ -139,146 +133,115 @@ const MrfPartialStatus = ({
     const errorMessage = `Some required fields are empty: ${formattedEmptyFields.join(
       ", "
     )}`;
-    toastRef.current.showBadRequestMessage(errorMessage);
-    setIsLoading(false);
-    setVisible(false);
+    toastRef.current.showWarrningMessage(errorMessage);
+  
   };
 
   const handleSubmit = async (mrfStatusId) => {
-    console.log(formData);
-    if (formData.isReplacement && emailErrors) {
-      toastRef.current.showWarrningMessage("Invalid Email format");
-      setVisible(false);
-      return;
-    }
-    if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
-      const emptyFields = isFormDataEmptyForSubmit(formData);
-      formatAndShowErrorMessage(emptyFields);
-      setVisible(false);
-    } else if (
-      mrfStatusId == 1 &&
-      isFormDataEmptyForSaveasDraft(formData).length > 0
-    ) {
-      const emptyFields = isFormDataEmptyForSaveasDraft(formData);
-      formatAndShowErrorMessage(emptyFields);
-      setVisible(false);
-    } else {
-      console.log("Form data is valid. Submitting...");
+    setIsLoading(true);
+    const data = {
+      referenceNo: formData.referenceNo,
+      requisitionType:
+        formData.requisitionType == ""
+          ? REQUISITION_TYPE[0].code
+          : formData.requisitionType,
+      positionTitleId: formData.positionTitleId,
+      departmentId: formData.departmentId,
+      subDepartmentId: formData.subDepartmentId,
+      projectId: formData.projectId,
+      vacancyNo: Number(formData.vacancyNo),
+      genderId: formData.genderId,
+      qualification: formData.qualification,
+      requisitionDateUtc: formatDateToYYYYMMDD(formData.requisitionDateUtc),
+      reportsToEmployeeId: formData.reportsToEmployeeId,
+      minGradeId: formData.minGradeId,
+      maxGradeId: formData.maxGradeId,
+      employmentTypeId: formData.employmentTypeId,
+      minExperience: formData.minExperience,
+      maxExperience: formData.maxExperience,
+      vacancyTypeId: formData.vacancyTypeId,
+      isReplacement: formData.isReplacement,
+      mrfStatusId: mrfStatusId,
+      jdDocPath: "string",
+      locationId: formData.locationId,
+      qualificationId: formData.qualificationId,
+      createdByEmployeeId: storageService.getData("profile").employeeId,
+      createdOnUtc: new Date().toISOString(),
+      updatedByEmployeeId: storageService.getData("profile").employeeId,
+      updatedOnUtc: new Date().toISOString(),
+      justification: formData.justification,
+      jobDescription: formData.jobDescription,
+      skills: formData.skills,
+      minTargetSalary: formData.minTargetSalary,
+      maxTargetSalary: formData.maxTargetSalary,
+      employeeName: formData.employeeName,
+      emailId: formData.emailId,
+      note: formData.note,
+      hrId: formData.hrId,
+      employeeCode: formData.employeeCode == null ? 0 : formData.employeeCode,
+      lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
+      annualCtc: formData.annualCtc,
+      annualGross: formData.annualGross,
+      replaceJustification: formData.replaceJustification,
+      resumeReviewerEmployeeIds: strToArray(
+        formData.resumeReviewerEmployeeIds
+      ).toString(),
+      interviewerEmployeeIds: strToArray(
+        formData.interviewerEmployeeIds
+      ).toString(),
+      hiringManagerId: formData.hiringManagerId,
+      hiringManagerEmpId: formData.hiringManagerEmpId,
+      functionHeadId: formData.functionHeadId,
+      functionHeadEmpId: formData.functionHeadEmpId,
+      siteHRSPOCId: formData.siteHRSPOCId,
+      siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
+      financeHeadId: formData.financeHeadId,
+      financeHeadEmpId: formData.financeHeadEmpId,
+      presidentnCOOId: formData.presidentnCOOId,
+      presidentnCOOEmpId: formData.presidentnCOOEmpId,
+    };
 
-      setIsLoading(true);
-      const data = {
-        referenceNo: formData.referenceNo,
-        requisitionType:
-          formData.requisitionType == ""
-            ? REQUISITION_TYPE[0].code
-            : formData.requisitionType,
-        positionTitleId: formData.positionTitleId,
-        departmentId: formData.departmentId,
-        subDepartmentId: formData.subDepartmentId,
-        projectId: formData.projectId,
-        vacancyNo: Number(formData.vacancyNo),
-        genderId: formData.genderId,
-        qualification: formData.qualification,
-        requisitionDateUtc: formatDateToYYYYMMDD(formData.requisitionDateUtc),
-        reportsToEmployeeId: formData.reportsToEmployeeId,
-        minGradeId: formData.minGradeId,
-        maxGradeId: formData.maxGradeId,
-        employmentTypeId: formData.employmentTypeId,
-        minExperience: formData.minExperience,
-        maxExperience: formData.maxExperience,
-        vacancyTypeId: formData.vacancyTypeId,
-        isReplacement: formData.isReplacement,
-        mrfStatusId: mrfStatusId,
-        jdDocPath: "string",
-        locationId: formData.locationId,
-        qualificationId: formData.qualificationId,
-        createdByEmployeeId: storageService.getData("profile").employeeId,
-        createdOnUtc: new Date().toISOString(),
-        updatedByEmployeeId: storageService.getData("profile").employeeId,
-        updatedOnUtc: new Date().toISOString(),
-        justification: formData.justification,
-        jobDescription: formData.jobDescription,
-        skills: formData.skills,
-        minTargetSalary: formData.minTargetSalary,
-        maxTargetSalary: formData.maxTargetSalary,
-        employeeName: formData.employeeName,
-        emailId: formData.emailId,
-        note: formData.note,
-        hrId:formData.hrId,
-        employeeCode: formData.employeeCode == null ? 0 : formData.employeeCode,
-        lastWorkingDate: formatDateToYYYYMMDD(formData.lastWorkingDate),
-        annualCtc: formData.annualCtc,
-        annualGross: formData.annualGross,
-        replaceJustification: formData.replaceJustification,
-        resumeReviewerEmployeeIds: strToArray(
-          formData.resumeReviewerEmployeeIds
-        ).toString(),
-        interviewerEmployeeIds: strToArray(
-          formData.interviewerEmployeeIds
-        ).toString(),
-        hiringManagerId: formData.hiringManagerId,
-        hiringManagerEmpId: formData.hiringManagerEmpId,
-        functionHeadId: formData.functionHeadId,
-        functionHeadEmpId: formData.functionHeadEmpId,
-        siteHRSPOCId: formData.siteHRSPOCId,
-        siteHRSPOCEmpId: formData.siteHRSPOCEmpId,
-        financeHeadId: formData.financeHeadId,
-        financeHeadEmpId: formData.financeHeadEmpId,
-        presidentnCOOId: formData.presidentnCOOId,
-        presidentnCOOEmpId: formData.presidentnCOOEmpId,
-      };
+    try {
+      let response = await postData(`${API_URL.POST_CREATE_REQUISITION}`, data);
 
-      try {
-        console.log(data);
-        let response = await postData(
-          `${API_URL.POST_CREATE_REQUISITION}`,
-          data
-        );
-        console.log(response)
-
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Response Data:", responseData);
-          if (responseData.statusCode === 409) {
-            setVisible(false);
-            setIsLoading(false);
-            toastRef.current.showConflictMessage(responseData.message);
-          } else {
-            if (mrfStatusId == 1) {
-              setVisible(false);
-              setIsLoading(false);
-              toastRef.current.showSuccessMessage(
-                "The MRF has been saved as Draft!"
-              );
-            } else {
-              setVisible(false);
-              setIsLoading(false);
-              toastRef.current.showSuccessMessage(
-                "Form submitted successfully!"
-              );
-            }
-            setTimeout(() => {
-              navigateTo("my_requisition");
-            }, 1000);
-          }
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Response Data:", responseData);
+        if (responseData.statusCode === 409) {
+          setVisible(false);
+          setIsLoading(false);
+          toastRef.current.showConflictMessage(responseData.message);
         } else {
-          console.error("Request failed with status:", response.status);
-          const errorData = await response.text();
-          console.error("Error Data:", errorData);
-          if (response.status === 400) {
-            setVisible(false);
-            setIsLoading(false);
-            toastRef.current.showBadRequestMessage(
-              "Bad request: " + response.url
+          if (mrfStatusId == 1) {
+            toastRef.current.showSuccessMessage(
+              "The MRF has been saved as Draft!"
             );
+          } else {
+            toastRef.current.showSuccessMessage("Form submitted successfully!");
           }
+          setTimeout(() => {
+            navigateTo("my_requisition");
+          }, 1000);
+          setVisible(false);
+          setIsLoading(false);
         }
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setVisible(false);
-        setIsLoading(false);
+      } else {
+        console.error("Request failed with status:", response.status);
+        const errorData = await response.text();
+        console.error("Error Data:", errorData);
+        if (response.status === 400) {
+          setVisible(false);
+          setIsLoading(false);
+          toastRef.current.showBadRequestMessage(
+            "Bad request: " + response.url
+          );
+        }
       }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setVisible(false);
+      setIsLoading(false);
     }
   };
 
@@ -374,43 +337,46 @@ const MrfPartialStatus = ({
 
   const handleChange = (e) => {
     const value = e.target.value;
-    console.log(value);
     if (value.length <= maxCharacterCount) {
       setNote(value);
     }
   };
 
   const remaingletter = maxCharacterCount - note.length;
+
+  const HandleError = () => {
+    if (formData.isReplacement && emailErrors) {
+      toastRef.current.showWarrningMessage("Invalid Employee Email format");
+      setVisible(false);
+      return;
+    }
+    if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
+      const emptyFields = isFormDataEmptyForSubmit(formData);
+      formatAndShowErrorMessage(emptyFields);
+      // setVisible(false);
+    } else if (
+      mrfStatusId == 1 &&
+      isFormDataEmptyForSaveasDraft(formData).length > 0
+    ) {
+      const emptyFields = isFormDataEmptyForSaveasDraft(formData);
+      formatAndShowErrorMessage(emptyFields);
+      // setVisible(false);
+    } else {
+      setVisible(true);
+    }
+  };
   return (
     <>
-      {/* {popupmessage &&(
-        <>
-         <Dialog dismissableMask >{popupmessage}</Dialog>
-         </>
-       )} */}
-      {/* 
-      {((roleID == 3 && mrfStatusId == MRF_STATUS.new) ||
-        mrfStatusId == MRF_STATUS.draft) && (
-        <Dialog
-          className="w-4 "
-          visible={visible}
-          header={header}
-          // draggable={false}
-          onHide={() => setVisible(false)}
-          footer={footerContent(mrfStatusId)}
-        >
-          {message && <h3>{message}</h3>}
-        </Dialog>
-      )} */}
-
+      
       {label && (
         <>
           <ButtonC
             label={label}
             ref={buttonRef}
             className={className}
-            // className="w-2 bg-red-600 border-red-600"
-            onClick={() => setVisible(true)}
+            onClick={
+              () => HandleError()
+            }
             disable={disabled}
             outlined={outlined}
           ></ButtonC>
