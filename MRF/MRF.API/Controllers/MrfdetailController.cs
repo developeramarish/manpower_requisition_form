@@ -645,23 +645,25 @@ namespace MRF.API.Controllers
                 {
                     Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == request.MrfStatusId);
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
-
-                    List<int> RoleIds = new List<int>();
-                    RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
-
-                    string emailSubject = emailRequest.Subject.Replace("#", $" Id {mrfdetails.ReferenceNo}");
-                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
-                                                      .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-
-                    List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
-
-                    foreach (var emailReq in rejectedEmailList)
+                    if (emailRequest != null)
                     {
-                        _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
-                    }
+                        List<int> RoleIds = new List<int>();
+                        RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
 
-                    //Send Email to MRF Owner
-                    _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailSubject, emailContent);
+                        string emailSubject = emailRequest.Subject.Replace("#", $" Id {mrfdetails.ReferenceNo}");
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                                                          .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+
+                        List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+
+                        foreach (var emailReq in rejectedEmailList)
+                        {
+                            _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
+                        }
+
+                        //Send Email to MRF Owner
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailSubject, emailContent);
+                    }
                 }
             }
             else
