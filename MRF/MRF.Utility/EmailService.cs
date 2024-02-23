@@ -69,7 +69,7 @@ namespace MRF.Utility
             try
             {
                 string mrfRefNo = getMRFRefNoFromMRFId(mrfId);
-                htmlContent = htmlContent.Replace("MRF#", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfRefNo}</span>");
+                htmlContent = htmlContent.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfRefNo}</span>");
                 if (IsSendGridEnabled())
                 {
                     SendEmailSendGrid(getUserEmail(senderId), subject, htmlContent);
