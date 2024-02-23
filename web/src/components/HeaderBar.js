@@ -74,7 +74,9 @@ const HeaderBar = ({
       .then((responseData) => {
         if (Array.isArray(responseData.result)) {
           const data = responseData.result,
-            aMultipleRoleIds = multipleRoleIds.split(",");
+            aMultipleRoleIds = multipleRoleIds
+              ? multipleRoleIds.split(",")
+              : [roleId.toString()];
           const options = data.map((x) => {
             return { id: x.id, name: x.name };
           });
