@@ -6,7 +6,8 @@ const initialState = {
   loading: false,
   prevPageKey: '',
   params: null,
-  locationParams: []
+  locationParams: [],
+  profile: null
   // statusForTitle:null,
   // roleId:null,
 };
@@ -36,6 +37,9 @@ const pageSlice = createSlice({
     },
     showPreloader: (state, action) => {
       state.loading = true;
+    },
+    setProfile: (state, action) =>{
+      state.profile = action.payload;
     }
   }
 });

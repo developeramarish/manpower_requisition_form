@@ -43,12 +43,11 @@ import { Dialog } from "primereact/dialog";
 import LoginFail from "./components/LoginFail";
 function App() {
   const [token, setToken] = useState();
-  const [profile, setProfile] = useState();
+  // const [profile, setProfile] = useState();
   const [userData, setUserData] = useState("");
   const dispatch = useDispatch();
-  const { currentPageKey, params } = useSelector((state) => state.page);
+  const { currentPageKey, params, profile, locationParams } = useSelector((state) => state.page);
   const { currentDevice, touchDevice } = useSelector((state) => state.device);
-  const { locationParams } = useSelector((state) => state.page);
   const { instance, accounts } = useMsal();
 
   useEffect(() => {
@@ -89,7 +88,7 @@ function App() {
   async function callLoginAPI() {
     const result = await getDataAPI(graphConfig.graphMeEndpoint);
     const response = await result.json();
-    console.log(response);
+    // console.log(response);
     var oData =
       response && response.hasOwnProperty("result") ? response.result : null;
     if (oData === null) {
@@ -98,7 +97,8 @@ function App() {
     }
     storageService.setData("profile", oData);
     storageService.setData("isLoggedIn", true);
-    setProfile(oData);
+    // setProfile(oData);
+    dispatch(PAGE_ACTIONS.setProfile(oData))
     getLocationHash();
   }
 
@@ -160,6 +160,8 @@ function App() {
               userLastName={
                 accounts.length > 0 && accounts[0].name.split(" ")[1]
               }
+              roleId={profile.roleId}
+              multipleRoleIds={profile.multipleRoleIds}
             />
             <div className="content">
               <Sidebar roleId={profile.roleId} sPageKey={currentPageKey} />
