@@ -20,7 +20,7 @@ namespace MRF.Models.ViewModels
         public string ReferenceNo { get; set; } = null!;
         public int EmployeeId { get; set; }
         public int RoleId { get; set; }
-
+        
         public string  PositionTitle { get; set; } = null!;
 
     }
@@ -36,6 +36,8 @@ namespace MRF.Models.ViewModels
         public string Candidatestatus { get; set; } = null!;
         public int statusID { get; set; }
         public int TotalCount { get; set; }
+
+        public DateTime UpdatedOnUtc { get; set; }
 
     }
 

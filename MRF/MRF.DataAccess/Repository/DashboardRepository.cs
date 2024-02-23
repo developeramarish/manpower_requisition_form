@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
@@ -41,6 +42,8 @@ namespace MRF.DataAccess.Repository
             //RoleId= _userService.GetRoleId();
             string Role = _Utility.GetRole(roleId);
             var mrf = from Mrfdetails in _db.Mrfdetails 
+                       
+                      
                              where (Role != "mrfowner" || (Role == "mrfowner" && Mrfdetails.CreatedByEmployeeId == userId))
                              && (Mrfdetails.HrId == null ||(Role != "hr" || (Role =="hr" && Mrfdetails.HrId == userId)))
                              
@@ -88,6 +91,7 @@ namespace MRF.DataAccess.Repository
                                                           join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                                           join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
                                                           where status.Status.Contains("resume")
+                                                          
                                                           group new { mrfDetails, Candidate, status } by new
                                                           {
                                                               mrfDetails.Id,
@@ -138,6 +142,7 @@ namespace MRF.DataAccess.Repository
                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                              join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
+                            
                              where evaluation.InterviewerId== userId
                              orderby mrfD.UpdatedOnUtc descending
                              group new { mrfD, Candidate } by new
@@ -161,33 +166,34 @@ namespace MRF.DataAccess.Repository
             }
             else
             {
-                 mrfDetails = from mrfD in _db.Mrfdetails
-                                 join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
-                                 join position in _db.PositionTitlemaster
-                                 on mrfD.PositionTitleId equals position.Id
-                                 where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
-                                 ||(mrfD.HrId == null ||(Role == "hr" && mrfD.HrId == userId))
-                                 || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds != null
-                                 && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer" && Role !="hr"))
-                              orderby mrfD.CreatedOnUtc descending
+                mrfDetails = (from mrfD in _db.Mrfdetails
+                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                              join position in _db.PositionTitlemaster
+                              on mrfD.PositionTitleId equals position.Id
+                              where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                              || (mrfD.HrId == null || (Role == "hr" && mrfD.HrId == userId))
+                              || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds != null
+                              && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer" && Role != "hr"))
+                              // orderby mrfD.UpdatedOnUtc ascending
                               group new { mrfD, Candidate } by new
-                                 {
-                                     mrfD.Id,
-                                     Candidate.CandidateStatusId,
-                                     mrfD.ReferenceNo,
-                                     position.Name,
+                              {
+                                  mrfD.Id,
+                                  Candidate.CandidateStatusId,
+                                  mrfD.ReferenceNo,
+                                  position.Name,
+                                  mrfD.UpdatedOnUtc
+                              }
+                        into grouped
 
-                                 }
-                         into grouped
-                              
                               select new MrfResumeSummaryViewModel
-                                 {
-                                     MrfId = grouped.Key.Id,
-                                     ReferenceNo = grouped.Key.ReferenceNo,
-                                     statusID = grouped.Key.CandidateStatusId,
-                                     TotalCount = grouped.Count(),
-                                     PositionTitle = grouped.Key.Name,
-                                 };
+                              {
+                                  MrfId = grouped.Key.Id,
+                                  ReferenceNo = grouped.Key.ReferenceNo,
+                                  statusID = grouped.Key.CandidateStatusId,
+                                  TotalCount = grouped.Count(),
+                                  PositionTitle = grouped.Key.Name,
+                                  UpdatedOnUtc = grouped.Key.UpdatedOnUtc,
+                              }).OrderByDescending(s => s.UpdatedOnUtc);
             }
             var result = new List<ResultViewModel>();
             

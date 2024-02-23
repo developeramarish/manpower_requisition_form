@@ -23,6 +23,11 @@ public class Employeerolemap
     public string? name { get; set; }
     [NotMapped]
     public int EmployeeCode { get; set; }
+    [NotMapped]
+    public string Email { get; set; } = null!;
 
+    
+    [NotMapped]
+    public string ContactNo { get; set; } = null!;
     public string? multipleRoleIds { get; set; }
 }
