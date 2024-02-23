@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import "primeicons/primeicons.css";
 import { DataTable } from "primereact/datatable";
@@ -20,39 +19,41 @@ import MultiSelectDropdown from "../components/multiselectDropdown";
 import DropdownComponent from "../components/Dropdown";
 import ButtonC from "../components/Button";
 import LoadingSpinner from "../components/LoadingSpinner";
-const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
+const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
   const [values, setValues] = useState([]);
   const [saveBttn, setSaveBttn] = useState([]);
   const toastRef = useRef(null);
-  const [isFlag,setIsFlag]=useState([]);
+  const [isFlag, setIsFlag] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     getResumeData();
   }, []);
- 
+
   async function getResumeData() {
-    const resumeData = await getData(API_URL.GET_MYRESUME+ "?id=0&roleId=" + roleId + "&userId=" + userId);
+    const resumeData = await getData(
+      API_URL.GET_MYRESUME + "?id=0&roleId=" + roleId + "&userId=" + userId
+    );
     if (roleId === ROLES.resumeReviwer) {
       var filterInterviewerResumtSumData = [];
-      resumeData.result.candidateDetails.map(( res) => {
-          if (!MRF_STATUS_FOR_DISABLE(roleId,res.mrfStatus)) {
-            filterInterviewerResumtSumData.push(res)
-          }
-      })
+      resumeData.result.candidateDetails.map((res) => {
+        if (!MRF_STATUS_FOR_DISABLE(roleId, res.mrfStatus)) {
+          filterInterviewerResumtSumData.push(res);
+        }
+      });
       setValues(filterInterviewerResumtSumData);
       setForwardData(resumeData.result.resumereviewer);
       setStatusData(resumeData.result.status);
-      const isFlagArray = resumeData.result.candidateDetails.map((res) => res.candidateStatusId === 2 || res.candidateStatusId === 3);
+      const isFlagArray = resumeData.result.candidateDetails.map(
+        (res) => res.candidateStatusId === 2 || res.candidateStatusId === 3
+      );
       setIsFlag(isFlagArray);
-    }
-    else{
+    } else {
       setValues(resumeData.result.candidateDetails);
       setForwardData(resumeData.result.resumereviewer);
       setStatusData(resumeData.result.status);
     }
-   
   }
   const SingleSelect = (data, options) => {
     const handleDropdownChange = (e) => {
@@ -76,30 +77,25 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
       />
     );
   };
- 
-  
- 
+
   const MultiSelect = (data, options) => {
     const handleMultiSelectChange = (e) => {
       let interviewDataCopy = [...values];
       let sv = [...saveBttn];
       sv[options.rowIndex] = e.value.length > 0 ? true : false;
-      interviewDataCopy[options.rowIndex].resumeReviewerEmployeeIds  = objToIntArray(
-        e.value,
-        "employeeId"
-      ).toString();
+      interviewDataCopy[options.rowIndex].resumeReviewerEmployeeIds =
+        objToIntArray(e.value, "employeeId").toString();
       setValues(interviewDataCopy);
       setSaveBttn(sv);
     };
- 
+
     return (
       <MultiSelectDropdown
         // className="drop-width"
         options={forwardData}
         value={arrayToObj(
           forwardData,
-          strToArray(data.resumeReviewerEmployeeIds
-            ),
+          strToArray(data.resumeReviewerEmployeeIds),
           "employeeId"
         )}
         placeholder={"Select Resume Reviwer"}
@@ -107,14 +103,13 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
         optionLabel="name"
         disable={isFlag[options.rowIndex]}
         className="w-full md:w-15rem"
-      
       />
     );
   };
   const updateData = async (rowData) => {
     setIsLoading(true);
     const reviewedByEmployeeIds = rowData.resumeReviewerEmployeeIds;
-    const name =  rowData.candidateName; // this because we are handling data in backend it not save as string
+    const name = rowData.candidateName; // this because we are handling data in backend it not save as string
     const emailId = "string";
     const id = rowData.candidateId;
     const candidateStatusId = rowData.candidateStatusId;
@@ -124,7 +119,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
     const resumePath = rowData.resumePath;
     const createdByEmployeeId = rowData.createdByEmployeeId;
     const createdOnUtc = rowData.createdOnUtc;
-    const candidateName=rowData.candidateName;
+    const candidateName = rowData.candidateName;
     const candidateDetailsData = {
       id,
       mrfId,
@@ -138,7 +133,10 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
       createdOnUtc,
       reason,
     };
-    let response = await putData(`${API_URL.RESUME_SUMMARY_POST + id}`,candidateDetailsData);
+    let response = await putData(
+      `${API_URL.RESUME_SUMMARY_POST + id}`,
+      candidateDetailsData
+    );
     if (response.ok) {
       const responseData = await response.json();
       console.log("Response Data:", responseData);
@@ -147,40 +145,35 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
         navigateTo("dashboard");
         setIsLoading(false);
       }, 100);
-      
     } else {
       console.error("Request failed with status:", response.status);
       if (response.status === 400) {
-        toastRef.current.showBadRequestMessage(
-          "Bad request: " + response.url
-        );
+        toastRef.current.showBadRequestMessage("Bad request: " + response.url);
       }
       setIsLoading(false);
     }
   };
- 
- 
+
   const textEditor = (data, options) => {
     const TextChange = (e) => {
       let statusdataCopy = [...values];
- 
+
       let sv = [...saveBttn];
       sv[options.rowIndex] = true;
- 
+
       statusdataCopy[options.rowIndex].reason = e.target.value;
- 
+
       setValues(statusdataCopy);
       setSaveBttn(sv);
     };
     return (
       <InputTextareaComponent
-      readOnly={isFlag[options.rowIndex]}
+        readOnly={isFlag[options.rowIndex]}
         value={data.reason}
-        rows={2}  
+        rows={2}
         cols={55}
         onChange={TextChange}
         placeholder={"Enter Reason"}
- 
       />
     );
   };
@@ -201,8 +194,9 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
         </React.Fragment>
       );
     }
-    return <ButtonC icon="pi pi-save" disable={true} className="myaction_btn"/>;
- 
+    return (
+      <ButtonC icon="pi pi-save" disable={true} className="myaction_btn" />
+    );
   };
   const resumeBodyTemplate = (interview) => {
     let resumeLink = FILE_URL.RESUME + interview.resumePath;
@@ -212,15 +206,15 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
       </a>
     );
   };
- 
+
   const columns = [
-    {
-      header: "Sr. No.",
-      body: (data, options) => options.rowIndex + 1,
-      //bodyClassName: "int-edit-col",
-      bodyClassName: "my_resume-col",
-    },
-    
+    // {
+    //   header: "Sr. No.",
+    //   body: (data, options) => options.rowIndex + 1,
+    //   //bodyClassName: "int-edit-col",
+    //   bodyClassName: "my_resume-col",
+    // },
+
     {
       field: "candidateName",
       header: "Name",
@@ -234,7 +228,14 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
       sortable: true,
       bodyClassName: "my_resume-col",
     },
-   
+    {
+      field: "positionTitle",
+      header: "Position Title",
+      // body: resumeBodyTemplate,
+      sortable: true,
+      bodyClassName: "my_resume-col",
+    },
+
     {
       field: "candidateStatusId",
       header: "Status",
@@ -264,7 +265,7 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
   return (
     <div className="my-resume">
       <h3 className="my-resume-title">My Resumes</h3>
- 
+
       <div className="my-resume-table">
         <DataTable
           value={values}
@@ -274,19 +275,18 @@ const MyResume = ({roleId =null, mrfId =  0, userId=null}) => {
           scrollable
           scrollHeight="flex"
         >
-          {columns.map((col,index) => (
+          {columns.map((col, index) => (
             <Column
               field={col.field}
               header={col.header}
               body={col.body}
- rowClassname={col.rowClassName}
+              rowClassname={col.rowClassName}
               bodyClassName={"int-col " + col.bodyClassName}
               sortable={col.sortable}
             />
           ))}
- 
         </DataTable>
-        {isLoading && <LoadingSpinner/>}
+        {isLoading && <LoadingSpinner />}
       </div>
     </div>
   );
