@@ -28,8 +28,9 @@ function Dashboard({ roleId, userId }) {
   const [resumePopupId, setResumePopupId] = useState(null);
   const [InterviewStatus, setInterviewStatusPopup] = useState(false);
   useEffect(() => {
+    console.log(roleId, "  Dashboard rendered")
     getSummaryData();
-  }, []);
+  }, [roleId]);
   async function getSummaryData() {
     const mrfStatusData = await getData(
       API_URL.MRF_STATUS_SUMMARY + "?roleId=" + roleId + "&userId=" + userId
