@@ -66,6 +66,7 @@ const HeaderBar = ({
       console.error("Error:", error);
     }
   };
+
   const fetchData = () => {
     const apiUrl = API_URL.GET_ROLE;
     fetch(apiUrl)
@@ -73,9 +74,7 @@ const HeaderBar = ({
       .then((responseData) => {
         if (Array.isArray(responseData.result)) {
           const data = responseData.result,
-            aMultipleRoleIds = multipleRoleIds
-              ? multipleRoleIds.split(",")
-              : [roleId.toString()];
+            aMultipleRoleIds = multipleRoleIds.split(",");
           const options = data.map((x) => {
             return { id: x.id, name: x.name };
           });
