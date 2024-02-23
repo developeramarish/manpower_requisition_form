@@ -332,33 +332,29 @@ CREATE TABLE `EvaluationStatusMaster` (
 INSERT INTO `EvaluationStatusMaster` (`Id`, `Status`,`RoleId`, `IsActive`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
 (1, 'Assignment Sent',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
 (2, 'Assignment Received',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(3, 'Assignment Shortlisted',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(4, 'Assignment Rejected',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(5, 'Video Interview Cleared',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(6, 'Video Interview Not Cleared',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(7, 'Coding Test Cleared',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(8, 'Coding Test Not Cleared',6, 1, 1, '2023-08-06 17:22:47', 1, 0),
-(9, 'Aptitude Test Cleared', 4,1, 1, '2023-08-08 21:46:52', 1, 0),
-(10, 'Aptitude Test Not Cleared',4, 1, 1, '2023-08-08 21:46:52', 1, 0),
-(11, 'Telephonic Interview Cleared',6, 1, 1, '2023-08-08 21:51:49', 1, 0),
-(12, 'Telephonic Interview Not Cleared',6, 1, 1, '2023-08-08 21:51:49', 1, 0),
-(13, 'Face To Face Interview Cleared',6, 1, 1, '2023-08-08 21:55:33', 1, 0),
-(14, 'Face To Face Interview Not Cleared',6, 1, 1, '2023-08-08 21:55:33', 1, 0),
-(15, 'Selected',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(16, 'Not Selected',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(17, 'Offer Rolledout',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(18, 'Offer Accepted',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(19, 'Offer Accepted & did not join',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(20, 'Offer Rejected',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(21, 'Offer Accepted and Countered',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(22, 'Interview Forwarded',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(23, 'Interview to be Scheduled',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(24, 'Interview Scheduled',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(25, 'Interview Rescheduled',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(26, 'Candidate was Absent',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(27, 'Interview Canceled',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(28, 'Interview on Hold',4, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
-(29, 'Onboarded', 4, 1,1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22');
+(3, 'Interview Scheduled',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(4, 'Interview Rescheduled',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(5, 'Interview Cancelled',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(6, 'Interview On Hold',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(7, 'Offer Rolledout',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(8, 'Offer Accepted',4, 1, 1, '2023-08-06 17:22:47', 1, 0),
+(9, 'Offer accepted & did not joiin', 4,1, 1, '2023-08-08 21:46:52', 1, 0),
+(10, 'Offer Rejected',4, 1, 1, '2023-08-08 21:46:52', 1, 0),
+(11, 'Onboarded',4, 1, 1, '2023-08-08 21:51:49', 1, 0),
+(12, 'Assignment  Shortlisted',6, 1, 1, '2023-08-08 21:51:49', 1, 0),
+(13, 'Assignment Rejected',6, 1, 1, '2023-08-08 21:55:33', 1, 0),
+(14, 'Interview To Be Scheduled',6, 1, 1, '2023-08-08 21:55:33', 1, 0),
+(15, 'Interview Forwarded',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(16, 'Candidate was Absent',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(17, 'Coding Round',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(18, 'Coding Round Cleared',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(19, 'Coding Round Not Cleared',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(20, 'FaceToFace Interview',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(21, 'FaceToFace Interview Cleared',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(22, 'FaceToFace Interview Not Cleared',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(23, 'Candidate Selected',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22'),
+(24, 'Candidate Not Selected',6, 1, 1, '2023-08-06 19:01:22', 1, '2023-08-06 19:01:22');
+ 
 
 -- --------------------------------------------------------
 
@@ -627,7 +623,7 @@ CREATE TABLE `InterviewEvaluation` (
 
 INSERT INTO `InterviewEvaluation` (`Id`, `CandidateId`,`InterviewerId`, `EvaluationDateUtc`, `FromTimeUtc`, `ToTimeUtc`, `EvalutionStatusId`,   `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
 (1, 1,5, '2023-08-08', NULL, NULL, 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(2, 2, 5, '2023-08-08', '15:00:00', '15:30:00', 29, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
+(2, 2, 5, '2023-08-08', '15:00:00', '15:30:00', 23, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
 (3, 3,5, '2023-08-08', NULL, NULL, 2, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
 (4, 2,5, '2023-08-08', NULL, NULL, 4, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
 (5, 1,5, '2023-08-09', '11:30:00', '12:30:00', 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
@@ -1887,7 +1883,7 @@ ALTER TABLE `EvaluationMaster`
 -- AUTO_INCREMENT for table `EvaluationStatusMaster`
 --
 ALTER TABLE `EvaluationStatusMaster`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `FreshMrfDetails`

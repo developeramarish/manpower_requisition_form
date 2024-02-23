@@ -78,6 +78,8 @@ namespace MRF.DataAccess.Repository
                         else
                         {
                             Employeerolemap.name = Employeedetail.Name;
+                            Employeerolemap.Email= Employeedetail.Email;
+                            Employeerolemap.ContactNo= Employeedetail.ContactNo;
                             SetRoleId(Employeerolemap.RoleId);
                             SetUserId(Employeerolemap.EmployeeId);
                             _response.Result = Employeerolemap;
