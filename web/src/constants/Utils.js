@@ -1,4 +1,4 @@
-import { INTERVIEW_EVALUATION, MRF_STATUS, RESUME_STATUS, ROLES } from "./config";
+import { FILE_URL, INTERVIEW_EVALUATION, MRF_STATUS, RESUME_STATUS, ROLES } from "./config";
 import { storageService } from "./storage";
 
 /**** 
@@ -418,3 +418,18 @@ return  false;
 }
 
 }
+
+
+export const resumeBodyTemplate = (data) => {
+
+let resumeString = data.resumePath;
+let resumeValue = resumeString.replace(/^[\d-]+\/\//, ''); 
+
+    let resumeLink = FILE_URL.RESUME + data.resumePath;
+    return (
+      <a href={resumeLink} target="_blank" className="int-link-cell">
+   
+		{ resumeValue} 
+      </a>
+    );
+  };

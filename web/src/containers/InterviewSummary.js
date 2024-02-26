@@ -21,6 +21,7 @@ import {
   postData,
   getDataAPI,
   INTERVIEW_EVALUATION_FOR_DISABLE,
+  resumeBodyTemplate,
 } from "../constants/Utils";
 import "../css/InterviewSummary.css";
 import AssignmentUpload from "../containers/AssignmentUpload";
@@ -32,14 +33,7 @@ const uploadedOnBodyTemplate = (interview) => {
   return changeDateFormat(interview.createdOnUtc);
 };
 
-const resumeBodyTemplate = (interview) => {
-  let resumeLink = FILE_URL.RESUME + interview.resumePath;
-  return (
-    <a href={resumeLink} target="_blank" className="int-link-cell">
-      {interview.resumePath}
-    </a>
-  );
-};
+
 
 //summary component
 const InterviewSummary = ({
