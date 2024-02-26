@@ -4,6 +4,7 @@ using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -209,6 +210,7 @@ namespace MRF.API.Controllers
                 var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
                 {
                     MrfId = mrfId,
+                    RoleId = 3,
                     EmployeeId = request.CreatedByEmployeeId,
                     ApprovalDate = request.HMApprovalDate
                 };
@@ -254,134 +256,93 @@ namespace MRF.API.Controllers
 
         private int CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update, out int nextMrfStatusId) 
         {
-            int employeeId = 0;
+            int employeeId = 0; int RoleID = 0;
             nextMrfStatusId = request.MrfStatusId;
-            List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetList(mrfId);
-            if (request.HrId != null && request.HrId != 0)
+            //List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetList(mrfId);
+            /*if (request.HrId != null && request.HrId != 0)
             {
+                RoleID = 4;
                 //employeeId = request.HrId;
                 var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
                     MrfId = mrfId,
                     EmployeeId = (int)request.HrId,
+                    RoleId = RoleID,
                     //ApprovalDate = request.CreatedOnUtc,
                 };
                 MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 4).FirstOrDefault();
+                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId && s.RoleId == RoleID).FirstOrDefault();
                 if (MrfEmailApproval == null)
                 {
                     postMrfEmail(MrfEmailApprovalRequestModel);
                 }
-            }
+            }*/
             if (request.FunctionHeadId != 0)
             {
+                RoleID = 8;
                 nextMrfStatusId = 4;
                 employeeId = request.FunctionHeadId;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.FHApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 8).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.FHApprovalDate);
             }
             if (request.HiringManagerId != 0)
             {
+                RoleID = 3;
                 employeeId = request.HiringManagerId;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.HMApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 3).FirstOrDefault();
-
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.HMApprovalDate);
             }
 
-            if (request.SiteHRSPOCId != 0)
+            if (request.SiteHRSPOCId != 0 || (request.HrId != null && request.HrId != 0))
             {
-                employeeId = request.SiteHRSPOCId;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.SPApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 4).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
+                RoleID = 4; DateOnly approveDate = request.SPApprovalDate;
+                if (request.SiteHRSPOCId != 0) { employeeId = request.SiteHRSPOCId;
+                
+                } else if(request.HrId != null && request.HrId != 0)
+                { employeeId = (int)(request.HrId); 
+                  approveDate = DateOnly.FromDateTime(DateTime.Today); }
+                
+                if (employeeId != 0) {
+                    AddUpdateEmailApproval(mrfId, employeeId, RoleID, approveDate);
                 }
             }
             if (request.FinanceHeadId != 0)
             {
+                RoleID = 10;
                 employeeId = request.FinanceHeadId;
                 nextMrfStatusId = 14;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.FIApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 10).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.FIApprovalDate);
             }
 
             if (request.PresidentnCOOId != 0)
             {
+                RoleID = 11;
                 employeeId = request.PresidentnCOOId;
                 nextMrfStatusId = 5;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.PCApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 11).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.PCApprovalDate);
             }
             return employeeId;
         }
+        private void AddUpdateEmailApproval(int mrfId, int employeeId, int roleId, DateOnly ApprovalDate)
+        {
+            List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetA(u=>u.MrfId== mrfId).ToList();
+            var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
+            {
+                MrfId = mrfId,
+                EmployeeId = employeeId,
+                RoleId = roleId,
+                ApprovalDate = ApprovalDate
+            };
+            MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+            MrfEmailApproval MrfEmailApproval = list.Where(s => s.RoleId == roleId).FirstOrDefault();
+            if (MrfEmailApproval == null)
+            {
+                postMrfEmail(MrfEmailApprovalRequestModel);
+            }
+            else
+            {
+                controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
+            }
 
+        }
         private void postMrfEmail(MrfEmailApprovalRequestModel MrfdetailRequestModelRequest)
         {
             MrfEmailApprovalController MrfEmailApprovalController = new MrfEmailApprovalController(_unitOfWork, _logger);

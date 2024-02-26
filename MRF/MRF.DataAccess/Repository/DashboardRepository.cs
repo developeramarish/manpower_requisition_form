@@ -168,8 +168,7 @@ namespace MRF.DataAccess.Repository
             {
                 mrfDetails = (from mrfD in _db.Mrfdetails
                               join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
-                              join position in _db.PositionTitlemaster
-                              on mrfD.PositionTitleId equals position.Id
+                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                               where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
                               || (mrfD.HrId == null || (Role == "hr" && mrfD.HrId == userId))
                               || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds != null
@@ -265,22 +264,25 @@ namespace MRF.DataAccess.Repository
             var Interviewevaluation = (from mrfD in _db.Mrfdetails
                                        join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                                        join interview in _db.Interviewevaluation on Candidate.Id equals interview.CandidateId into interviewGroup
-                                       from interview in interviewGroup.DefaultIfEmpty() // Perform left join
+                                       from interview in interviewGroup.DefaultIfEmpty() // *Perform left join Interviewevaluation
                                        join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id into statusGroup
-                                       from status in statusGroup.DefaultIfEmpty() // Perform left join
+                                       from status in statusGroup.DefaultIfEmpty() // *Perform left join Evaluationstatus
                                        join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                                        where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)||
-                                      (mrfD.HrId ==0 || (Role == "hr" && Role != "hr" && mrfD.HrId == userId))
-                                              || (Role == "interviewer" && interview != null && interview.InterviewerId != 0
-                                                    && interview.InterviewerId == userId && Candidate.CandidateStatusId == 2)
-                                              || (Role != "mrfowner" && Role != "interviewer" && Role!= "hr"))
-                                       orderby mrfD.UpdatedOnUtc descending
+                                       (Role == "hr" && (mrfD.HrId == userId || mrfD.HrId ==0) ||
+                                       (Role == "interviewer" && interview != null && interview.InterviewerId != 0
+                                                    && interview.InterviewerId == userId 
+                                                    //&& Candidate.CandidateStatusId == 2
+                                       )
+                                       || (Role != "mrfowner" && Role != "interviewer" && Role!= "hr")))
+                                       && Candidate.CandidateStatusId == 2
                                        group new { mrfD, Candidate, interview, status } by new
                                        {
                                            mrfD.Id,
                                            mrfD.ReferenceNo,
                                            position.Name,
-                                           status = status != null ? status.Id : 0, // Handle null status
+                                           status = status != null ? status.Id : 0,
+                                           mrfD.UpdatedOnUtc,
                                        }
                        into grouped
                                        select new MrfInterviewSummaryViewModel
@@ -290,33 +292,38 @@ namespace MRF.DataAccess.Repository
                                            ReferenceNo = grouped.Key.ReferenceNo,
                                            TotalCount = grouped.Count(),
                                            PositionTitle = grouped.Key.Name,
+                                           UpdatedOnUtc = grouped.Key.UpdatedOnUtc
                                        })
-                       .OrderBy(result => result.MrfId)
+                       .OrderBy(result => result.UpdatedOnUtc)
                        .ToList();
 
 
 
-            if (Role == "mrfowner" || Role == "hr")
+            /*if (Role == "mrfowner" || Role == "hr")
             {
                 var mrflist = (from mrfD in _db.Mrfdetails
                                join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                                join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                                where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId) || Role != "mrfowner")
-                               orderby mrfD.UpdatedOnUtc descending
+                               && Candidate.CandidateStatusId==2
+                               //orderby mrfD.UpdatedOnUtc descending
                                select new MrfInterviewSummaryViewModel
                                {
                                    MrfId = mrfD.Id,
                                    ReferenceNo = mrfD.ReferenceNo,
                                    PositionTitle = position.Name,
+                                   UpdatedOnUtc= mrfD.UpdatedOnUtc,
                                }).ToList();
 
 
-                var newItems = mrflist.Where(x => !Interviewevaluation.Any(y => x.MrfId == y.MrfId));
+                var newItems = mrflist
+                        .OrderByDescending(x => x.UpdatedOnUtc) // Order mrflist by UpdatedOnUtc in descending order
+                        .Where(x => !Interviewevaluation.Any(y => x.MrfId == y.MrfId));
                 foreach (var item in newItems)
                 {
                     Interviewevaluation.Add(item);
                 }
-            }
+            }*/
            
             
 

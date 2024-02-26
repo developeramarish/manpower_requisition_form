@@ -788,20 +788,21 @@ CREATE TABLE `MrfEmailApproval` (
   `Id` int(11) NOT NULL,
   `MrfId` int(11) NOT NULL,
   `EmployeeId` int(11) NOT NULL,
+  `RoleId` int(11) NOT NULL,
   `ApprovalDate` date null
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `MrfEmailApproval` (`Id`, `MrfId`, `EmployeeId`,`ApprovalDate`) VALUES
-(1,1,8,'2023-08-09'),
-(2,1,13,'2023-08-09'),
-(3,1,10,'2023-08-09'),
-(4,1,11,'2023-08-09'),
-(5,1,12,'2023-08-09'),
-(6,2,8,'2023-08-09'),
-(7,2,13,'2023-08-09'),
-(8,2,10,'2023-08-09'),
-(9,2,11,'2023-08-09'),
-(10,2,12,'2023-08-09');
+INSERT INTO `MrfEmailApproval` (`Id`, `MrfId`, `EmployeeId`, `RoleId`, `ApprovalDate`) VALUES
+(1,1,8,3,'2023-08-09'),
+(2,1,13,4,'2023-08-09'),
+(3,1,10,5,'2023-08-09'),
+(4,1,11,6,'2023-08-09'),
+(5,1,12,7,'2023-08-09'),
+(6,2,8,3,'2023-08-09'),
+(7,2,13,4,'2023-08-09'),
+(8,2,10,5,'2023-08-09'),
+(9,2,11,7,'2023-08-09'),
+(10,2,12,6,'2023-08-09');
 
 -- ---------------------------------------------------------
 --
@@ -1688,7 +1689,8 @@ ALTER TABLE `GradeMaster`
 ALTER TABLE `MrfEmailApproval`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `FK_MrfDetailsId` (`MrfId`),
-  ADD KEY `FK_EmployeeDetails` (`EmployeeId`);
+  ADD KEY `FK_EmployeeDetails` (`EmployeeId`),
+  ADD KEY `RoleMasterMrfEmailApproval` (`RoleId`);
 
 --
 -- Indexes for table `InterviewEvaluation`
@@ -1718,7 +1720,7 @@ ALTER TABLE `LocationMaster`
 ALTER TABLE `MrfDetails`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `FK_DepartmentMasterMrfDetails` (`DepartmentId`),
-  ADD KEY `FK_PositionTitleMaster` (`PositionTitleId`),
+  ADD KEY `FK_PositionTitleMasterD` (`PositionTitleId`),
   ADD KEY `FK_SubDepartmentMasterMrfDetails` (`SubDepartmentId`),
   ADD KEY `FK_ProjectMasterMrfDetails` (`ProjectId`),
   ADD KEY `FK_GenderMasterMrfDetails` (`GenderId`),
@@ -2013,7 +2015,8 @@ ALTER TABLE `MrfEmailApproval`
 
 ALTER TABLE `MrfEmailApproval`
   ADD CONSTRAINT `FK_MrfDetailsId` FOREIGN KEY (`MrfId`) REFERENCES `MrfDetails` (`Id`),
-  ADD CONSTRAINT `FK_EmployeeDetails` FOREIGN KEY (`EmployeeId`) REFERENCES `EmployeeDetails` (`Id`);
+  ADD CONSTRAINT `FK_EmployeeDetails` FOREIGN KEY (`EmployeeId`) REFERENCES `EmployeeDetails` (`Id`),
+  ADD CONSTRAINT `FK_RoleMasterMrfEmailApproval` FOREIGN KEY (`RoleId`) REFERENCES `RoleMaster` (`Id`);
 
 --
 -- Constraints for table `CandidateDetails`
@@ -2068,7 +2071,7 @@ ALTER TABLE `AttachmentEvaluation`
 --
 ALTER TABLE `MrfDetails`
   ADD CONSTRAINT `FK_DepartmentMasterMrfDetails` FOREIGN KEY (`DepartmentId`) REFERENCES `DepartmentMaster` (`Id`),
-  ADD CONSTRAINT `FK_PositionTitleMaster` FOREIGN KEY (`PositionTitleId`) REFERENCES `PositionTitleMaster` (`Id`),
+  ADD CONSTRAINT `FK_PositionTitleMasterD` FOREIGN KEY (`PositionTitleId`) REFERENCES `PositionTitleMaster` (`Id`),
   ADD CONSTRAINT `FK_EmploymentTypeMasterMrfDetails` FOREIGN KEY (`EmploymentTypeId`) REFERENCES `EmploymentTypeMaster` (`Id`),
   ADD CONSTRAINT `FK_GenderMasterMrfDetails` FOREIGN KEY (`GenderId`) REFERENCES `GenderMaster` (`Id`),
   ADD CONSTRAINT `FK_GradeMasterMrfDetails` FOREIGN KEY (`MinGradeId`) REFERENCES `GradeMaster` (`Id`),
