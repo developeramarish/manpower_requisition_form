@@ -111,7 +111,7 @@ namespace MRF.API.Controllers
                     MrfId = request.MrfId,
                     EmailId = request.EmailId,
                     ContactNo = request.ContactNo,
-                 ResumePath = request.ResumePath,
+                 ResumePath = DateTime.Now.ToString("yyyy-MM-dd")+"//"+request.ResumePath,
                  ReviewedByEmployeeIds = reviewerEmpId,
                  CandidateStatusId = request.CandidateStatusId,
                  CreatedByEmployeeId = request.CreatedByEmployeeId,

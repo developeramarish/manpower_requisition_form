@@ -31,9 +31,13 @@ namespace MRF.API.Controllers
             else
                 directory = Path.Combine(_rootPath, ResumeOrAssign);
 
+            directory = Path.Combine(directory, DateTime.Now.ToString("yyyy-MM-dd"));
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
             // Make sure to validate the file type and size.
+
+
+
 
             if (!string.IsNullOrEmpty(FileName))
             {
