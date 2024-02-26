@@ -15,6 +15,7 @@ import {
   strToArray,
   CANDIDATE_STATUS_FOR_DISABLE,
   MRF_STATUS_FOR_DISABLE,
+  resumeBodyTemplate,
 } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -224,15 +225,7 @@ const ResumeSummary = ({
     return changeDateFormat(data.createdOnUtc);
   };
 
-  const resumeBodyTemplate = (interview) => {
-    let resumeLink = FILE_URL.RESUME + interview.resumePath;
-    return (
-      <a href={resumeLink} target="_blank" className="int-link-cell">
-        {interview.resumePath}
-      </a>
-    );
-  };
-
+ 
   const reasonTemplate = (resume) => {
     // console.log(resume);
 

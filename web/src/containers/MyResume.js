@@ -4,7 +4,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
-import { navigateTo, putData } from "../constants/Utils";
+import { navigateTo, putData, resumeBodyTemplate } from "../constants/Utils";
 import { API_URL, FILE_URL, ROLES } from "../constants/config";
 import {
   arrayToObj,
@@ -198,14 +198,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       <ButtonC icon="pi pi-save" disable={true} className="myaction_btn" />
     );
   };
-  const resumeBodyTemplate = (interview) => {
-    let resumeLink = FILE_URL.RESUME + interview.resumePath;
-    return (
-      <a href={resumeLink} target="_blank" className="int-link-cell">
-        {interview.resumePath}
-      </a>
-    );
-  };
+ 
 
   const columns = [
     // {
