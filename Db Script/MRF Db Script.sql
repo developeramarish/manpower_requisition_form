@@ -151,13 +151,13 @@ INSERT INTO `EmployeeDetails` (`Id`, `Name`, `Email`, `ContactNo`,`IsDeleted`,`E
 (6, 'kritika gupta', 'kritika.gupta@kwglobal.com', '8911848218',0,41238, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
 (7, 'vaibhav chaudhari', 'vaibhav.chaudhari@kwglobal.com', '8756776654',0,41239, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
 (8, 'manish partey', 'manish.partey@kwglobal.com', '9410625151',0,41249, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
-(9, 'manotosh roy', 'manotosh.roy@kwglobal.com', '9660013618',0,41248, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
+(9, 'manotosh roy', 'riya.singh@kwglobal.com', '9660013618',0,41248, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
 (10, 'ashutosh.tiwari', 'ashutosh.tiwari@kwglobal.com', '9660013618',0,41247, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
-(11, 'jack md', 'bobd.j@kwglobal.com', '9660013618',0,41246, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
-(12, 'John Ms', 'bobd.j@kwglobal.com', '9660013618',0,41245, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
-(13, 'cathy Za', 'bobd.j@kwglobal.com', '9660013618',0,41244, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
-(14, 'Queen ff', 'bobd.j@kwglobal.com', '9660013618', 0,41243,1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
-(15, 'president', 'bobd.j@kwglobal.com', '9660013618', 0,4111,1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
+(11, 'jack md', 'amita.dhamapurkar@kwglobal.com', '9660013618',0,41246, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
+(12, 'John Ms', 'ramkrishna.maurya@kwglobal.com', '9660013618',0,41245, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
+(13, 'cathy Za', 'ramkrishna.maurya@kwglobal.com', '9660013618',0,41244, 1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
+(14, 'Queen ff', 'amita.dhamapurkar@kwglobal.com', '9660013618', 0,41243,1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
+(15, 'president', 'riya.singh@kwglobal.com', '9660013618', 0,4111,1, 1, 1, '2023-08-09 18:48:53', 1, '2023-08-09 18:48:53'),
 (16, 'Riya Singh', 'riya.singh@kwglobal.com', '7656865467',0,47082, 1, 1, 1, '2023-08-07 23:00:42', 1, '2023-08-07 23:00:42');
 -- --------------------------------------------------------
 
@@ -214,20 +214,20 @@ CREATE TABLE `EmployeeRoleMap` (
 
 INSERT INTO `EmployeeRoleMap` (`Id`, `EmployeeId`, `RoleId`, `IsActive`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`,`multipleRoleIds`) VALUES
 (1, 1, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(2, 2, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
+(2, 2, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5,6"),
 (3, 3, 5, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(4, 4, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
+(4, 4, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5,6"),
 (5, 5, 6, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(6, 6, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
+(6, 6, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5,6"),
 (7, 7, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(8, 8, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
+(8, 8, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5,6"),
 (9, 9, 3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
 (10, 10, 4, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(11, 11, 7, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(12, 12, 8, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(13, 13, 9, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(14, 14, 10, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
-(15, 15, 11, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5"),
+(11, 11, 7, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"8"),
+(12, 12, 8, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"10"),
+(13, 13, 9, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"8"),
+(14, 14, 10, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"10"),
+(15, 15, 11, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"11"),
 (16, 16,3, 1, 1, '2023-08-07 17:46:26', 1, '2023-08-07 17:46:26',"3,4,5");
 
 -- --------------------------------------------------------
@@ -788,20 +788,21 @@ CREATE TABLE `MrfEmailApproval` (
   `Id` int(11) NOT NULL,
   `MrfId` int(11) NOT NULL,
   `EmployeeId` int(11) NOT NULL,
+  `RoleId` int(11) NOT NULL,
   `ApprovalDate` date null
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `MrfEmailApproval` (`Id`, `MrfId`, `EmployeeId`,`ApprovalDate`) VALUES
-(1,1,8,'2023-08-09'),
-(2,1,13,'2023-08-09'),
-(3,1,10,'2023-08-09'),
-(4,1,11,'2023-08-09'),
-(5,1,12,'2023-08-09'),
-(6,2,8,'2023-08-09'),
-(7,2,13,'2023-08-09'),
-(8,2,10,'2023-08-09'),
-(9,2,11,'2023-08-09'),
-(10,2,12,'2023-08-09');
+INSERT INTO `MrfEmailApproval` (`Id`, `MrfId`, `EmployeeId`, `RoleId`, `ApprovalDate`) VALUES
+(1,1,8,3,'2023-08-09'),
+(2,1,13,4,'2023-08-09'),
+(3,1,10,5,'2023-08-09'),
+(4,1,11,6,'2023-08-09'),
+(5,1,12,7,'2023-08-09'),
+(6,2,8,3,'2023-08-09'),
+(7,2,13,4,'2023-08-09'),
+(8,2,10,5,'2023-08-09'),
+(9,2,11,7,'2023-08-09'),
+(10,2,12,6,'2023-08-09');
 
 -- ---------------------------------------------------------
 --
@@ -1080,9 +1081,9 @@ INSERT INTO `RoleMaster` (`Id`, `Name`, `IsActive`, `CreatedByEmployeeId`, `Crea
 (4, 'HR', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
 (5, 'Resume Reviewer', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
 (6, 'Interviewer', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
-(7, 'Hiring Manager', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
+(7, 'Hiring Manager', 0, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
 (8, 'Function Head', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
-(9, 'Site HR SPOC', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
+(9, 'Site HR SPOC', 0, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
 (10, 'Finance Head', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58'),
 (11, 'President &COO', 1, 1, '2023-08-07 16:40:58', 1, '2023-08-07 16:40:58');
 
@@ -1688,7 +1689,8 @@ ALTER TABLE `GradeMaster`
 ALTER TABLE `MrfEmailApproval`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `FK_MrfDetailsId` (`MrfId`),
-  ADD KEY `FK_EmployeeDetails` (`EmployeeId`);
+  ADD KEY `FK_EmployeeDetails` (`EmployeeId`),
+  ADD KEY `RoleMasterMrfEmailApproval` (`RoleId`);
 
 --
 -- Indexes for table `InterviewEvaluation`
@@ -1718,7 +1720,7 @@ ALTER TABLE `LocationMaster`
 ALTER TABLE `MrfDetails`
   ADD PRIMARY KEY (`Id`),
   ADD KEY `FK_DepartmentMasterMrfDetails` (`DepartmentId`),
-  ADD KEY `FK_PositionTitleMaster` (`PositionTitleId`),
+  ADD KEY `FK_PositionTitleMasterD` (`PositionTitleId`),
   ADD KEY `FK_SubDepartmentMasterMrfDetails` (`SubDepartmentId`),
   ADD KEY `FK_ProjectMasterMrfDetails` (`ProjectId`),
   ADD KEY `FK_GenderMasterMrfDetails` (`GenderId`),
@@ -2013,7 +2015,8 @@ ALTER TABLE `MrfEmailApproval`
 
 ALTER TABLE `MrfEmailApproval`
   ADD CONSTRAINT `FK_MrfDetailsId` FOREIGN KEY (`MrfId`) REFERENCES `MrfDetails` (`Id`),
-  ADD CONSTRAINT `FK_EmployeeDetails` FOREIGN KEY (`EmployeeId`) REFERENCES `EmployeeDetails` (`Id`);
+  ADD CONSTRAINT `FK_EmployeeDetails` FOREIGN KEY (`EmployeeId`) REFERENCES `EmployeeDetails` (`Id`),
+  ADD CONSTRAINT `FK_RoleMasterMrfEmailApproval` FOREIGN KEY (`RoleId`) REFERENCES `RoleMaster` (`Id`);
 
 --
 -- Constraints for table `CandidateDetails`
@@ -2068,7 +2071,7 @@ ALTER TABLE `AttachmentEvaluation`
 --
 ALTER TABLE `MrfDetails`
   ADD CONSTRAINT `FK_DepartmentMasterMrfDetails` FOREIGN KEY (`DepartmentId`) REFERENCES `DepartmentMaster` (`Id`),
-  ADD CONSTRAINT `FK_PositionTitleMaster` FOREIGN KEY (`PositionTitleId`) REFERENCES `PositionTitleMaster` (`Id`),
+  ADD CONSTRAINT `FK_PositionTitleMasterD` FOREIGN KEY (`PositionTitleId`) REFERENCES `PositionTitleMaster` (`Id`),
   ADD CONSTRAINT `FK_EmploymentTypeMasterMrfDetails` FOREIGN KEY (`EmploymentTypeId`) REFERENCES `EmploymentTypeMaster` (`Id`),
   ADD CONSTRAINT `FK_GenderMasterMrfDetails` FOREIGN KEY (`GenderId`) REFERENCES `GenderMaster` (`Id`),
   ADD CONSTRAINT `FK_GradeMasterMrfDetails` FOREIGN KEY (`MinGradeId`) REFERENCES `GradeMaster` (`Id`),

@@ -106,14 +106,14 @@ namespace MRF.DataAccess.Repository
             List<MrfdetailRequestModel> emploeeyemailId = (from mrfDetails in _db.Mrfdetails
                                                            join mail in _db.MrfEmailApproval on mrfDetails.Id equals mail.MrfId
                                                            join employee in _db.Employeedetails on mail.EmployeeId equals employee.Id
-                                                           join role in _db.Employeerolemap on employee.Id equals role.EmployeeId
+                                                           //join role in _db.Employeerolemap on employee.Id equals role.EmployeeId
                                                            where mrfDetails.Id == MrfId
                                                            select new MrfdetailRequestModel
                                                            {
                                                                mrfID = mrfDetails.Id,
                                                                HiringManagerEmpId = employee.EmployeeCode,
                                                                HiringManagerId = employee.Id,
-                                                               roleId = role.RoleId,
+                                                               roleId = mail.RoleId,
                                                                HMApprovalDate =
                                                                (mail.ApprovalDate == new DateOnly()) ? DateOnly.FromDateTime(DateTime.Now) : mail.ApprovalDate,
                                                            }

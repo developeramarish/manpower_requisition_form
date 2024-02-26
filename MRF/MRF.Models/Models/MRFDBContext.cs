@@ -808,6 +808,7 @@ public partial class MRFDBContext : DbContext
             entity.ToTable("MrfEmailApproval");
             entity.Property(e => e.EmployeeId).HasColumnType("int(11)");
             entity.Property(e => e.MrfId).HasColumnType("int(11)");
+            entity.Property(e => e.RoleId).HasColumnType("int(11)");
             entity.Property(e => e.ApprovalDate)
                 .HasDefaultValueSql("CURRENT_DATE()")
                 .HasColumnType("date");

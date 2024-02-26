@@ -7,13 +7,7 @@ import ToastMessages from "../components/ToastMessages";
 import "../css/ResumeSummary.css";
 import "../css/InterviewSummary.css";
 import MultiSelectDropdown from "../components/multiselectDropdown";
-import {
-  API_URL,
-  
-  FILE_URL,
-  
-  ROLES,
-} from "../constants/config";
+import { API_URL, FILE_URL, ROLES } from "../constants/config";
 import {
   changeDateFormat,
   getDataAPI,
@@ -40,11 +34,10 @@ const ResumeSummary = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if(mrfId || mrfId===0){ 
-      console.log("ss") 
-        fetchData();
+    if (mrfId || mrfId === 0) {
+      fetchData();
     }
-  }, [mrfId]);
+  }, [mrfId,roleId]);
 
   const fetchData = async () => {
     try {
@@ -83,7 +76,6 @@ const ResumeSummary = ({
   //     </Dialog>
   //   );
   // }
-
   const MultiSelectDrop = (rowData, options) => {
     if (
       roleId === ROLES.hr ||
@@ -128,7 +120,7 @@ const ResumeSummary = ({
             className="w-full md:w-20rem "
             disable={
               MRF_STATUS_FOR_DISABLE(roleId, rowData.mrfStatus) ||
-              CANDIDATE_STATUS_FOR_DISABLE(roleId,rowData.candidateStatusId)
+              CANDIDATE_STATUS_FOR_DISABLE(roleId, rowData.candidateStatusId)
             }
           />
         </div>
@@ -242,21 +234,45 @@ const ResumeSummary = ({
   };
 
   const reasonTemplate = (resume) => {
-    if (!resume.reason)
+    // console.log(resume);
+
+    if (
+      !resume.reason &&
+      (resume.candidateStatusId === 1 || resume.candidateStatusId === 4)
+    ) {
       return <p className="resume-reason-col">To be Updated</p>;
-    return (
-      <InputTextarea readOnly={true} value={resume.reason} rows={2} cols={50} />
-      // <p className="resume-reason-col">{resume.reason}</p>
-    );
+    } else if (
+      !resume.reason &&
+      (resume.candidateStatusId === 2 || resume.candidateStatusId === 3)
+    ) {
+      return (
+        <p className="resume-reason-col" style={{ textAlign: "center" }}>
+          {" "}
+          _
+        </p>
+      );
+    } else {
+      return (
+        <InputTextarea
+          readOnly={true}
+          value={resume.reason}
+          rows={2}
+          cols={50}
+        />
+      );
+    }
+
+    // if (resume.candidateStatusId === 1 || resume.candidateStatusId === 3) {
+    //   return <p className="resume-reason-col">To be Updated</p>;
+    // } else if (true) {
+    // }
+    // return (
+    //   <InputTextarea readOnly={true} value={resume.reason} rows={2} cols={50} />
+    //   // <p className="resume-reason-col">{resume.reason}</p>
+    // );
   };
 
   let columns = [
-    {
-      header: "Sr.No",
-      body: (data, options) => options.rowIndex + 1,
-      bodyClassName: " resume-col ",
-      sortable: true,
-    },
     {
       field: "candidateName",
       header: "Name",
@@ -329,9 +345,9 @@ const ResumeSummary = ({
           draggable={false}
           scrollHeight="flex"
         >
-          {columns.map((col,index) => (
+          {columns.map((col, index) => (
             <Column
-            key={index}
+              key={index}
               field={col.field}
               header={col.header}
               body={col.body}
@@ -377,9 +393,9 @@ const ResumeSummary = ({
               draggable={false}
               scrollHeight="flex"
             >
-              {columns.map((col,index) => (
+              {columns.map((col, index) => (
                 <Column
-                key={index}
+                  key={index}
                   field={col.field}
                   header={col.header}
                   body={col.body}

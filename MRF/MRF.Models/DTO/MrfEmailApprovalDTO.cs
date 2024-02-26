@@ -12,6 +12,7 @@ namespace MRF.Models.DTO
         public int Id { get; set; }
         public int MrfId { get; set; }
         public int EmployeeId { get; set; }
+        public int RoleId { get; set; }
         public DateOnly ApprovalDate { get; set; }
     }
 
