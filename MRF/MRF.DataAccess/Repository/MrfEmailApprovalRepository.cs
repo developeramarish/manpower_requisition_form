@@ -35,7 +35,7 @@ namespace MRF.DataAccess.Repository
                   Id = mrfDetails.Id,
                   MrfId = mrfId,
                   EmployeeId=mrfDetails.EmployeeId,
-                  roleId = role.RoleId,
+                  RoleId = role.RoleId,
                   ApprovalDate=mrfDetails.ApprovalDate,
                };
 

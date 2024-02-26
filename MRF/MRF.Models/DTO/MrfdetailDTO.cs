@@ -72,6 +72,8 @@ namespace MRF.Models.DTO
         public DateOnly PCApprovalDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public int roleId { get; set; }
 
+        public string? roleIds { get; set; }
+
         public string? Note { get; set; }
 
         public string? MrfStatus { get; set; }

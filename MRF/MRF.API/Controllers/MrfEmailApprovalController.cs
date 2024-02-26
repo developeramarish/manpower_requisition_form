@@ -43,6 +43,7 @@ namespace MRF.API.Controllers
                 MrfId = request.MrfId,
                 EmployeeId = request.EmployeeId,
                 ApprovalDate = request.ApprovalDate,
+                RoleId = request.RoleId,
 
             };
 
@@ -117,6 +118,7 @@ namespace MRF.API.Controllers
                 existingStatus.EmployeeId = request.EmployeeId;
                 existingStatus.MrfId = request.MrfId;
 ;                existingStatus.ApprovalDate = request.ApprovalDate;
+                existingStatus.RoleId = request.RoleId;
                     _unitOfWork.MrfEmailApproval.Update(existingStatus);
                     _unitOfWork.Save();
                 _responseModel.Id = existingStatus.Id;

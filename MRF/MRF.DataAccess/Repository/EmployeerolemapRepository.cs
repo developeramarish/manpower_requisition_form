@@ -17,16 +17,18 @@ namespace MRF.DataAccess.Repository
         }
         public List<Employeerolemap> GetEmployeebyRole(int roleId)
         {
+            string roleIdString = roleId.ToString(); // Convert the roleId to string
+
             IQueryable<Employeerolemap> query = from emprole in _db.Employeerolemap
                                                 join empdetails in _db.Employeedetails on emprole.EmployeeId equals empdetails.Id
-                                                          where emprole.RoleId == roleId 
-                                                          select new Employeerolemap
-                                                          {
-                                                              EmployeeId = emprole.EmployeeId,
-                                                              name= empdetails.Name,
-                                                              RoleId = emprole.RoleId,
-                                                              EmployeeCode = empdetails.EmployeeCode,
-                                                          };
+                                                where emprole.multipleRoleIds.Contains(roleIdString)
+                                                select new Employeerolemap
+                                                {
+                                                    EmployeeId = emprole.EmployeeId,
+                                                    name = empdetails.Name,
+                                                    RoleId = emprole.RoleId,
+                                                    EmployeeCode = empdetails.EmployeeCode,
+                                                };
 
             return query.ToList();
 

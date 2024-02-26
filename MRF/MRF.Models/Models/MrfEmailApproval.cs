@@ -12,8 +12,8 @@ namespace MRF.Models.Models
         public int Id { get; set; }
         public int MrfId { get; set; }
         public int EmployeeId { get; set; }
-        [NotMapped]
-        public int roleId { get; set; } 
+        
+        public int RoleId { get; set; } 
         public DateOnly ApprovalDate { get; set; }
     }
 }
