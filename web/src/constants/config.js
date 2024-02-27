@@ -45,9 +45,6 @@ export const FILE_URL = {
 };
  
 export const ROUTES = {
-  /* DASHBOARD: "dashboard",
-    CREATE_REQUISITION: "create_requisition",
-    MY_REQUISITION: "my_requisition" */
   dashboard: "dashboard",
   my_requisition: "my_requisition",
   create_requisition: "create_requisition",
@@ -56,6 +53,9 @@ export const ROUTES = {
   add_candidate: "add_candidate",
   view_candidate: "view_candidate",
   resume_summary:"resume_summary",
+  mrf_summary:"mrf_summary",
+  interview_summary:"interview_summary",
+  interview_summary_more:"interview_summary_more",
   my_resume:"my_resume",
   employee_edit:"employee_edit",
   employee:"employee",
@@ -183,7 +183,7 @@ export const FORM_SCHEMA_CR = {
   spApprovalDate:new Date(),
   fhApprovalDate:new Date(),
   hmApprovalDate:new Date(),
-  hrId:0,
+  hrId:undefined,
  
 };
 export const INTERVIEW_EVALUATION={

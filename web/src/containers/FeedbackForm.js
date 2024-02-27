@@ -68,6 +68,8 @@ const FeedbackForm = ({
         [id]: value,
         [evId]: evId,
       });
+    }else{
+      toastRef.current.showWarrningMessage("Character limit Exceed: "+maxCharacterLimit);
     }
   };
 

@@ -1,3 +1,19 @@
+.resume_summary_cont{
+  display: flex;
+  padding: 15px 20px;
+  flex-direction: column;
+  background-color: #f6f6f6;
+}
+.resume_summary_cont .dashboard_title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 15px;
+  color: #0b1016;
+}
+.resume_summary_cont .dashboard_title_res{
+  font-size: 22px;
+} 
 .resume-card {
   position: absolute;
   top: 10%;
