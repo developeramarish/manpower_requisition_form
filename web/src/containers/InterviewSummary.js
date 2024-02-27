@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Dialog } from "primereact/dialog";
+// import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
@@ -26,6 +26,7 @@ import {
 import "../css/InterviewSummary.css";
 import AssignmentUpload from "../containers/AssignmentUpload";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useSelector } from "react-redux";
 
 //const roleId = 3;
 
@@ -38,9 +39,9 @@ const uploadedOnBodyTemplate = (interview) => {
 //summary component
 const InterviewSummary = ({
   roleId = null,
-  visible,
+ /*  visible,
   onHide,
-  mrfId = null,
+  mrfId = null, */
   userId = null,
 }) => {
   const [interviewData, setInterviewData] = useState([]);
@@ -55,6 +56,8 @@ const InterviewSummary = ({
   const [candidateInterviewDetails, setCandidateInterviewDetails] = useState(
     {}
   );
+  const {locationParams} = useSelector((state)=> state.page);
+  const [mrfId, setMrfId] = useState(0);
   const toastRef = useRef(null);
 
   async function getIntData() {
@@ -75,12 +78,18 @@ const InterviewSummary = ({
     setInterviewerData(data.interviewReviewer);
     setSaveBttn(arr);
   }
-
+  useEffect(() => {
+    if(locationParams && locationParams.length > 0){
+      setMrfId(locationParams[0].mrfId);
+    }else{
+      setMrfId(0);
+    }
+  }, [])
   useEffect(() => {
     if (mrfId) {
       getIntData();
     }
-  }, [mrfId]);
+  }, [mrfId, roleId]);
   const update = async (data) => {
     setIsLoading(true);
     const id = data.interviewevaluationId;
@@ -450,7 +459,8 @@ const InterviewSummary = ({
     },
   ];
   return (
-    <Dialog
+    <>
+    {/* <Dialog
       //header={"Interview Summary- MRF ID:   " +interviewData[0]?.referenceNo +" Position Title: "+interviewData[0]?.positionTitle}
       header={
         <div>
@@ -469,37 +479,49 @@ const InterviewSummary = ({
       onHide={onHide}
       draggable={false}
       className="int-card"
-    >
-      <DataTable
-        value={interviewData}
-        paginator={interviewData.length > 10}
-        removableSort
-        rows={10}
-        scrollable
-        scrollHeight="flex"
-      >
-        {columns.map((col, index) => (
-          <Column
-            key={index}
-            field={col.field}
-            header={col.header}
-            body={col.body}
-            bodyClassName={"int-col " + col.bodyClassName}
-            sortable={col.sortable}
+    > */}
+     <div className="interview_summary_cont">
+        <h3 className="dashboard_title"><a className="breadcrum_link" href="#/dashboard">My Dashboard</a> / Interview Summary- MRF ID:{"\u00A0\u00A0"}
+          <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+            {interviewData[0]?.referenceNo}
+          </span>
+          {"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+          Position Title:{"\u00A0\u00A0"}
+          <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+            {interviewData[0]?.positionTitle}
+          </span></h3>
+        <DataTable
+          value={interviewData}
+          paginator={interviewData.length > 10}
+          removableSort
+          rows={10}
+          scrollable
+          scrollHeight="flex"
+        >
+          {columns.map((col, index) => (
+            <Column
+              key={index}
+              field={col.field}
+              header={col.header}
+              body={col.body}
+              bodyClassName={"int-col " + col.bodyClassName}
+              sortable={col.sortable}
+            />
+          ))}
+        </DataTable>
+        {setshowUploadAssignment && (
+          <AssignmentUpload
+            visible={showUploadAssignment}
+            data={candidateInterviewDetails}
+            onHide={() => setshowUploadAssignment(false)}
+            refreshParent={refreshParentComponent}
           />
-        ))}
-      </DataTable>
-      {setshowUploadAssignment && (
-        <AssignmentUpload
-          visible={showUploadAssignment}
-          data={candidateInterviewDetails}
-          onHide={() => setshowUploadAssignment(false)}
-          refreshParent={refreshParentComponent}
-        />
-      )}
-      {isLoading && <LoadingSpinner />}
-      <ToastMessages ref={toastRef} />
-    </Dialog>
+        )}
+        {isLoading && <LoadingSpinner />}
+        <ToastMessages ref={toastRef} />
+    {/* </Dialog> */}
+      </div>
+    </>
   );
 };
 

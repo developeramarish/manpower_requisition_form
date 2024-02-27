@@ -350,6 +350,8 @@ const MrfPartialStatus = ({
     const value = e.target.value;
     if (value.length <= maxCharacterCount) {
       setNote(value);
+    }else{
+      toastRef.current.showWarrningMessage("Character limit Exceed: "+maxCharacterCount);
     }
   };
 

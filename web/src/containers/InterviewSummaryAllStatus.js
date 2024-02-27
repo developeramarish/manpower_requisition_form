@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./../css/Dashboard.css";
-import { filterSelectedColumn, getData } from "../constants/Utils";
+import { filterSelectedColumn, getData, navigateTo } from "../constants/Utils";
 import { API_URL } from "../constants/config";
 import { DataTable } from "primereact/datatable";
-import { Dialog } from "primereact/dialog";
+// import { Dialog } from "primereact/dialog";
 import { Column } from "primereact/column";
-import InterviewSummary from "../containers/InterviewSummary";
+// import InterviewSummary from "../containers/InterviewSummary";
+import "../css/InterviewSummaryAllStatus.css";
 function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
   const [interviewSummary, setInterviewSummary] = useState([]);
   const [interviewPopup, setInterviewPopup] = useState(false);
@@ -23,6 +24,7 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
         "&userId=" +
         userId
     );
+    // console.log(interviewSummaryData)
     setInterviewSummary(interviewSummaryData.result);
   }
 
@@ -51,8 +53,9 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
   };
 
   const onInterviewMRFIdClicked = (e) => {
-    setInterviewPopupId(e);
-    setInterviewPopup(true);
+    /* setInterviewPopupId(e);
+    setInterviewPopup(true); */
+    navigateTo("interview_summary?mrfId="+e);
   };
 
   const mrfIdInterviewRefernceTemplate = (rowData) => {
@@ -74,7 +77,8 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
       : [];
 
   return (
-    <Dialog
+    <>
+    {/* <Dialog
       header={
         <div
           className="dashboard_body_right"
@@ -87,7 +91,9 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
       onHide={onHide}
       draggable={false}
       className="int-card"
-    >
+    > */}
+    <div className="interview_summary_more_cont">
+        <h3 className="dashboard_title"><a className="breadcrum_link" href="#/dashboard">My Dashboard</a> / Interview Summary</h3>
       <DataTable
         paginator={interviewSummary.length > 5}
         rows={5}
@@ -108,14 +114,16 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
         />
         {interviewSummaryColumns}
       </DataTable>
-      <InterviewSummary
+      {/* <InterviewSummary
         visible={interviewPopup}
         onHide={() => setInterviewPopup(false)}
         mrfId={interviewPopupId}
         roleId={roleId}
         userId={userId}
-      />
-    </Dialog>
+      /> */}
+    {/* </Dialog> */}
+    </div>
+    </>
   );
 }
 

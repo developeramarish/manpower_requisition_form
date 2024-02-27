@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
+// import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import ToastMessages from "../components/ToastMessages";
@@ -16,15 +16,17 @@ import {
   CANDIDATE_STATUS_FOR_DISABLE,
   MRF_STATUS_FOR_DISABLE,
   resumeBodyTemplate,
+  navigateTo,
 } from "../constants/Utils";
 import { InputTextarea } from "primereact/inputtextarea";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useSelector } from "react-redux";
 
 const ResumeSummary = ({
   roleId = null,
-  visible,
-  onHide,
-  mrfId = null,
+ /*  visible,
+  onHide, */
+  /* mrfId = null, */
   dashboard = true,
   userId = null,
 }) => {
@@ -33,8 +35,22 @@ const ResumeSummary = ({
   const [saveBttn, setSaveBttn] = useState([]);
   const toastRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [mrfId, setMrfId] = useState(0);
 
+  const {locationParams} = useSelector((state)=> state.page);
+
+  useEffect(()=>{
+    if(locationParams && locationParams.length > 0){
+      setMrfId(locationParams[0].mrfId);
+    }else{
+      setMrfId(0)
+    }
+  },[])
   useEffect(() => {
+    if (roleId === ROLES.resumeReviwer && mrfId !== 0) {
+      navigateTo("dashboard");
+      return;
+    }
     if (mrfId || mrfId === 0) {
       fetchData();
     }
@@ -358,8 +374,18 @@ const ResumeSummary = ({
     <>
       {/* if roleId is equal to this then it will show dialog box otherwise show data table*/}
       {roleId != ROLES.resumeReviwer && (
-        <>
-          <Dialog
+        <div className="resume_summary_cont">
+          <h3 className="dashboard_title"><a className="breadcrum_link" href="#/dashboard">My Dashboard</a> / Resume Summary- MRF ID:{"\u00A0\u00A0"}
+            <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+              {data[0]?.referenceNo}
+            </span>
+            {"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}
+            Position Title:{"\u00A0\u00A0"}
+            <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+              {data[0]?.positionTitle}
+            </span>
+          </h3>
+          {/* <Dialog
             header={
               <div>
                 Resume Summary- MRF ID:{"\u00A0\u00A0"}
@@ -377,7 +403,8 @@ const ResumeSummary = ({
             onHide={onHide}
             draggable={false}
             className="resume-card"
-          >
+          > */}
+
             <DataTable
               value={data}
               paginator={data.length > 5}
@@ -399,8 +426,8 @@ const ResumeSummary = ({
             </DataTable>
             {isLoading && <LoadingSpinner />}
             <ToastMessages ref={toastRef} />
-          </Dialog>
-        </>
+         {/*  </Dialog> */}
+        </div>
       )}
 
       {roleId === ROLES.resumeReviwer && (
