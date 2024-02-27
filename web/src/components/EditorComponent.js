@@ -1,6 +1,7 @@
 import { Editor } from "primereact/editor";
 import { Knob } from "primereact/knob";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import ToastMessages from "./ToastMessages";
 
 const EditorComponent = ({
   value,
@@ -10,6 +11,7 @@ const EditorComponent = ({
   disable,
   max,
 }) => {
+  const toastRef = useRef(null);
   const [orgText, setOrgText] = useState({ txt: "", html: "" });
   const [remainingChars, setRemainingChars] = useState(max);
   const onUpdate = (e) => {
@@ -19,7 +21,7 @@ const EditorComponent = ({
 
     if (txtValue.length > max) {
       oTarget.innerHTML = orgText.html;
-      
+      toastRef.current.showWarrningMessage("Character limit Exceed: "+max);
       return;
     }
     if (txtValue === "" || htmlValue === "<p><br></p>") {
@@ -27,20 +29,18 @@ const EditorComponent = ({
       htmlValue = "";
       txtValue = "";
     }
-    console.log(txtValue)
     setOrgText({ txt: txtValue, html: htmlValue });
     onTextChanged({ text: txtValue, htmlText: htmlValue });
-    setRemainingChars(max-txtValue.length)
+    setRemainingChars(max - txtValue.length);
   };
-  const onTextUpdate = (e) => {
-    console.log(e);
-  };
+
   return (
     <div
-    style={{
-      position: "relative",
-      // width:"685px"
-    }}>
+      style={{
+        position: "relative",
+        // width:"685px"
+      }}
+    >
       <Editor
         value={value}
         autoResize={autoResize}
@@ -51,27 +51,26 @@ const EditorComponent = ({
         style={{ height: "220px" }}
         max={max}
       />
-       <div
-                    style={{
-                      position: "absolute",
-                      bottom: "7px",
-                      right: "10px",
-                      zIndex: "100",
-                      textAlign: "right",
-                    }}
-                  >
-                    <Knob
-                      value={
-                        max-remainingChars
-                      }
-                      max={max}
-                      readOnly
-                      size={50}
-                      rangeColor="#aaaaaa"
-                      valueColor="#d32f2e"
-                      textColor="#000000"
-                    />
-                  </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "7px",
+          right: "10px",
+          zIndex: "100",
+          textAlign: "right",
+        }}
+      >
+        <Knob
+          value={max - remainingChars}
+          max={max}
+          readOnly
+          size={50}
+          rangeColor="#aaaaaa"
+          valueColor="#d32f2e"
+          textColor="#000000"
+        />
+      </div>
+      <ToastMessages ref={toastRef} />
     </div>
   );
 };

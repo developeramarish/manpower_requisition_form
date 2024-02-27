@@ -62,7 +62,6 @@ const CreateRequisitionBody = ({
   const [hiringManagerBtnDisable, setHiringManagerBtnDisable] = useState(true);
   const [siteHrSpocValue, setSiteHrSpocValue] = useState(0);
   const [hiringManagerValue, setHiringManagerValue] = useState(0);
- 
 
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
@@ -221,6 +220,8 @@ const CreateRequisitionBody = ({
 
     if (value.length <= maxCharacterCountJustification) {
       setFormData({ ...formData, justification: value });
+    }else{
+      toastRef.current.showWarrningMessage("Character limit Exceed: "+   maxCharacterCountJustification)
     }
   };
 
@@ -231,10 +232,8 @@ const CreateRequisitionBody = ({
   }
 
   const onTextChangedSkill = (oVal) => {
-   
     setFormData({ ...formData, skills: oVal.htmlText, skillsText: oVal.text });
   };
-  
 
   const onTextChangedJobDesc = (oVal) => {
     setFormData({
@@ -318,13 +317,16 @@ const CreateRequisitionBody = ({
     }
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!formData || formData.departmentId === 0) {
       return;
     }
-    fetchSubDepartments(formData.departmentId);
-  }, [formData]);
-
+  }, [formData]); */
+  
+  const setDepartment = (value)=>{
+    setFormData({ ...formData, departmentId: value });
+    fetchSubDepartments(value);
+  }
   const strToArray = (s) => {
     s = s ?? "";
     if (typeof s === "string") {
@@ -501,7 +503,7 @@ const CreateRequisitionBody = ({
                   value={formData.departmentId}
                   disable={commonSettings.setReadOnly}
                   onChange={(e) => {
-                    setFormData({ ...formData, departmentId: e.target.value });
+                    setDepartment(e.target.value);
                   }}
                 />
               </div>
@@ -940,15 +942,14 @@ const CreateRequisitionBody = ({
                   Job Description
                   <RedAsterisk />
                 </label>
-               
-                  <EditorComponent
-                    value={formData.jobDescription}
-                    headerTemplate={header}
-                    onTextChanged={onTextChangedJobDesc}
-                    disable={commonSettings.setReadOnly}
-                    max={6000}
-                  />
-                  
+
+                <EditorComponent
+                  value={formData.jobDescription}
+                  headerTemplate={header}
+                  onTextChanged={onTextChangedJobDesc}
+                  disable={commonSettings.setReadOnly}
+                  max={6000}
+                />
               </div>
 
               <div className="flex flex-column w-6 gap-2">
@@ -956,16 +957,14 @@ const CreateRequisitionBody = ({
                   Skills
                   <RedAsterisk />
                 </label>
-                  <EditorComponent
-                    value={formData.skills}
-                    headerTemplate={header}
-                    onTextChanged={onTextChangedSkill}
-                    disable={commonSettings.setReadOnly}
-                    max={500}
-                  />
-                 
+                <EditorComponent
+                  value={formData.skills}
+                  headerTemplate={header}
+                  onTextChanged={onTextChangedSkill}
+                  disable={commonSettings.setReadOnly}
+                  max={500}
+                />
               </div>
-            
             </div>
             <div className="flex justify-content-between gap-5 ">
               <div className="flex flex-column relative inline-block w-6 gap-2">
@@ -973,7 +972,6 @@ const CreateRequisitionBody = ({
                   Justification <RedAsterisk />
                 </label>
 
-              
                 <InputTextareaComponent
                   id="Justification"
                   value={formData.justification}
@@ -1100,8 +1098,9 @@ const CreateRequisitionBody = ({
                   optionValue="employeeId"
                   type="siteHRSPOCId"
                   options={dropdownData.siteHRSPOC}
-                  value={formData.hrId}
+                  value={formData.hrId ? formData.hrId :undefined }
                   disable={commonSettings.setReadOnly}
+                  clearIcon={true}
                   onChange={(e) => {
                     setFormData({ ...formData, hrId: e.target.value });
                   }}
