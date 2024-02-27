@@ -496,7 +496,8 @@ const InterviewSummary = ({
           removableSort
           rows={10}
           scrollable
-          scrollHeight="flex"
+          rowsPerPageOptions={[5, 10, 25, 50]} 
+          scrollHeight="450px"
         >
           {columns.map((col, index) => (
             <Column

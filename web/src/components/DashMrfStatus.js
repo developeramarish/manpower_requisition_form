@@ -149,6 +149,7 @@ const DashMrfStatus = ({
           paginator={data.length > 10}
           rows={10}
           scrollable
+          rowsPerPageOptions={[5, 10, 25, 50]} 
           scrollHeight="400px"
         >
           {columns.map((col) => (
