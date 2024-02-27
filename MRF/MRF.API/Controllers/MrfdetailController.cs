@@ -412,6 +412,8 @@ namespace MRF.API.Controllers
         }
         private void CallreviewerController(MrfdetailRequestModel request, int mrfId, bool Update)
         {
+            bool isDraft = (request.MrfStatusId == 1); //checking to not send email when status is draft
+
             if (string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
             {
                 MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
@@ -433,13 +435,13 @@ namespace MRF.API.Controllers
                     {
                         MrfId = mrfId,
                         ResumeReviewerEmployeeId = int.Parse(employeeId), // Convert the ID to the appropriate type
-                        IsActive = true,
+                        IsActive = isDraft,
                         CreatedByEmployeeId = request.CreatedByEmployeeId,
                         CreatedOnUtc = request.CreatedOnUtc,
                         UpdatedByEmployeeId = request.UpdatedByEmployeeId,
                         UpdatedOnUtc = request.UpdatedOnUtc
                     };
-
+                    
                     var resumereviewermapResponse = resumereviewermap.Post(mrfresumereviewermap);
                 }
             }
@@ -463,7 +465,7 @@ namespace MRF.API.Controllers
                     {
                         MrfId = mrfId,
                         InterviewerEmployeeId = int.Parse(employeeId),
-                        IsActive = true,
+                        IsActive = isDraft,
                         CreatedByEmployeeId = request.CreatedByEmployeeId,
                         CreatedOnUtc = request.CreatedOnUtc,
                         UpdatedByEmployeeId = request.UpdatedByEmployeeId,
