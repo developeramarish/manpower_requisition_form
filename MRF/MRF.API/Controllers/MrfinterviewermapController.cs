@@ -87,11 +87,12 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfinterviewermapResponseModel Post([FromBody] MrfinterviewermapRequestModel request)
         {
+            bool noEmail = request.IsActive;
             var mrfinterviewermap = new Mrfinterviewermap
             {
                 MrfId = request.MrfId,
                 InterviewerEmployeeId = request.InterviewerEmployeeId,
-                IsActive = request.IsActive,
+                IsActive = true,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -102,6 +103,8 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
             _responseModel.Id = mrfinterviewermap.Id;
             
+            if (noEmail) return _responseModel;
+
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");

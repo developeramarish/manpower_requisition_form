@@ -85,11 +85,12 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public MrfresumereviewermapResponseModel Post([FromBody] MrfresumereviewermapRequestModel request)
         {
+            bool noEmail = request.IsActive;
             var mrfresumereviewermap = new Mrfresumereviewermap
             {
                 MrfId = request.MrfId,
                 ResumeReviewerEmployeeId = request.ResumeReviewerEmployeeId,
-                IsActive = request.IsActive,
+                IsActive = true,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,
                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -100,6 +101,8 @@ namespace MRF.API.Controllers
             _unitOfWork.Save();
             _responseModel.Id = mrfresumereviewermap.Id;
             
+            if (noEmail) return _responseModel;
+
             if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
             {
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
