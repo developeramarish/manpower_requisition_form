@@ -1,0 +1,11 @@
+.submit_btn {
+  background-color: #d32f2e;
+  color: #ffffff;
+  width: 100px;
+}
+
+.submit_btn:disabled {
+  background-color: #c5c5c5;
+  color: #ffffff;
+  width: 100px;
+}
