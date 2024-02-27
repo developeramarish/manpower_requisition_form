@@ -352,7 +352,8 @@ const ResumeSummary = ({
           rows={10}
           scrollable
           draggable={false}
-          scrollHeight="flex"
+          rowsPerPageOptions={[5, 10, 25, 50]} 
+          scrollHeight="450px"
         >
           {columns.map((col, index) => (
             <Column
@@ -411,7 +412,8 @@ const ResumeSummary = ({
               rows={10}
               scrollable
               draggable={false}
-              scrollHeight="flex"
+              rowsPerPageOptions={[5, 10, 25, 50]} 
+          scrollHeight="450px"
             >
               {columns.map((col, index) => (
                 <Column

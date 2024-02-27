@@ -1,5 +1,6 @@
 .interview_summary_more_cont{
 	display: flex;
+	height: 80vh;
 	padding: 15px 20px;
 	flex-direction: column;
 	background-color: #f6f6f6;
