@@ -303,24 +303,16 @@ function Dashboard({ roleId, userId }) {
               column={interviewSummaryColums}
               headerHeading={
                 <div>
-                  <h4
-                    style={{
-                      margin: "0px",
-                      marginLeft: "150px",
-                      padding: "0px",
-                    }}
+                  <h4 className="interviewSummary_tableHeader"
+                   
                   >
                     Interview Status
-                    <span
-                      style={{
-                        marginLeft: "110px",
-                        textAlign: "left",
-                        color: "#d32f2e",
-                      }}
+                    <span className="interviewSummary_moreStatus"
+                     
                     >
-                      <a style={{ color: "#d32f2e" }} onClick={handlePopupOpen}>
+                      <a onClick={handlePopupOpen}>
                         More Status
-                        <span style={{ fontSize: "15px" }}>&gt;</span>
+                        <span>&gt;</span>
                       </a>
                     </span>
                   </h4>

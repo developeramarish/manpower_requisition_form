@@ -288,7 +288,7 @@ const AddCandidate = (reqId) => {
                   </label>
 
                   <div className="flex flex-row w-6 gap-2">
-                    <div className="flex flex-column  ">
+                    <div className="flex flex-column gap-2 ">
                       <DropdownComponent
                         options={COUNTRIES}
                         optionLabel="name"
@@ -300,10 +300,10 @@ const AddCandidate = (reqId) => {
                             countrycode: e.target.value,
                           })
                         }
-                        className="w-full md:w-13rem"
+                        className="w-full md:w-10rem"
                       />
                     </div>
-                    <div className="flex flex-column  gap-1 ">
+                    <div className="flex flex-column  gap-2 ">
                       <InputMask
                         mask={mask}
                         value={formData.contactNo}
@@ -315,7 +315,7 @@ const AddCandidate = (reqId) => {
                         }
                         onBlur={handleMinimumContact}
                         // autoClear={false}
-                        className="w-full md:w-30rem  "
+                        className="w-22rem "
                       />
                     </div>
                   </div>
