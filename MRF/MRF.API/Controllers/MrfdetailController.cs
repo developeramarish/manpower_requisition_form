@@ -96,7 +96,9 @@ namespace MRF.API.Controllers
                 string ReferenceNo = string.Empty;
                 if (request.ReferenceNo != "")
                 {
-                    Put(request.mrfID ?? 0, request);
+                    var res = Put(request.mrfID ?? 0, request);
+                    mrfUrl = _configuration["MRFUrl"].Replace("ID", res.Id.ToString());
+                    ReferenceNo = request.ReferenceNo;
                 }
                 else
                 {
