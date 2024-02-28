@@ -68,7 +68,7 @@ function Dashboard({ roleId, userId }) {
   }
   const interviewSummaryTableData = filterResultGroupByCandidatestatus(
     interviewSummary,
-    ["Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
+    ["Candidate Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
   );
 
   const onMRFIdClicked = (mrfStatusId,mrfStatusWord) => {
@@ -173,9 +173,9 @@ function Dashboard({ roleId, userId }) {
       bodyClassName: "dash_status_col",
     },
     {
-      field: "Selected",
+      field: "Candidate Selected",
       header: <h5 className="dashborad_table_sub_header">Selected</h5>,
-      body: (rowData) => filterSelectedColumn(rowData, "Selected"),
+      body: (rowData) => filterSelectedColumn(rowData, "Candidate Selected"),
       bodyClassName: "dash_status_col",
     },
     {
@@ -185,7 +185,7 @@ function Dashboard({ roleId, userId }) {
       bodyClassName: "dash_status_col",
     },
     {
-      field: "new",
+      field: "Assignment Sent",
       header: <h5 className="dashborad_table_sub_header">Assignment Sent</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Assignment Sent"),
       bodyClassName: "dash_status_col",

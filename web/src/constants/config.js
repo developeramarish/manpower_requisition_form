@@ -211,4 +211,4 @@ export const INTERVIEW_EVALUATION={
   Onboarded:22,
 }
  
-export const emailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+export const emailRegex=/^(?![0-9]+@)\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
