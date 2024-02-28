@@ -19,15 +19,15 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MRF.DataAccess.Repository
 {
-    public class DashboardRepository: Repository<MrDashboardViewModel>, IDashboardRepository
+    public class DashboardRepository : Repository<MrDashboardViewModel>, IDashboardRepository
     {
         private readonly Data.MRFDBContext _db;
         private readonly IUserService _userService;
         private readonly Data.Utility _Utility;
-        public DashboardRepository(Data.MRFDBContext db,IUserService userService) : base(db)
+        public DashboardRepository(Data.MRFDBContext db, IUserService userService) : base(db)
         {
             _db = db;
-            _userService= userService;
+            _userService = userService;
             _Utility = new Data.Utility();
         }
 
@@ -41,29 +41,29 @@ namespace MRF.DataAccess.Repository
             //}
             //RoleId= _userService.GetRoleId();
             string Role = _Utility.GetRole(roleId);
-            var mrf = from Mrfdetails in _db.Mrfdetails 
-                       
-                      
-                             where (Role != "mrfowner" || (Role == "mrfowner" && Mrfdetails.CreatedByEmployeeId == userId))
-                             && (Mrfdetails.HrId == null ||(Role != "hr" || (Role =="hr" && Mrfdetails.HrId == userId)))
-                             
+            var mrf = from Mrfdetails in _db.Mrfdetails
+
+
+                      where (Role != "mrfowner" || (Role == "mrfowner" && Mrfdetails.CreatedByEmployeeId == userId))
+                      && (Mrfdetails.HrId == null || (Role != "hr" || (Role == "hr" && Mrfdetails.HrId == userId)))
+
                       select Mrfdetails;
 
 
             var query = from mrfStatus in _db.Mrfstatusmaster
                         join mrfstatusRole in _db.mrfStatusrolemap on mrfStatus.Id equals mrfstatusRole.statusId
                         join mrfDetails in mrf
-                        on mrfStatus.Id equals mrfDetails.MrfStatusId 
-                        
+                        on mrfStatus.Id equals mrfDetails.MrfStatusId
+
                         into mrfDetailsGroup
                         where mrfstatusRole.RoleId == roleId
-                        
+
                         select new
                         {
                             MrfStatusId = mrfStatus.Id,
                             Status = mrfStatus.Status,
                             MrfDetailsCount = mrfDetailsGroup.Count(),
-                            
+
                         };
 
 
@@ -77,10 +77,10 @@ namespace MRF.DataAccess.Repository
                 .Distinct() // Apply distinct to avoid duplications
                 .OrderBy(item => item.Status.Length)
 
-                .ToList()  ;
+                .ToList();
 
             return result;
-         
+
         }
 
 
@@ -91,12 +91,12 @@ namespace MRF.DataAccess.Repository
                                                           join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                                           join status in _db.Candidatestatusmaster on Candidate.CandidateStatusId equals status.Id
                                                           where status.Status.Contains("resume")
-                                                          
+
                                                           group new { mrfDetails, Candidate, status } by new
                                                           {
                                                               mrfDetails.Id,
                                                               //Candidate.CandidateStatusId,
-                                                               
+
                                                               status.Status,
                                                               mrfDetails.ReferenceNo,
 
@@ -114,24 +114,24 @@ namespace MRF.DataAccess.Repository
 
 
         }
-       public List<ResultViewModel> GetCountByMrfIdAndResumeStatus(int count, int roleId, int userId)
+        public List<ResultViewModel> GetCountByMrfIdAndResumeStatus(int count, int roleId, int userId)
         {
-            List<ResultViewModel> finalresult= new List<ResultViewModel>();
+            List<ResultViewModel> finalresult = new List<ResultViewModel>();
             finalresult = GetCountfromCandidateStatus(count, true, roleId, userId);
             return finalresult;
         }
 
-        public List<ResultViewModel> GetCountfromCandidateStatus(int count,bool resume, int roleId, int userId)
+        public List<ResultViewModel> GetCountfromCandidateStatus(int count, bool resume, int roleId, int userId)
         {
             List<Candidatestatusmaster> CStatus = new List<Candidatestatusmaster>();
             //if (resume)
             //{
-                 CStatus = (from s in _db.Candidatestatusmaster
-                               select new Candidatestatusmaster
-                               {
-                                   Id = s.Id,
-                                   Status = s.Status,
-                               }).ToList();
+            CStatus = (from s in _db.Candidatestatusmaster
+                       select new Candidatestatusmaster
+                       {
+                           Id = s.Id,
+                           Status = s.Status,
+                       }).ToList();
             //}
             IQueryable<MrfResumeSummaryViewModel> mrfDetails = null;
             string Role = _Utility.GetRole(roleId);
@@ -142,8 +142,8 @@ namespace MRF.DataAccess.Repository
                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                              join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
-                            
-                             where evaluation.InterviewerId== userId
+
+                             where evaluation.InterviewerId == userId
                              orderby mrfD.UpdatedOnUtc descending
                              group new { mrfD, Candidate } by new
                              {
@@ -195,7 +195,7 @@ namespace MRF.DataAccess.Repository
                               }).OrderByDescending(s => s.UpdatedOnUtc);
             }
             var result = new List<ResultViewModel>();
-            
+
             bool valid = false;
             foreach (var mrf in mrfDetails)
             {
@@ -207,7 +207,7 @@ namespace MRF.DataAccess.Repository
                     {
                         mrfId = mrf.MrfId,
                         referenceno = mrf.ReferenceNo,
-                        positionTitle= mrf.PositionTitle,
+                        positionTitle = mrf.PositionTitle,
                         resultGroups = new List<ResultGroup>()
                     };
                     valid = true;
@@ -237,7 +237,7 @@ namespace MRF.DataAccess.Repository
                 if (valid)
                 {
                     result.Add(resultViewModel);
-                    
+
                 }
                 if (count > 0 && result.Count == count)
                 {
@@ -268,34 +268,52 @@ namespace MRF.DataAccess.Repository
                                        join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id into statusGroup
                                        from status in statusGroup.DefaultIfEmpty() // *Perform left join Evaluationstatus
                                        join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
-                                       where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)||
-                                       (Role == "hr" && (mrfD.HrId == userId || mrfD.HrId ==0) ||
+                                       where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId) ||
+                                       (Role == "hr" && (mrfD.HrId == userId || mrfD.HrId == 0) ||
                                        (Role == "interviewer" && interview != null && interview.InterviewerId != 0
-                                                    && interview.InterviewerId == userId 
-                                                    //&& Candidate.CandidateStatusId == 2
+                                                    && interview.InterviewerId == userId
+                                       //&& Candidate.CandidateStatusId == 2
                                        )
-                                       || (Role != "mrfowner" && Role != "interviewer" && Role!= "hr")))
+                                       || (Role != "mrfowner" && Role != "interviewer" && Role != "hr")))
                                        && Candidate.CandidateStatusId == 2
-                                       group new { mrfD, Candidate, interview, status } by new
-                                       {
-                                           mrfD.Id,
-                                           mrfD.ReferenceNo,
-                                           position.Name,
-                                           status = status != null ? status.Id : 0,
-                                           mrfD.UpdatedOnUtc,
-                                       }
-                       into grouped
                                        select new MrfInterviewSummaryViewModel
                                        {
-                                           MrfId = grouped.Key.Id,
-                                           EvaluationId = grouped.Key.status,
-                                           ReferenceNo = grouped.Key.ReferenceNo,
-                                           TotalCount = grouped.Count(),
-                                           PositionTitle = grouped.Key.Name,
-                                           UpdatedOnUtc = grouped.Key.UpdatedOnUtc
+                                           MrfId = mrfD.Id,
+                                           EvaluationId = status != null ? status.Id : 0,
+                                           ReferenceNo = mrfD.ReferenceNo,
+                                           PositionTitle = position.Name,
+                                           UpdatedOnUtc = mrfD.UpdatedOnUtc,
+                                           CandidateId = Candidate.Id,
                                        })
+                        .Distinct()
                        .OrderBy(result => result.UpdatedOnUtc)
                        .ToList();
+
+
+            var InterviewevaluationCount = (from mrfD in Interviewevaluation
+                                            group new { mrfD } by new
+                                            {
+                                                mrfD.MrfId,
+                                                mrfD.ReferenceNo,
+                                                mrfD.PositionTitle,
+                                                mrfD.EvaluationId,
+                                                mrfD.UpdatedOnUtc,
+                                            }
+                       into grouped
+                                            select new MrfInterviewSummaryViewModel
+                                            {
+                                                MrfId = grouped.Key.MrfId,
+                                                EvaluationId = grouped.Key.EvaluationId,
+                                                ReferenceNo = grouped.Key.ReferenceNo,
+                                                TotalCount = grouped.Count(),
+                                                PositionTitle = grouped.Key.PositionTitle,
+                                                UpdatedOnUtc = grouped.Key.UpdatedOnUtc
+                                            })
+
+                       .ToList();
+
+
+
 
 
 
@@ -324,11 +342,11 @@ namespace MRF.DataAccess.Repository
                     Interviewevaluation.Add(item);
                 }
             }*/
-           
-            
+
+
 
             bool valid = false;
-            foreach (var mrf in Interviewevaluation)
+            foreach (var mrf in InterviewevaluationCount)
             {
                 valid = false;
                 var resultViewModel = result.FirstOrDefault(r => r.mrfId == mrf.MrfId);
