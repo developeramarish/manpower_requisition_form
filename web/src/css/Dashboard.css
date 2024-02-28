@@ -25,29 +25,17 @@
 	height: 70vh;
 }
 
+.interviewSummary_tableHeader{
+  margin: 0px;
+margin-left:150px;
+padding: 0px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.interviewSummary_moreStatus{
+  margin-left: 70px;
+  text-align: left;
+  color: #d32f2e;
+}
 
 /* .dashboard_header h3 {
   color: #0b1016;
