@@ -2177,9 +2177,7 @@ const CreateRequisitionBody = ({
                   case MRF_STATUS.cooapproval:
                   case MRF_STATUS.awaitCooApproval:
                   case MRF_STATUS.recivedfinanceHeadApproval:
-
-                  case MRF_STATUS.bypassFinanceHeadApproval:
-                  case MRF_STATUS.recivedfinanceHeadApproval:
+                    case MRF_STATUS.awaitfinanceHeadApproval:
                     return (
                       <>
                         <MrfPartialStatus
