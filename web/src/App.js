@@ -50,7 +50,7 @@ function App() {
   // const [profile, setProfile] = useState();
   const [userData, setUserData] = useState("");
   const dispatch = useDispatch();
-  const { currentPageKey, params, profile, locationParams } = useSelector((state) => state.page);
+  const { currentPageKey, params, profile, locationParams, currentRole } = useSelector((state) => state.page);
   const { currentDevice, touchDevice } = useSelector((state) => state.device);
   const { instance, accounts } = useMsal();
 
@@ -152,8 +152,9 @@ function App() {
   };
 
   let Comp = ROUTES[currentPageKey];
+  let currentRoleName = currentRole && currentRole.name.split(" ").join("_").toLowerCase();
   return (
-    <div className={"App " + currentDevice + " " + currentPageKey}>
+    <div className={"App " + currentDevice + " " + currentPageKey+" "+currentRoleName}>
       <AuthenticatedTemplate>
         {profile && profile.roleId && (
           <>

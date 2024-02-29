@@ -139,11 +139,10 @@ function Dashboard({ roleId, userId }) {
 
     {
       field: "Shortlisted",
-      header: <h5 className="dashborad_table_sub_header">Shortlisted</h5>,
+      header: <h5 className="dashborad_table_sub_header int_sortlist">Shortlisted</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Shortlisted"),
-      bodyClassName: "dash_status_col",
+      bodyClassName: "dash_status_col int_sortlistbody",
     },
-
     {
       field: "Rejected",
       header: <h5 className="dashborad_table_sub_header">Rejected</h5>,
@@ -174,7 +173,7 @@ function Dashboard({ roleId, userId }) {
     },
     {
       field: "Candidate Selected",
-      header: <h5 className="dashborad_table_sub_header">Selected</h5>,
+      header: <h5 className="dashborad_table_sub_header ">Selected</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Candidate Selected"),
       bodyClassName: "dash_status_col",
     },
@@ -289,6 +288,7 @@ function Dashboard({ roleId, userId }) {
                 </h4>
               }
               table_title={"Resume Summary"}
+              isHide={roleId === ROLES.interviewer}
             />
             {/* <ResumeSummary
               visible={resumePopup}

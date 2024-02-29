@@ -283,6 +283,12 @@ const ResumeSummary = ({
 
   let columns = [
     {
+      field: "referenceNo",
+      header: "Sr. No.",
+      body: (data, options) => options.rowIndex + 1,
+      bodyClassName: "sr_No ",
+    },
+    {
       field: "candidateName",
       header: "Name",
       bodyClassName: " resume-col",
@@ -351,6 +357,7 @@ const ResumeSummary = ({
           paginator={value.length > 5}
           rows={10}
           scrollable
+          showGridlines
           draggable={false}
           rowsPerPageOptions={[5, 10, 25, 50]} 
           scrollHeight="450px"
@@ -412,6 +419,7 @@ const ResumeSummary = ({
               rows={10}
               scrollable
               draggable={false}
+              showGridlines
               rowsPerPageOptions={[5, 10, 25, 50]} 
           scrollHeight="450px"
             >

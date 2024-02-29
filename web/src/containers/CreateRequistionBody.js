@@ -95,6 +95,10 @@ const CreateRequisitionBody = ({
       setSiteHrSpocValue(response.siteHRSPOCId);
       setHiringManagerValue(response.hiringManagerId);
       setFormData({ ...formData, ...response });
+      if(response && response.departmentId > 0){
+        fetchSubDepartments(response.departmentId);
+      }
+
     } else {
       setDropdownData(dropData);
       setFormData(FORM_SCHEMA_CR);

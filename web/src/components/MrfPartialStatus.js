@@ -63,7 +63,7 @@ const MrfPartialStatus = ({
             return (
               <ButtonC
                 label="Yes"
-                className="submit_btn"
+                className="Dialog_submit_btn"
                 onClick={() => {
                   handleSubmit(value);
                 }}
@@ -74,7 +74,7 @@ const MrfPartialStatus = ({
               <ButtonC
                 label="Yes"
                 disable={note.length == 0}
-                className="submit_btn"
+                className="Dialog_submit_btn"
                 onClick={() => {
                   submitPartial(value);
                 }}
@@ -84,7 +84,7 @@ const MrfPartialStatus = ({
             return (
               <ButtonC
                 label="Yes"
-                className="submit_btn"
+                className="Dialog_submit_btn"
                 onClick={() => {
                   handleDeleteDraftMrf();
                 }}
@@ -94,7 +94,7 @@ const MrfPartialStatus = ({
             return (
               <ButtonC
                 label="Yes"
-                className="submit_btn"
+                className="Dialog_submit_btn"
                 onClick={() => {
                   submitPartial(value);
                 }}
@@ -105,7 +105,7 @@ const MrfPartialStatus = ({
 
         <ButtonC
           label="No"
-          className="submit_btn"
+          className="Dialog_submit_btn"
           onClick={() => {
             setVisible(false);
           }}

@@ -27,6 +27,12 @@ fetch();
 
 
   const columns = [
+	{
+		field: "referenceNo",
+		header: "Sr. No.",
+		body: (data, options) => options.rowIndex + 1,
+		bodyClassName: "sr_No ",
+	  },
 		{
 			field: "referenceNo",
 			header: "MRF ID",
@@ -75,6 +81,7 @@ fetch();
         paginator={reqData.length > 10}
         removableSort
         rows={10}
+		showGridlines
         scrollable
         scrollHeight="62vh"
       >

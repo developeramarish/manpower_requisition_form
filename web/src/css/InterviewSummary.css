@@ -59,6 +59,10 @@
 	cursor: pointer;
 }
 
+.assignment_upload .disabled {
+	color: #aaaaaa;;
+	pointer-events: none; }
+
 .int-col {
 	font-size: 14px;
 	font-weight: 500;
