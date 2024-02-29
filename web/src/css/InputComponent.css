@@ -230,6 +230,7 @@
 .submit_btn {
   background-color: #d32f2e;
   color: #ffffff;
+  width: 125px;
 }
 
 .resume_update_btn {
@@ -245,6 +246,7 @@
 .submit_btn_feedback {
   color: #ffffff;
   width: 160px;
+  margin: 20px;
   background-color: #d32f2e;
   font-size: 14px;
   font-weight: 500;

@@ -60,3 +60,10 @@ a {
 .breadcrum_link{
   color: #0b1016;
 }
+
+
+.sr_No{
+  font-size: 14px;
+  color: #0b1016;
+  font-weight: 500;
+}

@@ -34,9 +34,9 @@ const HeaderBar = ({
     empdata.createdOnUtc = new Date().toISOString();
     empdata["isAllowed"] = true;
     empdata["allowedByEmployeeId"] = empdata.employeeId;
-    sendData(empdata);
+    sendData(empdata, role);
   };
-  const sendData = async (empdata) => {
+  const sendData = async (empdata, oRole) => {
     try {
       const response = await fetch(API_URL.UPDATE_EMPLOYEE + empdata.id, {
         method: "Put",
@@ -47,8 +47,9 @@ const HeaderBar = ({
       });
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Response Data:", responseData);
+        console.log(oRole,"  Response Data:", responseData);
         toastRef.current.showSuccessMessage("Role Updated successfully!");
+        dispatch(PAGE_ACTIONS.setRole(oRole));
         setTimeout(() => {
           //  navigateTo("dashborad");
           //  window.location.reload();
@@ -88,7 +89,7 @@ const HeaderBar = ({
             return data.id === roleId;
           });
           setRole(currentRole[0]);
-          console.log(currentRole[0], roleId);
+          dispatch(PAGE_ACTIONS.setRole(currentRole[0]));
         } else {
           console.error("API response result is not an array:", responseData);
         }

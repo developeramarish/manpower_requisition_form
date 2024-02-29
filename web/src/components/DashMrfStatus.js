@@ -62,6 +62,12 @@ const DashMrfStatus = ({
   };
   const columns = [
     {
+      // field: "referenceNo",
+      header: "Sr. No.",
+      body: (data, options) => options.rowIndex + 1,
+      bodyClassName: " sr_No  ",
+    },
+    {
       field: "referenceNo",
       header: "MRF ID",
       body: ReferenceBodyTemplate,
@@ -149,6 +155,7 @@ const DashMrfStatus = ({
           paginator={data.length > 10}
           rows={10}
           scrollable
+          showGridlines
           rowsPerPageOptions={[5, 10, 25, 50]} 
           scrollHeight="400px"
         >

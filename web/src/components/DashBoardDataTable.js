@@ -7,7 +7,7 @@ import { FilterMatchMode } from "primereact/api";
 import InputTextCp from "./Textbox";
 import "../css/DashBoardDataTable.css";
 
-const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
+const DashBoardDataTable = ({ value, table_title, headerHeading, column, isHide }) => {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -50,7 +50,7 @@ const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
       <Row>
         {column.map((col, index) => {
           if (col.header != "MRF ID" && col.header != "Position Title") {
-            return <Column key={index} field={col.field} header={col.header} />;
+            return <Column  key={index} field={col.field} header={col.header} {...(isHide ? {'colSpan': 4} : '')} />;
           }
         })}
       </Row>
@@ -68,6 +68,7 @@ const DashBoardDataTable = ({ value, table_title, headerHeading, column }) => {
         // rowsPerPageOptions={[ 10, 25, 50]}
         filters={filters}
         header={header}
+        // showGridlines
         headerColumnGroup={headerGroup}
         scrollable
         scrollHeight="flex"

@@ -201,12 +201,12 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
  
 
   const columns = [
-    // {
-    //   header: "Sr. No.",
-    //   body: (data, options) => options.rowIndex + 1,
-    //   //bodyClassName: "int-edit-col",
-    //   bodyClassName: "my_resume-col",
-    // },
+    {
+      header: "Sr. No.",
+      body: (data, options) => options.rowIndex + 1,
+      //bodyClassName: "int-edit-col",
+      bodyClassName: "sr_No ",
+    },
 
     {
       field: "candidateName",
@@ -265,6 +265,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
           paginator={values.length > 10}
           removableSort
           rows={10}
+          showGridlines
           scrollable
           scrollHeight="flex"
         >

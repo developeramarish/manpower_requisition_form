@@ -7,7 +7,7 @@ import { Column } from "primereact/column";
 import ButtonC from "./../components/Button";
 import "../css/InterviewFeedback.css";
 import FeedbackForm from './FeedbackForm';
-const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null }) => {
+const InterviewFeedbackComponent = ({ visible, onHide, cId = null,roleId = null ,disable}) => {
     const [feedData, setFeedData] = useState([{}]);
 	const [showForm, setShowForm] = useState(false);
     const [buttonDisplayed, setButtonDisplayed] = useState(true);
@@ -129,7 +129,8 @@ const response=await result.json();
       <div className="dvAddFeedback">
         <ButtonC
           label="Add Feedback"
-          className="w-15 bg-red-600 border-red-600 BtnAddFeedback"
+          disable={disable}
+          className="add_feedback_btn"
           onClick={() => handleAddFeedbackClick()}  // Pass index or any identifier you need
           outlined="true"
         />

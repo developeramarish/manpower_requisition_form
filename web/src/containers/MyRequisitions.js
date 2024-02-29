@@ -56,6 +56,12 @@ const MyRequisitions = ({ roleId, userId }) => {
 
   const columns = [
     {
+      // field: "referenceNo",
+      header: "Sr. No.",
+      body: (data, options) => options.rowIndex + 1,
+      bodyClassName: "sr_No ",
+    },
+    {
       field: "referenceNo",
       header: "MRF ID",
       body: ReferenceBodyTemplate,
@@ -86,7 +92,7 @@ const MyRequisitions = ({ roleId, userId }) => {
     },
     {
       field: "createdOnUtc",
-      header: "MRF Open since",
+      header: "MRF Open Since",
       body: convertToDayBodytemplate,
       sortable: true,
     },
@@ -129,6 +135,7 @@ const MyRequisitions = ({ roleId, userId }) => {
           removableSort
           rows={10}
           scrollable
+          showGridlines
           scrollHeight="flex"
         >
           {columns.map((col, index) => (

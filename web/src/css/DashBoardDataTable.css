@@ -70,6 +70,13 @@ justify-content: center;
 
 }
 
+.interviewer  .int_sortlistbody{
+  padding-left: 200px;
+  font-weight: 500;
+  font-size: 14px;
+  color: rgb(2, 2, 2);
+
+}
 
  /* .p-datatable .p-column-header-content{
   display: flex;
