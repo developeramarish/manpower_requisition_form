@@ -1091,7 +1091,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
-</html>",11,"3,4"),
+</html>",4,"3,4"),
 	   (25,"Received COO Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received COO Approval","<!DOCTYPE html>
 <html lang='en'>
 <body>
@@ -1101,7 +1101,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
-</html>",11,"3,4"),
+</html>",5,"3,4"),
 	   (26,"Received Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Received Finance Head Approval","<!DOCTYPE html>
 <html lang='en'>
 <body>
@@ -1111,17 +1111,17 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
-</html>",11,"3,4"),
+</html>",14,"3,4"),
 	   (27,"Awaiting Finance Head Approval","ashutosh.tiwari@kwglobal.com","MRF Owner, HR ","Awaiting Finance Head Approval","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>Status of MRF ## is changed to Received Finance Head Approval.</p>
+        <p>Status of MRF ## is changed to Awaiting Finance Head Approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
-</html>",11,"3,4");
+</html>",13,"3,4");
 
 	   
 --

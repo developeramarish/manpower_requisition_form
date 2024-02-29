@@ -4,7 +4,6 @@ using MRF.Models.DTO;
 using MRF.Models.Models;
 using MRF.Models.ViewModels;
 using MRF.Utility;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -580,14 +579,14 @@ namespace MRF.API.Controllers
                 _responseModel.Id = existingStatus.Id;
 
                 int nextMrfStatusId;
-                int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId);
-                CallMrfHistory(request, id, mrfstatus);
+                int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId); //saves approval history
+                CallMrfHistory(request, id, mrfstatus); //saves mrf update history
 
                 MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
 
                 if (new List<int> { 11, 12, 13 }.Contains(request.MrfStatusId))
                 {
-                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
+                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId); //emails approval requests
 
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
@@ -596,14 +595,17 @@ namespace MRF.API.Controllers
                         string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                         //Send Email to HR
-                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
+                        /*List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR"); //gets for all the emps which have hr role currently
                         foreach (var emailReq in emailList)
                         {
                             _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailContent);
-                        }
+                        }*/
+
+                        //email only to the current hr which updates the status
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
 
                         //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailRequest.Subject, emailContent);
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailRequest.Subject, emailContent);
                     }
                 }
                 else

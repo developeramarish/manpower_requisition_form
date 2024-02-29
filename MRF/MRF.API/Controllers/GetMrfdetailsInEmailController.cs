@@ -65,6 +65,7 @@ namespace MRF.API.Controllers
 
 
             if (MrfStatus != null && EmpDetails != null)
+            {
                 try
                 {
                     _logger.LogInfo("Sending Email to HOD / Finance Head /COO");
@@ -74,8 +75,10 @@ namespace MRF.API.Controllers
                 {
                     _logger.LogError($"Error while sending email: {ex}");
                 }
-
-            var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == currentMrfStatusId);
+            }
+                
+            //not being used
+            /*var emailMaster = _unitOfWork.emailmaster.Get(u => u.statusId == currentMrfStatusId);
             try
             {
                 List<EmailRecipient> emailList = SendEmailOnStatus(currentMrfStatusId, MrfId);
@@ -98,7 +101,7 @@ namespace MRF.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Error while sending email: {ex}");
-            }
+            }*/
 
             return mrfdetail;
         }
