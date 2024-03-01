@@ -573,6 +573,7 @@ namespace MRF.API.Controllers
                     }
                 }
 
+                existingStatus.HrId = request.SiteHRSPOCId;
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
 
@@ -582,17 +583,19 @@ namespace MRF.API.Controllers
                 int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId); //saves approval history
                 CallMrfHistory(request, id, mrfstatus); //saves mrf update history
 
-                MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
+                //MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
+
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
                 if (new List<int> { 11, 12, 13 }.Contains(request.MrfStatusId))
                 {
-                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId); //emails approval requests
+                    //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId); //emails approval requests
 
                     if (emailRequest != null)
                     {
-                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {existingStatus.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                         //Send Email to HR
                         /*List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR"); //gets for all the emps which have hr role currently
@@ -602,7 +605,7 @@ namespace MRF.API.Controllers
                         }*/
 
                         //email only to the current hr which updates the status
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
 
                         //Send Email to MRF Owner
                         _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailRequest.Subject, emailContent);
@@ -610,26 +613,30 @@ namespace MRF.API.Controllers
                 }
                 else
                 {
-                    Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == request.MrfStatusId);
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
+                    //Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == request.MrfStatusId);
+                    //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
                     if (emailRequest != null)
                     {
                         List<int> RoleIds = new List<int>();
                         RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
 
-                        string emailSubject = emailRequest.Subject.Replace("#", $" Id {mrfdetails.ReferenceNo}");
-                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                        string emailSubject = emailRequest.Subject.Replace("##", $" Id {existingStatus.ReferenceNo}");
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {existingStatus.ReferenceNo}</span>")
                                                           .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
-                        List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+                        //sends email to all emails having a particular role
+                        //need to fix it so that email is sent to only involved people having the given roleIds are sent email 
+                        /*List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
 
                         foreach (var emailReq in rejectedEmailList)
                         {
                             _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
-                        }
+                        }*/
+                        //for now email only to the current hr
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)existingStatus.HrId), emailSubject, emailContent);
 
                         //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailSubject, emailContent);
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailSubject, emailContent);
                     }
                 }
             }
