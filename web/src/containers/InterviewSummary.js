@@ -360,14 +360,16 @@ const InterviewSummary = ({
 
   const attachmentBodyTemplate = (interview,options) => {
     if (interview.attachment) {
+
+      let date=interview.createdOnUtc.substring(0, 10);
       let attachmentLink;
       const fileExtension = interview.attachment.split(".").pop().toLowerCase();
 
       if (fileExtension === "docx") {
         // attachmentLink = `ms-word:ofe|u|${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
         // attachmentLink = `https://docs.google.com/viewer?url=${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
-        attachmentLink = FILE_URL.ASSIGNMENT + interview.attachment;
-        //alert(attachmentLink);
+        attachmentLink = FILE_URL.ASSIGNMENT + date+"//"+interview.attachment;
+       
         return (
           <a href={attachmentLink} target="_blank" className="int-link-cell">
             View Attachment
