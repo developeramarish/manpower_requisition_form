@@ -36,9 +36,10 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "Not Found")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public MrfdetailsEmailRequestModel GetRequisition(int MrfId, int EmployeeId,int nextMrfStatusId,int currentMrfStatusId)
+        public async Task<MrfdetailsEmailRequestModel> GetRequisitionAsync(int MrfId, int EmployeeId,int nextMrfStatusId,int currentMrfStatusId)
         {
-            var mrfdetail = _unitOfWork.MrfdetailsEmailRepository.GetRequisition(MrfId);
+            //getting null even when id is present need to check this for bug #779
+            var mrfdetail = await _unitOfWork.MrfdetailsEmailRepository.GetRequisition(MrfId); //converted this to async method
             if (mrfdetail == null)
             {
                 _logger.LogError($"No result found by this Id:{MrfId}");
