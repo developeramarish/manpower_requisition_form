@@ -9,6 +9,7 @@ import { storageService } from "../constants/storage";
 import ToastMessages from "./ToastMessages";
 import { useDispatch, useSelector } from "react-redux";
 import { PAGE_ACTIONS } from "../reducers/Page_r";
+import { navigateTo } from "../constants/Utils";
 
 const HeaderBar = ({
   userFirstName,
@@ -47,14 +48,12 @@ const HeaderBar = ({
       });
       if (response.ok) {
         const responseData = await response.json();
-        console.log(oRole,"  Response Data:", responseData);
+        // console.log(oRole,"  Response Data:", responseData);
         toastRef.current.showSuccessMessage("Role Updated successfully!");
         dispatch(PAGE_ACTIONS.setRole(oRole));
-        setTimeout(() => {
-          //  navigateTo("dashborad");
-          //  window.location.reload();
-          dispatch(PAGE_ACTIONS.setProfile(empdata));
-        }, 1000);
+        dispatch(PAGE_ACTIONS.setProfile(empdata));
+        navigateTo("dashborad");
+
       } else {
         console.error("Request failed with status:", response.status);
         if (response.status === 400) {
