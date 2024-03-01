@@ -248,7 +248,7 @@ namespace MRF.API.Controllers
             return freshmrRequest;
         }
 
-        private async void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
+        private async Task CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
         {
             GetMrfdetailsInEmailController getMrfdetailsInEmailController =
                 new GetMrfdetailsInEmailController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
@@ -552,7 +552,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public MrfdetaiResponseModel PartialUpdateMRFStatus(int id, [FromBody] MrfdetailRequestModel request)
+        public async Task<MrfdetaiResponseModel> PartialUpdateMRFStatus(int id, [FromBody] MrfdetailRequestModel request)
         {
             var existingStatus = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
             mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
@@ -591,7 +591,7 @@ namespace MRF.API.Controllers
                 {
                     //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
-                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId); //emails approval requests
+                    await CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId); //emails approval requests
 
                     if (emailRequest != null)
                     {
