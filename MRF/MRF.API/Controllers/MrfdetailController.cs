@@ -135,7 +135,7 @@ namespace MRF.API.Controllers
                     //Send Email to HR - Skipping if MRF Status is Drafted : MRF Status Id = 1 (Drafted)
                     if(request.MrfStatusId != 1)
                     {
-                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
+                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR"); //need to change this so the mail is not sent to every hr
 
                         foreach (var emailReq in emailList)
                         {
@@ -248,11 +248,11 @@ namespace MRF.API.Controllers
             return freshmrRequest;
         }
 
-        private void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
+        private async void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
         {
             GetMrfdetailsInEmailController getMrfdetailsInEmailController =
                 new GetMrfdetailsInEmailController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
-            getMrfdetailsInEmailController.GetRequisition(MrfId, EmployeeId, nextMrfStatusId, currentMrfStatusId);
+            await getMrfdetailsInEmailController.GetRequisitionAsync(MrfId, EmployeeId, nextMrfStatusId, currentMrfStatusId);
         }
 
         private int CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update, out int nextMrfStatusId) 
