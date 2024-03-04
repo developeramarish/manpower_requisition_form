@@ -23,9 +23,9 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
   const [values, setValues] = useState([]);
-  const [saveBttn, setSaveBttn] = useState([]);
+  // const [saveBttn, setSaveBttn] = useState([]);
   const toastRef = useRef(null);
-  const [isFlag, setIsFlag] = useState([]);
+  // const [isFlag, setIsFlag] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     getResumeData();
@@ -63,12 +63,25 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
   }
   const SingleSelect = (data, options) => {
     const handleDropdownChange = (e) => {
-      let statusdataCopy = [...values];
-      let sv = [...saveBttn];
-      sv[options.rowIndex] = true;
-      statusdataCopy[options.rowIndex].candidateStatusId = e.target.value;
+      let statusdataCopy = [...values],
+        index = statusdataCopy.indexOf(data),
+        oCurrentData = statusdataCopy[index];
+      
+        oCurrentData.candidateStatusId = e.target.value;
+        oCurrentData.actionBtnEnable = true;
+        statusdataCopy[index] = oCurrentData;
+      /* statusdataCopy.map((val, index)=>{
+        if(val.candidateId === data.candidateId){
+          val.candidateStatusId = e.target.value;
+          val.actionBtnEnable = true;
+        }
+      }) */
+      // let sv = [...saveBttn];
+      // sv[options.rowIndex] = true;
+      // statusdataCopy[options.rowIndex].candidateStatusId = e.target.value;
+      // statusdataCopy[options.rowIndex].actionBtnEnable = true;
       setValues(statusdataCopy);
-      setSaveBttn(sv);
+      // setSaveBttn(sv);
     };
     return (
       <DropdownComponent
@@ -86,13 +99,26 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
 
   const MultiSelect = (data, options) => {
     const handleMultiSelectChange = (e) => {
-      let interviewDataCopy = [...values];
-      let sv = [...saveBttn];
-      sv[options.rowIndex] = e.value.length > 0 ? true : false;
-      interviewDataCopy[options.rowIndex].resumeReviewerEmployeeIds =
-        objToIntArray(e.value, "employeeId").toString();
+      let interviewDataCopy = [...values],
+          index = interviewDataCopy.indexOf(data),
+          oCurrentData = interviewDataCopy[index];
+      
+        oCurrentData.resumeReviewerEmployeeIds = objToIntArray(e.value, "employeeId").toString();
+        oCurrentData.actionBtnEnable = true;
+        interviewDataCopy[index] = oCurrentData;
+      // let sv = [...saveBttn];
+      // sv[options.rowIndex] = e.value.length > 0 ? true : false;
+      // interviewDataCopy[options.rowIndex].actionBtnEnable = true;
+      // interviewDataCopy[options.rowIndex].resumeReviewerEmployeeIds = objToIntArray(e.value, "employeeId").toString();
+      /* TODO: Change the below strategy as it is itterating all data and updating it */
+      /* interviewDataCopy.map((val, index)=>{
+        if(val.candidateId === data.candidateId){
+          val.resumeReviewerEmployeeIds = objToIntArray(e.value, "employeeId").toString();
+          val.actionBtnEnable = true;
+        }
+      }) */
       setValues(interviewDataCopy);
-      setSaveBttn(sv);
+      // setSaveBttn(sv);
     };
 
     return (
@@ -164,15 +190,27 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
 
   const textEditor = (data, options) => {
     const TextChange = (e) => {
-      let statusdataCopy = [...values];
+      let statusdataCopy = [...values],
+          index = statusdataCopy.indexOf(data),
+          oCurrentData = statusdataCopy[index];
+      
+        oCurrentData.reason = e.target.value;
+        oCurrentData.actionBtnEnable = true;
+        statusdataCopy[index] = oCurrentData;
 
-      let sv = [...saveBttn];
-      sv[options.rowIndex] = true;
-
-      statusdataCopy[options.rowIndex].reason = e.target.value;
+      // let sv = [...saveBttn];
+      // sv[options.rowIndex] = true;
+      // statusdataCopy[options.rowIndex].actionBtnEnable = true;
+      // statusdataCopy[options.rowIndex].reason = e.target.value;
+     /*  statusdataCopy.map((val, index)=>{
+        if(val.candidateId === data.candidateId){
+          val.reason = e.target.value;
+          val.actionBtnEnable = true;
+        }
+      }) */
 
       setValues(statusdataCopy);
-      setSaveBttn(sv);
+      // setSaveBttn(sv);
     };
     return (
       <InputTextareaComponent      
@@ -186,7 +224,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
     );
   };
   const actionBodyTemplate = (rowData, options) => {
-    if (saveBttn[options.rowIndex]) {
+    if (rowData && rowData.actionBtnEnable) {
       return (
         <React.Fragment>
           <ButtonC
@@ -241,20 +279,17 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       header: "Status",
       body: SingleSelect,
       bodyClassName: "my_resume-col",
-      sortable: true,
     },
     {
       field: "reviewedByEmployeeIds",
       header: "Forward To",
       body: MultiSelect,
       bodyClassName: "my_resume-col",
-      sortable: true,
     },
     {
       field: "reason",
       header: "Reason",
       body: textEditor,
-      sortable: true,
     },
     {
       header: "Action",
