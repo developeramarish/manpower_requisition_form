@@ -147,7 +147,7 @@ namespace MRF.DataAccess.Repository
                 mrfDetails = from mrfD in _db.Mrfdetails
                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
-                             join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
+                             //join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
                              //where evaluation.InterviewerId == userId
                              where ids.Contains(mrfD.Id)
                              orderby mrfD.UpdatedOnUtc descending
