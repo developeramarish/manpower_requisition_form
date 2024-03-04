@@ -25,29 +25,17 @@
 	height: 70vh;
 }
 
+.interviewSummary_tableHeader{
+  margin: 0px;
+margin-left:150px;
+padding: 0px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.interviewSummary_moreStatus{
+  margin-left: 70px;
+  text-align: left;
+  color: #d32f2e;
+}
 
 /* .dashboard_header h3 {
   color: #0b1016;
@@ -241,6 +229,16 @@ text-align: center;
   color: #68696b;
   font-weight:500 ;
   }
+
+  
+  .interviewer  .int_sortlist {
+
+  padding-left: 175px;
+  font-weight:500 ;
+  } 
+
+
+
 .mrf_interview_summary {
    /*width: 62vw; 
   height: 300px;*/
@@ -400,4 +398,13 @@ text-align: center;
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #8b8b8b;
+}
+
+.interviewer .dashboard_wrapper .dashboard_body .dashboard_body_right{
+  width: 100%;
+
+}
+
+.interviewer .dashBoard_table{
+  margin-left: 0px;
 }

@@ -64,7 +64,8 @@ namespace MRF.Models.ViewModels
         public string Type { get; set; } = null!;
         public string Candidatestatus { get; set; } = null!;
         public int ITotalCount { get; set; }
-        
+        public DateTime UpdatedOnUtc { get; set; }
+
     }
 
 }

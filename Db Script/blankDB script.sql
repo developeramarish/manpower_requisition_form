@@ -45,20 +45,6 @@ CREATE TABLE `CandidateDetails` (
   `UpdatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `CandidateDetails`
---
-
-INSERT INTO `CandidateDetails` (`Id`, `MrfId`, `Name`, `EmailId`, `ContactNo`, `ResumePath`, `CandidateStatusId`, `ReviewedByEmployeeIds`,`SourceId`,`Reason`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1, 'Amita D', 'amita.dhamapurkar@gmail.com', '2147483647', 'resume1.pdf', 3, '1',1,  'Reason test',1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(2, 1, 'ramkrishna maurya', 'ramkrishna.maurya@gmail.com', '875765467', 'ramkrishna.pdf', 3, '2',2, 'Reason testg ',1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(3, 1, 'sujata pawar', 'sujata.pawar@gmail.com', '2147483647', 'sujata.pdf', 3, '5',3,'Reason rrt', 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(4, 2, 'alpesh patil', 'alpesh.patil@gmail.com', '875765467', 'alpesh.pdf', 3, '3',4,'Reason rt', 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(5, 2, 'gauravsingh rana', 'gauravsingh.rana@gmail.com', '2147483647', 'gauravsingh.pdf', 3, '6',5, 'Reason rtrt',1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(6, 3, 'jkl', 'manny.jah@gmail.com', '875765467', 'ramkrishna.pdf', 3, '4',1,'Reason rtrt', 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(7, 5, 'mno', 'ray.sin@gmail.com', '2147483647', 'ramkrishna.pdf', 3, '1',2, 'Reason rtrt',1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(8, 2, 'chris', 'manny.jah@gmail.com', '875765467', 'ramkrishna.pdf', 3, '7',6,'Reason rtr', 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00');
-
 -- --------------------------------------------------------
 
 --
@@ -376,171 +362,7 @@ CREATE TABLE `FreshMrfDetails` (
   `UpdatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `FreshMrfDetails`
---
 
-INSERT INTO `FreshMrfDetails` (`Id`, `MrfId`, `Justification`, `JobDescription`, `Skills`, `MinTargetSalary`, `MaxTargetSalary`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(2, 2, 'For additional RnD work', 'Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location', 'Headset, Laptop, Keyboard, Mouse', 8, 11, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(3, 3, 'For additional RnD work', 'Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location', 'Headset, Laptop, Keyboard, Mouse', 8, 11, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(4, 4, 'For additional RnD work', 'Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location', 'Headset, Laptop, Keyboard, Mouse', 8, 11, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(5, 5, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(6, 6, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(7, 7, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(8, 8, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(9, 9, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(10, 10, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(11, 11, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(12, 12, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(13, 13, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(14, 14, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(15, 15, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(16, 16, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(17, 17, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(18, 18, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(19, 19, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(20, 20, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(21, 21, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(22, 22, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(23, 23, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(24, 24, 'For additional RnD work', 'Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location', 'Headset, Laptop, Keyboard, Mouse', 8 , 11 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(25,25, 'For additional RnD work', 'Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location', 'Headset, Laptop, Keyboard, Mouse', 8 , 11 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(26, 26, 'For additional RnD work', 'Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location', 'Headset, Laptop, Keyboard, Mouse', 8 , 11 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(27,27, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(28, 28, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(29,29, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5 , 7 , 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33'),
-(30, 30, 'For a new project', 'Start with a strong, attention-grabbing summary.
-Your summary should provide an overview of your company and expectations for the position.
-Get your reader interested by giving details about what makes your company unique.
-Your job description is an introduction to your company and your employer brand. Include details about your company culture to sum up why a candidate would enjoy working for you.
-Include an exact job location.
-Provide an exact job location to optimize your job posting so it appears higher in job search results.', 'Visual Studio, MS Office,Laptop,Headset, Laptop, Keyboard, Mouse', 5, 7, 1, '2023-08-07 16:31:33', 1, '2023-08-07 16:31:33')
-
-;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `GenderMaster`
@@ -617,26 +439,7 @@ CREATE TABLE `InterviewEvaluation` (
   `UpdatedOnUtc` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `InterviewEvaluation`
---
 
-INSERT INTO `InterviewEvaluation` (`Id`, `CandidateId`,`InterviewerId`, `EvaluationDateUtc`, `FromTimeUtc`, `ToTimeUtc`, `EvalutionStatusId`,   `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1,5, '2023-08-08', NULL, NULL, 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(2, 2, 5, '2023-08-08', '15:00:00', '15:30:00', 23, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(3, 3,5, '2023-08-08', NULL, NULL, 2, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(4, 2,5, '2023-08-08', NULL, NULL, 4, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(5, 1,5, '2023-08-09', '11:30:00', '12:30:00', 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(6, 3,5, '2023-08-10', '15:30:00', '16:30:00', 9, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(7, 1, 5, '2023-08-08', NULL, NULL, 3,1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(8, 2, 5, '2023-08-08', NULL, NULL, 2,1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(9, 3, 5, '2023-08-08', NULL, NULL, 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(10, 2, 5, '2023-08-08', '10:00:00', '11:00:00', 4, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(11, 1, 5, '2023-08-08', '14:00:00', '15:00:00', 3, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(12, 4, 5, '2023-08-08', NULL, NULL, 5, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(13, 5, 5, '2023-08-08', '16:00:00', '16:30:00', 2, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(14, 4, 5, '2023-08-08', '12:00:00', '13:00:00', 8, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(15, 4, 5, '2023-08-08', '18:00:00', '18:30:00', 6, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00');
 
 --
 -- Table structure for table `AttachmentEvaluation`
@@ -651,15 +454,6 @@ CREATE TABLE `AttachmentEvaluation` (
   `UpdatedByEmployeeId` int(11) NOT NULL,
   `UpdatedOnUtc` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `AttachmentEvaluation`
---
-
-INSERT INTO `AttachmentEvaluation` (`Id`, `InterviewEvaluationId`,`FilePath`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1,'Atul-Assignment.pdf',  1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(2, 3,'kbc-Assignment.pdf',  1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00');
--- --------------------------------------------------------
 
 
 --
@@ -725,41 +519,7 @@ CREATE TABLE `MrfDetails` (
   `UpdatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `MrfDetails`
---
 
-INSERT INTO `MrfDetails` (`Id`, `ReferenceNo`,`RequisitionType`, `PositionTitleId`, `DepartmentId`, `SubDepartmentId`, `ProjectId`, `VacancyNo`, `GenderId`, `RequisitionDateUtc`, `ReportsToEmployeeId`, `MinGradeId`,`MaxGradeId`, `EmploymentTypeId`, `MinExperience`, `MaxExperience`, `VacancyTypeId`, `IsReplacement`, `MrfStatusId`, `JdDocPath`, `LocationId`,`QualificationId`,`Note`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, '02/MUM/FR/AUG/23/001', 'FR',1, 2, 6, 1, 2, 1, '2023-08-08', 5, 1,2, 1, 0, 4, 3, 0, 1, '', 1, 1,'note',9, '2023-08-08 23:30:42', 9, '2023-08-08 23:30:42'),
-(2, '08/CHE/FR/SEP/23/002','RP',2, 1, 4, 1, 2, 1, '2023-08-08', 5, 2,3, 1, 5, 10, 3, 0, 2, '', 1, 1,'',1, '2023-08-08 23:32:01', 1, '2023-08-08 23:32:01'),
-(3, '14/MUM/FR/MAR/23/003', 'FR',3, 1, 4, 3, 2, 1, '2023-08-06', 5, 1,2, 1, 0, 4, 3, 0, 3, '', 1, 1,'note',1, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(4, '05/MUM/RP/OCT/23/004', 'RP',4, 1, 4, 4, 1, 2, '2023-08-04', 4, 3,2, 3, 5, 10, 2, 1, 4, '', 3, 1,'note',1, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(5, '02/DEL/RP/AUG/23/005', 'FR',5, 2, 6, 5, 2, 1, '2023-08-01', 5, 5,6, 1, 0, 3, 3, 0, 5, '', 1, 1,'note',1, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(6, '01/NOD/RP/AUG/23/006','FR',6, 1, 4, 1, 1, 2, '2023-08-03', 4, 4,6, 3, 4, 6, 2, 1, 6, '', 3, 1,'note',6, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(7, '02/NOD/FR/APR/23/007','RP',7, 1, 4, 3, 2, 1, '2023-08-05', 5, 5,7, 1, 0, 4, 3, 0, 7, '', 1, 1,'note',6,'2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(8, '02/MUM/RP/MAY/23/008', 'FR',8, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 8, '', 3, 6,'', 6,'2023-08-09 18:22:23', 1, '2023-08-09 18:22:23'),
-(9, '02/MUM/RP/MAY/23/009', 'FR',9, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 9, '', 3, 1,'', 6,'2023-08-09 18:22:23', 1, '2023-08-09 18:22:23'),
-(10, '02/MUM/RP/MAY/23/010', 'FR',10, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 10, '', 3, 1,'', 6,'2023-08-09 18:22:23', 1, '2023-08-09 18:22:23'),
-(11, '02/MUM/FR/AUG/23/011', 'FR',1, 2, 6, 1, 2, 1, '2023-08-08', 5, 1,2, 1, 0, 4, 3, 0, 1, '', 1, 1,'note',1, '2023-08-08 23:30:42', 1, '2023-08-08 23:30:42'),
-(12, '08/CHE/FR/SEP/23/012','RP',2, 1, 4, 1, 2, 1, '2023-08-08', 5, 2,3, 1, 5, 10, 3, 0, 2, '', 1, 1,'',1, '2023-08-08 23:32:01', 1, '2023-08-08 23:32:01'),
-(13, '14/MUM/FR/MAR/23/013', 'FR',3, 1, 4, 3, 2, 1, '2023-08-06', 5, 1,2, 1, 0, 4, 3, 0, 3, '', 1, 1,'note',1, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(14, '05/MUM/RP/OCT/23/014', 'RP',4, 1, 4, 4, 1, 2, '2023-08-04', 4, 3,2, 3, 5, 10, 2, 1, 4, '', 3, 1,'note',1, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(15, '02/DEL/RP/AUG/23/015', 'FR',5, 1, 1, 5, 2, 1, '2023-08-01', 5, 5,6, 1, 0, 3, 3, 0, 5, '', 1, 1,'note',1, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(16, '01/NOD/RP/AUG/23/016','FR',6, 1, 4, 1, 1, 2, '2023-08-03', 4, 4,6, 3, 4, 6, 2, 1, 6, '', 3, 1,'note',2, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(17, '02/NOD/FR/APR/23/017','RP',7, 1, 4, 3, 2, 1, '2023-08-05', 5, 5,7, 1, 0, 4, 3, 0, 7, '', 1, 1,'note',1,'2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(18, '02/MUM/RP/MAY/23/018', 'FR',8, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 8, '', 3, 1,'',1,'2023-08-09 18:22:23', 1, '2023-08-09 18:22:23'),
-(19, '02/MUM/RP/MAY/23/019', 'FR',8, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 9, '', 3, 1,'',1,'2023-08-09 18:22:23', 1, '2023-08-09 18:22:23'),
-(20, '02/MUM/RP/MAY/23/020', 'FR',8, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 10, '', 3, 1,'',6,'2023-08-09 18:22:23', 6, '2023-08-09 18:22:23'),
-(21, '02/MUM/RP/MAY/23/021', 'FR',8, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 11, '', 3, 1,'',6,'2023-08-09 18:22:23', 6, '2023-08-09 18:22:23'),
-(22, '02/MUM/RP/MAY/23/022', 'FR',8, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 12, '', 3, 1,'',6,'2023-08-09 18:22:23', 6, '2023-08-09 18:22:23'),
-(23, '02/MUM/FR/AUG/23/023', 'FR',1, 1, 4, 1, 2, 1, '2023-08-08', 5, 1,2, 1, 0, 4, 3, 0, 1, '', 1, 1,'note',2, '2023-08-08 23:30:42', 1, '2023-08-08 23:30:42'),
-(24, '08/CHE/FR/SEP/23/023','RP',2, 1, 4, 1, 2, 1, '2023-08-08', 5, 2,3, 1, 5, 10, 3, 0, 2, '', 1, 1,'',2, '2023-08-08 23:32:01', 1, '2023-08-08 23:32:01'),
-(25, '14/MUM/FR/MAR/23/025', 'FR',3, 1, 4, 3, 2, 1, '2023-08-06', 5, 1,2, 1, 0, 4, 3, 0, 3, '', 1, 1,'note',2, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(26, '05/MUM/RP/OCT/23/026', 'RP',4, 1, 4, 4, 1, 2, '2023-08-04', 4, 3,2, 3, 5, 10, 2, 1, 4, '', 3, 1,'note',2, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(27, '02/DEL/RP/AUG/23/027', 'FR',5, 1, 4, 5, 2, 1, '2023-08-01', 5, 5,6, 1, 0, 3, 3, 0, 5, '', 1, 1,'note',2, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(28, '01/NOD/RP/AUG/23/028','FR',6, 1, 4, 1, 1, 2, '2023-08-03', 4, 4,6, 3, 4, 6, 2, 1, 6, '', 3, 1,'note',2, '2023-08-09 18:22:22', 1, '2023-08-09 18:22:22'),
-(29, '02/NOD/FR/APR/23/029','RP',7, 1, 4, 3, 2, 1, '2023-08-05', 5, 5,7, 1, 0, 4, 3, 0, 7, '', 1, 1,'note',10,'2023-08-09 18:22:22', 10, '2023-08-09 18:22:22'),
-(30, '02/MUM/CRP/MAY/23/030', 'FR',8, 1, 4, 5, 1, 2, '2023-08-07', 4, 4,7, 3, 5, 7, 2, 1, 8, '', 3, 6,'', 10,'2023-08-09 18:22:23', 10, '2023-08-09 18:22:23');
 
 
 
@@ -772,14 +532,7 @@ CREATE TABLE `MrfDetailsStatusHistory` (
   `CreatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `MrfDetailsStatusHistory` (`Id`,`MrfId`,  `MrfStatusId`,  `CreatedByEmployeeId`, `CreatedOnUtc`) VALUES
-(1, 1, 1,1, '2023-08-08 23:30:42'),
-(2, 1, 2,1, '2023-08-08 23:30:42'),
-(3, 1, 3,1, '2023-08-08 23:30:42'),
-(4, 2, 1,1, '2023-08-08 23:30:42'),
-(5, 2, 2,1, '2023-08-08 23:30:42'),
-(6, 2, 3,1, '2023-08-08 23:30:42'),
-(7, 2, 4,1, '2023-08-08 23:30:42');
+
 
 
 -- --------------------------------------------------------
@@ -792,22 +545,7 @@ CREATE TABLE `MrfEmailApproval` (
   `ApprovalDate` date null
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `MrfEmailApproval` (`Id`, `MrfId`, `EmployeeId`, `RoleId`, `ApprovalDate`) VALUES
-(1,1,8,3,'2023-08-09'),
-(2,1,13,4,'2023-08-09'),
-(3,1,10,5,'2023-08-09'),
-(4,1,11,6,'2023-08-09'),
-(5,1,12,7,'2023-08-09'),
-(6,2,8,3,'2023-08-09'),
-(7,2,13,4,'2023-08-09'),
-(8,2,10,5,'2023-08-09'),
-(9,2,11,7,'2023-08-09'),
-(10,2,12,6,'2023-08-09');
 
--- ---------------------------------------------------------
---
--- Table structure for table `MrfFeedback`
---
 
 CREATE TABLE `MrfFeedback` (
   `Id` int(11) NOT NULL,
@@ -819,14 +557,6 @@ CREATE TABLE `MrfFeedback` (
   `UpdatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `MrfFeedback`
---
-
-INSERT INTO `MrfFeedback` (`Id`, `MrfId`, `Feedback`, `FeedbackByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1, 'Not enough information provided', 1, '2023-08-07 18:27:46', 1, '2023-08-07 18:27:46'),
-(2, 2, 'JD is not complete', 2, '2023-08-07 18:27:46', 1, '2023-08-07 18:27:46'),
-(3, 3, 'Experience and skills are missing', 3, '2023-08-07 18:27:46', 1, '2023-08-07 18:27:46');
 
 -- --------------------------------------------------------
 
@@ -845,18 +575,7 @@ CREATE TABLE `MrfInterviewerMap` (
   `UpdatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `MrfInterviewerMap`
---
 
-INSERT INTO `MrfInterviewerMap` (`Id`, `MrfId`, `InterviewerEmployeeId`, `IsActive`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1, 3, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(2, 1, 5, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(3, 1, 6, 0, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(4, 2, 7, 0, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(5, 2, 8, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(6, 2, 9, 0, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(7, 1, 4, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05');
 
 -- --------------------------------------------------------
 
@@ -875,18 +594,7 @@ CREATE TABLE `MrfResumeReviewerMap` (
   `UpdatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `MrfResumeReviewerMap`
---
 
-INSERT INTO `MrfResumeReviewerMap` (`Id`, `MrfId`, `ResumeReviewerEmployeeId`, `IsActive`, `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1, 3, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(2, 1, 5, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(3, 1, 6, 0, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(4, 2, 7, 0, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(5, 2, 8, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(6, 2, 9, 0, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05'),
-(7, 1, 4, 1, 1, '2023-08-09 20:40:05', 1, '2023-08-09 20:40:05');
 
 -- --------------------------------------------------------
 
@@ -1015,17 +723,6 @@ CREATE TABLE `ReplacementMrfDetails` (
   `UpdatedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `ReplacementMrfDetails`
---
-
-INSERT INTO `ReplacementMrfDetails` (`Id`, `MrfId`, `EmployeeName`, `EmailId`, `EmployeeCode`, `LastWorkingDate`, `Justification`, `AnnualCTC`, `AnnualGross`,  `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1, 'Gaurav Mehta', 'gaurav.m@kwglobal.com', 46111, '2023-08-18', 'For career growth', 1000000, 900000, 1, '2023-08-06 16:41:06', 1, '2023-08-06 16:41:06'),
-(2, 3, 'Nitish Yadav', 'nitish.y@kwglobal.com', 46222, '2022-11-11', 'For career growth', 1000000, 900000, 1, '2023-08-06 16:41:06', 1, '2023-08-06 16:41:06'),
-(3, 5, 'Ramkumar Krishnan', 'ramkumar.k@kwglobal.com', 46333, '2022-07-15', 'For career growth', 1200000, 1000000, 1, '2023-08-06 16:41:06', 1, '2023-08-06 16:41:06'),
-(4, 7, 'Nitin Jadhav', 'nitin.j@kwglobal.com', 46444, '2023-03-15', 'financial growth', 1750000, 1500000, 1, '2023-08-08 18:06:56', 1, '2023-08-08 18:06:56');
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `ResumeForwardDetails`
@@ -1039,22 +736,6 @@ CREATE TABLE `ResumeForwardDetails` (
   `ForwardedOnUtc` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `ResumeForwardDetails`
---
-
-INSERT INTO `ResumeForwardDetails` (`Id`, `CandidateId`, `ForwardedFromEmployeeId`, `ForwardedToEmployeeId`, `ForwardedOnUtc`) VALUES
-(1, 1, 4, 6, '2023-08-08 20:44:18'),
-(2, 2, 5, 7, '2023-08-08 20:44:18'),
-(3, 1, 6, 8, '2023-08-08 20:44:18'),
-(4, 4, 7, 6, '2023-08-08 20:44:18'),
-(5, 2, 7, 5, '2023-08-08 20:44:18'),
-(6, 3, 3, 8, '2023-08-08 20:44:18'),
-(7, 1, 8, 5, '2023-08-08 20:44:18'),
-(8, 5, 6, 7, '2023-08-08 20:44:18'),
-(9, 6, 2, 8, '2023-08-08 20:44:18');
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `RoleMaster`
@@ -1436,7 +1117,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>Status of MRF ## is changed to Received Finance Head Approval.</p>
+        <p>Status of MRF ## is changed to Awaiting Finance Head Approval.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1452,7 +1133,7 @@ CREATE TABLE `MrfLastNumber` (
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   
 INSERT INTO `MrfLastNumber` (`Id`,`LastNumber`) VALUES
-(1,21) ;
+(1,1) ;
 
 --
 -- Table structure for table `PositionTitleMaster`
@@ -1823,11 +1504,13 @@ ALTER TABLE `VacancyTypeMaster`
   ADD PRIMARY KEY (`Id`);
 
 
+
+
 --
 -- AUTO_INCREMENT for table `CandidateDetails`
 --
 ALTER TABLE `CandidateDetails`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `CandidateStatusMaster`
@@ -1891,7 +1574,7 @@ ALTER TABLE `EvaluationStatusMaster`
 -- AUTO_INCREMENT for table `FreshMrfDetails`
 --
 ALTER TABLE `FreshMrfDetails`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `GenderMaster`
@@ -1909,13 +1592,13 @@ ALTER TABLE `GradeMaster`
 -- AUTO_INCREMENT for table `InterviewEvaluation`
 --
 ALTER TABLE `InterviewEvaluation`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `AttachmentEvaluation`
 --
 ALTER TABLE `AttachmentEvaluation`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `LocationMaster`
@@ -1927,32 +1610,32 @@ ALTER TABLE `LocationMaster`
 -- AUTO_INCREMENT for table `MrfDetails`
 --
 ALTER TABLE `MrfDetails`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 
 --
 -- AUTO_INCREMENT for table `MrfDetailsStatusHistory`
 --
 ALTER TABLE `MrfDetailsStatusHistory`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `MrfFeedback`
 --
 ALTER TABLE `MrfFeedback`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `MrfInterviewerMap`
 --
 ALTER TABLE `MrfInterviewerMap`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `MrfResumeReviewerMap`
 --
 ALTER TABLE `MrfResumeReviewerMap`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `MrfStatusMaster`
@@ -1976,13 +1659,13 @@ ALTER TABLE `QualificationMaster`
 -- AUTO_INCREMENT for table `ReplacementMrfDetails`
 --
 ALTER TABLE `ReplacementMrfDetails`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ResumeForwardDetails`
 --
 ALTER TABLE `ResumeForwardDetails`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `RoleMaster`
@@ -2004,10 +1687,7 @@ ALTER TABLE `VacancyTypeMaster`
 
 
 ALTER TABLE `MrfEmailApproval`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
---
--- Constraints for dumped tables
---
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for table `MrfEmailApproval`
@@ -2220,25 +1900,8 @@ ALTER TABLE `MrfStatusRoleMap`
   CONSTRAINT `EvaluationFeedBackId` FOREIGN KEY (`EvaluationFeedBackId`) REFERENCES `evaluationfeedbackmaster` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-Insert into `candidateinterviewfeedback` values (1,1,1,1,"his positive attitude and friendliness made interviewing  a pleasure",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(2,1,2,1,"he spoke knowledgeably about the topics we covered in the interview and demonstrated expertise in the field",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(3,1,3,1,"his positive attitude and friendliness made interviewing  a pleasure",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(4,3,1,1,"he were confident and comfortable during the interview",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(5,1,1,2,"comment",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(6,1,2,2,"he spoke knowledgeably about the topics we covered in the interview and demonstrated expertise in the field",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(7,1,3,2,"he were confident and comfortable during the interview",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(8,1,1,3,"his positive attitude and friendliness made interviewing  a pleasure",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(9,2,2,3,"comment",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(10,2,3,1,"his positive attitude and friendliness made interviewing  a pleasure",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19'),
-(11,2,2,1,"he were confident and comfortable during the interview",1,1,'2023-08-06 17:38:19',1,'2023-08-06 17:38:19');
-
-
-
---
--- AUTO_INCREMENT for table `candidateinterviewfeedback`
---
 ALTER TABLE `candidateinterviewfeedback`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Table structure for table `InterviewevaluationHistory`
@@ -2258,26 +1921,6 @@ CREATE TABLE `InterviewevaluationHistory` (
   `UpdatedOnUtc` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `InterviewevaluationHistory`
---
-
-INSERT INTO `InterviewevaluationHistory` (`Id`, `CandidateId`,`InterviewerId`, `EvaluationDateUtc`, `FromTimeUtc`, `ToTimeUtc`, `EvalutionStatusId`,   `CreatedByEmployeeId`, `CreatedOnUtc`, `UpdatedByEmployeeId`, `UpdatedOnUtc`) VALUES
-(1, 1,5, '2023-08-08', NULL, NULL, 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(2, 2, 5, '2023-08-08', '15:00:00', '15:30:00', 29, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(3, 3,5, '2023-08-08', NULL, NULL, 2, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(4, 2,5, '2023-08-08', NULL, NULL, 4, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(5, 1,5, '2023-08-09', '11:30:00', '12:30:00', 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(6, 3,5, '2023-08-10', '15:30:00', '16:30:00', 9, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(7, 1, 5, '2023-08-08', NULL, NULL, 3,1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(8, 2, 5, '2023-08-08', NULL, NULL, 2,1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(9, 3, 5, '2023-08-08', NULL, NULL, 1, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(10, 2, 5, '2023-08-08', '10:00:00', '11:00:00', 4, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(11, 1, 5, '2023-08-08', '14:00:00', '15:00:00', 3, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(12, 4, 5, '2023-08-08', NULL, NULL, 5, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(13, 5, 5, '2023-08-08', '16:00:00', '16:30:00', 2, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(14, 4, 5, '2023-08-08', '12:00:00', '13:00:00', 8, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00'),
-(15, 4, 5, '2023-08-08', '18:00:00', '18:30:00', 6, 1, '2023-08-08 00:00:00', 1, '2023-08-08 00:00:00');
 
 --
 -- Indexes for table `InterviewevaluationHistory`
@@ -2287,15 +1930,9 @@ ALTER TABLE `InterviewevaluationHistory`
   ADD KEY `FK_CandidateMasterInterviewEvaluation` (`CandidateId`),
   ADD KEY `FK_EvaluationStatusMasterInterviewEvaluation` (`EvalutionStatusId`),    
   ADD KEY `FK_UserDetailsInterviewEvaluation` (`InterviewerId`);
---
--- AUTO_INCREMENT for table `InterviewevaluationHistory`
---
+
 ALTER TABLE `InterviewevaluationHistory`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
- 
-
-
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

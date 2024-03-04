@@ -10,6 +10,7 @@ const DropdownComponent = ({
   onChange,
   value = null,
   disable,
+  clearIcon=false,
 }) => {
   const [filteredOptions, setFilteredOptions] = useState(options);
 
@@ -27,6 +28,7 @@ const DropdownComponent = ({
       placeholder={placeholder}
       className={className}
       disabled={disable}
+      showClear={clearIcon}
     />
   );
 };

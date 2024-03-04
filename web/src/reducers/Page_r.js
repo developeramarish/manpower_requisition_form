@@ -7,7 +7,8 @@ const initialState = {
   prevPageKey: '',
   params: null,
   locationParams: [],
-  profile: null
+  profile: null,
+  currentRole: null
   // statusForTitle:null,
   // roleId:null,
 };
@@ -28,6 +29,9 @@ const pageSlice = createSlice({
       // state.statusForTitle = action.payload.statusForTitle;
       // state.roleId = action.payload.roleId;
 
+    },
+    setRole: (state, action) =>{
+      state.currentRole = action.payload;
     },
     setLocationParams: (state, action) =>{
       state.locationParams = action.payload.locationParams;

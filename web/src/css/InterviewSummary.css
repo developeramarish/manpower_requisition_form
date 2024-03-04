@@ -1,3 +1,17 @@
+.interview_summary_cont{
+	display: flex;
+	height: 85vh;
+	padding: 15px 20px;
+	flex-direction: column;
+	background-color: #f6f6f6;
+  }
+  .interview_summary_cont .dashboard_title {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0;
+	margin-bottom: 15px;
+	color: #0b1016;
+  }
 .int-card {
 	position: absolute;
 	top: 10%;
@@ -44,6 +58,10 @@
 	text-underline-offset: 5px;
 	cursor: pointer;
 }
+
+.assignment_upload .disabled {
+	color: #aaaaaa;;
+	pointer-events: none; }
 
 .int-col {
 	font-size: 14px;

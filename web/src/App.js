@@ -41,12 +41,16 @@ import MyResume from "./containers/MyResume";
 import ViewCandidate from "./containers/ViewCandidate";
 import { Dialog } from "primereact/dialog";
 import LoginFail from "./components/LoginFail";
+import ResumeSummary from "./containers/ResumeSummary";
+import DashMrfStatus from "./components/DashMrfStatus";
+import InterviewSummary from "./containers/InterviewSummary";
+import InterviewSummaryAllStatus from "./containers/InterviewSummaryAllStatus";
 function App() {
   const [token, setToken] = useState();
   // const [profile, setProfile] = useState();
   const [userData, setUserData] = useState("");
   const dispatch = useDispatch();
-  const { currentPageKey, params, profile, locationParams } = useSelector((state) => state.page);
+  const { currentPageKey, params, profile, locationParams, currentRole } = useSelector((state) => state.page);
   const { currentDevice, touchDevice } = useSelector((state) => state.device);
   const { instance, accounts } = useMsal();
 
@@ -148,8 +152,9 @@ function App() {
   };
 
   let Comp = ROUTES[currentPageKey];
+  let currentRoleName = currentRole && currentRole.name.split(" ").join("_").toLowerCase();
   return (
-    <div className={"App " + currentDevice + " " + currentPageKey}>
+    <div className={"App " + currentDevice + " " + currentPageKey+" "+currentRoleName}>
       <AuthenticatedTemplate>
         {profile && profile.roleId && (
           <>
@@ -168,6 +173,30 @@ function App() {
               <div className="content_right_wrapper">
                 {currentPageKey === "dashboard" && (
                   <Dashboard
+                    roleId={profile.roleId}
+                    userId={profile.employeeId}
+                  />
+                )}
+                {currentPageKey === "resume_summary" && (
+                  <ResumeSummary
+                    roleId={profile.roleId}
+                    userId={profile.employeeId}
+                  />
+                )}
+                {currentPageKey === "mrf_summary" && (
+                  <DashMrfStatus
+                    roleId={profile.roleId}
+                    userId={profile.employeeId}
+                  />
+                )}
+                {currentPageKey === "interview_summary" && (
+                  <InterviewSummary
+                    roleId={profile.roleId}
+                    userId={profile.employeeId}
+                  />
+                )}
+                {currentPageKey === "interview_summary_more" && (
+                  <InterviewSummaryAllStatus
                     roleId={profile.roleId}
                     userId={profile.employeeId}
                   />

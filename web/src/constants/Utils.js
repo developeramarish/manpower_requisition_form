@@ -1,4 +1,4 @@
-import { INTERVIEW_EVALUATION, MRF_STATUS, RESUME_STATUS, ROLES } from "./config";
+import { FILE_URL, INTERVIEW_EVALUATION, MRF_STATUS, RESUME_STATUS, ROLES } from "./config";
 import { storageService } from "./storage";
 
 /**** 
@@ -374,7 +374,7 @@ export const convertToDays=(mrf)=>{
   return daysDifference;
 }
 export const MRF_STATUS_FOR_DISABLE =(roleId,mrfstatusId)=>{
-  if((roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.resumeReviwer)  && [
+  if((roleId === ROLES.hr || roleId === ROLES.mrfOwner || roleId === ROLES.resumeReviwer|| roleId === ROLES.interviewer)  && [
     MRF_STATUS.closed,MRF_STATUS.rejected,MRF_STATUS.withdrawn
   ].includes(mrfstatusId)
   ){
@@ -401,20 +401,42 @@ else{
  
 }
 export const INTERVIEW_EVALUATION_FOR_DISABLE =(roleId,evaluationID)=>{
-  if((roleId == ROLES.mrfOwner) && [
-    INTERVIEW_EVALUATION.AssignmentRejected, INTERVIEW_EVALUATION.VideoInterviewNotCleared,
-    INTERVIEW_EVALUATION.CodingTestNotCleared,INTERVIEW_EVALUATION.AptitudeTestNotCleared,
-    INTERVIEW_EVALUATION.TelephonicInterviewNotCleared, INTERVIEW_EVALUATION.FaceToFaceInterviewNotCleared,
-    INTERVIEW_EVALUATION.Selected, INTERVIEW_EVALUATION.NotSelected, INTERVIEW_EVALUATION.OfferRolledout,
-    INTERVIEW_EVALUATION.OfferAccepted,INTERVIEW_EVALUATION.OfferAcceptedAnddidnotjoin,
-    INTERVIEW_EVALUATION.OfferRejected,INTERVIEW_EVALUATION.OfferAcceptedandCountered,
-    INTERVIEW_EVALUATION.Onboarded
+  if((roleId == ROLES.mrfOwner || roleId == ROLES.hr ) && [
+    // INTERVIEW_EVALUATION.AssignmentRejected, INTERVIEW_EVALUATION.VideoInterviewNotCleared,
+    // INTERVIEW_EVALUATION.CodingTestNotCleared,INTERVIEW_EVALUATION.AptitudeTestNotCleared,
+    // INTERVIEW_EVALUATION.TelephonicInterviewNotCleared, INTERVIEW_EVALUATION.FaceToFaceInterviewNotCleared,
+    // INTERVIEW_EVALUATION.Selected, INTERVIEW_EVALUATION.NotSelected, INTERVIEW_EVALUATION.OfferRolledout,
+    // INTERVIEW_EVALUATION.OfferAccepted,INTERVIEW_EVALUATION.OfferAcceptedAnddidnotjoin,
+    // INTERVIEW_EVALUATION.OfferRejected,INTERVIEW_EVALUATION.OfferAcceptedandCountered,
+    // INTERVIEW_EVALUATION.Onboarded,
+
+    INTERVIEW_EVALUATION.OfferRejected,INTERVIEW_EVALUATION.Onboarded,INTERVIEW_EVALUATION.OfferacceptedAndDidnotjoin,INTERVIEW_EVALUATION.CandidateNotSelected,INTERVIEW_EVALUATION.FaceToFaceInterviewNotCleared,INTERVIEW_EVALUATION.AssignmentRejected,INTERVIEW_EVALUATION.CodingRoundNotCleared,
+
   ].includes(evaluationID))
 {
   return  true;
 }
-else{
-return  false;
+
+
+if((roleId == ROLES.interviewer)&& [INTERVIEW_EVALUATION.CandidateSelected,INTERVIEW_EVALUATION.CandidateNotSelected,INTERVIEW_EVALUATION.FaceToFaceInterviewNotCleared,INTERVIEW_EVALUATION.AssignmentRejected,INTERVIEW_EVALUATION.CodingRoundNotCleared,INTERVIEW_EVALUATION.OfferRejected,INTERVIEW_EVALUATION.Onboarded,INTERVIEW_EVALUATION.OfferacceptedAndDidnotjoin,].includes(evaluationID))
+{
+  return  true;
 }
 
+
 }
+
+
+export const resumeBodyTemplate = (data) => {
+
+let resumeString = data.resumePath;
+let resumeValue = resumeString.replace(/^[\d-]+\/\//, ''); 
+
+    let resumeLink = FILE_URL.RESUME + data.resumePath;
+    return (
+      <a href={resumeLink} target="_blank" className="int-link-cell">
+   
+		{ resumeValue} 
+      </a>
+    );
+  };

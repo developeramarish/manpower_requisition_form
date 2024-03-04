@@ -4,7 +4,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "../css/InputComponent.css";
 import "../css/MyResume.css";
-import { navigateTo, putData } from "../constants/Utils";
+import { navigateTo, putData, resumeBodyTemplate } from "../constants/Utils";
 import { API_URL, FILE_URL, ROLES } from "../constants/config";
 import {
   arrayToObj,
@@ -35,25 +35,31 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
     const resumeData = await getData(
       API_URL.GET_MYRESUME + "?id=0&roleId=" + roleId + "&userId=" + userId
     );
-    if (roleId === ROLES.resumeReviwer) {
+
       var filterInterviewerResumtSumData = [];
       resumeData.result.candidateDetails.map((res) => {
         if (!MRF_STATUS_FOR_DISABLE(roleId, res.mrfStatus)) {
+          if(res.candidateStatusId === 2 || res.candidateStatusId === 3){
+            res.disable = true;
+          }else{
+            res.disable = false;
+          }
           filterInterviewerResumtSumData.push(res);
         }
       });
+    
+
       setValues(filterInterviewerResumtSumData);
       setForwardData(resumeData.result.resumereviewer);
       setStatusData(resumeData.result.status);
-      const isFlagArray = resumeData.result.candidateDetails.map(
-        (res) => res.candidateStatusId === 2 || res.candidateStatusId === 3
-      );
-      setIsFlag(isFlagArray);
-    } else {
-      setValues(resumeData.result.candidateDetails);
-      setForwardData(resumeData.result.resumereviewer);
-      setStatusData(resumeData.result.status);
-    }
+     
+    
+
+    // const isFlagArray = resumeData.result.candidateDetails.map(
+    //   (res) => res.candidateStatusId === 2 || res.candidateStatusId === 3
+    // );
+    // setIsFlag(isFlagArray);
+    // console.log(isFlagArray)
   }
   const SingleSelect = (data, options) => {
     const handleDropdownChange = (e) => {
@@ -70,7 +76,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
         optionValue="id"
         className="w-full md:w-15rem"
         options={statusData}
-        disable={isFlag[options.rowIndex]}
+        disable={data.disable}
         value={data.candidateStatusId}
         placeholder={"Select Status"}
         onChange={handleDropdownChange}
@@ -101,7 +107,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
         placeholder={"Select Resume Reviwer"}
         onChange={handleMultiSelectChange}
         optionLabel="name"
-        disable={isFlag[options.rowIndex]}
+        disable={data.disable}
         className="w-full md:w-15rem"
       />
     );
@@ -119,6 +125,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
     const resumePath = rowData.resumePath;
     const createdByEmployeeId = rowData.createdByEmployeeId;
     const createdOnUtc = rowData.createdOnUtc;
+    const updatedOnUtc = new Date().toISOString();
     const candidateName = rowData.candidateName;
     const candidateDetailsData = {
       id,
@@ -132,6 +139,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       createdByEmployeeId,
       createdOnUtc,
       reason,
+      updatedOnUtc
     };
     let response = await putData(
       `${API_URL.RESUME_SUMMARY_POST + id}`,
@@ -167,8 +175,8 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       setSaveBttn(sv);
     };
     return (
-      <InputTextareaComponent
-        readOnly={isFlag[options.rowIndex]}
+      <InputTextareaComponent      
+        readOnly={data.disable}
         value={data.reason}
         rows={2}
         cols={55}
@@ -178,7 +186,6 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
     );
   };
   const actionBodyTemplate = (rowData, options) => {
-    //console.log(rowData);
     if (saveBttn[options.rowIndex]) {
       return (
         <React.Fragment>
@@ -198,22 +205,15 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       <ButtonC icon="pi pi-save" disable={true} className="myaction_btn" />
     );
   };
-  const resumeBodyTemplate = (interview) => {
-    let resumeLink = FILE_URL.RESUME + interview.resumePath;
-    return (
-      <a href={resumeLink} target="_blank" className="int-link-cell">
-        {interview.resumePath}
-      </a>
-    );
-  };
+ 
 
   const columns = [
-    // {
-    //   header: "Sr. No.",
-    //   body: (data, options) => options.rowIndex + 1,
-    //   //bodyClassName: "int-edit-col",
-    //   bodyClassName: "my_resume-col",
-    // },
+    {
+      header: "Sr. No.",
+      body: (data, options) => options.rowIndex + 1,
+      //bodyClassName: "int-edit-col",
+      bodyClassName: "sr_No ",
+    },
 
     {
       field: "candidateName",
@@ -272,6 +272,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
           paginator={values.length > 10}
           removableSort
           rows={10}
+          showGridlines
           scrollable
           scrollHeight="flex"
         >

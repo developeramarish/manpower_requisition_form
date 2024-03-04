@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import "../css/Candidate.css";
 import "../css/MyRequisitions.css";
 import { API_URL, FILE_URL } from "../constants/config";
-import { getDataAPI } from "../constants/Utils";
+import { getDataAPI, resumeBodyTemplate } from "../constants/Utils";
 function ViewCandidate() {
   const [reqData, setReqData] = useState([]);
   useEffect(() => {
@@ -22,15 +22,17 @@ fetch();
   const createdOnBodyTemplate = (mrf) => {
     return new Date(mrf.createdOnUtc).toLocaleDateString().replaceAll("/", "-");
   };
-  const resumeBodyTemplate = (mrf) => {
-    let resumeLink = FILE_URL.RESUME + mrf.resumePath;
-    return (
-      <a href={resumeLink} target="_blank" className="int-link-cell">
-        {mrf.resumePath}
-      </a>
-    );
-  };
+
+
+
+
   const columns = [
+	{
+		field: "referenceNo",
+		header: "Sr. No.",
+		body: (data, options) => options.rowIndex + 1,
+		bodyClassName: "sr_No ",
+	  },
 		{
 			field: "referenceNo",
 			header: "MRF ID",
@@ -79,6 +81,7 @@ fetch();
         paginator={reqData.length > 10}
         removableSort
         rows={10}
+		showGridlines
         scrollable
         scrollHeight="62vh"
       >

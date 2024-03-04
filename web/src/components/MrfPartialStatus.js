@@ -17,6 +17,7 @@ import InputTextareaComponent from "./InputTextarea";
 import ToastMessages from "./ToastMessages";
 import LoadingSpinner from "./LoadingSpinner";
 import { throttle } from "lodash";
+import "../css/MrfPartialstatus.css";
 const MrfPartialStatus = ({
   mrfId = null,
   mrfStatusId = null,
@@ -62,9 +63,20 @@ const MrfPartialStatus = ({
             return (
               <ButtonC
                 label="Yes"
-                className="w-2 bg-red-600 border-red-600 p-2 mr-3"
+                className="Dialog_submit_btn"
                 onClick={() => {
                   handleSubmit(value);
+                }}
+              />
+            );
+          } else if (textbox) {
+            return (
+              <ButtonC
+                label="Yes"
+                disable={note.length == 0}
+                className="Dialog_submit_btn"
+                onClick={() => {
+                  submitPartial(value);
                 }}
               />
             );
@@ -72,7 +84,7 @@ const MrfPartialStatus = ({
             return (
               <ButtonC
                 label="Yes"
-                className="w-2 bg-red-600 border-red-600 p-2 mr-3"
+                className="Dialog_submit_btn"
                 onClick={() => {
                   handleDeleteDraftMrf();
                 }}
@@ -82,7 +94,7 @@ const MrfPartialStatus = ({
             return (
               <ButtonC
                 label="Yes"
-                className="w-2 bg-red-600  px-2 mr-3"
+                className="Dialog_submit_btn"
                 onClick={() => {
                   submitPartial(value);
                 }}
@@ -93,7 +105,7 @@ const MrfPartialStatus = ({
 
         <ButtonC
           label="No"
-          className=" w-2 bg-red-600 border-red-600 px-2 "
+          className="Dialog_submit_btn"
           onClick={() => {
             setVisible(false);
           }}
@@ -134,7 +146,6 @@ const MrfPartialStatus = ({
       ", "
     )}`;
     toastRef.current.showWarrningMessage(errorMessage);
-  
   };
 
   const handleSubmit = async (mrfStatusId) => {
@@ -339,6 +350,8 @@ const MrfPartialStatus = ({
     const value = e.target.value;
     if (value.length <= maxCharacterCount) {
       setNote(value);
+    }else{
+      toastRef.current.showWarrningMessage("Character limit Exceed: "+maxCharacterCount);
     }
   };
 
@@ -367,16 +380,13 @@ const MrfPartialStatus = ({
   };
   return (
     <>
-      
       {label && (
         <>
           <ButtonC
             label={label}
             ref={buttonRef}
             className={className}
-            onClick={
-              () => HandleError()
-            }
+            onClick={() => HandleError()}
             disable={disabled}
             outlined={outlined}
           ></ButtonC>

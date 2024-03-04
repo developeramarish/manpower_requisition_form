@@ -1,4 +1,5 @@
-﻿using MRF.DataAccess.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.DTO;
 using MRF.Models.Models;
 
@@ -11,9 +12,10 @@ namespace MRF.DataAccess.Repository
         {
             _db = db;
         }
-        public MrfdetailsEmailRequestModel GetRequisition(int MrfId)
+        public async Task<MrfdetailsEmailRequestModel> GetRequisition(int MrfId)
         {
-            List<MrfdetailsEmailRequestModel> query = (from MD in _db.Mrfdetails
+            //before List<MrfdetailsEmailRequestModel> query
+            IQueryable<MrfdetailsEmailRequestModel> query = (from MD in _db.Mrfdetails
                                                      join DEPT in _db.Departmentmaster on MD.DepartmentId equals DEPT.Id
                                                      join SUBDEPT in _db.Departmentmaster on MD.SubDepartmentId equals SUBDEPT.Id
                                                      join PM in _db.Projectmaster on MD.ProjectId equals PM.Id
@@ -60,8 +62,9 @@ namespace MRF.DataAccess.Repository
                                                          MinTargetSalary = FMRF.MinTargetSalary,
                                                          MaxTargetSalary = FMRF.MaxTargetSalary,
                                                          MRFRaisedBy=CBY.Name
-                                                     }).ToList();
-            return query.FirstOrDefault();
+                                                     });
+            //return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
 
         }
     }

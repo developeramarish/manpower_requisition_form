@@ -12,19 +12,24 @@ import {
   isFormDataEmptyForAddCandidate,
   formatDateToYYYYMMDD,
 } from "../constants/Utils";
+import "../css/AddCandidate.css"
 import { InputMask } from "primereact/inputmask";
 import { API_URL, COUNTRIES, emailRegex } from "../constants/config";
 import DropdownComponent from "../components/Dropdown";
 import LoadingSpinner from "../components/LoadingSpinner";
 import FileUploads from "../components/FileUploads";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 
 const AddCandidate = (reqId) => {
   const toastRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [showTable, setShowTable] = useState(false);
   const [submitBtnDisable, setSubmitBtnDisable] = useState(false);
   const [mask, setMask] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const fileUploadRef = useRef(null);
+  const [resumeArray, setResumeArray] = useState([]);
 
   let Data = sessionStorage.getItem("mrfAddcandidate");
 
@@ -164,11 +169,12 @@ const AddCandidate = (reqId) => {
                 toastRef.current.showSuccessMessage(
                   "Form submitted successfully!"
                 );
+                resumeArray.unshift(data);
                 //here is succesfull full api call
                 setIsLoading(false);
                 setSubmitBtnDisable(false);
                 setFormData(formSchema);
-
+                setShowTable(true);
                 fileUploadRef.current.clearSelectedFile();
               }
             } else {
@@ -186,9 +192,7 @@ const AddCandidate = (reqId) => {
           }
         } else {
           if (fileUploadResponse.status === 400) {
-            toastRef.current.showWarrningMessage(
-              "you have to upload Resume!"
-            );
+            toastRef.current.showWarrningMessage("you have to upload Resume!");
             setIsLoading(false);
             setSubmitBtnDisable(false);
           }
@@ -221,6 +225,13 @@ const AddCandidate = (reqId) => {
       );
     }
   };
+
+  const ResumeViewColumns = [
+    { field: "name", header: "Name" },
+    { field: "emailId", header: "Email" },
+    { field: "contactNo", header: "Contact No" },
+    { field: "resumePath", header: "Resume" },
+  ];
 
   return (
     <div>
@@ -277,7 +288,7 @@ const AddCandidate = (reqId) => {
                   </label>
 
                   <div className="flex flex-row w-6 gap-2">
-                    <div className="flex flex-column  ">
+                    <div className="flex flex-column gap-2 ">
                       <DropdownComponent
                         options={COUNTRIES}
                         optionLabel="name"
@@ -289,10 +300,10 @@ const AddCandidate = (reqId) => {
                             countrycode: e.target.value,
                           })
                         }
-                        className="w-full md:w-13rem"
+                        className="w-full md:w-10rem"
                       />
                     </div>
-                    <div className="flex flex-column  gap-1 ">
+                    <div className="flex flex-column  gap-2 ">
                       <InputMask
                         mask={mask}
                         value={formData.contactNo}
@@ -304,11 +315,12 @@ const AddCandidate = (reqId) => {
                         }
                         onBlur={handleMinimumContact}
                         // autoClear={false}
-                        className="w-full md:w-30rem bg-gray-100"
+                        className="w-22rem "
                       />
                     </div>
                   </div>
                 </div>
+                {/**/}
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
                     Source Name
@@ -338,6 +350,28 @@ const AddCandidate = (reqId) => {
                   fileExtension={"pdf ,docx "}
                 />
               </div>
+              {showTable && (
+                <div className="show_resume_View_DataTable  ">
+                  <DataTable
+                    value={resumeArray}
+                    paginator={resumeArray.length > 5}
+                    rows={5}
+                    scrollable
+                    stripedRows 
+                    draggable={false}
+                    scrollHeight="flex"
+                    className=" View_DataTable  "
+                  >
+                    {ResumeViewColumns.map((col, index) => (
+                      <Column
+                        key={index}
+                        field={col.field}
+                        header={col.header}
+                      />
+                    ))}
+                  </DataTable>
+                </div>
+              )}
             </section>
 
             <div className="flex flex-wrap justify-content-end gap-5 mt-3">

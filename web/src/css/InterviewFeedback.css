@@ -189,3 +189,13 @@
 	padding-top: 10px;
   }
   
+  .add_feedback_btn{
+	background-color: #d32f2e;
+	color: #ffffff;
+	width: 155px;
+  }
+  .add_feedback_btn:disabled{
+	color: #ffffff;
+	background-color: #c5c5c5;
+	width: 155px;
+  }

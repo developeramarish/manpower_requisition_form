@@ -8,7 +8,7 @@ export default function MultiSelectDropdown({
   placeholder,
   optionLabel,
   optionValue,
-  addFilter = false,
+  addFilter = true,
   className,
   maxSelectedLabels,
   disable,

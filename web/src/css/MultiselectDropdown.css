@@ -1,10 +1,10 @@
-.p-multiselect-header .p-checkbox-box:after {
+/* .p-multiselect-header .p-checkbox-box:after {
   content: "Select All Options";
-  /* top: 2px; */
+   top: 2px;
   position: absolute;
   left: 13px;
   text-align: center;
   font-weight: 500;
   width: 860%;
   color: #0b1016;
-}
+} */

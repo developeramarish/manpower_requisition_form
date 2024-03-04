@@ -14,6 +14,7 @@ import InputNumberamount from "./../components/InputNumberAmount";
 import { Editor } from "primereact/editor";
 import ToastMessages from "./../components/ToastMessages";
 import MultiSelectDropdown from "./../components/multiselectDropdown";
+import '../css/CreateRequistionBody.css';
 import {
   getData1,
   getDataAPI,
@@ -62,7 +63,6 @@ const CreateRequisitionBody = ({
   const [hiringManagerBtnDisable, setHiringManagerBtnDisable] = useState(true);
   const [siteHrSpocValue, setSiteHrSpocValue] = useState(0);
   const [hiringManagerValue, setHiringManagerValue] = useState(0);
- 
 
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
@@ -95,6 +95,10 @@ const CreateRequisitionBody = ({
       setSiteHrSpocValue(response.siteHRSPOCId);
       setHiringManagerValue(response.hiringManagerId);
       setFormData({ ...formData, ...response });
+      if(response && response.departmentId > 0){
+        fetchSubDepartments(response.departmentId);
+      }
+
     } else {
       setDropdownData(dropData);
       setFormData(FORM_SCHEMA_CR);
@@ -221,6 +225,8 @@ const CreateRequisitionBody = ({
 
     if (value.length <= maxCharacterCountJustification) {
       setFormData({ ...formData, justification: value });
+    }else{
+      toastRef.current.showWarrningMessage("Character limit Exceed: "+   maxCharacterCountJustification)
     }
   };
 
@@ -231,10 +237,8 @@ const CreateRequisitionBody = ({
   }
 
   const onTextChangedSkill = (oVal) => {
-   
     setFormData({ ...formData, skills: oVal.htmlText, skillsText: oVal.text });
   };
-  
 
   const onTextChangedJobDesc = (oVal) => {
     setFormData({
@@ -318,13 +322,16 @@ const CreateRequisitionBody = ({
     }
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!formData || formData.departmentId === 0) {
       return;
     }
-    fetchSubDepartments(formData.departmentId);
-  }, [formData]);
-
+  }, [formData]); */
+  
+  const setDepartment = (value)=>{
+    setFormData({ ...formData, departmentId: value });
+    fetchSubDepartments(value);
+  }
   const strToArray = (s) => {
     s = s ?? "";
     if (typeof s === "string") {
@@ -501,7 +508,7 @@ const CreateRequisitionBody = ({
                   value={formData.departmentId}
                   disable={commonSettings.setReadOnly}
                   onChange={(e) => {
-                    setFormData({ ...formData, departmentId: e.target.value });
+                    setDepartment(e.target.value);
                   }}
                 />
               </div>
@@ -940,15 +947,14 @@ const CreateRequisitionBody = ({
                   Job Description
                   <RedAsterisk />
                 </label>
-               
-                  <EditorComponent
-                    value={formData.jobDescription}
-                    headerTemplate={header}
-                    onTextChanged={onTextChangedJobDesc}
-                    disable={commonSettings.setReadOnly}
-                    max={6000}
-                  />
-                  
+
+                <EditorComponent
+                  value={formData.jobDescription}
+                  headerTemplate={header}
+                  onTextChanged={onTextChangedJobDesc}
+                  disable={commonSettings.setReadOnly}
+                  max={6000}
+                />
               </div>
 
               <div className="flex flex-column w-6 gap-2">
@@ -956,16 +962,14 @@ const CreateRequisitionBody = ({
                   Skills
                   <RedAsterisk />
                 </label>
-                  <EditorComponent
-                    value={formData.skills}
-                    headerTemplate={header}
-                    onTextChanged={onTextChangedSkill}
-                    disable={commonSettings.setReadOnly}
-                    max={500}
-                  />
-                 
+                <EditorComponent
+                  value={formData.skills}
+                  headerTemplate={header}
+                  onTextChanged={onTextChangedSkill}
+                  disable={commonSettings.setReadOnly}
+                  max={500}
+                />
               </div>
-            
             </div>
             <div className="flex justify-content-between gap-5 ">
               <div className="flex flex-column relative inline-block w-6 gap-2">
@@ -973,7 +977,6 @@ const CreateRequisitionBody = ({
                   Justification <RedAsterisk />
                 </label>
 
-              
                 <InputTextareaComponent
                   id="Justification"
                   value={formData.justification}
@@ -1100,8 +1103,9 @@ const CreateRequisitionBody = ({
                   optionValue="employeeId"
                   type="siteHRSPOCId"
                   options={dropdownData.siteHRSPOC}
-                  value={formData.hrId}
+                  value={formData.hrId ? formData.hrId :undefined }
                   disable={commonSettings.setReadOnly}
+                  clearIcon={true}
                   onChange={(e) => {
                     setFormData({ ...formData, hrId: e.target.value });
                   }}
@@ -1198,6 +1202,7 @@ const CreateRequisitionBody = ({
                       id="ApprovalDate"
                       inputClassName="bg-gray-100"
                       value={new Date(formData.hmApprovalDate)}
+                      minDate={new Date(formData.createdOnUtc)}
                       maxDate={new Date()}
                       className={"email_dropdown"}
                       disable={hiringManagerBtnDisable}
@@ -1315,7 +1320,7 @@ const CreateRequisitionBody = ({
                             />
                           </div>
 
-                          <div className=" gap-3  w-3 ">
+                          <div className=" gap-4  w-3 ">
                             <label
                               htmlFor="ApprovalDate"
                               className="font-bold text-sm gap-3 "
@@ -1323,17 +1328,19 @@ const CreateRequisitionBody = ({
                               Status
                             </label>
 
-                            <div className=" gap-2 w-5">
+                            <div className=" gap-3 w-6">
                               {hiringManagerValue > 0 ? (
-                                <h4>Updated</h4>
+                                <h4 className="show_status">Updated</h4>
                               ) : (
-                                <h4>Yet to be Updated</h4>
+                                <h4 className="show_status">Yet to be Updated</h4>
                               )}
                             </div>
                           </div>
                         </>
                       );
                     }
+
+
                   })()}
                 </div>
                 <div id="third" className="flex justify-content-evenly gap-4">
@@ -1396,6 +1403,7 @@ const CreateRequisitionBody = ({
                       inputClassName="bg-gray-100"
                       value={new Date(formData.spApprovalDate)}
                       disable={siteHrSpocBtnDisable}
+                      minDate={new Date(formData.createdOnUtc)}
                       maxDate={new Date()}
                       className={"email_dropdown"}
                       onChange={(e) =>
@@ -1479,11 +1487,11 @@ const CreateRequisitionBody = ({
                             />
                           </div>
                           <div className=" gap-3  w-3 ">
-                            <div className=" gap-2 w-5">
+                            <div className=" gap-2 w-6">
                               {siteHrSpocValue > 0 ? (
-                                <h4>Updated</h4>
+                                <h4 className="show_status">Updated</h4>
                               ) : (
-                                <h4>Yet to be Updated</h4>
+                                <h4 className="show_status">Yet to be Updated</h4>
                               )}
                             </div>
                           </div>
@@ -1558,6 +1566,7 @@ const CreateRequisitionBody = ({
                       value={new Date(formData.fhApprovalDate)}
                       disable={commonSettings.setHodapprovalDate}
                       className={"email_dropdown"}
+                      minDate={new Date(formData.createdOnUtc)}
                       maxDate={new Date()}
                       onChange={(e) =>
                         setFormData({
@@ -1592,7 +1601,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3 ">
-                                <h4>Yet to be Approved</h4>
+                                <h4 className="show_status">Yet to be Approved</h4>
                               </div>
                             </>
                           );
@@ -1613,7 +1622,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3 ">
-                                <h4>Awaiting HOD approval</h4>
+                                <h4 className="show_status">Awaiting HOD approval</h4>
                               </div>
                             </>
                           );
@@ -1636,7 +1645,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Yet to be Approved</h4>
+                                  <h4 className="show_status">Yet to be Approved</h4>
                                 </div>
                               </>
                             );
@@ -1658,7 +1667,8 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Received HOD Approval</h4>
+                                  <h4 className="show_status">Received HOD Approsval</h4>
+                                  
                                 </div>
                               </>
                             );
@@ -1729,6 +1739,7 @@ const CreateRequisitionBody = ({
                       inputClassName="bg-gray-100"
                       value={new Date(formData.fiApprovalDate)}
                       className={"email_dropdown"}
+                      minDate={new Date(formData.createdOnUtc)}
                       maxDate={new Date()}
                       disable={commonSettings.setFinanceHeadApprovalDate}
                       onChange={(e) =>
@@ -1764,7 +1775,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3">
-                                <h4>Yet to be Approved</h4>
+                                <h4 className="show_status">Yet to be Approved</h4>
                               </div>
                             </>
                           );
@@ -1809,7 +1820,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3">
-                                <h4>Awaiting Fin. Head approval</h4>
+                                <h4 className="show_status">Awaiting Fin. Head approval</h4>
                               </div>
                             </>
                           );
@@ -1833,7 +1844,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Yet to be Approved</h4>
+                                  <h4 className="show_status">Yet to be Approved</h4>
                                 </div>
                               </>
                             );
@@ -1855,7 +1866,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Received Fin. Head Approval</h4>
+                                  <h4 className="show_status">Received Fin. Head Approval</h4>
                                 </div>
                               </>
                             );
@@ -1951,6 +1962,7 @@ const CreateRequisitionBody = ({
                       inputClassName="bg-gray-100"
                       value={new Date(formData.pcApprovalDate)}
                       maxDate={new Date()}
+                      minDate={new Date(formData.createdOnUtc)}
                       disable={commonSettings.setCooapprovalDate}
                       className={"email_dropdown"}
                       onChange={(e) =>
@@ -1986,7 +1998,8 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3 ">
-                                <h4>Yet to be Approved</h4>
+                                <h4 className="show_status">Yet to be Approved</h4>
+                                
                               </div>
                             </>
                           );
@@ -2030,7 +2043,7 @@ const CreateRequisitionBody = ({
                                 />
                               </div>
                               <div className=" w-3 ">
-                                <h4>Awaiting COO approval</h4>
+                                <h4 className="show_status">Awaiting COO approval</h4>
                               </div>
                             </>
                           );
@@ -2054,7 +2067,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Yet to be Approved</h4>
+                                  <h4 className="show_status">Yet to be Approved</h4>
                                 </div>
                               </>
                             );
@@ -2076,7 +2089,7 @@ const CreateRequisitionBody = ({
                                   />
                                 </div>
                                 <div className=" w-3 ">
-                                  <h4>Received Fin. Head Approval</h4>
+                                  <h4 className="show_status">Received Fin. Head Approval</h4>
                                 </div>
                               </>
                             );
@@ -2168,9 +2181,7 @@ const CreateRequisitionBody = ({
                   case MRF_STATUS.cooapproval:
                   case MRF_STATUS.awaitCooApproval:
                   case MRF_STATUS.recivedfinanceHeadApproval:
-
-                  case MRF_STATUS.bypassFinanceHeadApproval:
-                  case MRF_STATUS.recivedfinanceHeadApproval:
+                    case MRF_STATUS.awaitfinanceHeadApproval:
                     return (
                       <>
                         <MrfPartialStatus

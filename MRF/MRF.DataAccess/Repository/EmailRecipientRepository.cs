@@ -104,6 +104,7 @@ namespace MRF.DataAccess.Repository
             return query.ToList();
         }
 
+        //need to change it for multiple roles
         public List<EmailRecipient> GetEmployeeEmail(string empRole)
         {
             IQueryable<EmailRecipient> query = from ed in _db.Employeedetails

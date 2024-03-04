@@ -1,34 +1,33 @@
 import React, { useEffect, useState } from "react";
 import "./../css/Dashboard.css";
-import { getData } from "../constants/Utils";
+import { getData, navigateTo } from "../constants/Utils";
 import { API_URL, ROLES } from "../constants/config";
-import { storageService } from "../constants/storage";
-import InterviewSummary from "../containers/InterviewSummary";
-import DashMrfStatus from "../components/DashMrfStatus";
+// import { storageService } from "../constants/storage";
+// import InterviewSummary from "../containers/InterviewSummary";
+// import DashMrfStatus from "../components/DashMrfStatus";
 import ResumeSummary from "../containers/ResumeSummary";
 import DashBoardDataTable from "../components/DashBoardDataTable";
-import InterviewSummaryAllStatus from "../containers/InterviewSummaryAllStatus";
+// import InterviewSummaryAllStatus from "../containers/InterviewSummaryAllStatus";
 import {
   filterSelectedColumn,
   filterResultGroupByCandidatestatus,
 } from "../constants/Utils";
-import { Dialog } from "primereact/dialog";
+// import { Dialog } from "primereact/dialog";
 // import HrResumeSummary from "../components/HrResumeSummary";
 
 function Dashboard({ roleId, userId }) {
   const [mrfStatus, setMrfStatus] = useState([]);
   const [resumeSummary, setResumeSummary] = useState([]);
   const [interviewSummary, setInterviewSummary] = useState([]);
-  const [interviewPopup, setInterviewPopup] = useState(false);
+  /* const [interviewPopup, setInterviewPopup] = useState(false);
   const [interviewPopupId, setInterviewPopupId] = useState(null);
   const [mrfStatusPopup, setMrfStatusPopup] = useState(false);
   const [mrfStatusPopupId, setrfStatusPopupId] = useState(null);
   const [mrfstatusWordPopUp, setMrfstatusWordPopUp] = useState(null);
   const [resumePopup, setResumePopup] = useState(false);
   const [resumePopupId, setResumePopupId] = useState(null);
-  const [InterviewStatus, setInterviewStatusPopup] = useState(false);
+  const [InterviewStatus, setInterviewStatusPopup] = useState(false); */
   useEffect(() => {
-    console.log(roleId, "  Dashboard rendered")
     getSummaryData();
   }, [roleId]);
   async function getSummaryData() {
@@ -69,23 +68,25 @@ function Dashboard({ roleId, userId }) {
   }
   const interviewSummaryTableData = filterResultGroupByCandidatestatus(
     interviewSummary,
-    ["Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
+    ["Candidate Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
   );
 
   const onMRFIdClicked = (mrfStatusId,mrfStatusWord) => {
-  
-    setrfStatusPopupId(mrfStatusId);
+    /* setrfStatusPopupId(mrfStatusId);
     setMrfstatusWordPopUp(mrfStatusWord)
-    setMrfStatusPopup(true);
+    setMrfStatusPopup(true); */
+    navigateTo("mrf_summary?mrfStatusId="+mrfStatusId+"&status="+mrfStatusWord);
   };
 
   const onInterviewMRFIdClicked = (e) => {
-    setInterviewPopupId(e);
-    setInterviewPopup(true);
+    navigateTo("interview_summary?mrfId="+e);
+    /* setInterviewPopupId(e);
+    setInterviewPopup(true); */
   };
   const onResumeMRFIdClicked = (e) => {
-    setResumePopupId(e);
-    setResumePopup(true);
+    navigateTo("resume_summary?mrfId="+e);
+    /* setResumePopupId(e);
+    setResumePopup(true); */
   };
   const mrfIdInterviewRefernceTemplate = (rowData) => {
     return (
@@ -114,7 +115,8 @@ function Dashboard({ roleId, userId }) {
   };
 
   const handlePopupOpen = () => {
-    setInterviewStatusPopup(true);
+    // setInterviewStatusPopup(true);
+    navigateTo("interview_summary_more");
   };
   let resumeSummaryColums = [
     {
@@ -137,11 +139,10 @@ function Dashboard({ roleId, userId }) {
 
     {
       field: "Shortlisted",
-      header: <h5 className="dashborad_table_sub_header">Shortlisted</h5>,
+      header: <h5 className="dashborad_table_sub_header int_sortlist">Shortlisted</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Shortlisted"),
-      bodyClassName: "dash_status_col",
+      bodyClassName: "dash_status_col int_sortlistbody",
     },
-
     {
       field: "Rejected",
       header: <h5 className="dashborad_table_sub_header">Rejected</h5>,
@@ -171,9 +172,9 @@ function Dashboard({ roleId, userId }) {
       bodyClassName: "dash_status_col",
     },
     {
-      field: "Selected",
-      header: <h5 className="dashborad_table_sub_header">Selected</h5>,
-      body: (rowData) => filterSelectedColumn(rowData, "Selected"),
+      field: "Candidate Selected",
+      header: <h5 className="dashborad_table_sub_header ">Selected</h5>,
+      body: (rowData) => filterSelectedColumn(rowData, "Candidate Selected"),
       bodyClassName: "dash_status_col",
     },
     {
@@ -183,7 +184,7 @@ function Dashboard({ roleId, userId }) {
       bodyClassName: "dash_status_col",
     },
     {
-      field: "new",
+      field: "Assignment Sent",
       header: <h5 className="dashborad_table_sub_header">Assignment Sent</h5>,
       body: (rowData) => filterSelectedColumn(rowData, "Assignment Sent"),
       bodyClassName: "dash_status_col",
@@ -215,7 +216,7 @@ function Dashboard({ roleId, userId }) {
       {roleId === ROLES.resumeReviwer && (
         <>
           <div className="resume-viwer-table">
-            <ResumeSummary roleId={roleId} userId={userId} mrfId={0} />
+            <ResumeSummary roleId={roleId} userId={userId} />
           </div>
         </>
       )}
@@ -225,14 +226,14 @@ function Dashboard({ roleId, userId }) {
             <div className="mrf_status_summary">
               <div className="header">
                 <h4>MRF Summary</h4>
-                <DashMrfStatus
+               {/*  <DashMrfStatus
                   visible={mrfStatusPopup}
                   onHide={() => setMrfStatusPopup(false)}
                   statusId={mrfStatusPopupId}
                   userId={userId}
                   roleId={roleId}
                   dialogHeader={mrfstatusWordPopUp}
-                />
+                /> */}
               </div>
               <table className="mrf_table">
                 <thead>
@@ -242,7 +243,9 @@ function Dashboard({ roleId, userId }) {
                   </tr>
                 </thead>
                 <tbody className="mrf_table_body">
-                  {mrfStatus.map((data, index) => {
+                  {mrfStatus.filter((data, index)=>{
+                    return data.status !== "Bypass Finance Head Approval"
+                  }).map((data, index) => {
                     return (
                       <tr key={"mrf_" + index}>
                         <td>{data.status}</td>
@@ -285,38 +288,31 @@ function Dashboard({ roleId, userId }) {
                 </h4>
               }
               table_title={"Resume Summary"}
+              isHide={roleId === ROLES.interviewer}
             />
-            <ResumeSummary
+            {/* <ResumeSummary
               visible={resumePopup}
               onHide={() => setResumePopup(false)}
               mrfId={resumePopupId}
               roleId={roleId}
               userId={userId}
-            />
+            /> */}
 
             <DashBoardDataTable
               value={interviewSummaryTableData}
               column={interviewSummaryColums}
               headerHeading={
                 <div>
-                  <h4
-                    style={{
-                      margin: "0px",
-                      marginLeft: "150px",
-                      padding: "0px",
-                    }}
+                  <h4 className="interviewSummary_tableHeader"
+                   
                   >
                     Interview Status
-                    <span
-                      style={{
-                        marginLeft: "110px",
-                        textAlign: "left",
-                        color: "#d32f2e",
-                      }}
+                    <span className="interviewSummary_moreStatus"
+                     
                     >
-                      <a style={{ color: "#d32f2e" }} onClick={handlePopupOpen}>
+                      <a onClick={handlePopupOpen}>
                         More Status
-                        <span style={{ fontSize: "15px" }}>&gt;</span>
+                        <span>&gt;</span>
                       </a>
                     </span>
                   </h4>
@@ -324,19 +320,19 @@ function Dashboard({ roleId, userId }) {
               }
               table_title={"Interview Summary"}
             />
-            <InterviewSummary
+            {/* <InterviewSummary
               visible={interviewPopup}
               onHide={() => setInterviewPopup(false)}
               mrfId={interviewPopupId}
               roleId={roleId}
               userId={userId}
-            />
-            <InterviewSummaryAllStatus
+            /> */}
+            {/* <InterviewSummaryAllStatus
               visible={InterviewStatus}
               onHide={() => setInterviewStatusPopup(false)}
               roleId={roleId}
               userId={userId}
-            />
+            /> */}
           </div>
         )}
       </div>

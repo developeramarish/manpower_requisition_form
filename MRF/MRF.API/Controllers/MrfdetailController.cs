@@ -95,7 +95,9 @@ namespace MRF.API.Controllers
                 string ReferenceNo = string.Empty;
                 if (request.ReferenceNo != "")
                 {
-                    Put(request.mrfID ?? 0, request);
+                    var res = Put(request.mrfID ?? 0, request);
+                    mrfUrl = _configuration["MRFUrl"].Replace("ID", res.Id.ToString());
+                    ReferenceNo = request.ReferenceNo;
                 }
                 else
                 {
@@ -133,7 +135,7 @@ namespace MRF.API.Controllers
                     //Send Email to HR - Skipping if MRF Status is Drafted : MRF Status Id = 1 (Drafted)
                     if(request.MrfStatusId != 1)
                     {
-                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
+                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR"); //need to change this so the mail is not sent to every hr
 
                         foreach (var emailReq in emailList)
                         {
@@ -209,6 +211,7 @@ namespace MRF.API.Controllers
                 var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
                 {
                     MrfId = mrfId,
+                    RoleId = 3,
                     EmployeeId = request.CreatedByEmployeeId,
                     ApprovalDate = request.HMApprovalDate
                 };
@@ -245,143 +248,102 @@ namespace MRF.API.Controllers
             return freshmrRequest;
         }
 
-        private void CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
+        private async Task CallGetMrfdetailsInEmailController(int MrfId, int EmployeeId, int nextMrfStatusId, int currentMrfStatusId)
         {
             GetMrfdetailsInEmailController getMrfdetailsInEmailController =
                 new GetMrfdetailsInEmailController(_unitOfWork, _logger, _emailService, _hostEnvironment, _configuration);
-            getMrfdetailsInEmailController.GetRequisition(MrfId, EmployeeId, nextMrfStatusId, currentMrfStatusId);
+            await getMrfdetailsInEmailController.GetRequisitionAsync(MrfId, EmployeeId, nextMrfStatusId, currentMrfStatusId);
         }
 
         private int CallEmailApprovalController(MrfdetailRequestModel request, int mrfId, bool Update, out int nextMrfStatusId) 
         {
-            int employeeId = 0;
+            int employeeId = 0; int RoleID = 0;
             nextMrfStatusId = request.MrfStatusId;
-            List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetList(mrfId);
-            if (request.HrId != null && request.HrId != 0)
+            //List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetList(mrfId);
+            /*if (request.HrId != null && request.HrId != 0)
             {
+                RoleID = 4;
                 //employeeId = request.HrId;
                 var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
                 {
                     MrfId = mrfId,
                     EmployeeId = (int)request.HrId,
+                    RoleId = RoleID,
                     //ApprovalDate = request.CreatedOnUtc,
                 };
                 MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 4).FirstOrDefault();
+                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId && s.RoleId == RoleID).FirstOrDefault();
                 if (MrfEmailApproval == null)
                 {
                     postMrfEmail(MrfEmailApprovalRequestModel);
                 }
-            }
+            }*/
             if (request.FunctionHeadId != 0)
             {
+                RoleID = 8;
                 nextMrfStatusId = 4;
                 employeeId = request.FunctionHeadId;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.FHApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 8).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.FHApprovalDate);
             }
             if (request.HiringManagerId != 0)
             {
+                RoleID = 3;
                 employeeId = request.HiringManagerId;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.HMApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 3).FirstOrDefault();
-
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.HMApprovalDate);
             }
 
-            if (request.SiteHRSPOCId != 0)
+            if (request.SiteHRSPOCId != 0 || (request.HrId != null && request.HrId != 0))
             {
-                employeeId = request.SiteHRSPOCId;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.SPApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 4).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
+                RoleID = 4; DateOnly approveDate = request.SPApprovalDate;
+                if (request.SiteHRSPOCId != 0) { employeeId = request.SiteHRSPOCId;
+                
+                } else if(request.HrId != null && request.HrId != 0)
+                { employeeId = (int)(request.HrId); 
+                  approveDate = DateOnly.FromDateTime(DateTime.Today); }
+                
+                if (employeeId != 0) {
+                    AddUpdateEmailApproval(mrfId, employeeId, RoleID, approveDate);
                 }
             }
             if (request.FinanceHeadId != 0)
             {
+                RoleID = 10;
                 employeeId = request.FinanceHeadId;
                 nextMrfStatusId = 14;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.FIApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 10).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.FIApprovalDate);
             }
 
             if (request.PresidentnCOOId != 0)
             {
+                RoleID = 11;
                 employeeId = request.PresidentnCOOId;
                 nextMrfStatusId = 5;
-                var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
-                {
-                    MrfId = mrfId,
-                    EmployeeId = employeeId,
-                    ApprovalDate = request.PCApprovalDate
-                };
-                MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
-                MrfEmailApproval MrfEmailApproval = list.Where(s => s.EmployeeId == employeeId || s.roleId == 11).FirstOrDefault();
-                if (MrfEmailApproval == null)
-                {
-                    postMrfEmail(MrfEmailApprovalRequestModel);
-                }
-                else
-                {
-                    controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
-                }
+                AddUpdateEmailApproval(mrfId, employeeId, RoleID, request.PCApprovalDate);
             }
             return employeeId;
         }
+        private void AddUpdateEmailApproval(int mrfId, int employeeId, int roleId, DateOnly ApprovalDate)
+        {
+            List<MrfEmailApproval> list = _unitOfWork.MrfEmailApproval.GetA(u=>u.MrfId== mrfId).ToList();
+            var MrfEmailApprovalRequestModel = new MrfEmailApprovalRequestModel
+            {
+                MrfId = mrfId,
+                EmployeeId = employeeId,
+                RoleId = roleId,
+                ApprovalDate = ApprovalDate
+            };
+            MrfEmailApprovalController controller = new MrfEmailApprovalController(_unitOfWork, _logger);
+            MrfEmailApproval MrfEmailApproval = list.Where(s => s.RoleId == roleId).FirstOrDefault();
+            if (MrfEmailApproval == null)
+            {
+                postMrfEmail(MrfEmailApprovalRequestModel);
+            }
+            else
+            {
+                controller.Put(MrfEmailApproval.Id, MrfEmailApprovalRequestModel);
+            }
 
+        }
         private void postMrfEmail(MrfEmailApprovalRequestModel MrfdetailRequestModelRequest)
         {
             MrfEmailApprovalController MrfEmailApprovalController = new MrfEmailApprovalController(_unitOfWork, _logger);
@@ -451,6 +413,8 @@ namespace MRF.API.Controllers
         }
         private void CallreviewerController(MrfdetailRequestModel request, int mrfId, bool Update)
         {
+            bool isDraft = (request.MrfStatusId == 1); //checking to not send email when status is draft
+
             if (string.IsNullOrEmpty(request.ResumeReviewerEmployeeIds))
             {
                 MrfresumereviewermapController resumereviewermap = new MrfresumereviewermapController(_unitOfWork, _logger, _emailService, _hostEnvironment);
@@ -472,13 +436,13 @@ namespace MRF.API.Controllers
                     {
                         MrfId = mrfId,
                         ResumeReviewerEmployeeId = int.Parse(employeeId), // Convert the ID to the appropriate type
-                        IsActive = true,
+                        IsActive = isDraft,
                         CreatedByEmployeeId = request.CreatedByEmployeeId,
                         CreatedOnUtc = request.CreatedOnUtc,
                         UpdatedByEmployeeId = request.UpdatedByEmployeeId,
                         UpdatedOnUtc = request.UpdatedOnUtc
                     };
-
+                    
                     var resumereviewermapResponse = resumereviewermap.Post(mrfresumereviewermap);
                 }
             }
@@ -502,7 +466,7 @@ namespace MRF.API.Controllers
                     {
                         MrfId = mrfId,
                         InterviewerEmployeeId = int.Parse(employeeId),
-                        IsActive = true,
+                        IsActive = isDraft,
                         CreatedByEmployeeId = request.CreatedByEmployeeId,
                         CreatedOnUtc = request.CreatedOnUtc,
                         UpdatedByEmployeeId = request.UpdatedByEmployeeId,
@@ -588,7 +552,7 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status422UnprocessableEntity, Description = "Unprocessable entity")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal server error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
-        public MrfdetaiResponseModel PartialUpdateMRFStatus(int id, [FromBody] MrfdetailRequestModel request)
+        public async Task<MrfdetaiResponseModel> PartialUpdateMRFStatus(int id, [FromBody] MrfdetailRequestModel request)
         {
             var existingStatus = _unitOfWork.Mrfdetail.Get(u => u.Id == id);
             mrfUrl = _configuration["MRFUrl"].Replace("ID", id.ToString());
@@ -609,60 +573,71 @@ namespace MRF.API.Controllers
                     }
                 }
 
+                if (request.SiteHRSPOCId > 0) existingStatus.HrId = request.SiteHRSPOCId;
+
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
 
                 _responseModel.Id = existingStatus.Id;
 
                 int nextMrfStatusId;
-                int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId);
-                CallMrfHistory(request, id, mrfstatus);
+                int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId); //saves approval history
+                CallMrfHistory(request, id, mrfstatus); //saves mrf update history
 
-                MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
+                //MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
+
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
                 if (new List<int> { 11, 12, 13 }.Contains(request.MrfStatusId))
                 {
-                    CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId);
+                    //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
+                    await CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId); //emails approval requests
 
                     if (emailRequest != null)
                     {
-                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {existingStatus.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                         //Send Email to HR
-                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR");
+                        /*List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR"); //gets for all the emps which have hr role currently
                         foreach (var emailReq in emailList)
                         {
                             _emailService.SendEmailAsync(emailReq.Email, emailRequest.Subject, emailContent);
-                        }
+                        }*/
+
+                        //email only to the current hr which updates the status
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
 
                         //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailRequest.Subject, emailContent);
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailRequest.Subject, emailContent);
                     }
                 }
                 else
                 {
-                    Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == request.MrfStatusId);
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
+                    //Mrfstatusmaster mrfstatusmaster = _unitOfWork.Mrfstatusmaster.Get(u => u.Id == request.MrfStatusId);
+                    //emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == mrfstatusmaster.Status);
                     if (emailRequest != null)
                     {
                         List<int> RoleIds = new List<int>();
                         RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
 
-                        string emailSubject = emailRequest.Subject.Replace("#", $" Id {mrfdetails.ReferenceNo}");
-                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>")
+                        string emailSubject = emailRequest.Subject.Replace("##", $" Id {existingStatus.ReferenceNo}");
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {existingStatus.ReferenceNo}</span>")
                                                           .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
-                        List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
+                        //sends email to all emails having a particular role
+                        //need to fix it so that email is sent to only involved people having the given roleIds are sent email 
+                        /*List<EmailRecipient> rejectedEmailList = _unitOfWork.EmailRecipient.GetEmployeeEmailByRoleIds(RoleIds);
 
                         foreach (var emailReq in rejectedEmailList)
                         {
                             _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
-                        }
+                        }*/
+                        //for now email only to the current hr
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)existingStatus.HrId), emailSubject, emailContent);
 
                         //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId), emailSubject, emailContent);
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailSubject, emailContent);
                     }
                 }
             }

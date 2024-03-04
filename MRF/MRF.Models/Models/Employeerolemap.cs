@@ -29,5 +29,5 @@ public class Employeerolemap
     
     [NotMapped]
     public string ContactNo { get; set; } = null!;
-    public string? multipleRoleIds { get; set; }
+    public string? multipleRoleIds { get; set; } 
 }
