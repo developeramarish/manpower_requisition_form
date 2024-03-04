@@ -72,24 +72,23 @@ const InterviewSummary = ({
     var filterInterviewerResumtSumData = [];
     data.interviewDetails.map((res) => {
       if (res.candidateStatusId === 2) {
+        if(MRF_STATUS_FOR_DISABLE(roleId, res.mrfStatusId) ||
+          INTERVIEW_EVALUATION_FOR_DISABLE(
+            roleId,
+            res.evalutionStatusId
+          )){
+            res.disable = true;
+          }else{
+            res.disable = false;
+          }
+         
         filterInterviewerResumtSumData.push(res);
       }
     });
-    const aBoollean=data.interviewDetails.map((mapResponse)=>{
-      const bool= (MRF_STATUS_FOR_DISABLE(roleId, mapResponse.mrfStatusId) ||
-      INTERVIEW_EVALUATION_FOR_DISABLE(
-        roleId,
-        mapResponse.evalutionStatusId
-      ));
-      return bool;
-    }
-    );
-    setIsFlag(aBoollean);
     setInterviewData(filterInterviewerResumtSumData);
     setInterviewStatus(data.interviewstatus);
     setInterviewerData(data.interviewReviewer);
     setSaveBttn(arr);
-
    
   }
   useEffect(() => {
@@ -331,7 +330,8 @@ const InterviewSummary = ({
           //     interview.evalutionStatusId
           //   )
           // }
-          disable={isFlag[options.rowIndex]}
+          // disable={isFlag[options.rowIndex]}
+          disable={interview.disable}
         />
       );
     }
@@ -348,7 +348,8 @@ const InterviewSummary = ({
         //   MRF_STATUS_FOR_DISABLE(roleId, interview.mrfStatusId) ||
         //   INTERVIEW_EVALUATION_FOR_DISABLE(roleId, interview.evalutionStatusId)
         // }
-        disable={isFlag[options.rowIndex]}
+        // disable={isFlag[options.rowIndex]}
+        disable={interview.disable}
       />
     );
   };
@@ -396,9 +397,9 @@ const InterviewSummary = ({
         <div className="assignment_upload">
           <a
             // className="int-link-cell "
-            className={`int-link-cell ${isFlag[options.rowIndex] ? 'disabled' : ''}`}
+            className={`int-link-cell ${interview.disable ? 'disabled' : ''}`}
                           onClick={(e) => {
-                if (!isFlag[options.rowIndex]) {
+                if (interview.disable) {
                   onUploadAssginmentClick(interview);
                 }
              
@@ -450,7 +451,8 @@ const InterviewSummary = ({
           //     interview.evalutionStatusId
           //   )
           // }
-          disable={isFlag[options.rowIndex]}
+          // disable={isFlag[options.rowIndex]}
+          disable={interview.disable}
         />
       );
     }
@@ -475,7 +477,8 @@ const InterviewSummary = ({
         {showFeed && selectedId === interview.candidateId && (
           <InterviewFeedbackComponent
             visible={showFeed}
-            disable={isFlag[options.rowIndex]}
+            // disable={isFlag[options.rowIndex]}
+            disable={interview.disable}
             onHide={() => setShowFeed(false)}
             cId={selectedId}
             roleId={roleId}
