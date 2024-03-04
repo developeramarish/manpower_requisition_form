@@ -138,12 +138,17 @@ namespace MRF.DataAccess.Repository
 
             if (Role == "interviewer")
             {
+                //need to change these to only have active mrfids
+
+                //get mrfIds having user as an inter to one of the candidates
+                IQueryable<int> ids = from m in _db.Mrfdetails join mrfInter in _db.Mrfinterviewermap on m.Id equals mrfInter.MrfId where mrfInter.InterviewerEmployeeId == userId select m.Id;
+
                 mrfDetails = from mrfD in _db.Mrfdetails
                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                              join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
-
-                             where evaluation.InterviewerId == userId
+                             //where evaluation.InterviewerId == userId
+                             where ids.Contains(mrfD.Id)
                              orderby mrfD.UpdatedOnUtc descending
                              group new { mrfD, Candidate } by new
                              {
