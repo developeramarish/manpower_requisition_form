@@ -141,7 +141,8 @@ namespace MRF.DataAccess.Repository
                 //need to change these to only have active mrfids
 
                 //get mrfIds having user as an inter to one of the candidates
-                IQueryable<int> ids = from m in _db.Mrfdetails join mrfInter in _db.Mrfinterviewermap on m.Id equals mrfInter.MrfId where mrfInter.InterviewerEmployeeId == userId select m.Id;
+                IQueryable<int> ids = from cd in _db.Candidatedetails join ie in _db.Interviewevaluation on cd.Id equals ie.CandidateId where ie.InterviewerId == userId select cd.MrfId;
+                //from m in _db.Mrfdetails join mrfInter in _db.Mrfinterviewermap on m.Id equals mrfInter.MrfId where mrfInter.InterviewerEmployeeId == userId select m.Id;
 
                 mrfDetails = from mrfD in _db.Mrfdetails
                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
