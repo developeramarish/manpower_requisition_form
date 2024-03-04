@@ -51,6 +51,7 @@ namespace MRF.DataAccess.Repository
                 /* if resume reviewer assigned to mrfId will assign if reviewer assigned not with candidate  */
                 IQueryable<ResumeDetailsViewModel> ResumeDetails =
             (from mrfDetails in _db.Mrfdetails
+             join mrfstatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfstatus.Id
              join pos in _db.PositionTitlemaster on mrfDetails.PositionTitleId equals pos.Id
              join candidate in _db.Candidatedetails on mrfDetails.Id equals candidate.MrfId
              join emp in _db.Employeedetails on candidate.CreatedByEmployeeId equals emp.Id
@@ -79,7 +80,7 @@ namespace MRF.DataAccess.Repository
                  PositionTitle = pos.Name,
                  CandidateName = candidate.Name,
                  MrfStatus= mrfDetails.MrfStatusId,
-
+                 MrfStatusName = mrfstatus.Status,
              });
                 list = ResumeDetails.ToList();
             }
@@ -98,6 +99,7 @@ namespace MRF.DataAccess.Repository
 
                 IQueryable<ResumeDetailsViewModel> ReviewedByEmployee =
                        (from mrfDetails in _db.Mrfdetails
+                        join mrfstatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfstatus.Id
                         join pos in _db.PositionTitlemaster on mrfDetails.PositionTitleId equals pos.Id
                         join candidate in _db.Candidatedetails on mrfDetails.Id equals candidate.MrfId
                         join emp in _db.Employeedetails on candidate.CreatedByEmployeeId equals emp.Id
@@ -126,6 +128,7 @@ namespace MRF.DataAccess.Repository
                             PositionTitle = pos.Name,
                             CandidateName = candidate.Name,
                             MrfStatus = mrfDetails.MrfStatusId,
+                            MrfStatusName = mrfstatus.Status,
                         });
 
                 list = ReviewedByEmployee.ToList();
