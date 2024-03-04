@@ -573,7 +573,8 @@ namespace MRF.API.Controllers
                     }
                 }
 
-                existingStatus.HrId = request.SiteHRSPOCId;
+                if (request.SiteHRSPOCId > 0) existingStatus.HrId = request.SiteHRSPOCId;
+
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
 
