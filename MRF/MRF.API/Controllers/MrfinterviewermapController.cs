@@ -236,7 +236,7 @@ namespace MRF.API.Controllers
                     emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
 
                     Mrfdetails mrfdetails = GetMrfDetails(obj.MrfId);
-                    Employeedetails employeedetails = GetInterviewer(id);
+                    Employeedetails employeedetails = GetInterviewer(obj.InterviewerEmployeeId);
 
                     string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
                     string emailSubject = emailRequest.Subject.Replace("(Name)", employeedetails.Name);
