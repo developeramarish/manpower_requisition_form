@@ -41,6 +41,8 @@ namespace MRF.Models.ViewModels
 
         public int?  mrfStatusId { get; set; }
 
+        public string? mrfStatusName { get; set; }
+
     }
 
 

@@ -130,10 +130,11 @@ namespace MRF.DataAccess.Repository
 
 
             IQueryable<InterviewDetailsViewModel> firstlist = from mrfDetails in _db.Mrfdetails
+                                    
                                                               join Candidate in _db.Candidatedetails on mrfDetails.Id equals Candidate.MrfId
                                                               join Emp in _db.Employeedetails on Candidate.CreatedByEmployeeId equals Emp.Id
                                                               join pos in _db.PositionTitlemaster on mrfDetails.PositionTitleId equals pos.Id
-                                                        
+                                                              join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
                                                               where mrfDetails.Id == mrfId
                                                               select new InterviewDetailsViewModel
                                                               {
@@ -148,7 +149,7 @@ namespace MRF.DataAccess.Repository
                                                                   CandidateName = Candidate.Name,
                                                                   mrfStatusId = mrfDetails.MrfStatusId,
                                                                   CandidateStatusId = Candidate.CandidateStatusId,
-                                                                  
+                                                                  mrfStatusName = mrfStatus.Status
                                                               };
 
             if(Role == "interviewer")
@@ -174,6 +175,7 @@ namespace MRF.DataAccess.Repository
                                                                     mrfStatusId = q.mrfStatusId,
                                                                     CandidateStatusId = q.CandidateStatusId,
                                                                     Candidatestatus =  q.Candidatestatus,
+                                                                    mrfStatusName = q.mrfStatusName,
                                                                 };
 
 
@@ -195,6 +197,7 @@ namespace MRF.DataAccess.Repository
                                                                    mrfStatusId = q.mrfStatusId,
                                                                    CandidateStatusId = q.CandidateStatusId,
                                                                    Candidatestatus = q.Candidatestatus,
+                                                                   mrfStatusName = q.mrfStatusName,
                                                                };
 
 
@@ -217,6 +220,7 @@ namespace MRF.DataAccess.Repository
                                                                    mrfStatusId = q.mrfStatusId,
                                                                    CandidateStatusId = q.CandidateStatusId,
                                                                    Candidatestatus = q.Candidatestatus,
+                                                                   mrfStatusName = q.mrfStatusName,
                                                                };
 
 
@@ -245,6 +249,7 @@ namespace MRF.DataAccess.Repository
                                                                    mrfStatusId = q.mrfStatusId,
                                                                    CandidateStatusId = q.CandidateStatusId,
                                                                    Candidatestatus = q.Candidatestatus,
+                                                                   mrfStatusName = q.mrfStatusName,
                                                                };
 
             List<InterviewDetailsViewModel> queryResults = finalmerge.ToList();
