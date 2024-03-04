@@ -188,6 +188,7 @@ const ResumeSummary = ({
     const resumePath = data.resumePath;
     const createdByEmployeeId = data.createdByEmployeeId;
     const createdOnUtc = data.createdOnUtc;
+    const updatedOnUtc = new Date().toISOString();
     const candidateName = data.candidateName;
 
     const candidateDetailsData = {
@@ -203,6 +204,7 @@ const ResumeSummary = ({
       createdOnUtc,
       reason,
       candidateName,
+      updatedOnUtc
     };
 
     try {
@@ -319,26 +321,26 @@ const ResumeSummary = ({
       header: "Resume Reviewers",
       body: MultiSelectDrop,
       bodyClassName: "resume-col resume-ref-col ",
-      sortable: true,
+      // sortable: true,
     },
     {
       field: "candidatestatus",
       header: "Resume Status",
       bodyClassName: " resume-col",
-      sortable: true,
+      // sortable: true,
     },
     {
       field: "reason",
       header: "Reason",
       body: reasonTemplate,
       bodyClassName: "resume-reason-col resume-col",
-      sortable: true,
+      // sortable: true,
     },
     {
       header: "Action",
       bodyClassName: "mrfdraft-col ",
       body: actionBodyTemplate,
-      sortable: true,
+      // sortable: true,
     },
   ];
   if (

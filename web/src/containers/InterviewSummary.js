@@ -114,7 +114,7 @@ const InterviewSummary = ({
     const updatedByEmployeeId = storageService.getData("profile").employeeId;
     const createdByEmployeeId = storageService.getData("profile").employeeId;
     const updatedOnUtc = new Date().toISOString();
-    const createdOnUtc = new Date().toISOString();
+    const createdOnUtc = data.createdOnUtc;
     const fromTimeUtc = "15:00:00";
     const toTimeUtc = "15:00:00";
     const interviewDetailsData = {
@@ -399,7 +399,7 @@ const InterviewSummary = ({
             // className="int-link-cell "
             className={`int-link-cell ${interview.disable ? 'disabled' : ''}`}
                           onClick={(e) => {
-                if (interview.disable) {
+                if (!interview.disable) {
                   onUploadAssginmentClick(interview);
                 }
              
@@ -541,14 +541,14 @@ const InterviewSummary = ({
       header: "Interviewer/ Panel",
       body: interviewerBodyTemplate,
       bodyClassName: "drop-col",
-      sortable: true,
+      // sortable: true,
     },
     {
       field: "evalutionStatusId",
       header: "Interview Status",
       body: statusBodyTemplate,
       bodyClassName: "drop-col",
-      sortable: true,
+      // sortable: true,
     },
     {
       field: "evalutionStatus",

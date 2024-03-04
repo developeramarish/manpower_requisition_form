@@ -588,6 +588,7 @@ const CreateRequisitionBody = ({
                   options={dropdownData.reportingTo}
                   value={formData.reportsToEmployeeId}
                   disable={commonSettings.setReadOnly}
+                  filter={true}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -1105,6 +1106,7 @@ const CreateRequisitionBody = ({
                   options={dropdownData.siteHRSPOC}
                   value={formData.hrId ? formData.hrId :undefined }
                   disable={commonSettings.setReadOnly}
+                  filter={true}
                   clearIcon={true}
                   onChange={(e) => {
                     setFormData({ ...formData, hrId: e.target.value });

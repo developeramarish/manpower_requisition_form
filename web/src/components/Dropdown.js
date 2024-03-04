@@ -11,6 +11,7 @@ const DropdownComponent = ({
   value = null,
   disable,
   clearIcon=false,
+  filter
 }) => {
   const [filteredOptions, setFilteredOptions] = useState(options);
 
@@ -29,6 +30,7 @@ const DropdownComponent = ({
       className={className}
       disabled={disable}
       showClear={clearIcon}
+      filter ={filter}
     />
   );
 };
