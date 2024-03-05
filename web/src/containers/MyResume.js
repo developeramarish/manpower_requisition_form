@@ -313,6 +313,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
         >
           {columns.map((col, index) => (
             <Column
+            key={index}
               field={col.field}
               header={col.header}
               body={col.body}
