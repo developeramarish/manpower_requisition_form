@@ -27,6 +27,7 @@ export default function MultiSelectDropdown({
       className={className}
       disabled={disable}
       display={display} 
+      filterMatchMode={"startsWith"}
     />
 
   );

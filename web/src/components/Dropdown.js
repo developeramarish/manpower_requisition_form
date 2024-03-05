@@ -31,6 +31,7 @@ const DropdownComponent = ({
       disabled={disable}
       showClear={clearIcon}
       filter ={filter}
+      filterMatchMode={"startsWith"}
     />
   );
 };
