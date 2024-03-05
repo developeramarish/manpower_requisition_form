@@ -67,6 +67,7 @@ const DropdownAddNew = ({
       onMouseDown={filterData}
       onInput={handleInput} // Handle input for search
       filter
+      filterMatchMode={"startsWith"}
     />
   );
 };
