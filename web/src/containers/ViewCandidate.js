@@ -80,6 +80,7 @@ fetch();
         value={reqData}
         paginator={reqData.length > 10}
         removableSort
+		rowsPerPageOptions={[5, 10, 25, 50,100]} 
         rows={10}
 		showGridlines
         scrollable

@@ -21,7 +21,6 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
   const fileUploadRef = useRef(null);
   const handleFileChange = (event) => {
     setSelectedFile(event);
-    console.log(selectedFile);
     setDisableUrlTextBox(true);
     setSubmitBtnDisable(false);
   };

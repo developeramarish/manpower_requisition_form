@@ -159,8 +159,9 @@ const DashMrfStatus = ({
           rowsPerPageOptions={[5, 10, 25, 50]} 
           scrollHeight="400px"
         >
-          {columns.map((col) => (
+          {columns.map((col,index) => (
             <Column
+            key={index}
               field={col.field}
               header={col.header}
               body={col.body}

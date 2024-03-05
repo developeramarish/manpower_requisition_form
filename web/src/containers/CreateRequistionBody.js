@@ -263,7 +263,6 @@ const CreateRequisitionBody = ({
   };
 
   const handleMaxExpChange = (e) => {
-    console.log(e.target.value);
     const maxExp = e.target.value;
 
     if (maxExp < formData.minExperience) {

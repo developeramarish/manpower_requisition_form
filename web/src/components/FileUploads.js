@@ -49,7 +49,6 @@ const FileUploads = forwardRef((props, ref) => {
       toastRef.current.showWarrningMessage(`Please select a file.`);
     }
 
-    console.log(selectedFile);
   };
 
   return (

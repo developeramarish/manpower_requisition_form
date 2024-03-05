@@ -135,6 +135,7 @@ const MyRequisitions = ({ roleId, userId }) => {
           removableSort
           rows={10}
           scrollable
+          rowsPerPageOptions={[5, 10, 25, 50,100]} 
           showGridlines
           scrollHeight="flex"
         >

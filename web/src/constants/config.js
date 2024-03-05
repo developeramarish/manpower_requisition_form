@@ -113,7 +113,7 @@ export const REQUISITION_TYPE = [
 export const GENDER = [
   { label: "Male", id: 1 },
   { label: "Female", id: 2 },
-  { label: "Other", id: 3 },
+  { label: "Any", id: 3 },
 ];
  
 export const MIN_EXPERIENCE_OPTIONS = Array.from({ length: 31 }, (_, i) => ({
