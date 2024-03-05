@@ -145,30 +145,28 @@ namespace MRF.DataAccess.Repository
                 //from m in _db.Mrfdetails join mrfInter in _db.Mrfinterviewermap on m.Id equals mrfInter.MrfId where mrfInter.InterviewerEmployeeId == userId select m.Id;
 
                 mrfDetails = from mrfD in _db.Mrfdetails
-                             join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
-                             join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
-                             //join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
-                             //where evaluation.InterviewerId == userId
-                             where ids.Contains(mrfD.Id)
+                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
+                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
+                              //join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
+                              //where evaluation.InterviewerId == userId
+                              where ids.Contains(mrfD.Id)
                              orderby mrfD.UpdatedOnUtc descending
                              group new { mrfD, Candidate } by new
-                             {
-                                 mrfD.Id,
-                                 Candidate.CandidateStatusId,
-                                 mrfD.ReferenceNo,
-                                 position.Name,
-
+                              {
+                                  mrfD.Id,
+                                  Candidate.CandidateStatusId,
+                                  mrfD.ReferenceNo,
+                                  position.Name,
                              }
                          into grouped
-                             select new MrfResumeSummaryViewModel
-                             {
-                                 MrfId = grouped.Key.Id,
-                                 ReferenceNo = grouped.Key.ReferenceNo,
-                                 statusID = grouped.Key.CandidateStatusId,
-                                 TotalCount = grouped.Count(),
-                                 PositionTitle = grouped.Key.Name,
-                             };
-
+                              select new MrfResumeSummaryViewModel
+                              {
+                                  MrfId = grouped.Key.Id,
+                                  ReferenceNo = grouped.Key.ReferenceNo,
+                                  statusID = grouped.Key.CandidateStatusId,
+                                  TotalCount = grouped.Count(),
+                                  PositionTitle = grouped.Key.Name,
+                              };
             }
             else
             {
@@ -179,7 +177,7 @@ namespace MRF.DataAccess.Repository
                               || (mrfD.HrId == null || (Role == "hr" && mrfD.HrId == userId))
                               || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds != null
                               && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer" && Role != "hr"))
-                              // orderby mrfD.UpdatedOnUtc ascending
+                               orderby mrfD.UpdatedOnUtc descending
                               group new { mrfD, Candidate } by new
                               {
                                   mrfD.Id,
@@ -282,6 +280,7 @@ namespace MRF.DataAccess.Repository
                                        )
                                        || (Role != "mrfowner" && Role != "interviewer" && Role != "hr")))
                                        && Candidate.CandidateStatusId == 2
+                                        
                                        select new MrfInterviewSummaryViewModel
                                        {
                                            MrfId = mrfD.Id,
@@ -292,7 +291,7 @@ namespace MRF.DataAccess.Repository
                                            CandidateId = Candidate.Id,
                                        })
                         .Distinct()
-                       .OrderBy(result => result.UpdatedOnUtc)
+                       .OrderByDescending(u => u.UpdatedOnUtc) 
                        .ToList();
 
 
