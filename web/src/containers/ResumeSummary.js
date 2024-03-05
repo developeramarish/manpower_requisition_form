@@ -76,8 +76,8 @@ const ResumeSummary = ({
         setdata(response.result.resumeDetails);
       }
       setResumeReviewer(response.result.employeeRoleMap);
-      let array = new Array(response.result.resumeDetails.length).fill(false);
-      setSaveBttn(array);
+      // let array = new Array(response.result.resumeDetails.length).fill(false);
+      // setSaveBttn(array);
 
 if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.result.resumeDetails[0]?.mrfStatus)){
   setVisible(true);
@@ -129,13 +129,22 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
               strToArray(rowData.resumeReviewerEmployeeIds)
             )}
             onChange={(e) => {
-              let resumeReviewers = JSON.parse(JSON.stringify(data));
-              let sv = [...saveBttn];
-              sv[options.rowIndex] = e.value.length > 0 ? true : false;
-              resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
-                objToArray(e.value);
+              // let resumeReviewers = JSON.parse(JSON.stringify(data));
+              // let sv = [...saveBttn];
+              // sv[options.rowIndex] = e.value.length > 0 ? true : false;
+              // resumeReviewers[options.rowIndex].resumeReviewerEmployeeIds =
+              //   objToArray(e.value);
+              // setSaveBttn(sv);
+
+                let resumeReviewers = [...data],
+                index = resumeReviewers.indexOf(rowData),
+                oCurrentData = resumeReviewers[index];
+              
+                oCurrentData.resumeReviewerEmployeeIds =  objToArray(e.value).toString();
+                oCurrentData.actionBtnEnable = true;
+                resumeReviewers[index] = oCurrentData;
+
               setdata(resumeReviewers);
-              setSaveBttn(sv);
             }}
             options={resumeReviewer}
             optionLabel="name"
@@ -164,18 +173,20 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
   };
 
   const actionBodyTemplate = (rowData, options) => {
-    const onClickHandleSave = () => {
-      update(rowData);
-      let sv = [...saveBttn];
-      sv[options.rowIndex] = false;
-      setSaveBttn(sv);
-    };
-    if (saveBttn[options.rowIndex]) {
+    // const onClickHandleSave = () => {
+    //   update(rowData);
+    //   let sv = [...saveBttn];
+    //   sv[options.rowIndex] = false;
+    //   setSaveBttn(sv);
+    // };
+    if (rowData && rowData.actionBtnEnable) {
       return (
         <Button
           icon="pi pi-save "
           className="action_btn"
-          onClick={onClickHandleSave}
+          onClick={() => {
+            update(rowData);
+          }}
         />
       );
     }
@@ -228,6 +239,7 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
             "Resume Reviewers updated successfully!"
           );
         }
+        data.actionBtnEnable=false;
         setIsLoading(false);
       } else {
         console.error("Request failed with status:", response.status);
@@ -369,7 +381,7 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
           showGridlines
           draggable={false}
           rowsPerPageOptions={[5, 10, 25, 50]} 
-          scrollHeight="450px"
+          scrollHeight="flex"
         >
           {columns.map((col, index) => (
             <Column

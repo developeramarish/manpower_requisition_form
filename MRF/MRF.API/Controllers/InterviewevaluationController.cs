@@ -215,7 +215,7 @@ namespace MRF.API.Controllers
                         {
                             if (_responseModel.Id > 0)
                             {
-                                CandidatedetailController controller = new CandidatedetailController(_unitOfWork, _logger, null, null);
+                                CandidatedetailController controller = new CandidatedetailController(_unitOfWork, _logger, null, null,null);
                                 int MRFId = controller.GetStatusOfAllCandidateByMRF(existingRecord.CandidateId);
                                 if (MRFId>0)
                                 {

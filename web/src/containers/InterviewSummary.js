@@ -285,12 +285,20 @@ const [visible,setVisible]=useState(false);
   const statusBodyTemplate = (interview, options) => {
 
     const handleDropdownChange = (e) => {
-      let interviewDataCopy = [...interviewData];
-      let sv = [...saveBttn];
-      sv[options.rowIndex] = interview.interviewerEmployeeIds.length>0? true:false;
-      interviewDataCopy[options.rowIndex].evalutionStatusId = e.target.value;
+      let interviewDataCopy = [...interviewData],
+      index = interviewDataCopy.indexOf(interview),
+      oCurrentData = interviewDataCopy[index];
+    
+      oCurrentData.evalutionStatusId = e.target.value;
+      oCurrentData.actionBtnEnable = true;
+      interviewDataCopy[index] = oCurrentData;
+
+
+      // let sv = [...saveBttn];
+      // sv[options.rowIndex] = interview.interviewerEmployeeIds.length>0? true:false;
+      // interviewDataCopy[options.rowIndex].evalutionStatusId = e.target.value;
+      // setSaveBttn(sv);
       setInterviewData(interviewDataCopy);
-      setSaveBttn(sv);
       updateField[1]=true;
     };
 
@@ -426,14 +434,21 @@ const [visible,setVisible]=useState(false);
       return <div>{interview.interviewerName}</div>;
     } else {
       const handleMultiSelectChange = (e) => {
-        let interviewDataCopy = [...interviewData];
-        let sv = [...saveBttn];
-        sv[options.rowIndex] = e.value.length > 0 ? true : false;
-        interviewDataCopy[options.rowIndex].interviewerEmployeeIds =
-          objToIntArray(e.value, "employeeId").toString();
-        setInterviewData(interviewDataCopy);
-        setSaveBttn(sv);
-        // setupdateField(updateField[0]=true); //check if field is updated
+        let interviewDataCopy = [...interviewData],
+        index = interviewDataCopy.indexOf(interview),
+        oCurrentData = interviewDataCopy[index];
+    
+      oCurrentData.interviewerEmployeeIds = objToIntArray(e.value, "employeeId").toString();
+      oCurrentData.actionBtnEnable = true;
+      interviewDataCopy[index] = oCurrentData;
+
+        // let sv = [...saveBttn];
+        // sv[options.rowIndex] = e.value.length > 0 ? true : false;
+        // interviewDataCopy[options.rowIndex].interviewerEmployeeIds =
+        //   objToIntArray(e.value, "employeeId").toString();
+        //   setSaveBttn(sv);
+          // setupdateField(updateField[0]=true); //check if field is updated
+          setInterviewData(interviewDataCopy);
         updateField[0]=true;
       };
       return (
@@ -501,12 +516,16 @@ const [visible,setVisible]=useState(false);
       sv[options.rowIndex] = false;
       setSaveBttn(sv);
     };
-    if (saveBttn[options.rowIndex]) {
+
+    if (interview && interview.actionBtnEnable) {
       return (
         <Button
           icon="pi pi-save "
           className="action_btn"
-          onClick={onClickHandleSave}
+          onClick={() => {
+            update(interview);
+          }}
+          // onClick={onClickHandleSave}
         />
       );
     }
