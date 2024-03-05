@@ -285,7 +285,7 @@ export default function AllEmployees() {
     {
       header: "Role",
       body: roleBodyTemplate,
-      sortable: true,
+      // sortable: true,
     },
     {
       header: "Action",
@@ -306,6 +306,7 @@ export default function AllEmployees() {
             rows={10}
             filters={filters}
             scrollable
+            rowsPerPageOptions={[5, 10, 25, 50,100,500]} 
             scrollHeight="flex"
           >
             

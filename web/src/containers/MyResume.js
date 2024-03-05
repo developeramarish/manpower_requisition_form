@@ -308,6 +308,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
           removableSort
           rows={10}
           showGridlines
+          rowsPerPageOptions={[5, 10, 25, 50,100]} 
           scrollable
           scrollHeight="flex"
         >

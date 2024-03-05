@@ -189,6 +189,7 @@ export default function EmployeDetails() {
 					paginator={data.length > 10}
 					removableSort
 					rows={10}
+          rowsPerPageOptions={[5, 10, 25, 50,100]} 
 					scrollable
 					scrollHeight="flex"
 				>
