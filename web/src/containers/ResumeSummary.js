@@ -381,7 +381,7 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
           showGridlines
           draggable={false}
           rowsPerPageOptions={[5, 10, 25, 50]} 
-          scrollHeight="450px"
+          scrollHeight="flex"
         >
           {columns.map((col, index) => (
             <Column
