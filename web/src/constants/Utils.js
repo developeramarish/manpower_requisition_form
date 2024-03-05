@@ -418,7 +418,7 @@ export const INTERVIEW_EVALUATION_FOR_DISABLE =(roleId,evaluationID)=>{
 }
 
 
-if((roleId == ROLES.interviewer)&& [INTERVIEW_EVALUATION.CandidateSelected,INTERVIEW_EVALUATION.CandidateNotSelected,INTERVIEW_EVALUATION.FaceToFaceInterviewNotCleared,INTERVIEW_EVALUATION.AssignmentRejected,INTERVIEW_EVALUATION.CodingRoundNotCleared,INTERVIEW_EVALUATION.OfferRejected,INTERVIEW_EVALUATION.Onboarded,INTERVIEW_EVALUATION.OfferacceptedAndDidnotjoin,].includes(evaluationID))
+if((roleId == ROLES.interviewer)&& [INTERVIEW_EVALUATION.InterviewOnHold,INTERVIEW_EVALUATION.CandidateSelected,INTERVIEW_EVALUATION.CandidateNotSelected,INTERVIEW_EVALUATION.FaceToFaceInterviewNotCleared,INTERVIEW_EVALUATION.AssignmentRejected,INTERVIEW_EVALUATION.CodingRoundNotCleared,INTERVIEW_EVALUATION.OfferRejected,INTERVIEW_EVALUATION.Onboarded,INTERVIEW_EVALUATION.OfferacceptedAndDidnotjoin,].includes(evaluationID))
 {
   return  true;
 }
