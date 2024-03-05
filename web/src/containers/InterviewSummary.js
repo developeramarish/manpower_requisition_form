@@ -6,7 +6,7 @@ import { Column } from "primereact/column";
 import DropdownComponent from "../components/Dropdown";
 import MultiSelectDropdown from "../components/multiselectDropdown";
 import InterviewFeedbackComponent from "../containers/InterviewFeedbackComponent";
-import { API_URL, FILE_URL, ROLES } from "../constants/config";
+import { API_URL, FILE_URL, MRF_STATUS, ROLES } from "../constants/config";
 import { storageService } from "../constants/storage";
 import ToastMessages from "../components/ToastMessages";
 import {
@@ -27,6 +27,7 @@ import "../css/InterviewSummary.css";
 import AssignmentUpload from "../containers/AssignmentUpload";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useSelector } from "react-redux";
+import { Dialog } from "primereact/dialog";
 
 //const roleId = 3;
 
@@ -61,6 +62,7 @@ const InterviewSummary = ({
   const {locationParams} = useSelector((state)=> state.page);
   const [mrfId, setMrfId] = useState(0);
   const toastRef = useRef(null);
+const [visible,setVisible]=useState(false);
 
   async function getIntData() {
     const apiUrl =
@@ -90,6 +92,10 @@ const InterviewSummary = ({
     setInterviewerData(data.interviewReviewer);
     setSaveBttn(arr);
    
+    if(MRF_STATUS_FOR_DISABLE(roleId,filterInterviewerResumtSumData[0]?.mrfStatusId)){
+      setVisible(true);
+    }
+
   }
   useEffect(() => {
     if(locationParams && locationParams.length > 0){
@@ -140,7 +146,7 @@ const InterviewSummary = ({
     // updateInterviewer(interviewDetailsData);
     //updateInterviewStatus(id, updateStatus);
     //return;
-    
+   
     try {
 
       if(updateField[1]) {
@@ -588,6 +594,18 @@ const InterviewSummary = ({
       draggable={false}
       className="int-card"
     > */}
+
+     <Dialog
+      visible={visible}
+      onHide={() => setVisible(false)}
+      draggable={false}
+    >
+      <h3>This MRF ID  <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+            {interviewData[0]?.referenceNo} 
+          </span> is {interviewData[0]?.mrfStatusName} </h3>
+      
+      </Dialog>
+
      <div className="interview_summary_cont">
         <h3 className="dashboard_title"><a className="breadcrum_link" href="#/dashboard">My Dashboard</a> / Interview Summary- MRF ID:{"\u00A0\u00A0"}
           <span style={{ fontWeight: "bold", color: "#d9362b" }}>

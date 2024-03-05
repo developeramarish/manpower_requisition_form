@@ -21,6 +21,7 @@ import {
 import { InputTextarea } from "primereact/inputtextarea";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useSelector } from "react-redux";
+import { Dialog } from "primereact/dialog";
 
 const ResumeSummary = ({
   roleId = null,
@@ -36,6 +37,7 @@ const ResumeSummary = ({
   const toastRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [mrfId, setMrfId] = useState(0);
+  const [visible,setVisible]=useState(false);
 
   const {locationParams} = useSelector((state)=> state.page);
 
@@ -76,6 +78,11 @@ const ResumeSummary = ({
       setResumeReviewer(response.result.employeeRoleMap);
       let array = new Array(response.result.resumeDetails.length).fill(false);
       setSaveBttn(array);
+
+if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.result.resumeDetails[0]?.mrfStatus)){
+  setVisible(true);
+    }
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -382,6 +389,16 @@ const ResumeSummary = ({
 
   return (
     <>
+     <Dialog
+      visible={visible}
+      onHide={() => setVisible(false)}
+      draggable={false}
+    >
+      <h3>This MRF ID  <span style={{ fontWeight: "bold", color: "#d9362b" }}>
+            {data[0]?.referenceNo} 
+          </span> is {data[0]?.mrfStatusName} </h3>
+      </Dialog>
+
       {/* if roleId is equal to this then it will show dialog box otherwise show data table*/}
       {roleId != ROLES.resumeReviwer && (
         <div className="resume_summary_cont">
