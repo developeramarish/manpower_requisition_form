@@ -524,6 +524,7 @@ namespace MRF.API.Controllers
                 existingStatus.QualificationId = request.QualificationId == 0 ? null : request.QualificationId;
                 existingStatus.UpdatedByEmployeeId = request.UpdatedByEmployeeId;
                 existingStatus.UpdatedOnUtc = request.UpdatedOnUtc;
+                existingStatus.HrId = request.HrId > 0 ? request.HrId : null;
 
                 _unitOfWork.Mrfdetail.Update(existingStatus);
                 _unitOfWork.Save();
@@ -634,7 +635,7 @@ namespace MRF.API.Controllers
                             _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
                         }*/
                         //for now email only to the current hr
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)existingStatus.HrId), emailSubject, emailContent);
+                        if (existingStatus.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)existingStatus.HrId), emailSubject, emailContent);
 
                         //Send Email to MRF Owner
                         _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailSubject, emailContent);
