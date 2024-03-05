@@ -80,12 +80,19 @@ export default function AllEmployees() {
 
   const roleBodyTemplate = (rowData, options) => {
     const handleDropdownChange = (e) => {
-      let mergeedatacopy = [...mergeDataa];
-      let sv = [...saveBttn];
-      sv[options.rowIndex] = true;
-      setSaveBttn(sv);
+      let mergeedatacopy = [...mergeDataa],
+      index=mergeedatacopy.indexOf(rowData),
+      oCurrentData=mergeedatacopy[index];
 
-      mergeedatacopy[options.rowIndex].roleid = e.target.value;
+
+      oCurrentData.roleid= e.target.value;
+      oCurrentData.actionBtnEnable=true;
+      mergeedatacopy[index]=oCurrentData;
+    //   let sv = [...saveBttn];
+    //   sv[options.rowIndex] = true;
+    //   setSaveBttn(sv);
+
+    //   mergeedatacopy[options.rowIndex].roleid = e.target.value;
       setmergeData(mergeedatacopy);
     };
 
@@ -182,6 +189,7 @@ export default function AllEmployees() {
               "Role assigned/updated successfully!"
             );
             setIsLoading(false);
+            data.actionBtnEnable=false;
           }
         } else {
           console.error("Request failed with status:", upEmp.status);
@@ -203,7 +211,7 @@ export default function AllEmployees() {
               "Role assigned/updated successfully!"
             );
             setIsLoading(false);
-
+            data.actionBtnEnable=false;
           }
         } else {
           console.error("Request failed with status:", response.status);
@@ -224,24 +232,39 @@ export default function AllEmployees() {
 
     }
   };
-  const actionBodyTemplate = (rowData, options) => {
-    const onClickHandleSave = () => {
-      update(rowData, roleId[options.rowIndex]);
-      let sv = [...saveBttn];
-      sv[options.rowIndex] = false;
-      setSaveBttn(sv);
-    };
-    if (saveBttn[options.rowIndex]) {
+
+  const actionBodyTemplate=(rowData)=>{
+
+    if(rowData && rowData.actionBtnEnable){
       return (
-        <Button
-          icon="pi pi-save "
-          className="action_btn"
-          onClick={onClickHandleSave}
-        />
-      );
+              <Button
+                icon="pi pi-save "
+                className="action_btn"
+                onClick={()=>{update(rowData)}}
+              />
+            );
     }
     return <Button icon="pi pi-save" className="action_btn" disabled />;
-  };
+
+  }
+  // const actionBodyTemplate = (rowData, options) => {
+  //   const onClickHandleSave = () => {
+  //     update(rowData, roleId[options.rowIndex]);
+  //     let sv = [...saveBttn];
+  //     sv[options.rowIndex] = false;
+  //     setSaveBttn(sv);
+  //   };
+  //   if (saveBttn[options.rowIndex]) {
+  //     return (
+  //       <Button
+  //         icon="pi pi-save "
+  //         className="action_btn"
+  //         onClick={onClickHandleSave}
+  //       />
+  //     );
+  //   }
+  //   return <Button icon="pi pi-save" className="action_btn" disabled />;
+  // };
 
   const columns = [
     {
