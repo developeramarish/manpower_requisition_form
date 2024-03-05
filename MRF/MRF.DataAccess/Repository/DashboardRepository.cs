@@ -144,19 +144,20 @@ namespace MRF.DataAccess.Repository
                 IQueryable<int> ids = from cd in _db.Candidatedetails join ie in _db.Interviewevaluation on cd.Id equals ie.CandidateId where ie.InterviewerId == userId select cd.MrfId;
                 //from m in _db.Mrfdetails join mrfInter in _db.Mrfinterviewermap on m.Id equals mrfInter.MrfId where mrfInter.InterviewerEmployeeId == userId select m.Id;
 
-                mrfDetails = from mrfD in _db.Mrfdetails
+                mrfDetails = (from mrfD in _db.Mrfdetails
                              join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
                              join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                              //join evaluation in _db.Interviewevaluation on Candidate.Id equals evaluation.CandidateId
                              //where evaluation.InterviewerId == userId
                              where ids.Contains(mrfD.Id)
-                             orderby mrfD.UpdatedOnUtc descending
+                             //orderby mrfD.UpdatedOnUtc descending
                              group new { mrfD, Candidate } by new
                              {
                                  mrfD.Id,
                                  Candidate.CandidateStatusId,
                                  mrfD.ReferenceNo,
                                  position.Name,
+                                 mrfD.UpdatedOnUtc
 
                              }
                          into grouped
@@ -167,7 +168,8 @@ namespace MRF.DataAccess.Repository
                                  statusID = grouped.Key.CandidateStatusId,
                                  TotalCount = grouped.Count(),
                                  PositionTitle = grouped.Key.Name,
-                             };
+                                 UpdatedOnUtc = grouped.Key.UpdatedOnUtc,
+                             }).OrderByDescending(s => s.UpdatedOnUtc);
 
             }
             else
