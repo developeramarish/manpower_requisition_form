@@ -285,7 +285,7 @@ export default function AllEmployees() {
     {
       header: "Role",
       body: roleBodyTemplate,
-      sortable: true,
+      // sortable: true,
     },
     {
       header: "Action",
