@@ -408,3 +408,14 @@ text-align: center;
 .interviewer .dashBoard_table{
   margin-left: 0px;
 }
+
+
+.superadmin .dashboard_wrapper,
+.admin .dashboard_wrapper {
+ 
+  height: 95vh;
+  display: flex;
+  padding: 15px 20px;
+  flex-direction: column;
+  background-color: #f6f6f6;
+}
