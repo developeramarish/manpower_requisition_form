@@ -30,7 +30,7 @@ namespace MRF.API.Test.Controllers
             Mockconfiguration = new Mock<IConfiguration>();
           
 
-            Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object,MockHostEnvironment.Object);
+            Controller = new CandidatedetailController(MockUnitOfWork.Object, MockLogger.Object, MockEmailService.Object,MockHostEnvironment.Object, Mockconfiguration.Object);
         }
     }
 }
