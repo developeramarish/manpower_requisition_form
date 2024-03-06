@@ -53,5 +53,15 @@ namespace MRF.DataAccess.Repository
  
             return query.FirstOrDefault(); ;
         }
+
+        //to get mrfIds having a particular emp as a role
+        public List<int> GetListFromMrfIds(List<int> mrfIds, int empId, int roleId)
+        {
+            IQueryable<int> query = (from mrfDetails in _db.MrfEmailApproval
+                                    where mrfIds.Contains(mrfDetails.MrfId) && mrfDetails.RoleId == roleId && mrfDetails.EmployeeId == empId
+                                    select mrfDetails.MrfId).Distinct();
+
+            return query.ToList();
+        }
     }
 }

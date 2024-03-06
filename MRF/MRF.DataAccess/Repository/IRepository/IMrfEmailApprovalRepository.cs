@@ -11,7 +11,10 @@ namespace MRF.DataAccess.Repository.IRepository
     {
         public List<MrfEmailApproval> GetList(int mrfId);
 
-          MrfEmailApproval GetListBymrfIdandEmployeeId(int mrfId, int empId);
+        MrfEmailApproval GetListBymrfIdandEmployeeId(int mrfId, int empId);
+
         public void Update(MrfEmailApproval MrfEmailApproval);
+
+        public List<int> GetListFromMrfIds(List<int> mrfIds, int empId, int roleId);
     }
 }
