@@ -103,25 +103,6 @@ namespace MRF.API.Controllers
                 var employeeIdsInObj = obj.Select(item => item.InterviewerId.ToString()).ToList();
                 var employeeIdsToRemove = employeeIdsInObj.Except(employeeIds).Select(int.Parse).ToList();
                 Interviewevaluation obj1 = _unitOfWork.Interviewevaluation.Get(u => u.CandidateId == request.CandidateId);
-               
-
-                foreach (var employeeIdToRemove in employeeIdsToRemove)
-                {
-                    var itemToRemove = obj.FirstOrDefault(item => item.InterviewerId == employeeIdToRemove);
-                    if (itemToRemove != null)
-                    {
-                        try
-                        {
-
-                            _unitOfWork.Interviewevaluation.Remove(itemToRemove);
-                            _unitOfWork.Save();
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                    }
-                }
                 foreach (var employeeId in employeeIds)
                 {
                     bool employeeIdExists = obj.Any(item => item.InterviewerId == Convert.ToInt32(employeeId));
@@ -156,11 +137,30 @@ namespace MRF.API.Controllers
                             }
 
                         }
-                        
+
 
                     }
                 }
 
+
+                foreach (var employeeIdToRemove in employeeIdsToRemove)
+                {
+                    var itemToRemove = obj.FirstOrDefault(item => item.InterviewerId == employeeIdToRemove);
+                    if (itemToRemove != null)
+                    {
+                        try
+                        {
+
+                            _unitOfWork.Interviewevaluation.Remove(itemToRemove);
+                            _unitOfWork.Save();
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+               
             }
 
             else
