@@ -925,7 +925,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>MRF ## is re-opened and resubmission required.</p>
+        <p>MRF ## has been sent for Resubmission.</p>
         <p>Please <a href='#'>click here</a>.</p>
     </div>
 </body>
@@ -1001,7 +1001,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
     </div>
 </body>
 </html>",10,"4,8"),
-	   (15,"Resume Reviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Resume Reviewer (Name)  added successfully","<!DOCTYPE html>
+	   (15,"Resume Reviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Resume Reviewer added successfully","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
@@ -1010,7 +1010,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
     </div>
 </body>
 </html>",0,"5"),
-	   (16,"Interviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Interviewer (Name) added successfully","<!DOCTYPE html>
+	   (16,"Interviewer added","ashutosh.tiwari@kwglobal.com","Resume Reviewer","Interviewer added successfully","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
@@ -1019,7 +1019,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
     </div>
 </body>
 </html>",0,"5"),
-	   (17,"Resume Reviewer deleted","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer (Name) deleted successfully","<!DOCTYPE html>
+	   (17,"Resume Reviewer deleted","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer deleted successfully","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
@@ -1028,7 +1028,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
     </div>
 </body>
 </html>",0,"3"),
-	   (18,"Interviewer deleted","ashutosh.tiwari@kwglobal.com","HR","Interviewer (Name) deleted successfully","<!DOCTYPE html>
+	   (18,"Interviewer deleted","ashutosh.tiwari@kwglobal.com","HR","Interviewer deleted successfully","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
@@ -1046,7 +1046,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
     </div>
 </body>
 </html> ",0,"5"),
-	   (20,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(added as reviewer","Resume has been assigned","<!DOCTYPE html>
+	   (20,"Forward To(Resume)","ashutosh.tiwari@kwglobal.com","Resume Reviewer(added as reviewer)","Resume has been assigned","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
