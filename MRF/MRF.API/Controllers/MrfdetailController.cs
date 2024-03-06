@@ -597,7 +597,7 @@ namespace MRF.API.Controllers
 
                     if (emailRequest != null)
                     {
-                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {existingStatus.ReferenceNo}</span>")
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {existingStatus.ReferenceNo}</span>")
                                                  .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                         //Send Email to HR
                         /*List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR"); //gets for all the emps which have hr role currently
@@ -622,8 +622,8 @@ namespace MRF.API.Controllers
                         List<int> RoleIds = new List<int>();
                         RoleIds = emailRequest.roleId.Split(',').Select(int.Parse).ToList();
 
-                        string emailSubject = emailRequest.Subject.Replace("##", $" Id {existingStatus.ReferenceNo}");
-                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {existingStatus.ReferenceNo}</span>")
+                        string emailSubject = emailRequest.Subject.Replace("##", $"{existingStatus.ReferenceNo}");
+                        string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {existingStatus.ReferenceNo}</span>")
                                                           .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
                         //sends email to all emails having a particular role
@@ -739,11 +739,20 @@ namespace MRF.API.Controllers
         public ResponseDTO GetMrfDetails(int statusId, int roleId, int userId)
         {
             List<MrfDetailsViewModel> mrfdetail = _unitOfWork.MrfStatusDetail.GetMrfStatusDetails(statusId, roleId, userId);
-            if (mrfdetail == null)
+            var res = mrfdetail;
+            if (!res.Any())
             {
                 _logger.LogError($"No result found by this Id:");
             }
-            _response.Result = mrfdetail;
+            
+            if (res.Any() && roleId == 3) //only for mrf owner
+            {
+                var mrfIds = mrfdetail.Select(x => x.MrfId).ToList();
+                var mea = _unitOfWork.MrfEmailApproval.GetListFromMrfIds(mrfIds, userId, roleId); //gets list of mrfids where mrfowner is hiring manager
+                res = mrfdetail.Where(x => mea.Contains(x.MrfId)).ToList();
+            }
+
+            _response.Result = res;
             return _response;
         }
         // GET api/<MrfdetailController>/
