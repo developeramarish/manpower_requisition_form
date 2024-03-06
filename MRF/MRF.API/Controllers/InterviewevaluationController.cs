@@ -99,28 +99,10 @@ namespace MRF.API.Controllers
 
                 List<Interviewevaluation>? obj = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(request.CandidateId);
                 var employeeIds = request.interviewerEmployeeIds.Split(',');
-
                 // Remove employeeIds which exist in obj but not in request.interviewerEmployeeIds
                 var employeeIdsInObj = obj.Select(item => item.InterviewerId.ToString()).ToList();
                 var employeeIdsToRemove = employeeIdsInObj.Except(employeeIds).Select(int.Parse).ToList();
-
-                foreach (var employeeIdToRemove in employeeIdsToRemove)
-                {
-                    var itemToRemove = obj.FirstOrDefault(item => item.InterviewerId == employeeIdToRemove);
-                    if (itemToRemove != null)
-                    {
-                        try
-                        {
-                            _unitOfWork.Interviewevaluation.Remove(itemToRemove);
-                            _unitOfWork.Save();
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                    }
-                }
-
+                Interviewevaluation obj1 = _unitOfWork.Interviewevaluation.Get(u => u.CandidateId == request.CandidateId);
                 foreach (var employeeId in employeeIds)
                 {
                     bool employeeIdExists = obj.Any(item => item.InterviewerId == Convert.ToInt32(employeeId));
@@ -139,8 +121,46 @@ namespace MRF.API.Controllers
                         interviewevaluation1.UpdatedOnUtc = request.UpdatedOnUtc;
                         _unitOfWork.Interviewevaluation.Add(interviewevaluation1);
                         _unitOfWork.Save();
+                        if (obj1 != null)
+                        {
+                            AttachmentEvaluation attachment = _unitOfWork.AttachmentEvaluation.Get(u => u.InterviewEvaluationId == obj1.Id);
+                            if (attachment != null)
+                            {
+                                attachment.FilePath = attachment.FilePath;
+                                attachment.InterviewEvaluationId = interviewevaluation1.Id;
+
+                                attachment.UpdatedByEmployeeId = attachment.UpdatedByEmployeeId;
+                                attachment.UpdatedOnUtc = attachment.UpdatedOnUtc;
+
+                                _unitOfWork.AttachmentEvaluation.Update(attachment);
+                                _unitOfWork.Save();
+                            }
+
+                        }
+
+
                     }
                 }
+
+
+                foreach (var employeeIdToRemove in employeeIdsToRemove)
+                {
+                    var itemToRemove = obj.FirstOrDefault(item => item.InterviewerId == employeeIdToRemove);
+                    if (itemToRemove != null)
+                    {
+                        try
+                        {
+
+                            _unitOfWork.Interviewevaluation.Remove(itemToRemove);
+                            _unitOfWork.Save();
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+               
             }
 
             else
