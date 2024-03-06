@@ -393,7 +393,6 @@ const CreateRequisitionBody = ({
     setSubDepartments([]);
     window.history.back();
   };
-
   return (
     <>
       {formData && (
@@ -411,13 +410,14 @@ const CreateRequisitionBody = ({
           >
             {getReqId ? (
               <div className="flex justify-content-between gap-5">
-                <div className="flex flex-column w-19 gap-2">
-                  <h4 className="text-xl my-2">
+                <div className="flex flex-column w-19 gap-2 ">
+                  <h4 className="text-xl my-2 flex flex-row align-items-center gap-2  ">
                     Reference Number:{" "}
-                    <span className="text-red-600">
+                    <span className="text-red-600 flex flex-row align-items-center gap-2  ">
                       {formData.referenceNo}
-                      {" - "}
-                      {`(${formData.mrfStatus})`}
+                   
+                      <span className="status_message" >{`${formData.mrfStatus}`} </span>
+                      {/* {`(${formData.mrfStatus})`} */}
                     </span>
                   </h4>
                 </div>
@@ -425,20 +425,21 @@ const CreateRequisitionBody = ({
             ) : (
               ""
             )}
-            {formData.mrfStatusId == 3 && getReqRoleId == 4 ? (
+            {/* {formData.mrfStatusId == 3 && getReqRoleId == 4 ? (
               <span className="font-bold  ">
                 <Message text={`MRF is yet to be ReSubmit`} />{" "}
               </span>
             ) : (
               ""
-            )}
+            )} */}
             {formData.mrfStatusId == 3 ? (
               <label
                 htmlFor="RequisitionType"
                 className="font-semibold text-base"
               >
-                <span className="font-bold text-red-600 text-lg">Note: </span>
-                {formData.note}
+                <span className="font-bold text-red-600 text-lg flex flex-column ">Note:</span>
+                <p className="note_message"   >{formData.note}</p>
+                {/* {formData.note} */}
               </label>
             ) : (
               ""
@@ -2249,6 +2250,16 @@ const CreateRequisitionBody = ({
                   case MRF_STATUS.open:
                     return (
                       <>
+
+<MrfPartialStatus
+                          mrfId={getReqId}
+                          mrfStatusId={10}
+                          label={"Close"}
+                          refreshParent={refreshParentComponent}
+                          className={"w-20 px-7 bg-red-600 border-red-600"}
+                          formData={formData}
+                          message={"Do you want to Close this MRF?"}
+                        />
                         <ButtonC
                           label="Add Resume"
                           className="w-2 bg-red-600 border-red-600"

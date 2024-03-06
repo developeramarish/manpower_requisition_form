@@ -33,6 +33,12 @@
   color: #0b1016;
   min-width: 10%;
 }
+.sr_No_ViewCandidate{
+  font-size: 14px;
+  color: #0b1016;
+  font-weight: 500;
+  width: 3%
+}
 
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background-color: rgba(215, 107, 107, 0.249);
