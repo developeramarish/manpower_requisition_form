@@ -141,7 +141,7 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
                 oCurrentData = resumeReviewers[index];
               
                 oCurrentData.resumeReviewerEmployeeIds =  objToArray(e.value).toString();
-                oCurrentData.actionBtnEnable = true;
+                oCurrentData.actionBtnEnable =  e.value.length > 0 ? true : false;
                 resumeReviewers[index] = oCurrentData;
 
               setdata(resumeReviewers);

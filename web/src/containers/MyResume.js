@@ -224,7 +224,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
     );
   };
   const actionBodyTemplate = (rowData, options) => {
-    if (rowData && rowData.actionBtnEnable) {
+    if (rowData && (rowData.actionBtnEnable && rowData.resumeReviewerEmployeeIds )) {
       return (
         <React.Fragment>
           <ButtonC

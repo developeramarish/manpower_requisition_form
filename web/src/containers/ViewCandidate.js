@@ -31,7 +31,7 @@ fetch();
 		field: "referenceNo",
 		header: "Sr. No.",
 		body: (data, options) => options.rowIndex + 1,
-		bodyClassName: "sr_No ",
+		bodyClassName: "sr_No_ViewCandidate ",
 	  },
 		{
 			field: "referenceNo",

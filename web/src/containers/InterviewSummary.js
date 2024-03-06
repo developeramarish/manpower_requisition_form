@@ -439,7 +439,7 @@ const [visible,setVisible]=useState(false);
         oCurrentData = interviewDataCopy[index];
     
       oCurrentData.interviewerEmployeeIds = objToIntArray(e.value, "employeeId").toString();
-      oCurrentData.actionBtnEnable = true;
+      oCurrentData.actionBtnEnable =  e.value.length > 0 ? true : false;
       interviewDataCopy[index] = oCurrentData;
 
         // let sv = [...saveBttn];
