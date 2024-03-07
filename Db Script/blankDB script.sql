@@ -1060,7 +1060,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>Interview status for Resume.pdf has been changed from (Assignment sent) to (Assignment received).</p>
+        <p>Interview status of Resume #R is changed to #S.</p>
     </div>
 </body>
 </html>",0,"3,4,6"),
@@ -1069,7 +1069,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>Resume.pdf is now (shortlisted).</p>
+        <p>Status of Resume #R is changed to #S.</p>
     </div>
 </body>
 </html>",0,"3,4,5,6"),
