@@ -585,7 +585,7 @@ namespace MRF.API.Controllers
                 int employeeId = CallEmailApprovalController(request, id, false, out nextMrfStatusId); //saves approval history
                 CallMrfHistory(request, id, mrfstatus); //saves mrf update history
 
-                //MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id);
+                MrfdetailRequestModel mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(id); //gets all mrf details
 
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
 
@@ -607,10 +607,10 @@ namespace MRF.API.Controllers
                         }*/
 
                         //email only to the current hr which updates the status
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.UpdatedByEmployeeId), emailRequest.Subject, emailContent);
+                        if (existingStatus.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)existingStatus.HrId), emailRequest.Subject, emailContent);
 
-                        //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailRequest.Subject, emailContent);
+                        //Send Email to MRF Owner(hiring manager)
+                        if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), emailRequest.Subject, emailContent);
                     }
                 }
                 else
@@ -637,8 +637,12 @@ namespace MRF.API.Controllers
                         //for now email only to the current hr
                         if (existingStatus.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)existingStatus.HrId), emailSubject, emailContent);
 
-                        //Send Email to MRF Owner
-                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingStatus.CreatedByEmployeeId), emailSubject, emailContent);
+                        //Send Email to MRF Owner(hiring manager)
+                        if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), emailSubject, emailContent);
+
+                        //send email to hod on open/rejected/onhold
+                        bool sendHodEmail = new List<int> { 6, 8 }.Contains(request.MrfStatusId) && mrfdetails.FunctionHeadId > 0;
+                        if (sendHodEmail) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.FunctionHeadId), emailSubject, emailContent);
                     }
                 }
             }
