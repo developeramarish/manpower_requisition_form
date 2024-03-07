@@ -181,6 +181,8 @@ namespace MRF.API.Controllers
         {
 
             var existingDetails = _unitOfWork.Candidatedetail.Get(u => u.Id == id);
+            var interviewer = existingDetails.ReviewedByEmployeeIds;
+            var candidatestatus = existingDetails.CandidateStatusId;
             if (existingDetails != null)
             {
                 if (request.ReviewedByEmployeeIds != "")
@@ -213,7 +215,7 @@ namespace MRF.API.Controllers
                 CallResumeForwarddetailsController(request, _responseModel.Id);
                 List<int> empIDList = new List<int>();
                 emailmaster emailRequest=new emailmaster();
-                if (existingDetails.CandidateStatusId != request.CandidateStatusId)
+                if (candidatestatus != request.CandidateStatusId)
                 {
                      emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Status");
                 
@@ -229,7 +231,7 @@ namespace MRF.API.Controllers
                     }
                 }
                 }
-                else if(existingDetails.ReviewedByEmployeeIds != request.ReviewedByEmployeeIds)
+                if(interviewer != request.ReviewedByEmployeeIds)
                 {
                      emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Forward To(Resume)");
                 }
