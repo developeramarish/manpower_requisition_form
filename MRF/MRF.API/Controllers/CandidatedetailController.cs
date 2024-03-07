@@ -211,9 +211,15 @@ namespace MRF.API.Controllers
             if (_responseModel.Id != 0)
             {
                 CallResumeForwarddetailsController(request, _responseModel.Id);
-                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Status");
-                List<MrfEmailApproval> MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetList(existingDetails.MrfId);
                 List<int> empIDList = new List<int>();
+                emailmaster emailRequest=new emailmaster();
+                if (existingDetails.CandidateStatusId != request.CandidateStatusId)
+                {
+                     emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Status");
+                
+                
+                List<MrfEmailApproval> MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetList(existingDetails.MrfId);
+               
 
                 foreach (var emailReq in MrfEmailApproval)
                 {
@@ -221,6 +227,11 @@ namespace MRF.API.Controllers
                     {
                         empIDList.Add(emailReq.EmployeeId);
                     }
+                }
+                }
+                else if(existingDetails.ReviewedByEmployeeIds != request.ReviewedByEmployeeIds)
+                {
+                     emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Forward To(Resume)");
                 }
 
                 string[] employeeIdsArray = existingDetails.ReviewedByEmployeeIds.Split(',');
