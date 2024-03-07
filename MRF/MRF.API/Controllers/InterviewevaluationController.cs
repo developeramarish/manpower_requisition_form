@@ -93,7 +93,6 @@ namespace MRF.API.Controllers
         {
             var interviewevaluation = new Interviewevaluation();
 
-
             if (!string.IsNullOrEmpty(request.interviewerEmployeeIds))
             {
 
@@ -103,6 +102,14 @@ namespace MRF.API.Controllers
                 var employeeIdsInObj = obj.Select(item => item.InterviewerId.ToString()).ToList();
                 var employeeIdsToRemove = employeeIdsInObj.Except(employeeIds).Select(int.Parse).ToList();
                 Interviewevaluation obj1 = _unitOfWork.Interviewevaluation.Get(u => u.CandidateId == request.CandidateId);
+
+                var candidateDetails = _unitOfWork.Candidatedetail.Get(u => u.Id == request.CandidateId);
+                var mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(candidateDetails.MrfId); //gets all mrf details
+
+                //interviewer add email
+                emailmaster addEmail = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");
+                string addContent = addEmail.Content.Replace("MRF ##", $"Resume {candidateDetails.ResumePath.Split("//")[1]}");
+
                 foreach (var employeeId in employeeIds)
                 {
                     bool employeeIdExists = obj.Any(item => item.InterviewerId == Convert.ToInt32(employeeId));
@@ -121,6 +128,19 @@ namespace MRF.API.Controllers
                         interviewevaluation1.UpdatedOnUtc = request.UpdatedOnUtc;
                         _unitOfWork.Interviewevaluation.Add(interviewevaluation1);
                         _unitOfWork.Save();
+
+                        var emp = _unitOfWork.Employeedetails.Get(u => u.Id == Convert.ToInt32(employeeId));
+                        string content = addContent.Replace("You have", $"{emp.Name} has");
+
+                        //email to interviewer
+                        _emailService.SendEmailAsync(emp.Email, addEmail.Subject, addContent);
+
+                        //email only to the current hr which updates the status
+                        if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), addEmail.Subject, content);
+
+                        //email to MRF Owner(hiring manager)
+                        if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), addEmail.Subject, content);
+
                         if (obj1 != null)
                         {
                             AttachmentEvaluation attachment = _unitOfWork.AttachmentEvaluation.Get(u => u.InterviewEvaluationId == obj1.Id);
@@ -142,17 +162,32 @@ namespace MRF.API.Controllers
                     }
                 }
 
+                //interviewer remove email
+                emailmaster removeEmail = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer removed");
+                string removeContent = removeEmail.Content.Replace("#R", $"{candidateDetails.ResumePath.Split("//")[1]}");
 
                 foreach (var employeeIdToRemove in employeeIdsToRemove)
                 {
                     var itemToRemove = obj.FirstOrDefault(item => item.InterviewerId == employeeIdToRemove);
                     if (itemToRemove != null)
                     {
+                        var emp = _unitOfWork.Employeedetails.Get(u => u.Id == employeeIdToRemove);
+                        string content = removeContent.Replace("You have", $"{emp.Name} has");
+
                         try
                         {
 
                             _unitOfWork.Interviewevaluation.Remove(itemToRemove);
                             _unitOfWork.Save();
+
+                            //email to interviewer
+                            _emailService.SendEmailAsync(emp.Email, removeEmail.Subject, removeContent);
+
+                            //email only to the current hr which updates the status
+                            if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), removeEmail.Subject, content);
+
+                            //email to MRF Owner(hiring manager)
+                            if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), removeEmail.Subject, content);
                         }
                         catch (Exception ex)
                         {
@@ -209,6 +244,26 @@ namespace MRF.API.Controllers
             }catch(Exception ex) { _logger.LogError($"No result updated for interviewHistory by this Id: {id}"); }
             if (record.Count > 0)
             {
+                emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interview Status");
+                string emailContent = string.Empty;
+                if (emailRequest != null)
+                {
+                    var candidateDetails = _unitOfWork.Candidatedetail.Get(u => u.Id == request.CandidateId);
+                    var mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(candidateDetails.MrfId); //gets all mrf details
+                    
+                    var eStatus = _unitOfWork.Evaluationstatusmaster.Get(u => u.Id == request.EvalutionStatusId);
+                    emailContent = emailRequest.Content.Replace("#R", $"{candidateDetails.ResumePath.Split("//")[1]}")
+                                                              .Replace("#S", $"{eStatus.Status}");
+
+
+                    //email only to the current hr which updates the status
+                    if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), emailRequest.Subject, emailContent);
+
+                    //email to MRF Owner(hiring manager)
+                    if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), emailRequest.Subject, emailContent);
+
+                }
+
                 for (int i = 0; i < record.Count; i++)
                 {
 
@@ -217,8 +272,8 @@ namespace MRF.API.Controllers
 
                     if (existingRecord != null)
                     {
-                        existingRecord.CandidateId = request.CandidateId == 0 ? existingRecord.CandidateId : request.CandidateId;
-                        existingRecord.InterviewerId = request.InterviewerId == 0 ? existingRecord.InterviewerId : request.InterviewerId;
+                        //existingRecord.CandidateId = request.CandidateId == 0 ? existingRecord.CandidateId : request.CandidateId;
+                        //existingRecord.InterviewerId = request.InterviewerId == 0 ? existingRecord.InterviewerId : request.InterviewerId;
                         existingRecord.EvaluationDateUtc = request.EvaluationDateUtc == DateOnly.MinValue ? existingRecord.EvaluationDateUtc : request.EvaluationDateUtc;
                         existingRecord.FromTimeUtc = request.FromTimeUtc == TimeOnly.MinValue ? existingRecord.FromTimeUtc : request.FromTimeUtc;
                         existingRecord.ToTimeUtc = request.ToTimeUtc == TimeOnly.MinValue ? existingRecord.ToTimeUtc : request.ToTimeUtc;
@@ -230,13 +285,16 @@ namespace MRF.API.Controllers
                         _unitOfWork.Interviewevaluation.Update(existingRecord);
                         _unitOfWork.Save();
 
+                        //email to interviewer
+                        if (existingRecord.InterviewerId > 0 && !string.IsNullOrWhiteSpace(emailContent)) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(existingRecord.InterviewerId), emailRequest.Subject, emailContent);
+
                         _responseModel.Id = existingRecord.Id;
                         try
                         {
                             if (_responseModel.Id > 0)
                             {
                                 CandidatedetailController controller = new CandidatedetailController(_unitOfWork, _logger, null, null,null);
-                                int MRFId = controller.GetStatusOfAllCandidateByMRF(existingRecord.CandidateId);
+                                int MRFId = controller.GetStatusOfAllCandidateByMRF(existingRecord.CandidateId); //only get mrfid when evalId is offer accepted but not join/offer rejected/onboarded
                                 if (MRFId>0)
                                 {
                                     DateTime? updatedOnUtc = request.UpdatedOnUtc;
