@@ -1334,7 +1334,7 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>You have been added as a interviewer successfully against MRF ##.</p>
+        <p>You have been added as an Interviewer successfully against MRF ##.</p>
     </div>
 </body>
 </html>",0,"5"),
@@ -1347,12 +1347,12 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
     </div>
 </body>
 </html>",0,"3"),
-	   (18,"Interviewer deleted","ashutosh.tiwari@kwglobal.com","HR","Interviewer deleted successfully","<!DOCTYPE html>
+	   (18,"Interviewer removed","ashutosh.tiwari@kwglobal.com","HR","Interviewer removed successfully","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>(Name) is deleted against MRF ##.</p>
+        <p>You have been removed as an interviewer against Resume #R.</p>
     </div>
 </body>
 </html>",0,"4"),
