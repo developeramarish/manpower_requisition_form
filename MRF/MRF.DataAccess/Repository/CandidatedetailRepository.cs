@@ -90,18 +90,18 @@ namespace MRF.DataAccess.Repository
                                       where candidatedetails.Id == CandidateId
                                       select candidatedetails.MrfId).FirstOrDefault();
 
-
+            //total no of candidates in mrf
             int getCountCandidates = (from candidatedetails in _db.Candidatedetails
                                       where candidatedetails.MrfId == MrfId
                                       select candidatedetails).Distinct().Count();
 
+            //no of candidate in mrf having status 9,10,11 
             int getAllEvaluation = (from candidatedetails in _db.Candidatedetails
-                                                            join Interviewevaluation in _db.Interviewevaluation on
-                                                            candidatedetails.Id equals Interviewevaluation.Id
+                                                            join Interviewevaluation in _db.Interviewevaluation on candidatedetails.Id equals Interviewevaluation.CandidateId
                                                             where candidatedetails.MrfId == MrfId
-                                                           && (Interviewevaluation.EvalutionStatusId == 29 ||
-                                                               Interviewevaluation.EvalutionStatusId == 20 ||
-                                                               Interviewevaluation.EvalutionStatusId == 19)
+                                                           && (Interviewevaluation.EvalutionStatusId == 9 ||
+                                                               Interviewevaluation.EvalutionStatusId == 10 ||
+                                                               Interviewevaluation.EvalutionStatusId == 11)
                                                              select candidatedetails).Distinct().Count();
                                                     
 
