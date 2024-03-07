@@ -247,10 +247,12 @@ namespace MRF.API.Controllers
                 Candidatestatusmaster status = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == existingDetails.CandidateStatusId);
                 Mrfdetails mrfdetail = _unitOfWork.Mrfdetail.Get(u => u.Id == existingDetails.MrfId);
                 mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfdetail.Id.ToString());
-                string Content = emailRequest.Content.Replace("Resume.pdf", Convert.ToString(existingDetails.ResumePath.Split("//")[1]));
-                Content = Content.Replace("shortlisted", status.Status);
+                string Content = emailRequest.Content.Replace("#R", Convert.ToString(existingDetails.ResumePath.Split("//")[1]));
+                Content = Content.Replace("#S", status.Status);
                 Content = Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
+            
 
+                //Content = Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
                 foreach (var EmpID in empIDList)
                 {
                     Sendmail(emailRequest, EmpID,Content);
