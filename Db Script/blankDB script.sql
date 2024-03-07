@@ -1019,12 +1019,12 @@ VALUES (1,"Login","ashutosh.tiwari@kwglobal.com","For all user","You have succes
     </div>
 </body>
 </html>",0,"5"),
-	   (17,"Resume Reviewer deleted","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer deleted successfully","<!DOCTYPE html>
+	   (17,"Resume Reviewer removed","ashutosh.tiwari@kwglobal.com","MRF Owner","Resume Reviewer removed successfully","<!DOCTYPE html>
 <html lang='en'>
 <body>
     <div style='padding: 20px;'>
         <h4>Dear User,</h4>
-        <p>(Name) is deleted against MRF ##.</p>
+        <p>You have been removed as a Resume Reviewer against Resume #R.</p>
     </div>
 </body>
 </html>",0,"3"),
