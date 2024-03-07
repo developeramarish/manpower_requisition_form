@@ -183,6 +183,12 @@ namespace MRF.API.Controllers
             var existingDetails = _unitOfWork.Candidatedetail.Get(u => u.Id == id);
             var interviewer = existingDetails.ReviewedByEmployeeIds;
             var candidatestatus = existingDetails.CandidateStatusId;
+
+            List<int> temp1 = existingDetails.ReviewedByEmployeeIds.Split(",").Select(x => Convert.ToInt32(x)).ToList();
+            List<int> temp2 = request.ReviewedByEmployeeIds.Split(",").Select(x => Convert.ToInt32(x)).ToList();
+            var addEmail = temp2.Except(temp1);
+            var removeEmail = temp1.Except(temp2);
+
             if (existingDetails != null)
             {
                 if (request.ReviewedByEmployeeIds != "")
@@ -213,50 +219,70 @@ namespace MRF.API.Controllers
             if (_responseModel.Id != 0)
             {
                 CallResumeForwarddetailsController(request, _responseModel.Id);
-                List<int> empIDList = new List<int>();
-                emailmaster emailRequest=new emailmaster();
-                if (candidatestatus != request.CandidateStatusId)
-                {
-                     emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Status");
-                
-                
-                List<MrfEmailApproval> MrfEmailApproval = _unitOfWork.MrfEmailApproval.GetList(existingDetails.MrfId);
-               
+                var mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(existingDetails.MrfId); //gets all mrf details
 
-                foreach (var emailReq in MrfEmailApproval)
+                if (addEmail.Any())
                 {
-                    if (emailReq.RoleId == 3 || emailReq.RoleId == 4)
+                    emailmaster addEmailrequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
+                    string addContent = addEmailrequest.Content.Replace("MRF ##", $"Resume {existingDetails.ResumePath.Split("//")[1]}");
+
+                    foreach (int i in addEmail)
                     {
-                        empIDList.Add(emailReq.EmployeeId);
+                        var emp = _unitOfWork.Employeedetails.Get(u => u.Id == i);
+                        string content = addContent.Replace("You have", $"{emp.Name} has");
+
+                        //email to interviewer
+                        _emailService.SendEmailAsync(emp.Email, addEmailrequest.Subject, addContent);
+
+                        //email only to the current hr which updates the status
+                        if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), addEmailrequest.Subject, content);
+
+                        //email to MRF Owner(hiring manager)
+                        if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), addEmailrequest.Subject, content);
                     }
                 }
-                }
-                if(interviewer != request.ReviewedByEmployeeIds)
+
+                if (removeEmail.Any())
                 {
-                     emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Forward To(Resume)");
+                    emailmaster removeEmailrequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer removed");
+                    string removeContent = removeEmailrequest.Content.Replace("#R", $"{existingDetails.ResumePath.Split("//")[1]}");
+
+                    foreach (int i in removeEmail)
+                    {
+                        var emp = _unitOfWork.Employeedetails.Get(u => u.Id == i);
+                        string content = removeContent.Replace("You have", $"{emp.Name} has");
+
+                        //email to interviewer
+                        _emailService.SendEmailAsync(emp.Email, removeEmailrequest.Subject, removeContent);
+
+                        //email only to the current hr which updates the status
+                        if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), removeEmailrequest.Subject, content);
+
+                        //email to MRF Owner(hiring manager)
+                        if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), removeEmailrequest.Subject, content);
+                    }
                 }
 
-                string[] employeeIdsArray = existingDetails.ReviewedByEmployeeIds.Split(',');
-                foreach (string idString in employeeIdsArray)
-                { 
-                        empIDList.Add(Convert.ToInt32(idString));
-                    
+                if (candidatestatus != request.CandidateStatusId)
+                {
+                    Candidatestatusmaster cStatus = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == existingDetails.CandidateStatusId);
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Status");
+                    string emailContent = emailRequest.Content.Replace("#R", $"{existingDetails.ResumePath.Split("//")[1]}")
+                                                              .Replace("#S", $"{cStatus.Status}");
+
+                    //email only to the current hr which updates the status
+                    if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), emailRequest.Subject, emailContent);
+
+                    //email to MRF Owner(hiring manager)
+                    if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), emailRequest.Subject, emailContent);
+
+                    foreach (int i in temp2)
+                    {
+                        _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(i), emailRequest.Subject, emailContent);
+                    }
+
                 }
-                empIDList =(from s in empIDList  select s).Distinct().ToList();
                 
-                Candidatestatusmaster status = _unitOfWork.Candidatestatusmaster.Get(u => u.Id == existingDetails.CandidateStatusId);
-                Mrfdetails mrfdetail = _unitOfWork.Mrfdetail.Get(u => u.Id == existingDetails.MrfId);
-                mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfdetail.Id.ToString());
-                string Content = emailRequest.Content.Replace("#R", Convert.ToString(existingDetails.ResumePath.Split("//")[1]));
-                Content = Content.Replace("#S", status.Status);
-                Content = Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-            
-
-                //Content = Content.Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
-                foreach (var EmpID in empIDList)
-                {
-                    Sendmail(emailRequest, EmpID,Content);
-                }
 
             }
             else

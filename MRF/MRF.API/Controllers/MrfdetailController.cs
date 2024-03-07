@@ -93,11 +93,13 @@ namespace MRF.API.Controllers
             _logger.LogInfo($"Post All MRF Details");
             {
                 string ReferenceNo = string.Empty;
+                int rId = 0;
                 if (request.ReferenceNo != "")
                 {
                     var res = Put(request.mrfID ?? 0, request);
                     mrfUrl = _configuration["MRFUrl"].Replace("ID", res.Id.ToString());
                     ReferenceNo = request.ReferenceNo;
+                    rId = res.Id;
                 }
                 else
                 {
@@ -111,6 +113,7 @@ namespace MRF.API.Controllers
                     _unitOfWork.Save();
 
                     _responseModel.Id = mrfDetail.Id;
+                    rId = mrfDetail.Id;
                     mrfUrl = _configuration["MRFUrl"].Replace("ID", mrfDetail.Id.ToString());
                     if (mrfDetail.Id != 0)
                     {
@@ -128,29 +131,24 @@ namespace MRF.API.Controllers
 
                     }
                 }
+
                 emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.statusId == request.MrfStatusId);
-                
+                var mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(rId); //gets all mrf details
+
                 if (emailRequest != null)
                 {
-                    //Send Email to HR - Skipping if MRF Status is Drafted : MRF Status Id = 1 (Drafted)
-                    if(request.MrfStatusId != 1)
-                    {
-                        List<EmailRecipient> emailList = _unitOfWork.EmailRecipient.GetEmployeeEmail("HR"); //need to change this so the mail is not sent to every hr
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {existingStatus.ReferenceNo}</span>")
+                                                      .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
-                        foreach (var emailReq in emailList)
-                        {
-                            _emailService.SendEmailAsync(emailReq.Email,
-                                emailRequest.Subject,
-                                emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
-                                                     .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
-                        }
+                    //Send Email to HR - Skipping if MRF Status is Drafted : MRF Status Id = 1 (Drafted)
+                    if (request.MrfStatusId != 1)
+                    {
+                        //for now email only to the current hr
+                        if (request.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), emailRequest.Subject, emailContent);
                     }
 
-                    //Send Email to MRF Owner
-                    _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(request.CreatedByEmployeeId),
-                        emailRequest.Subject,
-                        emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {ReferenceNo}</span>")
-                                             .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>"));
+                    //Send Email to MRF Owner(hiring manager)
+                    if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), emailRequest.Subject, emailContent);
 
                 }
                 return _responseModel;
