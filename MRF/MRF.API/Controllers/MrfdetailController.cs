@@ -137,7 +137,7 @@ namespace MRF.API.Controllers
 
                 if (emailRequest != null)
                 {
-                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {existingStatus.ReferenceNo}</span>")
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {mrfdetails.ReferenceNo}</span>")
                                                       .Replace("click here", $"<span style='color:blue; font-weight:bold; text-decoration:underline;'><a href='{mrfUrl}'>click here</a></span>");
 
                     //Send Email to HR - Skipping if MRF Status is Drafted : MRF Status Id = 1 (Drafted)
