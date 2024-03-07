@@ -300,7 +300,7 @@ const AddCandidate = (reqId) => {
                             countrycode: e.target.value,
                           })
                         }
-                        className="w-full md:w-10rem"
+                        className="w-full md:w-13rem"
                       />
                     </div>
                     <div className="flex flex-column  gap-2 ">
@@ -315,7 +315,7 @@ const AddCandidate = (reqId) => {
                         }
                         onBlur={handleMinimumContact}
                         // autoClear={false}
-                        className="w-22rem "
+                        className="w-19rem "
                       />
                     </div>
                   </div>
