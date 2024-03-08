@@ -97,12 +97,9 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public CandidatedetailResponseModel Post([FromBody] CandidatedetailRequestModel request)
         {
-            var existingCandidate = _unitOfWork.Candidatedetail.Get(u => u.MrfId == request.MrfId && u.EmailId != null && u.EmailId.ToLower().Replace
-            (" ", "") == request.EmailId.ToLower().Replace(" ", ""));
-
+            var existingCandidate = _unitOfWork.Candidatedetail.Get(u => u.MrfId == request.MrfId && u.EmailId != null && u.EmailId.ToLower().Trim() == request.EmailId.ToLower().Trim());
 
             if (existingCandidate == null)
-
             {
                 List<Mrfresumereviewermap> mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == request.MrfId).ToList();
                 string reviewerEmpId="";
@@ -116,23 +113,42 @@ namespace MRF.API.Controllers
                     MrfId = request.MrfId,
                     EmailId = request.EmailId,
                     ContactNo = request.ContactNo,
-                 ResumePath = DateTime.Now.ToString("yyyy-MM-dd")+"//"+request.ResumePath,
-                 ReviewedByEmployeeIds = reviewerEmpId,
-                 CandidateStatusId = request.CandidateStatusId,
-                 CreatedByEmployeeId = request.CreatedByEmployeeId,
-                 Reason = request.Reason,
-                SourceId = request.SourceId,
-                 CreatedOnUtc = request.CreatedOnUtc,
-                 UpdatedByEmployeeId = request.UpdatedByEmployeeId,
-                 UpdatedOnUtc = request.UpdatedOnUtc,
-
-            };
+                    ResumePath = DateTime.Now.ToString("yyyy-MM-dd")+"//"+request.ResumePath,
+                    ReviewedByEmployeeIds = reviewerEmpId,
+                    CandidateStatusId = request.CandidateStatusId,
+                    CreatedByEmployeeId = request.CreatedByEmployeeId,
+                    Reason = request.Reason,
+                    SourceId = request.SourceId,
+                    CreatedOnUtc = request.CreatedOnUtc,
+                    UpdatedByEmployeeId = request.UpdatedByEmployeeId,
+                    UpdatedOnUtc = request.UpdatedOnUtc,
+                };
                
+                _unitOfWork.Candidatedetail.Add(Candidatedetail);
+                _unitOfWork.Save();
 
+                if (mrfresumereviewermap.Any())
+                {
+                    var mrfdetails = _unitOfWork.Mrfdetail.GetRequisition(request.MrfId); //gets all mrf details
+                    emailmaster addEmailrequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer added");
+                    string addContent = addEmailrequest.Content.Replace("MRF ##", $"Resume {request.ResumePath}");
 
+                    foreach (var e in mrfresumereviewermap)
+                    {
+                        var emp = _unitOfWork.Employeedetails.Get(u => u.Id == e.ResumeReviewerEmployeeId);
+                        string content = addContent.Replace("You have", $"{emp.Name} has");
 
-                    _unitOfWork.Candidatedetail.Add(Candidatedetail);
-                    _unitOfWork.Save();
+                        //email to interviewer
+                        _emailService.SendEmailAsync(emp.Email, addEmailrequest.Subject, addContent);
+
+                        //email only to the current hr which updates the status
+                        if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), addEmailrequest.Subject, content);
+
+                        //email to MRF Owner(hiring manager)
+                        if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), addEmailrequest.Subject, content);
+                    }
+                }
+
                 List<Mrfinterviewermap> mrfinterviewermap = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == Candidatedetail.MrfId).ToList();
                 if (mrfinterviewermap.Count > 0)
                 {

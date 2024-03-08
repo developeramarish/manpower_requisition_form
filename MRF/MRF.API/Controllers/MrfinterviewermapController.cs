@@ -225,11 +225,12 @@ namespace MRF.API.Controllers
 
         public void DeleteMRFInterview(int id)
         {
-            Mrfinterviewermap? obj = _unitOfWork.Mrfinterviewermap.Get(u => u.MrfId == id);
-
-            if (obj != null)
+            //Mrfinterviewermap? obj = _unitOfWork.Mrfinterviewermap.Get(u => u.MrfId == id);
+            List<Mrfinterviewermap> obj = _unitOfWork.Mrfinterviewermap.GetA(u => u.MrfId == id).ToList();
+            if (obj.Any()) //obj != null
             {
-                _unitOfWork.Mrfinterviewermap.Remove(obj);
+                //_unitOfWork.Mrfinterviewermap.Remove(obj);
+                _unitOfWork.Mrfinterviewermap.RemoveRange(obj);
                 _unitOfWork.Save();
                 /*if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {  

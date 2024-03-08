@@ -110,6 +110,8 @@ namespace MRF.API.Controllers
                 emailmaster addEmail = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer added");
                 string addContent = addEmail.Content.Replace("MRF ##", $"Resume {candidateDetails.ResumePath.Split("//")[1]}");
 
+                bool newCandidateAdded = !obj.Any();
+
                 foreach (var employeeId in employeeIds)
                 {
                     bool employeeIdExists = obj.Any(item => item.InterviewerId == Convert.ToInt32(employeeId));
@@ -132,15 +134,18 @@ namespace MRF.API.Controllers
                         var emp = _unitOfWork.Employeedetails.Get(u => u.Id == Convert.ToInt32(employeeId));
                         string content = addContent.Replace("You have", $"{emp.Name} has");
 
-                        //email to interviewer
-                        _emailService.SendEmailAsync(emp.Email, addEmail.Subject, addContent);
+                        if (!newCandidateAdded)
+                        {
+                            //email to interviewer
+                            _emailService.SendEmailAsync(emp.Email, addEmail.Subject, addContent);
 
-                        //email only to the current hr which updates the status
-                        if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), addEmail.Subject, content);
+                            //email only to the current hr which updates the status
+                            if (mrfdetails.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), addEmail.Subject, content);
 
-                        //email to MRF Owner(hiring manager)
-                        if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), addEmail.Subject, content);
-
+                            //email to MRF Owner(hiring manager)
+                            if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), addEmail.Subject, content);
+                        }
+                        
                         if (obj1 != null)
                         {
                             AttachmentEvaluation attachment = _unitOfWork.AttachmentEvaluation.Get(u => u.InterviewEvaluationId == obj1.Id);
