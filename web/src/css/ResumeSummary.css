@@ -15,6 +15,13 @@
 .resume_summary_cont .dashboard_title_res{
   font-size: 22px;
 } 
+.resume_summary_cont .resumeSummary_table{
+  border-radius: 0.5rem;
+	background-color: white;
+	padding: 0.5rem;
+	height: 77vh;
+
+}
 .resume-card {
   position: absolute;
   top: 10%;
@@ -47,7 +54,7 @@
 }
 
 .resume-ref-col {
-  width: 12%;
+  width: 11%;
   font-weight: 500;
   font-size: 14px;
 }
@@ -67,7 +74,7 @@
 }
 
 .resume-reason-col {
-  width: 90%;
+  width: 85%;
   font-size: 14px;
   /* background-color: aqua; */
   color: #0b1016;
