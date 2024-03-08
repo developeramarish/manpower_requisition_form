@@ -643,7 +643,8 @@ const [visible,setVisible]=useState(false);
           scrollable
           showGridlines
           rowsPerPageOptions={[5, 10, 25, 50]} 
-          scrollHeight="450px"
+          scrollHeight="flex"
+          className="interviewSummary_table"
         >
           {columns.map((col, index) => (
             <Column
