@@ -281,6 +281,17 @@ namespace MRF.API.Controllers
                         _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(i), emailRequest.Subject, emailContent);
                     }
 
+                    if (existingDetails.CandidateStatusId == 2) //when shortlisted
+                    {
+                        List<Interviewevaluation> obj = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(existingDetails.Id);
+                        var inters = obj.Select(x => x.InterviewerId).ToList();
+
+                        foreach (int i in inters) //send shortlist mail to interviewers
+                        {
+                            _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(i), emailRequest.Subject, emailContent);
+                        }
+                    }
+
                 }
                 
 
