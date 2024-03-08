@@ -22,7 +22,6 @@ namespace MRF.DataAccess.Repository
 
             List<int> mrfIdsHiringManager = (from mrfDetails in _db.Mrfdetails
                                                            join mail in _db.MrfEmailApproval on mrfDetails.Id equals mail.MrfId
-                                                           join employee in _db.Employeedetails on mail.EmployeeId equals employee.Id
                                                            where mail.EmployeeId == userId && mail.RoleId == 3 //for mrf owner
                                                            select mrfDetails.Id).ToList();
 
