@@ -41,10 +41,16 @@ namespace MRF.DataAccess.Repository
             //}
             //RoleId= _userService.GetRoleId();
             string Role = _Utility.GetRole(roleId);
+
+            List<int> mrfIdsHiringManager = (from mrfDetails in _db.Mrfdetails
+                                             join mail in _db.MrfEmailApproval on mrfDetails.Id equals mail.MrfId
+                                             where mail.EmployeeId == userId && mail.RoleId == 3 //for mrf owner
+                                             select mrfDetails.Id).ToList();
+
             var mrf = from Mrfdetails in _db.Mrfdetails
 
 
-                      where (Role != "mrfowner" || (Role == "mrfowner" && Mrfdetails.CreatedByEmployeeId == userId))
+                      where (Role != "mrfowner" || (Role == "mrfowner" && mrfIdsHiringManager.Contains(Mrfdetails.Id))) //Mrfdetails.CreatedByEmployeeId == userId
                       && (Mrfdetails.HrId == null || (Role != "hr" || (Role == "hr" && Mrfdetails.HrId == userId)))
 
                       select Mrfdetails;

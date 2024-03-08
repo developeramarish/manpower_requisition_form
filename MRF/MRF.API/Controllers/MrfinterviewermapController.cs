@@ -182,7 +182,7 @@ namespace MRF.API.Controllers
                     Mrfdetails mrfdetails = GetMrfDetails(obj.MrfId);
                     Employeedetails employeedetails = GetInterviewer(id);
 
-                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
                     string emailSubject = emailRequest.Subject.Replace("(Name)", employeedetails.Name);
 
                     if (emailRequest != null)
@@ -231,14 +231,14 @@ namespace MRF.API.Controllers
             {
                 _unitOfWork.Mrfinterviewermap.Remove(obj);
                 _unitOfWork.Save();
-                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+                /*if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {  
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer deleted");
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Interviewer removed");
 
                     Mrfdetails mrfdetails = GetMrfDetails(obj.MrfId);
                     Employeedetails employeedetails = GetInterviewer(obj.InterviewerEmployeeId);
 
-                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
                     string emailSubject = emailRequest.Subject.Replace("(Name)", employeedetails.Name);
 
                     if (emailRequest != null)
@@ -252,7 +252,7 @@ namespace MRF.API.Controllers
                     {
                         _emailService.SendEmailAsync(emailReq.Email, emailSubject, emailContent);
                     }
-                }
+                }*/
 
             }
             else

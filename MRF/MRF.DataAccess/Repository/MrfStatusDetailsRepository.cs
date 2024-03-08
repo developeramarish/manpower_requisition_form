@@ -2,7 +2,6 @@
 using MRF.DataAccess.Repository.IRepository;
 using MRF.Models.ViewModels;
 using System.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MRF.DataAccess.Repository
 {
@@ -20,6 +19,12 @@ namespace MRF.DataAccess.Repository
         public List<MrfDetailsViewModel> GetMrfStatusDetails(int statusId,int roleId,int userId)
         {
             string Role = _Utility.GetRole(roleId);
+
+            List<int> mrfIdsHiringManager = (from mrfDetails in _db.Mrfdetails
+                                                           join mail in _db.MrfEmailApproval on mrfDetails.Id equals mail.MrfId
+                                                           where mail.EmployeeId == userId && mail.RoleId == 3 //for mrf owner
+                                                           select mrfDetails.Id).ToList();
+
             IQueryable<MrfDetailsViewModel> query =
     from mrfDetails in _db.Mrfdetails
     join mrfStatus in _db.Mrfstatusmaster on mrfDetails.MrfStatusId equals mrfStatus.Id
@@ -33,7 +38,7 @@ namespace MRF.DataAccess.Repository
     from freshMrfDetail in freshMrfDetailsGroup.DefaultIfEmpty()
     where mrfRolemap.RoleId == roleId &&
           (statusId == 0 || (statusId != 0 && mrfStatus.Id == statusId)) &&
-          (Role != "mrfowner" || (Role == "mrfowner" && mrfDetails.CreatedByEmployeeId == userId)) &&
+          (Role != "mrfowner" || (Role == "mrfowner" && (mrfDetails.CreatedByEmployeeId == userId || mrfIdsHiringManager.Contains(mrfDetails.Id)))) &&
          (mrfDetails.HrId == null || (Role != "hr" || (Role == "hr" && mrfDetails.HrId == userId)))
     orderby mrfDetails.UpdatedOnUtc descending
     select new MrfDetailsViewModel
