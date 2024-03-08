@@ -213,15 +213,15 @@ namespace MRF.API.Controllers
             {
                 _unitOfWork.Mrfresumereviewermap.Remove(obj);
                 _unitOfWork.Save();
-                if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
+               /* if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
-                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer deleted");
+                    emailmaster emailRequest = _unitOfWork.emailmaster.Get(u => u.status == "Resume Reviewer removed");
                     if (emailRequest != null)
                     {
                         _logger.LogInfo("Sending Email from MrfresumereviewermapController DeletebyMRFId");
                         _emailService.SendEmailAsync(emailRequest.emailTo, emailRequest.Subject, emailRequest.Content);
                     }
-                }
+                }*/
             }
             else
             {
