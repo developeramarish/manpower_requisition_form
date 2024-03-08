@@ -382,6 +382,7 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
           draggable={false}
           rowsPerPageOptions={[5, 10, 25, 50]} 
           scrollHeight="flex"
+          className="resumeSummary_table"
         >
           {columns.map((col, index) => (
             <Column
@@ -452,7 +453,8 @@ if(roleId != ROLES.resumeReviwer && MRF_STATUS_FOR_DISABLE(roleId,response.resul
               draggable={false}
               showGridlines
               rowsPerPageOptions={[5, 10, 25, 50]} 
-          scrollHeight="450px"
+          scrollHeight="flex"
+          className="resumeSummary_table"
             >
               {columns.map((col, index) => (
                 <Column

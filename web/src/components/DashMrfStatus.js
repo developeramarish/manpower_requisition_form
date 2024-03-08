@@ -157,7 +157,8 @@ const DashMrfStatus = ({
           scrollable
           showGridlines
           rowsPerPageOptions={[5, 10, 25, 50]} 
-          scrollHeight="400px"
+          scrollHeight="flex"
+          className="dashmrf_status_table"
         >
           {columns.map((col,index) => (
             <Column

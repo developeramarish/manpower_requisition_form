@@ -12,6 +12,15 @@
   margin-bottom: 15px;
   color: #0b1016;
 }
+
+
+
+.mrf_summary_cont .dashmrf_status_table{
+  border-radius: 0.5rem;
+	background-color: white;
+	padding: 0.5rem;
+	height: 77vh;
+}
 .mrfdraft-card {
   position: absolute;
   top: 10%;

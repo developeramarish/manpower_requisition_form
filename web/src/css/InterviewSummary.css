@@ -59,6 +59,13 @@
 	cursor: pointer;
 }
 
+.interview_summary_cont .interviewSummary_table{
+	border-radius: 0.5rem;
+	background-color: white;
+	padding: 0.5rem;
+	height: 77vh;
+}
+
 .assignment_upload .disabled {
 	color: #aaaaaa;;
 	pointer-events: none; }
