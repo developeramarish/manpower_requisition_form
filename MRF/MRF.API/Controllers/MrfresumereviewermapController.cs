@@ -208,10 +208,12 @@ namespace MRF.API.Controllers
 
         public void DeletebyMRFId(int id)
         {
-            Mrfresumereviewermap? obj = _unitOfWork.Mrfresumereviewermap.Get(u => u.MrfId == id);
-            if (obj != null)
+            //Mrfresumereviewermap? obj = _unitOfWork.Mrfresumereviewermap.Get(u => u.MrfId == id);
+            List<Mrfresumereviewermap> mrfresumereviewermap = _unitOfWork.Mrfresumereviewermap.GetA(u => u.MrfId == id).ToList();
+            if (mrfresumereviewermap.Any()) //obj != null
             {
-                _unitOfWork.Mrfresumereviewermap.Remove(obj);
+                //_unitOfWork.Mrfresumereviewermap.Remove(obj);
+                _unitOfWork.Mrfresumereviewermap.RemoveRange(mrfresumereviewermap);
                 _unitOfWork.Save();
                /* if (_hostEnvironment.IsEnvironment("Development") || _hostEnvironment.IsEnvironment("Production"))
                 {
