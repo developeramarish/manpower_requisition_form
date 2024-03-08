@@ -182,7 +182,7 @@ namespace MRF.API.Controllers
                     Mrfdetails mrfdetails = GetMrfDetails(obj.MrfId);
                     Employeedetails employeedetails = GetInterviewer(id);
 
-                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
                     string emailSubject = emailRequest.Subject.Replace("(Name)", employeedetails.Name);
 
                     if (emailRequest != null)
@@ -238,7 +238,7 @@ namespace MRF.API.Controllers
                     Mrfdetails mrfdetails = GetMrfDetails(obj.MrfId);
                     Employeedetails employeedetails = GetInterviewer(obj.InterviewerEmployeeId);
 
-                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF Id {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
+                    string emailContent = emailRequest.Content.Replace("MRF ##", $"<span style='color:red; font-weight:bold;'>MRF {mrfdetails.ReferenceNo}</span>").Replace("(Name)", employeedetails.Name);
                     string emailSubject = emailRequest.Subject.Replace("(Name)", employeedetails.Name);
 
                     if (emailRequest != null)
