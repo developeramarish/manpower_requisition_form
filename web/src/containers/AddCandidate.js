@@ -287,7 +287,7 @@ const AddCandidate = (reqId) => {
                     <RedAsterisk />
                   </label>
 
-                  <div className="flex flex-row w-6 gap-2">
+                  <div className="flex flex-row  gap-2">
                     <div className="flex flex-column gap-2 ">
                       <DropdownComponent
                         options={COUNTRIES}
@@ -303,7 +303,7 @@ const AddCandidate = (reqId) => {
                         className="w-full md:w-13rem"
                       />
                     </div>
-                    <div className="flex flex-column  gap-2 ">
+                   
                       <InputMask
                         mask={mask}
                         value={formData.contactNo}
@@ -315,12 +315,12 @@ const AddCandidate = (reqId) => {
                         }
                         onBlur={handleMinimumContact}
                         // autoClear={false}
-                        className="w-19rem "
+                        className="w-full"
                       />
-                    </div>
+                   
                   </div>
                 </div>
-                {/**/}
+                
                 <div className="flex flex-column w-6 gap-2">
                   <label htmlFor="contact" className="font-bold text-sm">
                     Source Name
