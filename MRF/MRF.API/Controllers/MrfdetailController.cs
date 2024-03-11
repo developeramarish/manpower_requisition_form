@@ -206,15 +206,18 @@ namespace MRF.API.Controllers
 
             if (freshmrResponse.Id != 0)
             {
-                var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
+                /*var MrfdetailRequestModelRequest = new MrfEmailApprovalRequestModel
                 {
                     MrfId = mrfId,
                     RoleId = 3,
                     EmployeeId = request.CreatedByEmployeeId,
                     ApprovalDate = request.HMApprovalDate
-                };
+                };*/
 
-                postMrfEmail(MrfdetailRequestModelRequest);
+                //add mrf owner as a hiring manager
+                AddUpdateEmailApproval(mrfId, request.CreatedByEmployeeId, 3, request.HMApprovalDate);
+
+                //postMrfEmail(MrfdetailRequestModelRequest);
 
                 int nextMrfStatusId;
                 CallEmailApprovalController(request, mrfId, Update, out nextMrfStatusId);
