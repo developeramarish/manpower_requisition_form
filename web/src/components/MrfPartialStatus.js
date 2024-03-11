@@ -392,7 +392,7 @@ const MrfPartialStatus = ({
           ></ButtonC>
 
           <Dialog
-            className="w-4 "
+            className={textbox?"w-5":"w-4"}
             visible={visible}
             header={header}
             draggable={false}
@@ -414,7 +414,6 @@ const MrfPartialStatus = ({
                     onChange={handleChange}
                     rows={4}
                     cols={62}
-                    className="bg-gray-100"
                   />
                   <div
                     style={{
