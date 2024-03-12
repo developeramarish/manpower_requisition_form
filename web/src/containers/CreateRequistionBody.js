@@ -95,7 +95,7 @@ const CreateRequisitionBody = ({
       setSiteHrSpocValue(response.siteHRSPOCId);
       setHiringManagerValue(response.hiringManagerId);
       setFormData({ ...formData, ...response });
-      if(response && response.departmentId > 0){
+      if (response && response.departmentId > 0) {
         fetchSubDepartments(response.departmentId);
       }
 
@@ -225,8 +225,8 @@ const CreateRequisitionBody = ({
 
     if (value.length <= maxCharacterCountJustification) {
       setFormData({ ...formData, justification: value });
-    }else{
-      toastRef.current.showWarrningMessage("Character limit Exceed: "+   maxCharacterCountJustification)
+    } else {
+      toastRef.current.showWarrningMessage("Character limit Exceed: " + maxCharacterCountJustification)
     }
   };
 
@@ -326,8 +326,8 @@ const CreateRequisitionBody = ({
       return;
     }
   }, [formData]); */
-  
-  const setDepartment = (value)=>{
+
+  const setDepartment = (value) => {
     setFormData({ ...formData, departmentId: value });
     fetchSubDepartments(value);
   }
@@ -415,7 +415,7 @@ const CreateRequisitionBody = ({
                     Reference Number:{" "}
                     <span className="text-red-600 flex flex-row align-items-center gap-2  ">
                       {formData.referenceNo}
-                   
+
                       <span className="status_message" >{`${formData.mrfStatus}`} </span>
                       {/* {`(${formData.mrfStatus})`} */}
                     </span>
@@ -985,7 +985,7 @@ const CreateRequisitionBody = ({
                   rows={6}
                   cols={90}
                   readOnly={commonSettings.setReadOnly}
-                  className="w-100"
+                  className="justification_textbox"
                 />
                 <div
                   style={{
@@ -1090,7 +1090,7 @@ const CreateRequisitionBody = ({
                   display={"chip"}
                   disable={commonSettings.setReadOnly}
                   optionLabel="name"
-                  // optionValue="employeeId"
+                // optionValue="employeeId"
                 />
               </div>
             </div>
@@ -1104,9 +1104,10 @@ const CreateRequisitionBody = ({
                   optionValue="employeeId"
                   type="siteHRSPOCId"
                   options={dropdownData.siteHRSPOC}
-                  value={formData.hrId ? formData.hrId :undefined }
+                  value={formData.hrId ? formData.hrId : undefined}
                   disable={commonSettings.setReadOnly}
                   filter={true}
+                  className="Hr_dropdown"
                   clearIcon={true}
                   onChange={(e) => {
                     setFormData({ ...formData, hrId: e.target.value });
@@ -1119,520 +1120,341 @@ const CreateRequisitionBody = ({
               (getReqRoleId === 3 &&
                 formData.mrfStatusId !== MRF_STATUS.draft &&
                 formData.mrfStatusId !== MRF_STATUS.resubReq)) && (
-              <>
-                <div className="flex justify-content-between">
-                  <h1 className="my-2 ">
-                    EMAIL APPROVAL/SIGNATURE DATES
-                    <RedAsterisk />:
-                  </h1>
-                </div>
-                <div id="first" className="flex justify-content-evenly gap-4">
-                  <div className="flex flex-column gap-2">
-                    <label htmlFor="Position" className="font-bold text-sm">
-                      Position
-                    </label>
-                    <InputTextCp
-                      type="text"
-                      id="Position"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({ ...formData, Position: 7 })
-                      }
-                      //
-                      value="Hiring Manager"
-                    />
+                <>
+                  <div className="flex justify-content-between">
+                    <h1 className="my-2 ">
+                      EMAIL APPROVAL/SIGNATURE DATES
+                      <RedAsterisk />:
+                    </h1>
                   </div>
+                  <div id="first" className="flex justify-content-evenly gap-4">
+                    <div className="flex flex-column gap-2 ">
+                      <label htmlFor="Position" className="font-bold text-sm">
+                        Position
+                      </label>
+                      <InputTextCp
+                        type="text"
+                        id="Position"
+                        className="p-disabled email_textbox"
+                        onChange={(e) =>
+                          setFormData({ ...formData, Position: 7 })
+                        }
+                        //
+                        value="Hiring Manager"
+                      />
+                    </div>
 
-                  <div className="flex flex-column gap-2 w-3">
-                    <label htmlFor="Name" className="font-bold text-sm">
-                      Name
-                    </label>
-                    {/* Assuming DropdownComponent renders an input */}
-                    <DropdownComponent
-                      optionLabel="name"
-                      optionValue="employeeId"
-                      type="hiringManager"
-                      options={dropdownData.hiringManager}
-                      value={formData.hiringManagerId}
-                      disable={commonSettings.setHiringManager}
-                      placeholder={"Select Hiring Manager"}
-                      className={"email_dropdown"}
-                      onChange={(e) => {
-                        const selectedHiringManagerId = e.target.value;
-                        const selectedHiringManager =
-                          dropdownData.hiringManager.find(
-                            (manager) =>
-                              manager.employeeId === selectedHiringManagerId
-                          );
-                        setHiringManagerBtnDisable(false);
-                        if (selectedHiringManager) {
+                    <div className="flex flex-column gap-2 ">
+                      <label htmlFor="Name" className="font-bold text-sm">
+                        Name
+                      </label>
+                      {/* Assuming DropdownComponent renders an input */}
+                      <DropdownComponent
+                        optionLabel="name"
+                        optionValue="employeeId"
+                        type="hiringManager"
+                        options={dropdownData.hiringManager}
+                        value={formData.hiringManagerId}
+                        disable={commonSettings.setHiringManager}
+                        placeholder={"Select Hiring Manager"}
+                        className="email_dropdown"
+                        onChange={(e) => {
+                          const selectedHiringManagerId = e.target.value;
+                          const selectedHiringManager =
+                            dropdownData.hiringManager.find(
+                              (manager) =>
+                                manager.employeeId === selectedHiringManagerId
+                            );
+                          setHiringManagerBtnDisable(false);
+                          if (selectedHiringManager) {
+                            setFormData({
+                              ...formData,
+                              hiringManagerId: selectedHiringManagerId,
+                              hiringManagerEmpId:
+                                selectedHiringManager.employeeCode,
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex flex-column gap-2 ">
+                      <label htmlFor="EmployeeCode" className="font-bold text-sm">
+                        Employee ID
+                      </label>
+                      <InputTextCp
+                        id="hiringManagerEmpId"
+                        className="p-disabled email_empId_textbox"
+                        onChange={(e) =>
                           setFormData({
                             ...formData,
-                            hiringManagerId: selectedHiringManagerId,
-                            hiringManagerEmpId:
-                              selectedHiringManager.employeeCode,
-                          });
+                            hiringManagerEmpId: e.target.value,
+                          })
                         }
-                      }}
-                    />
-                  </div>
+                        value={formData.hiringManagerEmpId}
+                        disable={commonSettings.setHiringManager}
+                      />
+                    </div>
 
-                  <div className="flex flex-column gap-2 ">
-                    <label htmlFor="EmployeeCode" className="font-bold text-sm">
-                      Employee ID
-                    </label>
-                    <InputTextCp
-                      id="hiringManagerEmpId"
-                      className="p-disabled "
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          hiringManagerEmpId: e.target.value,
-                        })
-                      }
-                      value={formData.hiringManagerEmpId}
-                      disable={commonSettings.setHiringManager}
-                    />
-                  </div>
-
-                  <div className="flex flex-column gap-2">
-                    <label htmlFor="ApprovalDate" className="font-bold text-sm">
-                      Approval Date
-                    </label>
-                    {/* Assuming CalendarComponent renders an input */}
-                    <CalendarComponent
-                      id="ApprovalDate"
-                      inputClassName="bg-gray-100"
-                      value={new Date(formData.hmApprovalDate)}
-                      minDate={new Date(formData.createdOnUtc)}
-                      maxDate={new Date()}
-                      className={"email_dropdown"}
-                      disable={hiringManagerBtnDisable}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          hmApprovalDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  {/* {(() => {
-                    if (getReqRoleId == 4) {
-                      switch (formData.mrfStatusId) {
-                        case MRF_STATUS.new:
-                        // case MRF_STATUS.resubReq:
-                        case MRF_STATUS.hodapproval:
-                        case MRF_STATUS.awaitHodApproval:
-                        case MRF_STATUS.cooapproval:
-                        case MRF_STATUS.awaitCooApproval:
-                        case MRF_STATUS.recivedfinanceHeadApproval:
-                        case MRF_STATUS.awaitfinanceHeadApproval:
-                        case MRF_STATUS.bypassFinanceHeadApproval:
-                        case MRF_STATUS.mrfTransferToNew:
-                        case MRF_STATUS.open:
-                        case MRF_STATUS.onHold:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <label
-                                  htmlFor="ApprovalDate"
-                                  className="font-bold text-sm"
-                                >
-                                  Action
-                                </label>
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={formData.mrfStatusId}
-                                  label={"Update"}
-                                  formData={formData}
-                                  className={"update_btn"}
-                                  refreshParent={refreshParentComponent}
-                                  hiringManagerUpdateClick={true}
-                                  disabled={hiringManagerBtnDisable}
-                                  message={"Are you sure you want to update?"}
-                                />
-                              </div>
-                              <div className="flex flex-column gap-2  w-3 ">
-                                <label
-                                  htmlFor="ApprovalDate"
-                                  className="font-bold text-sm"
-                                >
-                                  Status
-                                </label>
-                              <div className=" w-3">{"ss"}</div>
-                               
-                              </div>
-                            </>
-                          );
-                        default:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <label
-                                  htmlFor="ApprovalDate"
-                                  className="font-bold text-sm"
-                                >
-                                  Action
-                                </label>
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={formData.mrfStatusId}
-                                  label={"Update"}
-                                  refreshParent={refreshParentComponent}
-                                  formData={formData}
-                                  className={"update_btn"}
-                                  disabled={true}
-                                />
-                              </div>
-                              <div className=" w-3 ">
-                                <label
-                                  htmlFor="ApprovalDate"
-                                  className="font-bold text-sm"
-                                >
-                                  Status
-                                </label>
-                               
-                              </div>
-                            </>
-                          );
-                      }
-                    }
-                  })()} */}
-                  {(() => {
-                    if (getReqRoleId == 4) {
-                      return (
-                        <>
-                          <div className="flex flex-column gap-2 w-2">
-                            <label
-                              htmlFor="ApprovalDate"
-                              className="font-bold text-sm"
-                            >
-                              Action
-                            </label>
-                            <MrfPartialStatus
-                              mrfId={getReqId}
-                              mrfStatusId={formData.mrfStatusId}
-                              label={"Update"}
-                              formData={formData}
-                              className={"update_btn"}
-                              refreshParent={refreshParentComponent}
-                              hiringManagerUpdateClick={true}
-                              disabled={hiringManagerBtnDisable}
-                              message={"Are you sure you want to update?"}
-                            />
-                          </div>
-
-                          <div className=" gap-4  w-3 ">
-                            <label
-                              htmlFor="ApprovalDate"
-                              className="font-bold text-sm gap-3 "
-                            >
-                              Status
-                            </label>
-
-                            <div className=" gap-3 w-6">
-                              {hiringManagerValue > 0 ? (
-                                <h4 className="show_status">Updated</h4>
-                              ) : (
-                                <h4 className="show_status">Yet to be Updated</h4>
-                              )}
+                    <div className="flex flex-column gap-2">
+                      <label htmlFor="ApprovalDate" className="font-bold text-sm">
+                        Approval Date
+                      </label>
+                      {/* Assuming CalendarComponent renders an input */}
+                      <CalendarComponent
+                        id="ApprovalDate"
+                        inputClassName="bg-gray-100"
+                        value={new Date(formData.hmApprovalDate)}
+                        minDate={new Date(formData.createdOnUtc)}
+                        maxDate={new Date()}
+                        className={"email_calendar"}
+                        disable={hiringManagerBtnDisable}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            hmApprovalDate: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    
+                    {(() => {
+                      if (getReqRoleId == 4) {
+                        return (
+                          <>
+                            <div className="flex flex-column gap-2 	">
+                              <label
+                                htmlFor="ApprovalDate"
+                                className="font-bold text-sm"
+                              >
+                                Action
+                              </label>
+                              <MrfPartialStatus
+                                mrfId={getReqId}
+                                mrfStatusId={formData.mrfStatusId}
+                                label={"Update"}
+                                formData={formData}
+                                className={"update_btn"}
+                                refreshParent={refreshParentComponent}
+                                hiringManagerUpdateClick={true}
+                                disabled={hiringManagerBtnDisable}
+                                message={"Are you sure you want to update?"}
+                              />
                             </div>
-                          </div>
-                        </>
-                      );
-                    }
 
+                            <div className=" gap-4  w-6  ">
+                              <label
+                                htmlFor="ApprovalDate"
+                                className="font-bold text-sm gap-3 "
+                              >
+                                Status
+                              </label>
 
-                  })()}
-                </div>
-                <div id="third" className="flex justify-content-evenly gap-4">
-                  <div className="flex flex-column gap-2">
-                    <InputTextCp
-                      type="text"
-                      id="Position"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({ ...formData, Position: 9 })
+                              <div className=" gap-3 w-6">
+                                {hiringManagerValue > 0 ? (
+                                  <h4 className="show_status">Updated</h4>
+                                ) : (
+                                  <h4 className="show_status">Yet to be Updated</h4>
+                                )}
+                              </div>
+                            </div>
+                          </>
+                        );
                       }
-                      value="Site HR SPOC"
-                    />
+
+
+                    })()}
                   </div>
-                  <div className="flex flex-column gap-2 w-3">
-                    <DropdownComponent
-                      optionLabel="name"
-                      optionValue="employeeId"
-                      type="siteHRSPOCId"
-                      options={dropdownData.siteHRSPOC}
-                      value={formData.siteHRSPOCId}
-                      placeholder={"Select Site HR SPOC"}
-                      className={"email_dropdown"}
-                      disable={commonSettings.setSiteHRSPOCApproval}
-                      onChange={(e) => {
-                        const selectedsiteHRSPOCId = e.target.value;
-                        const selectedsiteHRSPOCEmpId =
-                          dropdownData.siteHRSPOC.find(
-                            (manager) =>
-                              manager.employeeId === selectedsiteHRSPOCId
-                          );
-                        setSiteHrSpocBtnDisable(false);
-                        if (selectedsiteHRSPOCEmpId) {
+                  <div id="third" className="flex justify-content-evenly gap-4">
+                    <div className="flex flex-column gap-2">
+                      <InputTextCp
+                        type="text"
+                        id="Position"
+                        className="p-disabled email_textbox"
+                        onChange={(e) =>
+                          setFormData({ ...formData, Position: 9 })
+                        }
+                        value="Site HR SPOC"
+                      />
+                    </div>
+                    <div className="flex flex-column gap-2 ">
+                      <DropdownComponent
+                        optionLabel="name"
+                        optionValue="employeeId"
+                        type="siteHRSPOCId"
+                        options={dropdownData.siteHRSPOC}
+                        value={formData.siteHRSPOCId}
+                        placeholder={"Select Site HR SPOC"}
+                        className="email_dropdown"
+                        disable={commonSettings.setSiteHRSPOCApproval}
+                        onChange={(e) => {
+                          const selectedsiteHRSPOCId = e.target.value;
+                          const selectedsiteHRSPOCEmpId =
+                            dropdownData.siteHRSPOC.find(
+                              (manager) =>
+                                manager.employeeId === selectedsiteHRSPOCId
+                            );
+                          setSiteHrSpocBtnDisable(false);
+                          if (selectedsiteHRSPOCEmpId) {
+                            setFormData({
+                              ...formData,
+                              siteHRSPOCId: selectedsiteHRSPOCId,
+                              siteHRSPOCEmpId:
+                                selectedsiteHRSPOCEmpId.employeeCode,
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="flex flex-column gap-2  ">
+                      <InputTextCp
+                        id="siteHRSPOCEmpId"
+                        className="p-disabled email_empId_textbox"
+                        onChange={(e) =>
                           setFormData({
                             ...formData,
-                            siteHRSPOCId: selectedsiteHRSPOCId,
-                            siteHRSPOCEmpId:
-                              selectedsiteHRSPOCEmpId.employeeCode,
-                          });
+                            siteHRSPOCEmpId: e.target.value,
+                          })
                         }
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-column gap-2 ">
-                    <InputTextCp
-                      id="siteHRSPOCEmpId"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          siteHRSPOCEmpId: e.target.value,
-                        })
-                      }
-                      value={formData.siteHRSPOCEmpId}
-                    />
-                  </div>
-                  <div className="flex flex-column gap-2">
-                    <CalendarComponent
-                      id="ApprovalDate"
-                      inputClassName="bg-gray-100"
-                      value={new Date(formData.spApprovalDate)}
-                      disable={siteHrSpocBtnDisable}
-                      minDate={new Date(formData.createdOnUtc)}
-                      maxDate={new Date()}
-                      className={"email_dropdown"}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          spApprovalDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                        value={formData.siteHRSPOCEmpId}
+                      />
+                    </div>
+                    <div className="flex flex-column gap-2">
+                      <CalendarComponent
+                        id="ApprovalDate"
+                        inputClassName="bg-gray-100"
+                        value={new Date(formData.spApprovalDate)}
+                        disable={siteHrSpocBtnDisable}
+                        minDate={new Date(formData.createdOnUtc)}
+                        maxDate={new Date()}
+                        className="email_calendar"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            spApprovalDate: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
-                  {/* {(() => {
-                    if (getReqRoleId == 4) {
-                      switch (formData.mrfStatusId) {
-                        case MRF_STATUS.new:
-                        // case MRF_STATUS.resubReq:
-                        case MRF_STATUS.hodapproval:
-                        case MRF_STATUS.awaitHodApproval:
-                        case MRF_STATUS.cooapproval:
-                        case MRF_STATUS.awaitCooApproval:
-                        case MRF_STATUS.recivedfinanceHeadApproval:
-                        case MRF_STATUS.awaitfinanceHeadApproval:
-                        case MRF_STATUS.bypassFinanceHeadApproval:
-                        case MRF_STATUS.mrfTransferToNew:
-                        case MRF_STATUS.open:
-                        case MRF_STATUS.onHold:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={formData.mrfStatusId}
-                                  label={"Update"}
-                                  formData={formData}
-                                  className={"update_btn"}
-                                  refreshParent={refreshParentComponent}
-                                  siteHRUpdateClick={true}
-                                  disabled={siteHrSpocBtnDisable}
-                                  message={"Are you sure you want to update?"}
-                                />
-                              </div>
-                              <div className=" w-3 "></div>
-                            </>
-                          );
-                        default:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={formData.mrfStatusId}
-                                  label={"Update"}
-                                  formData={formData}
-                                  refreshParent={refreshParentComponent}
-                                  className={"update_btn"}
-                                  disabled={true}
-                                />
-                              </div>
-                              <div className=" w-3 "></div>
-                            </>
-                          );
-                      }
-                    }
-                  })()} */}
+                   
 
-                  {(() => {
-                    if (getReqRoleId == 4) {
-                      return (
-                        <>
-                          <div className="flex flex-column gap-2 w-2">
-                            <MrfPartialStatus
-                              mrfId={getReqId}
-                              mrfStatusId={formData.mrfStatusId}
-                              label={"Update"}
-                              formData={formData}
-                              className={"update_btn"}
-                              refreshParent={refreshParentComponent}
-                              siteHRUpdateClick={true}
-                              disabled={siteHrSpocBtnDisable}
-                              message={"Are you sure you want to update?"}
-                            />
-                          </div>
-                          <div className=" gap-3  w-3 ">
-                            <div className=" gap-2 w-6">
+                    {(() => {
+                      if (getReqRoleId == 4) {
+                        return (
+                          <>
+                            <div className="flex flex-column gap-2 ">
+                              <MrfPartialStatus
+                                mrfId={getReqId}
+                                mrfStatusId={formData.mrfStatusId}
+                                label={"Update"}
+                                formData={formData}
+                                className={"update_btn"}
+                                refreshParent={refreshParentComponent}
+                                siteHRUpdateClick={true}
+                                disabled={siteHrSpocBtnDisable}
+                                message={"Are you sure you want to update?"}
+                              />
+                            </div>
+                            {/* <div className=" gap-3 w-6   	  "> */}
+                            <div className=" gap-2 w-6  ">
                               {siteHrSpocValue > 0 ? (
                                 <h4 className="show_status">Updated</h4>
                               ) : (
                                 <h4 className="show_status">Yet to be Updated</h4>
                               )}
                             </div>
-                          </div>
-                        </>
-                      );
-                    }
-                  })()}
-                </div>
-                <div id="second" className="flex justify-content-evenly gap-4">
-                  <div className="flex flex-column gap-2">
-                    <InputTextCp
-                      type="text"
-                      id="Position"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({ ...formData, Position: 8 })
+                            {/* </div> */}
+                          </>
+                        );
                       }
-                      value="HOD"
-                    />
+                    })()}
                   </div>
+                  <div id="second" className="flex justify-content-evenly gap-4">
+                    <div className="flex flex-column gap-2">
+                      <InputTextCp
+                        type="text"
+                        id="Position"
+                        className="p-disabled email_textbox"
+                        onChange={(e) =>
+                          setFormData({ ...formData, Position: 8 })
+                        }
+                        value="HOD"
+                      />
+                    </div>
 
-                  <div className="flex flex-column gap-2 w-3">
-                    {/* Assuming DropdownComponent renders an input */}
-                    <DropdownComponent
-                      optionLabel="name"
-                      optionValue="employeeId"
-                      type="functionHead"
-                      options={dropdownData.functionHead}
-                      value={formData.functionHeadId}
-                      placeholder={"Select HOD"}
-                      disable={commonSettings.setHodapprovalName}
-                      className={"email_dropdown"}
-                      onChange={(e) => {
-                        const selectedfunctionHeadId = e.target.value;
-                        const selectedfunctionHead =
-                          dropdownData.functionHead.find(
-                            (manager) =>
-                              manager.employeeId === selectedfunctionHeadId
-                          );
+                    <div className="flex flex-column gap-2">
+                      {/* Assuming DropdownComponent renders an input */}
+                      <DropdownComponent
+                        optionLabel="name"
+                        optionValue="employeeId"
+                        type="functionHead"
+                        options={dropdownData.functionHead}
+                        value={formData.functionHeadId}
+                        placeholder={"Select HOD"}
+                        disable={commonSettings.setHodapprovalName}
+                        className="email_dropdown"
+                        onChange={(e) => {
+                          const selectedfunctionHeadId = e.target.value;
+                          const selectedfunctionHead =
+                            dropdownData.functionHead.find(
+                              (manager) =>
+                                manager.employeeId === selectedfunctionHeadId
+                            );
 
-                        if (selectedfunctionHead) {
+                          if (selectedfunctionHead) {
+                            setFormData({
+                              ...formData,
+                              functionHeadId: selectedfunctionHeadId,
+                              functionHeadEmpId:
+                                selectedfunctionHead.employeeCode,
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex flex-column gap-2 ">
+                      <InputTextCp
+                        id="functionHeadEmpId"
+                        className="p-disabled email_empId_textbox"
+                        onChange={(e) =>
                           setFormData({
                             ...formData,
-                            functionHeadId: selectedfunctionHeadId,
-                            functionHeadEmpId:
-                              selectedfunctionHead.employeeCode,
-                          });
+                            functionHeadEmpId: e.target.value,
+                          })
                         }
-                      }}
-                    />
-                  </div>
-
-                  <div className="flex flex-column gap-2 ">
-                    <InputTextCp
-                      id="functionHeadEmpId"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          functionHeadEmpId: e.target.value,
-                        })
-                      }
-                      value={formData.functionHeadEmpId}
+                        value={formData.functionHeadEmpId}
                       // disable={commonSettings.setHodapproval}
-                    />
-                  </div>
+                      />
+                    </div>
 
-                  <div className="flex flex-column gap-2">
-                    <CalendarComponent
-                      id="fhApprovalDate"
-                      inputClassName="bg-gray-100"
-                      value={new Date(formData.fhApprovalDate)}
-                      disable={commonSettings.setHodapprovalDate}
-                      className={"email_dropdown"}
-                      minDate={new Date(formData.createdOnUtc)}
-                      maxDate={new Date()}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          fhApprovalDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                    <div className="flex flex-column gap-2">
+                      <CalendarComponent
+                        id="fhApprovalDate"
+                        inputClassName="bg-gray-100"
+                        value={new Date(formData.fhApprovalDate)}
+                        disable={commonSettings.setHodapprovalDate}
+                        className="email_calendar"
+                        minDate={new Date(formData.createdOnUtc)}
+                        maxDate={new Date()}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            fhApprovalDate: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
-                  {(() => {
-                    if (getReqRoleId == 4) {
-                      switch (formData.mrfStatusId) {
-                        case MRF_STATUS.new:
-                        case MRF_STATUS.onHold:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2 ">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={11}
-                                  label={"Send to HOD Approval "}
-                                  formData={formData}
-                                  refreshParent={refreshParentComponent}
-                                  className={"hod_btn"}
-                                  disabled={
-                                    formData.functionHeadId != 0 ? false : true
-                                  }
-                                  message={
-                                    "Do you want to submit it for HOD approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3 ">
-                                <h4 className="show_status">Yet to be Approved</h4>
-                              </div>
-                            </>
-                          );
-                        case MRF_STATUS.awaitHodApproval:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2  w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={4}
-                                  formData={formData}
-                                  refreshParent={refreshParentComponent}
-                                  className={"acknowledge_btn"}
-                                  label={"Acknowledge"}
-                                  message={
-                                    "Do you want to submit it as Received HOD Approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3 ">
-                                <h4 className="show_status">Awaiting HOD approval</h4>
-                              </div>
-                            </>
-                          );
-                        default:
-                          if (formData.functionHeadId === 0) {
+                    {(() => {
+                      if (getReqRoleId == 4) {
+                        switch (formData.mrfStatusId) {
+                          case MRF_STATUS.new:
+                          case MRF_STATUS.onHold:
                             return (
                               <>
-                                <div className="flex flex-column gap-2  w-2">
+                                <div className="flex flex-column gap-2  ">
                                   <MrfPartialStatus
                                     mrfId={getReqId}
                                     mrfStatusId={11}
@@ -1640,21 +1462,23 @@ const CreateRequisitionBody = ({
                                     formData={formData}
                                     refreshParent={refreshParentComponent}
                                     className={"hod_btn"}
-                                    disabled={true}
+                                    disabled={
+                                      formData.functionHeadId != 0 ? false : true
+                                    }
                                     message={
                                       "Do you want to submit it for HOD approval?"
                                     }
                                   />
                                 </div>
-                                <div className=" w-3 ">
+                                <div className=" w-6 ">
                                   <h4 className="show_status">Yet to be Approved</h4>
                                 </div>
                               </>
                             );
-                          } else {
+                          case MRF_STATUS.awaitHodApproval:
                             return (
                               <>
-                                <div className="flex flex-column gap-2  w-2">
+                                <div className="flex flex-column gap-2 ">
                                   <MrfPartialStatus
                                     mrfId={getReqId}
                                     mrfStatusId={4}
@@ -1662,175 +1486,148 @@ const CreateRequisitionBody = ({
                                     refreshParent={refreshParentComponent}
                                     className={"acknowledge_btn"}
                                     label={"Acknowledge"}
-                                    disabled={true}
                                     message={
                                       "Do you want to submit it as Received HOD Approval?"
                                     }
                                   />
                                 </div>
-                                <div className=" w-3 ">
-                                  <h4 className="show_status">Received HOD Approsval</h4>
-                                  
+                                <div className=" w-6 ">
+                                  <h4 className="show_status">Awaiting HOD approval</h4>
                                 </div>
                               </>
                             );
-                          }
-                      }
-                    }
-                  })()}
-                </div>
-                <div id="forth" className="flex justify-content-evenly gap-4">
-                  <div className="flex flex-column gap-2">
-                    <InputTextCp
-                      type="text"
-                      id="Position"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({ ...formData, Position: 10 })
-                      }
-                      value="Finance Head"
-                    />
-                  </div>
-                  <div className="flex flex-column gap-2 w-3">
-                    {/* Assuming DropdownComponent renders an input */}
-                    <DropdownComponent
-                      optionLabel="name"
-                      optionValue="employeeId"
-                      type="financeHead"
-                      options={dropdownData.financeHead}
-                      value={formData.financeHeadId}
-                      placeholder={"Select Finance Head"}
-                      className={"email_dropdown"}
-                      disable={commonSettings.setFinanceHeadApprovalName}
-                      onChange={(e) => {
-                        const selectedfinanceHeadId = e.target.value;
-                        const selectedfinanceHeadEmpId =
-                          dropdownData.financeHead.find(
-                            (manager) =>
-                              manager.employeeId === selectedfinanceHeadId
-                          );
+                          default:
+                            if (formData.functionHeadId === 0) {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2  ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={11}
+                                      label={"Send to HOD Approval "}
+                                      formData={formData}
+                                      refreshParent={refreshParentComponent}
+                                      className={"hod_btn"}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it for HOD approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6 ">
+                                    <h4 className="show_status">Yet to be Approved</h4>
+                                  </div>
+                                </>
+                              );
+                            } else {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2  ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={4}
+                                      formData={formData}
+                                      refreshParent={refreshParentComponent}
+                                      className={"acknowledge_btn"}
+                                      label={"Acknowledge"}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it as Received HOD Approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6 ">
+                                    <h4 className="show_status">Received HOD Approval</h4>
 
-                        if (selectedfinanceHeadEmpId) {
+                                  </div>
+                                </>
+                              );
+                            }
+                        }
+                      }
+                    })()}
+                  </div>
+                  <div id="forth" className="flex justify-content-evenly gap-4">
+                    <div className="flex flex-column gap-2 ">
+                      <InputTextCp
+                        type="text"
+                        id="Position"
+                        className="p-disabled email_textbox"
+                        onChange={(e) =>
+                          setFormData({ ...formData, Position: 10 })
+                        }
+                        value="Finance Head"
+                      />
+                    </div>
+                    <div className="flex flex-column gap-2 ">
+                      {/* Assuming DropdownComponent renders an input */}
+                      <DropdownComponent
+                        optionLabel="name"
+                        optionValue="employeeId"
+                        type="financeHead"
+                        options={dropdownData.financeHead}
+                        value={formData.financeHeadId}
+                        placeholder={"Select Finance Head"}
+                        className={"email_dropdown"}
+                        disable={commonSettings.setFinanceHeadApprovalName}
+                        onChange={(e) => {
+                          const selectedfinanceHeadId = e.target.value;
+                          const selectedfinanceHeadEmpId =
+                            dropdownData.financeHead.find(
+                              (manager) =>
+                                manager.employeeId === selectedfinanceHeadId
+                            );
+
+                          if (selectedfinanceHeadEmpId) {
+                            setFormData({
+                              ...formData,
+                              financeHeadId: selectedfinanceHeadId,
+                              financeHeadEmpId:
+                                selectedfinanceHeadEmpId.employeeCode,
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="flex flex-column gap-2 ">
+                      <InputTextCp
+                        id="financeHeadEmpId"
+                        className="p-disabled email_empId_textbox"
+                        onChange={(e) =>
                           setFormData({
                             ...formData,
-                            financeHeadId: selectedfinanceHeadId,
-                            financeHeadEmpId:
-                              selectedfinanceHeadEmpId.employeeCode,
-                          });
+                            financeHeadEmpId: e.target.value,
+                          })
                         }
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-column gap-2">
-                    <InputTextCp
-                      id="financeHeadEmpId"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          financeHeadEmpId: e.target.value,
-                        })
-                      }
-                      value={formData.financeHeadEmpId}
+                        value={formData.financeHeadEmpId}
                       // disable={commonSettings.setFinanceHeadApproval}
-                    />
-                  </div>
-                  <div className="flex flex-column gap-2">
-                    <CalendarComponent
-                      id="ApprovalDate"
-                      inputClassName="bg-gray-100"
-                      value={new Date(formData.fiApprovalDate)}
-                      className={"email_dropdown"}
-                      minDate={new Date(formData.createdOnUtc)}
-                      maxDate={new Date()}
-                      disable={commonSettings.setFinanceHeadApprovalDate}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          fiApprovalDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                      />
+                    </div>
+                    <div className="flex flex-column gap-2">
+                      <CalendarComponent
+                        id="ApprovalDate"
+                        inputClassName="bg-gray-100"
+                        value={new Date(formData.fiApprovalDate)}
+                        className="email_calendar"
+                        minDate={new Date(formData.createdOnUtc)}
+                        maxDate={new Date()}
+                        disable={commonSettings.setFinanceHeadApprovalDate}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            fiApprovalDate: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
-                  {(() => {
-                    if (getReqRoleId == 4) {
-                      switch (formData.mrfStatusId) {
-                        case MRF_STATUS.hodapproval:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={13}
-                                  formData={formData}
-                                  refreshParent={refreshParentComponent}
-                                  className={"finance_btn"}
-                                  label={"Send to Fin. Head Approval"}
-                                  disabled={
-                                    formData.financeHeadId != 0 ? false : true
-                                  }
-                                  // financeHeadClick={true}
-                                  message={
-                                    "Do you want to submit it for Finance Head approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3">
-                                <h4 className="show_status">Yet to be Approved</h4>
-                              </div>
-                            </>
-                          );
-                        // case MRF_STATUS.cooapproval:
-                        // case MRF_STATUS.awaitCooApproval:
-                        // case MRF_STATUS.recivedfinanceHeadApproval:
-                        //   return (
-                        //     <>
-                        //       <div className="flex flex-column gap-2 w-2">
-                        //         <MrfPartialStatus
-                        //           mrfId={getReqId}
-                        //           mrfStatusId={14}
-                        //           formData={formData}
-                        //           refreshParent={refreshParentComponent}
-                        //           className={"acknowledge_btn"}
-                        //           label={"Acknowledge"}
-                        //           disabled={true}
-                        //           message={
-                        //             "Do you want to submit it as Received Finance Head approval?"
-                        //           }
-                        //         />
-                        //       </div>
-                        //       <div className=" w-3">
-                        //         <h4>Received Fin. Head Approval</h4>
-                        //       </div>
-                        //     </>
-                        //   );
-                        case MRF_STATUS.awaitfinanceHeadApproval:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={14}
-                                  formData={formData}
-                                  className={"acknowledge_btn"}
-                                  refreshParent={refreshParentComponent}
-                                  label={"Acknowledge"}
-                                  message={
-                                    "Do you want to submit it as Received Finance Head approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3">
-                                <h4 className="show_status">Awaiting Fin. Head approval</h4>
-                              </div>
-                            </>
-                          );
-                        default:
-                          if (formData.financeHeadId === 0) {
+                    {(() => {
+                      if (getReqRoleId == 4) {
+                        switch (formData.mrfStatusId) {
+                          case MRF_STATUS.hodapproval:
                             return (
                               <>
-                                <div className="flex flex-column gap-2  w-2">
+                                <div className="flex flex-column gap-2 ">
                                   <MrfPartialStatus
                                     mrfId={getReqId}
                                     mrfStatusId={13}
@@ -1838,222 +1635,179 @@ const CreateRequisitionBody = ({
                                     refreshParent={refreshParentComponent}
                                     className={"finance_btn"}
                                     label={"Send to Fin. Head Approval"}
-                                    disabled={true}
+                                    disabled={
+                                      formData.financeHeadId != 0 ? false : true
+                                    }
                                     // financeHeadClick={true}
                                     message={
                                       "Do you want to submit it for Finance Head approval?"
                                     }
                                   />
                                 </div>
-                                <div className=" w-3 ">
+                                <div className=" w-6">
                                   <h4 className="show_status">Yet to be Approved</h4>
                                 </div>
                               </>
                             );
-                          } else {
+                         
+                          case MRF_STATUS.awaitfinanceHeadApproval:
                             return (
                               <>
-                                <div className="flex flex-column gap-2  w-2">
+                                <div className="flex flex-column gap-2 ">
                                   <MrfPartialStatus
                                     mrfId={getReqId}
-                                    mrfStatusId={4}
+                                    mrfStatusId={14}
                                     formData={formData}
-                                    refreshParent={refreshParentComponent}
                                     className={"acknowledge_btn"}
+                                    refreshParent={refreshParentComponent}
                                     label={"Acknowledge"}
-                                    disabled={true}
                                     message={
-                                      "Do you want to submit it as Received HOD Approval?"
+                                      "Do you want to submit it as Received Finance Head approval?"
                                     }
                                   />
                                 </div>
-                                <div className=" w-3 ">
-                                  <h4 className="show_status">Received Fin. Head Approval</h4>
+                                <div className=" w-6">
+                                  <h4 className="show_status">Awaiting Fin. Head approval</h4>
                                 </div>
                               </>
                             );
-                          }
+                          default:
+                            if (formData.financeHeadId === 0) {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2  ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={13}
+                                      formData={formData}
+                                      refreshParent={refreshParentComponent}
+                                      className={"finance_btn"}
+                                      label={"Send to Fin. Head Approval"}
+                                      disabled={true}
+                                      // financeHeadClick={true}
+                                      message={
+                                        "Do you want to submit it for Finance Head approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6 ">
+                                    <h4 className="show_status">Yet to be Approved</h4>
+                                  </div>
+                                </>
+                              );
+                            } else {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2 ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={4}
+                                      formData={formData}
+                                      refreshParent={refreshParentComponent}
+                                      className={"acknowledge_btn"}
+                                      label={"Acknowledge"}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it as Received HOD Approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6">
+                                    <h4 className="show_status">Received Fin. Head Approval</h4>
+                                  </div>
+                                </>
+                              );
+                            }
 
-                        // return (
-                        //   <>
-                        //     <div className="flex flex-column gap-2 w-2">
-                        //       <MrfPartialStatus
-                        //         mrfId={getReqId}
-                        //         mrfStatusId={13}
-                        //         formData={formData}
-                        //         className={"finance_btn"}
-                        //         label={"Send to Fin. Head Approval"}
-                        //         refreshParent={refreshParentComponent}
-                        //         disabled={true}
-                        //         message={
-                        //           "Do you want to submit it for Finance Head approval?"
-                        //         }
-                        //       />
-                        //     </div>
-                        //     <div className=" w-3">
-                        //       <h4>Not Approved</h4>
-                        //     </div>
-                        //   </>
-                        // );
+                         
+                        }
                       }
-                    }
-                  })()}
-                </div>
-                <div id="fifth" className="flex justify-content-evenly gap-4">
-                  <div className="flex flex-column gap-2">
-                    <InputTextCp
-                      type="text"
-                      id="Position"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({ ...formData, Position: 11 })
-                      }
-                      value="President & COO"
-                      // disable={commonSettings.setCooapproval}
-                    />
+                    })()}
                   </div>
+                  <div id="fifth" className="flex justify-content-evenly gap-4">
+                    <div className="flex flex-column gap-2">
+                      <InputTextCp
+                        type="text"
+                        id="Position"
+                        className="p-disabled email_textbox"
+                        onChange={(e) =>
+                          setFormData({ ...formData, Position: 11 })
+                        }
+                        value="President & COO"
+                      // disable={commonSettings.setCooapproval}
+                      />
+                    </div>
 
-                  <div className="flex flex-column gap-2 w-3">
-                    {/* Assuming DropdownComponent renders an input */}
-                    <DropdownComponent
-                      optionLabel="name"
-                      optionValue="employeeId"
-                      type="presidentnCOO"
-                      options={dropdownData.presidentnCOO}
-                      value={formData.presidentnCOOId}
-                      className={"email_dropdown"}
-                      placeholder={"Select President & COO"}
-                      disable={commonSettings.setCooapprovalName}
-                      onChange={(e) => {
-                        const selectedpresidentnCOOId = e.target.value;
-                        const selectedpresidentnCOOEmpId =
-                          dropdownData.presidentnCOO.find(
-                            (manager) =>
-                              manager.employeeId === selectedpresidentnCOOId
-                          );
+                    <div className="flex flex-column gap-2 ">
+                      {/* Assuming DropdownComponent renders an input */}
+                      <DropdownComponent
+                        optionLabel="name"
+                        optionValue="employeeId"
+                        type="presidentnCOO"
+                        options={dropdownData.presidentnCOO}
+                        value={formData.presidentnCOOId}
+                        className={"email_dropdown"}
+                        placeholder={"Select President & COO"}
+                        disable={commonSettings.setCooapprovalName}
+                        onChange={(e) => {
+                          const selectedpresidentnCOOId = e.target.value;
+                          const selectedpresidentnCOOEmpId =
+                            dropdownData.presidentnCOO.find(
+                              (manager) =>
+                                manager.employeeId === selectedpresidentnCOOId
+                            );
 
-                        if (selectedpresidentnCOOEmpId) {
+                          if (selectedpresidentnCOOEmpId) {
+                            setFormData({
+                              ...formData,
+                              presidentnCOOId: selectedpresidentnCOOId,
+                              presidentnCOOEmpId:
+                                selectedpresidentnCOOEmpId.employeeCode,
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex flex-column gap-2 ">
+                      <InputTextCp
+                        id="presidentnCOOEmpId"
+                        className="p-disabled email_empId_textbox"
+                        onChange={(e) =>
                           setFormData({
                             ...formData,
-                            presidentnCOOId: selectedpresidentnCOOId,
-                            presidentnCOOEmpId:
-                              selectedpresidentnCOOEmpId.employeeCode,
-                          });
+                            presidentnCOOEmpId: e.target.value,
+                          })
                         }
-                      }}
-                    />
-                  </div>
+                        value={formData.presidentnCOOEmpId}
+                      />
+                    </div>
 
-                  <div className="flex flex-column gap-2 ">
-                    <InputTextCp
-                      id="presidentnCOOEmpId"
-                      className="p-disabled"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          presidentnCOOEmpId: e.target.value,
-                        })
-                      }
-                      value={formData.presidentnCOOEmpId}
-                    />
-                  </div>
-
-                  <div className="flex flex-column gap-2">
-                    <CalendarComponent
-                      id="pcApprovalDate"
-                      inputClassName="bg-gray-100"
-                      value={new Date(formData.pcApprovalDate)}
-                      maxDate={new Date()}
-                      minDate={new Date(formData.createdOnUtc)}
-                      disable={commonSettings.setCooapprovalDate}
-                      className={"email_dropdown"}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          pcApprovalDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  {(() => {
-                    if (getReqRoleId == 4) {
-                      switch (formData.mrfStatusId) {
-                        case MRF_STATUS.recivedfinanceHeadApproval:
-                        case MRF_STATUS.bypassFinanceHeadApproval:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2 ">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={12}
-                                  formData={formData}
-                                  label={"Send to COO Approval"}
-                                  cooClick={true}
-                                  refreshParent={refreshParentComponent}
-                                  className={"coo_btn"}
-                                  disabled={
-                                    formData.presidentnCOOId != 0 ? false : true
-                                  }
-                                  message={
-                                    "Do you want to submit it for COO approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3 ">
-                                <h4 className="show_status">Yet to be Approved</h4>
-                                
-                              </div>
-                            </>
-                          );
-                        // case MRF_STATUS.cooapproval:
-                        // case MRF_STATUS.open:
-                        //   return (
-                        //     <>
-                        //       <div className="flex flex-column gap-2 w-2">
-                        //         <MrfPartialStatus
-                        //           mrfId={getReqId}
-                        //           mrfStatusId={5}
-                        //           formData={formData}
-                        //           className={"acknowledge_btn"}
-                        //           label={"Acknowledge"}
-                        //           refreshParent={refreshParentComponent}
-                        //           disabled={true}
-                        //           message={
-                        //             "Do you want to submit it as Received COO Approval?"
-                        //           }
-                        //         />
-                        //       </div>
-                        //       <div className=" w-3 ">
-                        //         <h4>Received COO Approval</h4>
-                        //       </div>
-                        //     </>
-                        //   );
-                        case MRF_STATUS.awaitCooApproval:
-                          return (
-                            <>
-                              <div className="flex flex-column gap-2 w-2">
-                                <MrfPartialStatus
-                                  mrfId={getReqId}
-                                  mrfStatusId={5}
-                                  formData={formData}
-                                  className={"acknowledge_btn "}
-                                  label={"Acknowledge"}
-                                  refreshParent={refreshParentComponent}
-                                  message={
-                                    "Do you want to submit it as Received COO Approval?"
-                                  }
-                                />
-                              </div>
-                              <div className=" w-3 ">
-                                <h4 className="show_status">Awaiting COO approval</h4>
-                              </div>
-                            </>
-                          );
-                        default:
-                          if (formData.presidentnCOOId === 0) {
+                    <div className="flex flex-column gap-2">
+                      <CalendarComponent
+                        id="pcApprovalDate"
+                        inputClassName="bg-gray-100"
+                        value={new Date(formData.pcApprovalDate)}
+                        maxDate={new Date()}
+                        minDate={new Date(formData.createdOnUtc)}
+                        disable={commonSettings.setCooapprovalDate}
+                        className="email_calendar"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            pcApprovalDate: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    {(() => {
+                      if (getReqRoleId == 4) {
+                        switch (formData.mrfStatusId) {
+                          case MRF_STATUS.recivedfinanceHeadApproval:
+                          case MRF_STATUS.bypassFinanceHeadApproval:
                             return (
                               <>
-                                <div className="flex flex-column gap-2  w-2">
+                                <div className="flex flex-column gap-2  ">
                                   <MrfPartialStatus
                                     mrfId={getReqId}
                                     mrfStatusId={12}
@@ -2062,21 +1816,25 @@ const CreateRequisitionBody = ({
                                     cooClick={true}
                                     refreshParent={refreshParentComponent}
                                     className={"coo_btn"}
-                                    disabled={true}
+                                    disabled={
+                                      formData.presidentnCOOId != 0 ? false : true
+                                    }
                                     message={
                                       "Do you want to submit it for COO approval?"
                                     }
                                   />
                                 </div>
-                                <div className=" w-3 ">
+                                <div className=" w-6 ">
                                   <h4 className="show_status">Yet to be Approved</h4>
+
                                 </div>
                               </>
                             );
-                          } else {
+                          
+                          case MRF_STATUS.awaitCooApproval:
                             return (
                               <>
-                                <div className="flex flex-column gap-2  w-2">
+                                <div className="flex flex-column gap-2">
                                   <MrfPartialStatus
                                     mrfId={getReqId}
                                     mrfStatusId={5}
@@ -2084,47 +1842,71 @@ const CreateRequisitionBody = ({
                                     className={"acknowledge_btn "}
                                     label={"Acknowledge"}
                                     refreshParent={refreshParentComponent}
-                                    disabled={true}
                                     message={
                                       "Do you want to submit it as Received COO Approval?"
                                     }
                                   />
                                 </div>
-                                <div className=" w-3 ">
-                                  <h4 className="show_status">Received Fin. Head Approval</h4>
+                                <div className=" w-6">
+                                  <h4 className="show_status">Awaiting COO approval</h4>
                                 </div>
                               </>
                             );
-                          }
+                          default:
+                            if (formData.presidentnCOOId === 0) {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2  ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={12}
+                                      formData={formData}
+                                      label={"Send to COO Approval"}
+                                      cooClick={true}
+                                      refreshParent={refreshParentComponent}
+                                      className={"coo_btn"}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it for COO approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6 ">
+                                    <h4 className="show_status">Yet to be Approved</h4>
+                                  </div>
+                                </>
+                              );
+                            } else {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2  ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={5}
+                                      formData={formData}
+                                      className={"acknowledge_btn "}
+                                      label={"Acknowledge"}
+                                      refreshParent={refreshParentComponent}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it as Received COO Approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6 ">
+                                    <h4 className="show_status">Received Fin. Head Approval</h4>
+                                  </div>
+                                </>
+                              );
+                            }
 
-                        // return (
-                        //   <>
-                        //     <div className="flex flex-column gap-2 w-2">
-                        //       <MrfPartialStatus
-                        //         mrfId={getReqId}
-                        //         mrfStatusId={12}
-                        //         formData={formData}
-                        //         className={"coo_btn"}
-                        //         label={"Send to COO Approval"}
-                        //         refreshParent={refreshParentComponent}
-                        //         // cooClick={true}
-                        //         disabled={true}
-                        //         message={
-                        //           "Do you want to submit it for COO approval?"
-                        //         }
-                        //       />
-                        //     </div>
-                        //     <div className=" w-3 ">
-                        //       <h4>Not Approved</h4>
-                        //     </div>
-                        //   </>
-                        // );
+                         
+                        }
                       }
-                    }
-                  })()}
-                </div>
-              </>
-            )}
+                    })()}
+                  </div>
+                </>
+              )}
           </section>
 
           <div className="flex flex-wrap justify-content-end gap-5 mt-3">
@@ -2134,7 +1916,7 @@ const CreateRequisitionBody = ({
               className="cancel_btn"
               onClick={handleCancel}
               outlined="true"
-              // disable="true"
+            // disable="true"
             />
             {(() => {
               if (getReqRoleId == 3) {
@@ -2183,7 +1965,7 @@ const CreateRequisitionBody = ({
                   case MRF_STATUS.cooapproval:
                   case MRF_STATUS.awaitCooApproval:
                   case MRF_STATUS.recivedfinanceHeadApproval:
-                    case MRF_STATUS.awaitfinanceHeadApproval:
+                  case MRF_STATUS.awaitfinanceHeadApproval:
                     return (
                       <>
                         <MrfPartialStatus
@@ -2251,7 +2033,7 @@ const CreateRequisitionBody = ({
                     return (
                       <>
 
-<MrfPartialStatus
+                        <MrfPartialStatus
                           mrfId={getReqId}
                           mrfStatusId={10}
                           label={"Close"}
@@ -2286,6 +2068,7 @@ const CreateRequisitionBody = ({
                             );
 
                             navigateTo("add_candidate");
+                            // navigateTo("add_resume");
                           }}
                         />
                       </>
@@ -2295,19 +2078,19 @@ const CreateRequisitionBody = ({
                       <>
                         {(formData.mrfStatusId === MRF_STATUS.new ||
                           formData.mrfStatusId === MRF_STATUS.onHold) && (
-                          <>
-                            <MrfPartialStatus
-                              mrfId={getReqId}
-                              mrfStatusId={3}
-                              header={"Resubmission"}
-                              refreshParent={refreshParentComponent}
-                              label={"Resubmission Required"}
-                              className={"w-20 px-7 bg-red-600 border-red-600"}
-                              textbox={true}
-                              formData={formData}
-                            />
-                          </>
-                        )}
+                            <>
+                              <MrfPartialStatus
+                                mrfId={getReqId}
+                                mrfStatusId={3}
+                                header={"Resubmission"}
+                                refreshParent={refreshParentComponent}
+                                label={"Resubmission Required"}
+                                className={"w-20 px-7 bg-red-600 border-red-600"}
+                                textbox={true}
+                                formData={formData}
+                              />
+                            </>
+                          )}
                         {formData.mrfStatusId !== MRF_STATUS.closed &&
                           formData.mrfStatusId !== MRF_STATUS.rejected &&
                           formData.mrfStatusId !== MRF_STATUS.withdrawn && (
