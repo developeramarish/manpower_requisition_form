@@ -9,7 +9,8 @@ const InputTextareaComponent = ({
   cols,
   autoResize =false,
   disable,
-  readOnly
+  readOnly,
+  className,
 }) => {
   return (
     <InputTextarea
@@ -20,7 +21,7 @@ const InputTextareaComponent = ({
       autoResize={autoResize}
       disabled ={disable}
       readOnly={readOnly}
-    />
+      className={className}    />
   );
 };
 
