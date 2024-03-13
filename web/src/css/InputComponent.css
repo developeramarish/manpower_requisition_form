@@ -107,14 +107,7 @@
   font-size: 14px;
 }
 
-.update_btn {
-  background-color: #d32f2e;
 
-  color: #ffffff;
-  border-radius: 5px;
-  width: 15%;
-  margin-right: auto;
-}
 /* .update_btn:hover{
     background-color: #d32f2e;
     color: #ffffff;
@@ -127,6 +120,17 @@
     color: #ffffff;
     border-radius: 5px;
   } */
+
+.reset_btn{
+  background-color: #ffffff;
+  border: 1px solid #d32f2e;
+  color: #d32f2e;
+  font-weight: 500;
+  font-size: 15px;
+  width: 123px;
+  padding: 6px;
+}
+
 
 .cancel_btn {
   background-color: #ffffff;
