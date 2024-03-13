@@ -80,6 +80,8 @@ namespace MRF.Models.DTO
 
         public int? HrId { get; set; }
 
+        public int? RejectedById { get; set; }
+
     }
     public class MrfdetaiResponseModel
     {

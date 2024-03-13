@@ -104,7 +104,7 @@ namespace MRF.DataAccess.Repository
             return query.ToList();
         }
 
-        //need to change it for multiple roles
+        //it is for current role
         public List<EmailRecipient> GetEmployeeEmail(string empRole)
         {
             IQueryable<EmailRecipient> query = from ed in _db.Employeedetails
@@ -114,6 +114,17 @@ namespace MRF.DataAccess.Repository
                                                {
                                                    Email = ed.Email
                                                };
+
+            return query.ToList();
+        }
+
+        //for multiple role
+        public List<string> GetRoleEmails(string roleId)
+        {
+            IQueryable<string> query = from ed in _db.Employeedetails
+                                               join erm in _db.Employeerolemap on ed.Id equals erm.EmployeeId
+                                               where erm.IsActive == true && erm.multipleRoleIds.Contains(roleId)
+                                               select ed.Email;
 
             return query.ToList();
         }
