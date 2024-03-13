@@ -90,7 +90,7 @@ namespace MRF.API.Controllers
 
             var AttachmentEvaluation = new AttachmentEvaluation
             {
-                FilePath = request.FilePath,
+                FilePath = request.FilePath.Contains("://") ? request.FilePath : DateTime.Now.ToString("yyyy-MM-dd") + "//" + request.FilePath,
                 InterviewEvaluationId = request.InterviewEvaluationId,
                 CreatedByEmployeeId = request.CreatedByEmployeeId,
                 CreatedOnUtc = request.CreatedOnUtc,

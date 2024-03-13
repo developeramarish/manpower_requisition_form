@@ -143,8 +143,20 @@ namespace MRF.API.Controllers
                     //Send Email to HR - Skipping if MRF Status is Drafted : MRF Status Id = 1 (Drafted)
                     if (request.MrfStatusId != 1)
                     {
-                        //for now email only to the current hr
-                        if (request.HrId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), emailRequest.Subject, emailContent);
+                        
+                        if (request.HrId > 0)
+                        {
+                            //email only to current hr
+                            _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail((int)mrfdetails.HrId), emailRequest.Subject, emailContent);
+                        }
+                        else
+                        {
+                            var emps = _unitOfWork.EmailRecipient.GetRoleEmails("4");
+                            foreach(var e in emps)
+                            {
+                                _emailService.SendEmailAsync(e, emailRequest.Subject, emailContent);
+                            }
+                        }
                     }
 
                     //Send Email to MRF Owner(hiring manager)
@@ -781,6 +793,12 @@ namespace MRF.API.Controllers
             }
             else
             {
+                if (mrfdetail.MrfStatusId == 8) //when rejected
+                {
+                    var approvalList = _unitOfWork.mrfDetailsStatusHistory.GetA(x=> x.MrfId == MrfId && x.mrfStatusId == 8);
+                    if (approvalList.Any()) mrfdetail.RejectedById = approvalList.First().CreatedByEmployeeId; 
+
+                }
                 return mrfdetail;
             }
         }

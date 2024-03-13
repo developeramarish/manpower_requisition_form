@@ -178,10 +178,15 @@ namespace MRF.DataAccess.Repository
             }
             else
             {
+                List<int> mrfIdsHiringManager = (from m in _db.Mrfdetails
+                                                 join mail in _db.MrfEmailApproval on m.Id equals mail.MrfId
+                                                 where mail.EmployeeId == userId && mail.RoleId == 3 //for mrf owner
+                                                 select m.Id).ToList();
+
                 mrfDetails = (from mrfD in _db.Mrfdetails
                               join Candidate in _db.Candidatedetails on mrfD.Id equals Candidate.MrfId
                               join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
-                              where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId)
+                              where ((Role == "mrfowner" && mrfIdsHiringManager.Contains(mrfD.Id)) //mrfD.CreatedByEmployeeId == userId
                               || (mrfD.HrId == null || (Role == "hr" && mrfD.HrId == userId))
                               || (Role == "resumereviewer" && Candidate.ReviewedByEmployeeIds != null
                               && Candidate.ReviewedByEmployeeIds.Contains(Convert.ToString(userId))) || (Role != "mrfowner" && Role != "resumereviewer" && Role != "hr"))
@@ -270,6 +275,10 @@ namespace MRF.DataAccess.Repository
                            select s).ToList();
             string Role = _Utility.GetRole(roleId);
 
+            List<int> mrfIdsHiringManager = (from mrfDetails in _db.Mrfdetails
+                                             join mail in _db.MrfEmailApproval on mrfDetails.Id equals mail.MrfId
+                                             where mail.EmployeeId == userId && mail.RoleId == 3 //for mrf owner
+                                             select mrfDetails.Id).ToList();
 
 
             /* group by mrfid and evaluation id will get count */
@@ -280,7 +289,7 @@ namespace MRF.DataAccess.Repository
                                        join status in _db.Evaluationstatusmaster on interview.EvalutionStatusId equals status.Id into statusGroup
                                        from status in statusGroup.DefaultIfEmpty() // *Perform left join Evaluationstatus
                                        join position in _db.PositionTitlemaster on mrfD.PositionTitleId equals position.Id
-                                       where ((Role == "mrfowner" && mrfD.CreatedByEmployeeId == userId) ||
+                                       where ((Role == "mrfowner" && mrfIdsHiringManager.Contains(mrfD.Id)) || // mrfD.CreatedByEmployeeId == userId
                                        (Role == "hr" && (mrfD.HrId == userId || mrfD.HrId == 0) ||
                                        (Role == "interviewer" && interview != null && interview.InterviewerId != 0
                                                     && interview.InterviewerId == userId
