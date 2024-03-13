@@ -1148,7 +1148,7 @@ const CreateRequisitionBody = ({
                       <RedAsterisk />:
                     </h1>
                   </div>
-                  <div id="first" className="flex justify-content-evenly gap-4">
+                  <div id="first" className="flex justify-content-evenly gap-3">
                     <div className="flex flex-column gap-2 ">
                       <label htmlFor="Position" className="font-bold text-sm">
                         Position
@@ -1263,7 +1263,7 @@ const CreateRequisitionBody = ({
                               />
                             </div>
 
-                            <div className=" gap-4  w-6  ">
+                            <div className=" gap-4  w-5  ">
                               <label
                                 htmlFor="ApprovalDate"
                                 className="font-bold text-sm gap-3 "
@@ -1271,7 +1271,7 @@ const CreateRequisitionBody = ({
                                 Status
                               </label>
 
-                              <div className=" gap-3 w-6">
+                              <div className=" gap-2 ">
                                 {hiringManagerValue > 0 ? (
                                   <h4 className="show_status">Updated</h4>
                                 ) : (
@@ -1286,7 +1286,7 @@ const CreateRequisitionBody = ({
 
                     })()}
                   </div>
-                  <div id="third" className="flex justify-content-evenly gap-4">
+                  <div id="third" className="flex justify-content-evenly gap-3">
                     <div className="flex flex-column gap-2">
                       <InputTextCp
                         type="text"
@@ -1391,7 +1391,7 @@ const CreateRequisitionBody = ({
                       }
                     })()}
                   </div>
-                  <div id="second" className="flex justify-content-evenly gap-4">
+                  <div id="second" className="flex justify-content-evenly gap-3">
                     <div className="flex flex-column gap-2">
                       <InputTextCp
                         type="text"
@@ -1568,7 +1568,7 @@ const CreateRequisitionBody = ({
                       }
                     })()}
                   </div>
-                  <div id="forth" className="flex justify-content-evenly gap-4">
+                  <div id="forth" className="flex justify-content-evenly gap-3">
                     <div className="flex flex-column gap-2 ">
                       <InputTextCp
                         type="text"
@@ -1745,7 +1745,7 @@ const CreateRequisitionBody = ({
                       }
                     })()}
                   </div>
-                  <div id="fifth" className="flex justify-content-evenly gap-4">
+                  <div id="fifth" className="flex justify-content-evenly gap-3">
                     <div className="flex flex-column gap-2">
                       <InputTextCp
                         type="text"

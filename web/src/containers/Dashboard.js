@@ -40,10 +40,10 @@ function Dashboard({ roleId, userId }) {
     );
     const interviewSummaryData = await getData(
       API_URL.INTERVIEW_SUMMARY +
-        "?Count=0&roleId=" +
-        roleId +
-        "&userId=" +
-        userId
+      "?Count=0&roleId=" +
+      roleId +
+      "&userId=" +
+      userId
     );
     setMrfStatus(mrfStatusData.result);
 
@@ -71,20 +71,20 @@ function Dashboard({ roleId, userId }) {
     ["Candidate Selected", "Assignment Received", "Onboarded", "Assignment Sent"]
   );
 
-  const onMRFIdClicked = (mrfStatusId,mrfStatusWord) => {
+  const onMRFIdClicked = (mrfStatusId, mrfStatusWord) => {
     /* setrfStatusPopupId(mrfStatusId);
     setMrfstatusWordPopUp(mrfStatusWord)
     setMrfStatusPopup(true); */
-    navigateTo("mrf_summary?mrfStatusId="+mrfStatusId+"&status="+mrfStatusWord);
+    navigateTo("mrf_summary?mrfStatusId=" + mrfStatusId + "&status=" + mrfStatusWord);
   };
 
   const onInterviewMRFIdClicked = (e) => {
-    navigateTo("interview_summary?mrfId="+e);
+    navigateTo("interview_summary?mrfId=" + e);
     /* setInterviewPopupId(e);
     setInterviewPopup(true); */
   };
   const onResumeMRFIdClicked = (e) => {
-    navigateTo("resume_summary?mrfId="+e);
+    navigateTo("resume_summary?mrfId=" + e);
     /* setResumePopupId(e);
     setResumePopup(true); */
   };
@@ -226,7 +226,7 @@ function Dashboard({ roleId, userId }) {
             <div className="mrf_status_summary">
               <div className="header">
                 <h4>MRF Summary</h4>
-               {/*  <DashMrfStatus
+                {/*  <DashMrfStatus
                   visible={mrfStatusPopup}
                   onHide={() => setMrfStatusPopup(false)}
                   statusId={mrfStatusPopupId}
@@ -243,7 +243,7 @@ function Dashboard({ roleId, userId }) {
                   </tr>
                 </thead>
                 <tbody className="mrf_table_body">
-                  {mrfStatus.filter((data, index)=>{
+                  {mrfStatus.filter((data, index) => {
                     return data.status !== "Bypass Finance Head Approval"
                   }).map((data, index) => {
                     return (
@@ -258,7 +258,7 @@ function Dashboard({ roleId, userId }) {
                         >
                           {data.totalCount > 0 && (
                             <a
-                              onClick={(e) => onMRFIdClicked(data.mrfStatusId,data.status)}
+                              onClick={(e) => onMRFIdClicked(data.mrfStatusId, data.status)}
                             >
                               {data.totalCount}
                             </a>
@@ -277,20 +277,20 @@ function Dashboard({ roleId, userId }) {
         {(roleId === ROLES.hr ||
           roleId === ROLES.mrfOwner ||
           roleId === ROLES.interviewer) && (
-          <div className="dashboard_body_right">
-            
-            <DashBoardDataTable
-              value={resumeSummary}
-              column={resumeSummaryColums}
-              headerHeading={
-                <h4 className="resume_status_dash_table_heading">
-                  Resume Status
-                </h4>
-              }
-              table_title={"Resume Summary"}
-              isHide={roleId === ROLES.interviewer}
-            />
-            {/* <ResumeSummary
+            <div className="dashboard_body_right">
+
+              <DashBoardDataTable
+                value={resumeSummary}
+                column={resumeSummaryColums}
+                headerHeading={
+                  <h4 className="resume_status_dash_table_heading">
+                    Resume Status
+                  </h4>
+                }
+                table_title={"Resume Summary"}
+                isHide={roleId === ROLES.interviewer}
+              />
+              {/* <ResumeSummary
               visible={resumePopup}
               onHide={() => setResumePopup(false)}
               mrfId={resumePopupId}
@@ -298,43 +298,39 @@ function Dashboard({ roleId, userId }) {
               userId={userId}
             /> */}
 
-            <DashBoardDataTable
-              value={interviewSummaryTableData}
-              column={interviewSummaryColums}
-              headerHeading={
-                <div>
+              <DashBoardDataTable
+                value={interviewSummaryTableData}
+                column={interviewSummaryColums}
+                headerHeading={
                   <h4 className="interviewSummary_tableHeader"
-                   
+
                   >
                     Interview Status
-                    <span className="interviewSummary_moreStatus"
-                     
-                    >
+                    <span className="interviewSummary_moreStatus" >
                       <a onClick={handlePopupOpen}>
                         More Status
                         <span>&gt;</span>
                       </a>
                     </span>
                   </h4>
-                </div>
-              }
-              table_title={"Interview Summary"}
-            />
-            {/* <InterviewSummary
+                }
+                table_title={"Interview Summary"}
+              />
+              {/* <InterviewSummary
               visible={interviewPopup}
               onHide={() => setInterviewPopup(false)}
               mrfId={interviewPopupId}
               roleId={roleId}
               userId={userId}
             /> */}
-            {/* <InterviewSummaryAllStatus
+              {/* <InterviewSummaryAllStatus
               visible={InterviewStatus}
               onHide={() => setInterviewStatusPopup(false)}
               roleId={roleId}
               userId={userId}
             /> */}
-          </div>
-        )}
+            </div>
+          )}
       </div>
     </div>
   );

@@ -32,7 +32,8 @@ padding: 0px;
 }
 
 .interviewSummary_moreStatus{
-  margin-left: 70px;
+  margin-left: 60px;
+  /* background-color: aqua; */
   text-align: left;
   color: #d32f2e;
 }

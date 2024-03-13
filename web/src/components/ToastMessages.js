@@ -11,6 +11,7 @@ const ToastMessages = (props, ref) => {
         severity: "success",
         summary: "Success Message",
         detail: message,
+        life: 3000,
       });
     },
     showConflictMessage: (message) => {
@@ -18,6 +19,7 @@ const ToastMessages = (props, ref) => {
         severity: "error",
         summary: "Conflict Message",
         detail: message,
+        life: 3000,
       });
     },
     showBadRequestMessage: (message) => {
@@ -25,6 +27,7 @@ const ToastMessages = (props, ref) => {
         severity: "error",
         summary: "Bad Request Message",
         detail: message,
+        life: 3000,
       });
     },
     showInfoMessage: (message) => {
@@ -32,6 +35,7 @@ const ToastMessages = (props, ref) => {
         severity: "info",
         summary: "Info Message",
         detail: message,
+        life: 3000,
       });
     },
     showWarrningMessage: (message) => {
@@ -39,6 +43,7 @@ const ToastMessages = (props, ref) => {
         severity: "warn",
         summary: "Warning Message",
         detail: message,
+        life: 3000,
       });
     },
   }));
