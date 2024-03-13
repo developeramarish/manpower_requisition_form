@@ -63,6 +63,7 @@ const CreateRequisitionBody = ({
   const [hiringManagerBtnDisable, setHiringManagerBtnDisable] = useState(true);
   const [siteHrSpocValue, setSiteHrSpocValue] = useState(0);
   const [hiringManagerValue, setHiringManagerValue] = useState(0);
+  const { profile } = useSelector((state) => state.page);
 
   const OnLoad = async () => {
     const result = await getDataAPI(API_URL.GET_CREATE_REQUISITION_DROPDOWN);
@@ -98,6 +99,13 @@ const CreateRequisitionBody = ({
       if (response && response.departmentId > 0) {
         fetchSubDepartments(response.departmentId);
       }
+      if (profile.roleId === ROLES.resumeReviwer || profile.roleId === ROLES.interviewer) {
+        navigateTo("dashboard");
+      }
+      if ((response.siteHRSPOCId > 0) && (profile.roleId === ROLES.hr && response.siteHRSPOCId != storageService.getData("profile").employeeId) ||
+        ((response.siteHRSPOCId > 0) && (profile.roleId === ROLES.mrfOwner && response.hiringManagerId != storageService.getData("profile").employeeId))) {
+        navigateTo("dashboard");
+      }
 
     } else {
       setDropdownData(dropData);
@@ -131,8 +139,7 @@ const CreateRequisitionBody = ({
         toastRef.current.showWarrningMessage(
           "Min Target Salary is Greater than Max Target salary"
         );
-        setMinSal(minSalary);
-        return;
+
       }
     }
 
@@ -145,33 +152,47 @@ const CreateRequisitionBody = ({
     setData();
   };
 
+  // const handleMaxSalaryChange = (e) => {
+  //   const maxSalary = e.target.value;
+
+  //   setFormData((prevFormData) => {
+  //     if (minSal !== 0) {
+  //       if (maxSalary < minSal) {
+  //         toastRef.current.showWarrningMessage(
+  //           "Max Target Salary is Less than Min Target salary"
+  //         );
+  //         return prevFormData;
+  //       } else {
+  //         return {
+  //           ...prevFormData,
+  //           minTargetSalary: minSal,
+  //           maxTargetSalary: maxSalary,
+  //         };
+  //       }
+  //     } else if (maxSalary < prevFormData.minTargetSalary) {
+  //       toastRef.current.showWarrningMessage(
+  //         "Max Target Salary is Less than Min Target salary"
+  //       );
+  //       return prevFormData;
+  //     }
+
+  //     return { ...prevFormData, maxTargetSalary: maxSalary };
+  //   });
+  // };
+
   const handleMaxSalaryChange = (e) => {
     const maxSalary = e.target.value;
 
-    setFormData((prevFormData) => {
-      if (minSal !== 0) {
-        if (maxSalary < minSal) {
-          toastRef.current.showWarrningMessage(
-            "Max Target Salary is Less than Min Target salary"
-          );
-          return prevFormData;
-        } else {
-          return {
-            ...prevFormData,
-            minTargetSalary: minSal,
-            maxTargetSalary: maxSalary,
-          };
-        }
-      } else if (maxSalary < prevFormData.minTargetSalary) {
-        toastRef.current.showWarrningMessage(
-          "Max Target Salary is Less than Min Target salary"
-        );
-        return prevFormData;
-      }
+    if (formData.minTargetSalary > maxSalary) {
+      toastRef.current.showWarrningMessage(
+        "Min Target Salary is Greater than Max Target salary"
+      );
 
-      return { ...prevFormData, maxTargetSalary: maxSalary };
-    });
-  };
+    }
+
+    setFormData({ ...formData, maxTargetSalary: maxSalary });
+  }
+
 
   const handleMinGradeChange = (e) => {
     // setFormData({ ...formData, minGradeId: e.target.value });
@@ -1217,7 +1238,7 @@ const CreateRequisitionBody = ({
                         }
                       />
                     </div>
-                    
+
                     {(() => {
                       if (getReqRoleId == 4) {
                         return (
@@ -1337,7 +1358,7 @@ const CreateRequisitionBody = ({
                       />
                     </div>
 
-                   
+
 
                     {(() => {
                       if (getReqRoleId == 4) {
@@ -1649,7 +1670,7 @@ const CreateRequisitionBody = ({
                                 </div>
                               </>
                             );
-                         
+
                           case MRF_STATUS.awaitfinanceHeadApproval:
                             return (
                               <>
@@ -1719,7 +1740,7 @@ const CreateRequisitionBody = ({
                               );
                             }
 
-                         
+
                         }
                       }
                     })()}
@@ -1830,7 +1851,7 @@ const CreateRequisitionBody = ({
                                 </div>
                               </>
                             );
-                          
+
                           case MRF_STATUS.awaitCooApproval:
                             return (
                               <>
@@ -1900,7 +1921,7 @@ const CreateRequisitionBody = ({
                               );
                             }
 
-                         
+
                         }
                       }
                     })()}
