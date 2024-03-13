@@ -793,12 +793,12 @@ namespace MRF.API.Controllers
             }
             else
             {
-                if (mrfdetail.MrfStatusId == 8) //when rejected
+                /*if (mrfdetail.MrfStatusId == 8) //when rejected
                 {
                     var approvalList = _unitOfWork.mrfDetailsStatusHistory.GetA(x=> x.MrfId == MrfId && x.mrfStatusId == 8);
                     if (approvalList.Any()) mrfdetail.RejectedById = approvalList.First().CreatedByEmployeeId; 
 
-                }
+                }*/
                 return mrfdetail;
             }
         }

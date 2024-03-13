@@ -68,6 +68,7 @@ namespace MRF.DataAccess.Repository
                                                      CreatedOnUtc = mrfDetails.CreatedOnUtc,
                                                      MrfStatus = mrfStatus.Status,
                                                      HrId = mrfDetails.HrId != null ? mrfDetails.HrId : 0,
+                                                     UpdatedByEmployeeId = mrfDetails.UpdatedByEmployeeId,
                                                  }).ToList();
 
 

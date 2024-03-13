@@ -145,25 +145,27 @@ namespace MRF.API.Controllers
                             //email to MRF Owner(hiring manager)
                             if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), addEmail.Subject, content);
                         }
-                        
+
                     }
 
                     if (updateAttach && obj1 != null)
                     {
                         AttachmentEvaluation attachment = _unitOfWork.AttachmentEvaluation.Get(u => u.InterviewEvaluationId == obj1.Id);
                         List<Interviewevaluation> ie = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(request.CandidateId);
-                        if (attachment != null && ie.Any())
+                        var ieNotRemove = ie.Where(x => !employeeIdsToRemove.Contains(x.InterviewerId));
+                        if (attachment != null && ieNotRemove.Any())
                         {
                             attachment.FilePath = attachment.FilePath;
-                            attachment.InterviewEvaluationId = ie.First().Id;
+                            attachment.InterviewEvaluationId = ieNotRemove.First().Id;
 
                             attachment.UpdatedByEmployeeId = attachment.UpdatedByEmployeeId;
                             attachment.UpdatedOnUtc = attachment.UpdatedOnUtc;
 
                             _unitOfWork.AttachmentEvaluation.Update(attachment);
                             _unitOfWork.Save();
+                            updateAttach = false;
                         }
-                        updateAttach = false;
+                        
 
                     }
                 }
@@ -266,6 +268,9 @@ namespace MRF.API.Controllers
 
                     //email to MRF Owner(hiring manager)
                     if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), emailRequest.Subject, emailContent);
+
+                    bool sendHodEmail = request.EvalutionStatusId == 11 && mrfdetails.FunctionHeadId > 0; //only when candidate is onboarded
+                    if (sendHodEmail) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.FunctionHeadId), emailRequest.Subject, emailContent);
 
                 }
 
