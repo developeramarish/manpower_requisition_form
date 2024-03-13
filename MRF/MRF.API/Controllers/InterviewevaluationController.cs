@@ -89,7 +89,6 @@ namespace MRF.API.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Internal Server Error")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, Description = "Service Unavailable")]
         public InterviewevaluationResponseModel Post([FromBody] InterviewevaluationRequestModel request)
-
         {
             var interviewevaluation = new Interviewevaluation();
 
@@ -111,6 +110,7 @@ namespace MRF.API.Controllers
                 string addContent = addEmail.Content.Replace("MRF ##", $"Resume {candidateDetails.ResumePath.Split("//")[1]}");
 
                 bool newCandidateAdded = !obj.Any();
+                bool updateAttach = true;
 
                 foreach (var employeeId in employeeIds)
                 {
@@ -146,23 +146,24 @@ namespace MRF.API.Controllers
                             if (mrfdetails.HiringManagerId > 0) _emailService.SendEmailAsync(_unitOfWork.EmailRecipient.getEmail(mrfdetails.HiringManagerId), addEmail.Subject, content);
                         }
                         
-                        if (obj1 != null)
+                    }
+
+                    if (updateAttach && obj1 != null)
+                    {
+                        AttachmentEvaluation attachment = _unitOfWork.AttachmentEvaluation.Get(u => u.InterviewEvaluationId == obj1.Id);
+                        List<Interviewevaluation> ie = _unitOfWork.Interviewevaluation.GetCandidateByCandidateid(request.CandidateId);
+                        if (attachment != null && ie.Any())
                         {
-                            AttachmentEvaluation attachment = _unitOfWork.AttachmentEvaluation.Get(u => u.InterviewEvaluationId == obj1.Id);
-                            if (attachment != null)
-                            {
-                                attachment.FilePath = attachment.FilePath;
-                                attachment.InterviewEvaluationId = interviewevaluation1.Id;
+                            attachment.FilePath = attachment.FilePath;
+                            attachment.InterviewEvaluationId = ie.First().Id;
 
-                                attachment.UpdatedByEmployeeId = attachment.UpdatedByEmployeeId;
-                                attachment.UpdatedOnUtc = attachment.UpdatedOnUtc;
+                            attachment.UpdatedByEmployeeId = attachment.UpdatedByEmployeeId;
+                            attachment.UpdatedOnUtc = attachment.UpdatedOnUtc;
 
-                                _unitOfWork.AttachmentEvaluation.Update(attachment);
-                                _unitOfWork.Save();
-                            }
-
+                            _unitOfWork.AttachmentEvaluation.Update(attachment);
+                            _unitOfWork.Save();
                         }
-
+                        updateAttach = false;
 
                     }
                 }
@@ -181,7 +182,6 @@ namespace MRF.API.Controllers
 
                         try
                         {
-
                             _unitOfWork.Interviewevaluation.Remove(itemToRemove);
                             _unitOfWork.Save();
 
