@@ -160,7 +160,7 @@ const AssignmentUpload = ({ visible, data, onHide, refreshParent }) => {
         />
         <ButtonC
           label={"Reset"}
-          className={"cancel_btn ml-2"}
+          className={"reset_btn ml-2"}
           onClick={handleReset}
         />
         {isLoading && <LoadingSpinner />}

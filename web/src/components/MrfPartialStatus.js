@@ -289,11 +289,11 @@ const MrfPartialStatus = ({
       siteHRSPOCEmpId,
 
       functionHeadId: formData.functionHeadId,
-      functionHeadEmpId: formData.functionHeadEmpId,
-      financeHeadId: formData.financeHeadId,
-      financeHeadEmpId: formData.financeHeadEmpId,
-      presidentnCOOId: formData.presidentnCOOId,
-      presidentnCOOEmpId: formData.presidentnCOOEmpId,
+      functionHeadEmpId:  formData.functionHeadEmpId,
+      financeHeadId:  formData.financeHeadId,
+      financeHeadEmpId:  formData.financeHeadEmpId,
+      presidentnCOOId:  formData.presidentnCOOId,
+      presidentnCOOEmpId:  formData.presidentnCOOEmpId,
       pcApprovalDate: formatDateToYYYYMMDD(formData.pcApprovalDate),
       fhApprovalDate: formatDateToYYYYMMDD(formData.fhApprovalDate),
       fiApprovalDate,
@@ -350,8 +350,8 @@ const MrfPartialStatus = ({
     const value = e.target.value;
     if (value.length <= maxCharacterCount) {
       setNote(value);
-    }else{
-      toastRef.current.showWarrningMessage("Character limit Exceed: "+maxCharacterCount);
+    } else {
+      toastRef.current.showWarrningMessage("Character limit Exceed: " + maxCharacterCount);
     }
   };
 
@@ -364,13 +364,13 @@ const MrfPartialStatus = ({
       return;
     }
 
-    if(formData.maxTargetSalary<formData.minTargetSalary){
+    if (formData.maxTargetSalary < formData.minTargetSalary) {
       toastRef.current.showWarrningMessage("Min Target Salary is Greater than Max Target salary");
       setVisible(false);
       return;
     }
 
-    if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
+    if ((roleID === 3 && mrfStatusId == 2) && isFormDataEmptyForSubmit(formData).length > 0) {
       const emptyFields = isFormDataEmptyForSubmit(formData);
       formatAndShowErrorMessage(emptyFields);
       // setVisible(false);
@@ -400,7 +400,7 @@ const MrfPartialStatus = ({
           ></ButtonC>
 
           <Dialog
-            className={textbox?"w-5":"w-4"}
+            className={textbox ? "w-5" : "w-4"}
             visible={visible}
             header={header}
             draggable={false}

@@ -96,6 +96,7 @@ const CreateRequisitionBody = ({
       setSiteHrSpocValue(response.siteHRSPOCId);
       setHiringManagerValue(response.hiringManagerId);
       setFormData({ ...formData, ...response });
+
       if (response && response.departmentId > 0) {
         fetchSubDepartments(response.departmentId);
       }
@@ -111,7 +112,7 @@ const CreateRequisitionBody = ({
       setDropdownData(dropData);
       setFormData(FORM_SCHEMA_CR);
 
-      if (roleId === 4) {
+      if (roleId === 4 || profile.roleId === ROLES.resumeReviwer || profile.roleId === ROLES.interviewer) {
         navigateTo("dashboard");
       }
     }
@@ -123,6 +124,7 @@ const CreateRequisitionBody = ({
       roleId,
       commonSettings
     );
+
   } else {
     applySettingsBasedOnRoleAndStatus(
       getReqRoleId,
@@ -1517,6 +1519,32 @@ const CreateRequisitionBody = ({
                                 </div>
                               </>
                             );
+                          case MRF_STATUS.rejected:
+                            if (formData.functionHeadId === formData.updatedByEmployeeId) {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2  ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={4}
+                                      formData={formData}
+                                      refreshParent={refreshParentComponent}
+                                      className={"acknowledge_btn"}
+                                      label={"Acknowledge"}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it as Received HOD Approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6 ">
+                                    <h4 className="show_status">Rejected</h4>
+
+                                  </div>
+                                </>
+                              );
+                            }
+                           
                           default:
                             if (formData.functionHeadId === 0) {
                               return (
@@ -1670,7 +1698,6 @@ const CreateRequisitionBody = ({
                                 </div>
                               </>
                             );
-
                           case MRF_STATUS.awaitfinanceHeadApproval:
                             return (
                               <>
@@ -1692,6 +1719,53 @@ const CreateRequisitionBody = ({
                                 </div>
                               </>
                             );
+                          case MRF_STATUS.onHold:
+                            return (
+                              <>
+                                <div className="flex flex-column gap-2  ">
+                                  <MrfPartialStatus
+                                    mrfId={getReqId}
+                                    mrfStatusId={13}
+                                    formData={formData}
+                                    refreshParent={refreshParentComponent}
+                                    className={"finance_btn"}
+                                    label={"Send to Fin. Head Approval"}
+                                    disabled={true}
+                                    // financeHeadClick={true}
+                                    message={
+                                      "Do you want to submit it for Finance Head approval?"
+                                    }
+                                  />
+                                </div>
+                                <div className=" w-6 ">
+                                  <h4 className="show_status">Yet to be Approved</h4>
+                                </div>
+                              </>
+                            );
+                          case MRF_STATUS.rejected:
+                            if (formData.financeHeadId === formData.updatedByEmployeeId) {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2 ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={4}
+                                      formData={formData}
+                                      refreshParent={refreshParentComponent}
+                                      className={"acknowledge_btn"}
+                                      label={"Acknowledge"}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it as Received HOD Approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6">
+                                    <h4 className="show_status">Rejected</h4>
+                                  </div>
+                                </>
+                              );
+                            }
                           default:
                             if (formData.financeHeadId === 0) {
                               return (
@@ -1851,7 +1925,6 @@ const CreateRequisitionBody = ({
                                 </div>
                               </>
                             );
-
                           case MRF_STATUS.awaitCooApproval:
                             return (
                               <>
@@ -1873,6 +1946,53 @@ const CreateRequisitionBody = ({
                                 </div>
                               </>
                             );
+                          case MRF_STATUS.onHold:
+                            return (
+                              <>
+                                <div className="flex flex-column gap-2  ">
+                                  <MrfPartialStatus
+                                    mrfId={getReqId}
+                                    mrfStatusId={12}
+                                    formData={formData}
+                                    label={"Send to COO Approval"}
+                                    cooClick={true}
+                                    refreshParent={refreshParentComponent}
+                                    className={"coo_btn"}
+                                    disabled={true}
+                                    message={
+                                      "Do you want to submit it for COO approval?"
+                                    }
+                                  />
+                                </div>
+                                <div className=" w-6 ">
+                                  <h4 className="show_status">Yet to be Approved</h4>
+                                </div>
+                              </>
+                            );
+                          case MRF_STATUS.rejected:
+                            if (formData.presidentnCOOId === formData.updatedByEmployeeId) {
+                              return (
+                                <>
+                                  <div className="flex flex-column gap-2  ">
+                                    <MrfPartialStatus
+                                      mrfId={getReqId}
+                                      mrfStatusId={5}
+                                      formData={formData}
+                                      className={"acknowledge_btn "}
+                                      label={"Acknowledge"}
+                                      refreshParent={refreshParentComponent}
+                                      disabled={true}
+                                      message={
+                                        "Do you want to submit it as Received COO Approval?"
+                                      }
+                                    />
+                                  </div>
+                                  <div className=" w-6 ">
+                                    <h4 className="show_status">Rejected</h4>
+                                  </div>
+                                </>
+                              );
+                            }
                           default:
                             if (formData.presidentnCOOId === 0) {
                               return (
@@ -2000,7 +2120,6 @@ const CreateRequisitionBody = ({
                         />
                       </>
                     );
-
                   case MRF_STATUS.resubReq:
                     return (
                       <>
@@ -2017,7 +2136,6 @@ const CreateRequisitionBody = ({
                         />
                       </>
                     );
-
                   case MRF_STATUS.open:
                     return (
                       <>
@@ -2049,7 +2167,6 @@ const CreateRequisitionBody = ({
                         />
                       </>
                     );
-
                   case MRF_STATUS.open:
                     return (
                       <>
