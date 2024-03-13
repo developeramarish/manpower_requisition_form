@@ -363,10 +363,18 @@ const MrfPartialStatus = ({
       setVisible(false);
       return;
     }
+
+    if(formData.maxTargetSalary<formData.minTargetSalary){
+      toastRef.current.showWarrningMessage("Min Target Salary is Greater than Max Target salary");
+      setVisible(false);
+      return;
+    }
+
     if (mrfStatusId == 2 && isFormDataEmptyForSubmit(formData).length > 0) {
       const emptyFields = isFormDataEmptyForSubmit(formData);
       formatAndShowErrorMessage(emptyFields);
       // setVisible(false);
+
     } else if (
       mrfStatusId == 1 &&
       isFormDataEmptyForSaveasDraft(formData).length > 0

@@ -19,10 +19,10 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
   async function getSummaryData() {
     const interviewSummaryData = await getData(
       API_URL.INTERVIEW_SUMMARY +
-        "?Count=0&roleId=" +
-        roleId +
-        "&userId=" +
-        userId
+      "?Count=0&roleId=" +
+      roleId +
+      "&userId=" +
+      userId
     );
     // console.log(interviewSummaryData)
     setInterviewSummary(interviewSummaryData.result);
@@ -55,7 +55,7 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
   const onInterviewMRFIdClicked = (e) => {
     /* setInterviewPopupId(e);
     setInterviewPopup(true); */
-    navigateTo("interview_summary?mrfId="+e);
+    navigateTo("interview_summary?mrfId=" + e);
   };
 
   const mrfIdInterviewRefernceTemplate = (rowData) => {
@@ -78,7 +78,7 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
 
   return (
     <>
-    {/* <Dialog
+      {/* <Dialog
       header={
         <div
           className="dashboard_body_right"
@@ -92,37 +92,37 @@ function InterviewSummaryAllStatus({ roleId, userId, visible, onHide }) {
       draggable={false}
       className="int-card"
     > */}
-    <div className="interview_summary_more_cont">
+      <div className="interview_summary_more_cont">
         <h3 className="dashboard_title"><a className="breadcrum_link" href="#/dashboard">My Dashboard</a> / Interview Summary</h3>
-      <DataTable
-        paginator={interviewSummary.length > 5}
-        rows={5}
-        scrollable={true}
-        value={interviewSummary}
-        scrollHeight="flex"
-        className="all_interview"
-      >
-        <Column
-          field="referenceno"
-          header="MRF ID"
-          body={mrfIdInterviewRefernceTemplate}
-        />
-        <Column
-          field="positionTitle"
-          header="Position Title"
-          bodyClassName={"interview_all_status_body"}
-        />
-        {interviewSummaryColumns}
-      </DataTable>
-      {/* <InterviewSummary
+        <DataTable
+          paginator={interviewSummary.length > 5}
+          rows={5}
+          scrollable={true}
+          value={interviewSummary}
+          scrollHeight="flex"
+          className="all_interview"
+        >
+          <Column
+            field="referenceno"
+            header="MRF ID"
+            body={mrfIdInterviewRefernceTemplate}
+          />
+          <Column
+            field="positionTitle"
+            header="Position Title"
+            bodyClassName={"interview_all_status_body"}
+          />
+          {interviewSummaryColumns}
+        </DataTable>
+        {/* <InterviewSummary
         visible={interviewPopup}
         onHide={() => setInterviewPopup(false)}
         mrfId={interviewPopupId}
         roleId={roleId}
         userId={userId}
       /> */}
-    {/* </Dialog> */}
-    </div>
+        {/* </Dialog> */}
+      </div>
     </>
   );
 }

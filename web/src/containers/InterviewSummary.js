@@ -375,7 +375,6 @@ const [visible,setVisible]=useState(false);
 
   const attachmentBodyTemplate = (interview,options) => {
     if (interview.attachment) {
-
       let date=interview.createdOnUtc.substring(0, 10);
       let attachmentLink;
       const fileExtension = interview.attachment.split(".").pop().toLowerCase();
@@ -383,7 +382,7 @@ const [visible,setVisible]=useState(false);
       if (fileExtension === "docx") {
         // attachmentLink = `ms-word:ofe|u|${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
         // attachmentLink = `https://docs.google.com/viewer?url=${encodeURIComponent(FILE_URL.ASSIGNMENT + interview.attachment)}`;
-        attachmentLink = FILE_URL.ASSIGNMENT + date+"//"+interview.attachment;
+        attachmentLink = FILE_URL.ASSIGNMENT +interview.attachment;
        
         return (
           <a href={attachmentLink} target="_blank" className="int-link-cell">
