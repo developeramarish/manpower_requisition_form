@@ -672,7 +672,7 @@ namespace MRF.API.Controllers
                 if (new List<int> { 11, 12, 13 }.Contains(request.MrfStatusId))
                 {
                     bool emailSent =  CallGetMrfdetailsInEmailController(id, employeeId, nextMrfStatusId, request.MrfStatusId); //emails approval requests
-                    if (emailSent) _logger.LogInfo("Sent Email to HOD / Finance Head /COO");
+                    if (!emailSent) _logger.LogError($"No Email Sent to HOD / Finance Head /COO for MrfId: {id}");
 
                     if (emailRequest != null)
                     {
