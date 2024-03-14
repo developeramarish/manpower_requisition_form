@@ -12,7 +12,7 @@ namespace MRF.DataAccess.Repository
         {
             _db = db;
         }
-        public async Task<MrfdetailsEmailRequestModel> GetRequisition(int MrfId)
+        public MrfdetailsEmailRequestModel GetRequisition(int MrfId)
         {
             //before List<MrfdetailsEmailRequestModel> query
             IQueryable<MrfdetailsEmailRequestModel> query = (from MD in _db.Mrfdetails
@@ -63,8 +63,8 @@ namespace MRF.DataAccess.Repository
                                                          MaxTargetSalary = FMRF.MaxTargetSalary,
                                                          MRFRaisedBy=CBY.Name
                                                      });
-            //return query.FirstOrDefault();
-            return await query.FirstOrDefaultAsync();
+            return query.FirstOrDefault();
+            //return await query.FirstOrDefaultAsync();
 
         }
     }
