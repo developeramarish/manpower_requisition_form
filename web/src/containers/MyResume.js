@@ -19,6 +19,8 @@ import MultiSelectDropdown from "../components/multiselectDropdown";
 import DropdownComponent from "../components/Dropdown";
 import ButtonC from "../components/Button";
 import LoadingSpinner from "../components/LoadingSpinner";
+import InputTextCp from "../components/Textbox";
+import { FilterMatchMode } from "primereact/api";
 const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
   const [statusData, setStatusData] = useState({});
   const [forwardData, setForwardData] = useState({});
@@ -27,6 +29,11 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
   const toastRef = useRef(null);
   // const [isFlag, setIsFlag] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+
+  });
   useEffect(() => {
     getResumeData();
   }, []);
@@ -36,24 +43,20 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       API_URL.GET_MYRESUME + "?id=0&roleId=" + roleId + "&userId=" + userId
     );
 
-      var filterInterviewerResumtSumData = [];
-      resumeData.result.candidateDetails.map((res) => {
-        if (!MRF_STATUS_FOR_DISABLE(roleId, res.mrfStatus)) {
-          if(res.candidateStatusId === 2 || res.candidateStatusId === 3){
-            res.disable = true;
-          }else{
-            res.disable = false;
-          }
-          filterInterviewerResumtSumData.push(res);
+    var filterInterviewerResumtSumData = [];
+    resumeData.result.candidateDetails.map((res) => {
+      if (!MRF_STATUS_FOR_DISABLE(roleId, res.mrfStatus)) {
+        if (res.candidateStatusId === 2 || res.candidateStatusId === 3) {
+          res.disable = true;
+        } else {
+          res.disable = false;
         }
-      });
-    
-
-      setValues(filterInterviewerResumtSumData);
-      setForwardData(resumeData.result.resumereviewer);
-      setStatusData(resumeData.result.status);
-     
-    
+        filterInterviewerResumtSumData.push(res);
+      }
+    });
+    setValues(filterInterviewerResumtSumData);
+    setForwardData(resumeData.result.resumereviewer);
+    setStatusData(resumeData.result.status);
 
     // const isFlagArray = resumeData.result.candidateDetails.map(
     //   (res) => res.candidateStatusId === 2 || res.candidateStatusId === 3
@@ -66,10 +69,10 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       let statusdataCopy = [...values],
         index = statusdataCopy.indexOf(data),
         oCurrentData = statusdataCopy[index];
-      
-        oCurrentData.candidateStatusId = e.target.value;
-        oCurrentData.actionBtnEnable = true;
-        statusdataCopy[index] = oCurrentData;
+
+      oCurrentData.candidateStatusId = e.target.value;
+      oCurrentData.actionBtnEnable = true;
+      statusdataCopy[index] = oCurrentData;
       /* statusdataCopy.map((val, index)=>{
         if(val.candidateId === data.candidateId){
           val.candidateStatusId = e.target.value;
@@ -100,12 +103,12 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
   const MultiSelect = (data, options) => {
     const handleMultiSelectChange = (e) => {
       let interviewDataCopy = [...values],
-          index = interviewDataCopy.indexOf(data),
-          oCurrentData = interviewDataCopy[index];
-      
-        oCurrentData.resumeReviewerEmployeeIds = objToIntArray(e.value, "employeeId").toString();
-        oCurrentData.actionBtnEnable = true;
-        interviewDataCopy[index] = oCurrentData;
+        index = interviewDataCopy.indexOf(data),
+        oCurrentData = interviewDataCopy[index];
+
+      oCurrentData.resumeReviewerEmployeeIds = objToIntArray(e.value, "employeeId").toString();
+      oCurrentData.actionBtnEnable = true;
+      interviewDataCopy[index] = oCurrentData;
       // let sv = [...saveBttn];
       // sv[options.rowIndex] = e.value.length > 0 ? true : false;
       // interviewDataCopy[options.rowIndex].actionBtnEnable = true;
@@ -191,29 +194,29 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
   const textEditor = (data, options) => {
     const TextChange = (e) => {
       let statusdataCopy = [...values],
-          index = statusdataCopy.indexOf(data),
-          oCurrentData = statusdataCopy[index];
-      
-        oCurrentData.reason = e.target.value;
-        oCurrentData.actionBtnEnable = true;
-        statusdataCopy[index] = oCurrentData;
+        index = statusdataCopy.indexOf(data),
+        oCurrentData = statusdataCopy[index];
+
+      oCurrentData.reason = e.target.value;
+      oCurrentData.actionBtnEnable = true;
+      statusdataCopy[index] = oCurrentData;
 
       // let sv = [...saveBttn];
       // sv[options.rowIndex] = true;
       // statusdataCopy[options.rowIndex].actionBtnEnable = true;
       // statusdataCopy[options.rowIndex].reason = e.target.value;
-     /*  statusdataCopy.map((val, index)=>{
-        if(val.candidateId === data.candidateId){
-          val.reason = e.target.value;
-          val.actionBtnEnable = true;
-        }
-      }) */
+      /*  statusdataCopy.map((val, index)=>{
+         if(val.candidateId === data.candidateId){
+           val.reason = e.target.value;
+           val.actionBtnEnable = true;
+         }
+       }) */
 
       setValues(statusdataCopy);
       // setSaveBttn(sv);
     };
     return (
-      <InputTextareaComponent      
+      <InputTextareaComponent
         readOnly={data.disable}
         value={data.reason}
         rows={2}
@@ -224,7 +227,7 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
     );
   };
   const actionBodyTemplate = (rowData, options) => {
-    if (rowData && (rowData.actionBtnEnable && rowData.resumeReviewerEmployeeIds )) {
+    if (rowData && (rowData.actionBtnEnable && rowData.resumeReviewerEmployeeIds)) {
       return (
         <React.Fragment>
           <ButtonC
@@ -243,7 +246,34 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       <ButtonC icon="pi pi-save" disable={true} className="myaction_btn" />
     );
   };
- 
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    _filters["name", "referenceNo", "positionTitle", "global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+  const renderHeader = () => {
+    return (
+      <div className="dash_table_header ">
+        <h5 className="dash_summary_title"> </h5>
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" style={{ top: "50%" }} />
+          <InputTextCp
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Search"
+            className="  border-round-3xl h-2rem text-sm"
+          />
+        </span>
+      </div>
+    );
+  };
+  const header = renderHeader();
+
 
   const columns = [
     {
@@ -304,17 +334,19 @@ const MyResume = ({ roleId = null, mrfId = 0, userId = null }) => {
       <div className="my-resume-table">
         <DataTable
           value={values}
+          header={header}
           paginator={values.length > 10}
           removableSort
+          filters={filters}
           rows={10}
           showGridlines
-          rowsPerPageOptions={[5, 10, 25, 50,100]} 
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           scrollable
           scrollHeight="flex"
         >
           {columns.map((col, index) => (
             <Column
-            key={index}
+              key={index}
               field={col.field}
               header={col.header}
               body={col.body}

@@ -124,7 +124,7 @@ export default function AllEmployees() {
       <div className="dash_table_header ">
         <h5 className="dash_summary_title"> </h5>
         <span className="p-input-icon-left">
-          <i className="pi pi-search" style={{ top: "44%" }} />
+          <i className="pi pi-search" style={{ top: "50%" }} />
           <InputTextCp
             value={globalFilterValue}
             onChange={onGlobalFilterChange}
