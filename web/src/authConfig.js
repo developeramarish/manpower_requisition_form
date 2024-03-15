@@ -17,7 +17,7 @@ export const msalConfig = {
     authority:
       "https://login.microsoftonline.com/742bc209-0ce8-4cf8-b2e2-32d4d1c2d9ea",
     // redirectUri: "https://10.22.11.101:89/",
-    redirectUri: "https://mrf.kwglobal.com/mrf",
+    redirectUri: "https://mrf.kwglobal.com/",
     // redirectUri: "http://localhost:3000/",
   },
   cache: {
