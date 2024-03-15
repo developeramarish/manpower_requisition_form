@@ -61,7 +61,7 @@ export const ROUTES = {
   employee_edit: "employee_edit",
   employee: "employee",
   allemployees: "allemployees",
-  add_resume: "add_resume",
+
 };
 
 export const MRF_STATUS = {
