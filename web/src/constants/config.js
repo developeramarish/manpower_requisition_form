@@ -1,6 +1,6 @@
 export const APP_KEY = "MRF_v1.0";
 // const APP = "https://10.22.11.101:90";
-const App = "https://mrf.kwglobal.com/mrf"
+const APP = "https://mrf.kwglobal.com/mrf";
 // const APP = "https://localhost:7128";
 const APIPath = `${APP}/api/`;
 export const API_URL = {
