@@ -27,8 +27,8 @@
 	color: black;
 	/* text-align: center; */
 }
- .p-highlight,
-.p-highlight .p-sortable-column-icon {
+.req-table .p-highlight,
+.req-table .p-highlight .p-sortable-column-icon {
 	color: #d32f2e;
 }
 
